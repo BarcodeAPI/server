@@ -6,19 +6,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import javax.naming.ConfigurationException;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.krysalis.barcode4j.BarcodeException;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
 import org.krysalis.barcode4j.impl.code128.Code128Constants;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
-import org.xml.sax.SAXException;
 
 public class BarcodeServer extends AbstractHandler {
 
@@ -26,7 +22,7 @@ public class BarcodeServer extends AbstractHandler {
 
 	Code128Bean barcode128Bean;
 
-	public BarcodeServer() throws ConfigurationException, SAXException, IOException, BarcodeException {
+	public BarcodeServer() {
 
 		barcode128Bean = new Code128Bean();
 		barcode128Bean.setCodeset(Code128Constants.CODESET_B);
@@ -38,7 +34,7 @@ public class BarcodeServer extends AbstractHandler {
 	}
 
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
+			throws IOException {
 
 		String data = target.substring(1, target.length());
 

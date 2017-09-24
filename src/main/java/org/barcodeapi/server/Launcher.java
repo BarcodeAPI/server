@@ -22,15 +22,31 @@ public class Launcher {
 
 		Server server = new Server(serverPort);
 
+		ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
 		HandlerCollection handlers = new HandlerCollection();
 
-		// setup code
+		// setup code 128 handler
 		ContextHandler _128Context = new ContextHandler();
 		_128Context.setContextPath("/128");
 		_128Context.setHandler(new BarcodeServer());
+		_128Context.setErrorHandler(errorHandler);
 		handlers.addHandler(_128Context);
 
-		// add handlers
+		// setup qr handler
+		ContextHandler _QRContext = new ContextHandler();
+		_QRContext.setContextPath("/qr");
+		_QRContext.setHandler(new QRServer());
+		_QRContext.setErrorHandler(errorHandler);
+		handlers.addHandler(_QRContext);
+
+		// setup matrix handler
+		ContextHandler _MatrixHandler = new ContextHandler();
+		_MatrixHandler.setContextPath("/matrix");
+		_MatrixHandler.setHandler(new MatrixHandler());
+		_MatrixHandler.setErrorHandler(errorHandler);
+		handlers.addHandler(_MatrixHandler);
+
+		// add handlers to server
 		server.setHandler(handlers);
 
 		// start server
