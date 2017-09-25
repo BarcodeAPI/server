@@ -1,4 +1,4 @@
-package org.barcodeapi.server;
+package org.barcodeapi.server.qrcode;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
@@ -44,6 +45,9 @@ public class QRServer extends AbstractHandler {
 	}
 
 	public void render(String data) throws IOException {
+		
+		StatsCollector.getInstance().incrementCounter("qr.render");
+
 
 		System.out.println("Rendering: " + data);
 
@@ -53,13 +57,13 @@ public class QRServer extends AbstractHandler {
 		// Open output file
 		try {
 
-			int mWidth = 400;
-			int mHeight = 400;
+			int mWidth = 32;
+			int mHeight = 32;
 
 			Map<EncodeHintType, Object> hintsMap = new HashMap<>();
 			hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
 			hintsMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
-			hintsMap.put(EncodeHintType.MARGIN, 5);
+			hintsMap.put(EncodeHintType.MARGIN, 0);
 
 			BitMatrix bitMatrix = new QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, mWidth, mHeight, hintsMap);
 

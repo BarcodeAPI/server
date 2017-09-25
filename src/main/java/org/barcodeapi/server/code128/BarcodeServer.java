@@ -1,4 +1,4 @@
-package org.barcodeapi.server;
+package org.barcodeapi.server.code128;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
@@ -50,6 +51,8 @@ public class BarcodeServer extends AbstractHandler {
 	}
 
 	public void render(String data) throws IOException {
+
+		StatsCollector.getInstance().incrementCounter("code128.render");
 
 		System.out.println("Rendering: " + data);
 

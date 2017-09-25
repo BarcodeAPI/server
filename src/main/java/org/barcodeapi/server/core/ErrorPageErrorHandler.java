@@ -1,4 +1,4 @@
-package org.barcodeapi.server;
+package org.barcodeapi.server.core;
 
 import java.io.IOException;
 

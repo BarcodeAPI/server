@@ -1,4 +1,4 @@
-package org.barcodeapi.server;
+package org.barcodeapi.server.matrix;
 
 import java.io.IOException;
 
@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
-public class MatrixHandler extends AbstractHandler {
+public class MatrixServer extends AbstractHandler {
 
-	public MatrixHandler() {
+	public MatrixServer() {
 
 	}
 
