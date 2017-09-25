@@ -18,12 +18,15 @@ public class StatsServer extends AbstractHandler {
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
+		StatsCollector.getInstance().incrementCounter("stats.hits");
+
 		response.setStatus(HttpServletResponse.SC_OK);
 		baseRequest.setHandled(true);
 
-		for (String key : StatsCollector.getInstance().getCounters().keySet()) {
+		StatsCollector counters = StatsCollector.getInstance();
+		for (String key : counters.getCounters().keySet()) {
 
-			response.getOutputStream().println(key + " : " + StatsCollector.getInstance().getCounter(key));
+			response.getOutputStream().println(key + " : " + counters.getCounter(key));
 		}
 	}
 }

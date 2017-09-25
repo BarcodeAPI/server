@@ -59,6 +59,13 @@ public class Launcher {
 		_StatsHandler.setErrorHandler(errorHandler);
 		handlers.addHandler(_StatsHandler);
 
+		// setup default handler
+		ContextHandler _DefaultHandler = new ContextHandler();
+		_DefaultHandler.setContextPath("/*");
+		_DefaultHandler.setHandler(new DefaultServer());
+		_DefaultHandler.setErrorHandler(errorHandler);
+		handlers.addHandler(_DefaultHandler);
+
 		// add handlers to server
 		server.setHandler(handlers);
 

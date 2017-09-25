@@ -2,6 +2,8 @@ package org.barcodeapi.server.qrcode;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +11,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.cache.ImageCache;
+import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -22,10 +26,11 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class QRServer extends AbstractHandler {
 
-	final int dpi = 100;
+	final int dpi = 150;
 
 	public QRServer() {
 
+		ImageCache.getInstance().createCache(CodeType.QRCode);
 	}
 
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
@@ -33,21 +38,38 @@ public class QRServer extends AbstractHandler {
 
 		String data = target.substring(1, target.length());
 
-		response.addHeader("Server", "barcodeapi.org");
-
-		long start = System.currentTimeMillis();
-		render(data);
-		long time = System.currentTimeMillis() - start;
-
 		response.setStatus(HttpServletResponse.SC_OK);
+		response.addHeader("Server", "barcodeapi.org");
 		baseRequest.setHandled(true);
-		response.getOutputStream().println("Rendered [ " + data + " ] in [ " + time + "ms ]");
+
+		// load from cache
+		byte[] image = ImageCache.getInstance().getImage(CodeType.QRCode, data);
+
+		if (image != null) {
+
+			System.out.println("Serving from cache [ " + data + " ]");
+
+		} else {
+
+			// render image
+			long start = System.currentTimeMillis();
+			image = render(data);
+			long time = System.currentTimeMillis() - start;
+
+			System.out.println("Rendered [ " + data + " ] in [ " + time + "ms ]");
+
+			ImageCache.getInstance().addImage(CodeType.QRCode, data, image);
+		}
+
+		// print to stream
+		response.setHeader("Content-Type", "image/jpg");
+		response.setHeader("Content-Length", Integer.toString(image.length));
+		response.getOutputStream().write(image);
 	}
 
-	public void render(String data) throws IOException {
-		
-		StatsCollector.getInstance().incrementCounter("qr.render");
+	public byte[] render(String data) throws IOException {
 
+		StatsCollector.getInstance().incrementCounter("qr.render");
 
 		System.out.println("Rendering: " + data);
 
@@ -57,21 +79,25 @@ public class QRServer extends AbstractHandler {
 		// Open output file
 		try {
 
-			int mWidth = 32;
-			int mHeight = 32;
+			int mWidth = 300;
+			int mHeight = 300;
 
 			Map<EncodeHintType, Object> hintsMap = new HashMap<>();
 			hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
 			hintsMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
-			hintsMap.put(EncodeHintType.MARGIN, 0);
+			hintsMap.put(EncodeHintType.MARGIN, 2);
 
 			BitMatrix bitMatrix = new QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, mWidth, mHeight, hintsMap);
 
-			MatrixToImageWriter.writeToPath(bitMatrix, "png", Paths.get(fileName));
+			Path path = Paths.get(fileName);
+			MatrixToImageWriter.writeToPath(bitMatrix, "png", path);
+
+			return Files.readAllBytes(path);
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
+			return null;
 		}
 	}
 }
