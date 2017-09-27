@@ -1,9 +1,8 @@
 package org.barcodeapi.server;
 
 import org.barcodeapi.server.cache.ImageCache;
-import org.barcodeapi.server.code128.BarcodeServer;
+import org.barcodeapi.server.core.BarcodeServer;
 import org.barcodeapi.server.core.CodeType;
-import org.barcodeapi.server.core.ErrorPageErrorHandler;
 import org.barcodeapi.server.statistics.StatsServer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
@@ -33,21 +32,18 @@ public class Launcher {
 		ImageCache.getInstance().createCache(CodeType.QRCode);
 		ImageCache.getInstance().createCache(CodeType.DataMatrix);
 
-		ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
 		HandlerCollection handlers = new HandlerCollection();
 
 		// setup stats handler
 		ContextHandler statsHandler = new ContextHandler();
-		statsHandler.setContextPath("/stats");
 		statsHandler.setHandler(new StatsServer());
-		statsHandler.setErrorHandler(errorHandler);
+		statsHandler.setContextPath("/stats");
 		handlers.addHandler(statsHandler);
 
 		// setup default handler
 		ContextHandler apiHandler = new ContextHandler();
-		apiHandler.setContextPath("/");
 		apiHandler.setHandler(new BarcodeServer());
-		apiHandler.setErrorHandler(errorHandler);
+		apiHandler.setContextPath("/");
 		handlers.addHandler(apiHandler);
 
 		// add handlers to server

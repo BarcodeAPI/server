@@ -29,7 +29,7 @@ public class Code128Generator extends CodeGenerator {
 		// configure barcode generator
 		barcode128Bean.setModuleWidth(UnitConv.in2mm(5.0f / dpi));
 		barcode128Bean.doQuietZone(true);
-		barcode128Bean.setQuietZone(10);
+		barcode128Bean.setQuietZone(5);
 	}
 
 	@Override
@@ -38,8 +38,6 @@ public class Code128Generator extends CodeGenerator {
 		try {
 
 			StatsCollector.getInstance().incrementCounter("code128.render");
-
-			System.out.println("Rendering: " + data);
 
 			String fileName = data.replace(File.separatorChar, '-');
 			fileName = "128" + File.separator + fileName;

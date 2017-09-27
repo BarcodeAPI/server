@@ -5,30 +5,43 @@ public enum CodeType {
 	/**
 	 * 
 	 */
-	Code128(new String[] { "128" }),
+	Code128(new String[] { "128", "code128" }),
 
 	/**
 	 * 
 	 */
-	QRCode(new String[] { "qr" }),
+	QRCode(new String[] { "qr", "qrcode" }),
 
 	/**
 	 * 
 	 */
-	DataMatrix(new String[] { "matrix" });
+	DataMatrix(new String[] { "matrix", "datamatrix", "data" });
 
 	private String[] typeStrings;
 
+	/**
+	 * 
+	 * @param typeStrings
+	 */
 	CodeType(String[] typeStrings) {
 
 		this.typeStrings = typeStrings;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String[] getTypeStrings() {
 
 		return typeStrings;
 	}
 
+	/**
+	 * 
+	 * @param codeType
+	 * @return
+	 */
 	public static CodeType fromString(String codeType) {
 
 		for (CodeType type : CodeType.values()) {
@@ -45,12 +58,17 @@ public enum CodeType {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param data
+	 * @return
+	 */
 	public static CodeType getType(String data) {
 
-		// Longer then 256 bytes is DataMatrix
-		if (data.length() > 256) {
+		// Match numbers only to Code128
+		if (data.matches("[0-9]{1,16}")) {
 
-			return CodeType.DataMatrix;
+			return CodeType.Code128;
 		}
 
 		// Match URLs to QR
@@ -63,6 +81,12 @@ public enum CodeType {
 		if (data.matches("B[0-9a-zA-Z]{9}")) {
 
 			return CodeType.Code128;
+		}
+
+		// Longer then 256 bytes is DataMatrix
+		if (data.length() > 64) {
+
+			return CodeType.DataMatrix;
 		}
 
 		// Default to QR

@@ -38,8 +38,6 @@ public class DataMatrixGenerator extends CodeGenerator {
 
 			StatsCollector.getInstance().incrementCounter("matrix.render");
 
-			System.out.println("Rendering: " + data);
-
 			String fileName = data.replace(File.separatorChar, '-');
 			fileName = "matrix" + File.separator + fileName;
 

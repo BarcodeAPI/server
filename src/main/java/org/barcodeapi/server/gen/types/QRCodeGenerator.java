@@ -24,8 +24,6 @@ public class QRCodeGenerator extends CodeGenerator {
 
 		StatsCollector.getInstance().incrementCounter("qr.render");
 
-		System.out.println("Rendering: " + data);
-
 		String fileName = data.replace(File.separatorChar, '-');
 		fileName = "cache" + File.separator + "qr" + File.separator + fileName + ".png";
 
