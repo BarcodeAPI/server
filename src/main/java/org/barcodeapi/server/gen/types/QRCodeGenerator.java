@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.statistics.StatsCollector;
 
@@ -18,6 +19,11 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class QRCodeGenerator extends CodeGenerator {
+
+	public QRCodeGenerator() {
+		super(CodeType.QRCode);
+
+	}
 
 	@Override
 	public byte[] generateCode(String data) {

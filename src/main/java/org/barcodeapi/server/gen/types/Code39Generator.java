@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
@@ -21,11 +22,12 @@ public class Code39Generator extends CodeGenerator {
 	private final int dpi = 150;
 
 	public Code39Generator() {
+		super(CodeType.Code39);
 
 		barcode39Bean = new Code39Bean();
 
 		// configure barcode generator
-		barcode39Bean.setModuleWidth(UnitConv.in2mm(5.0f / dpi));
+		barcode39Bean.setModuleWidth(UnitConv.in2mm(2.5f / dpi));
 		barcode39Bean.doQuietZone(true);
 		barcode39Bean.setQuietZone(4);
 	}
@@ -35,7 +37,7 @@ public class Code39Generator extends CodeGenerator {
 
 		try {
 
-			StatsCollector.getInstance().incrementCounter("code128.render");
+			StatsCollector.getInstance().incrementCounter("code39.render");
 
 			String fileName = data.replace(File.separatorChar, '-');
 			fileName = "39" + File.separator + fileName;

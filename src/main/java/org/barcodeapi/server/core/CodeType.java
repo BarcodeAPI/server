@@ -5,6 +5,16 @@ public enum CodeType {
 	/**
 	 * 
 	 */
+	EAN8(new String[] { "8", "ean8" }),
+
+	/**
+	 * 
+	 */
+	EAN13(new String[] { "13", "ean13" }),
+
+	/**
+	 * 
+	 */
 	Code39(new String[] { "39", "code39" }),
 
 	/**
@@ -70,16 +80,22 @@ public enum CodeType {
 	 */
 	public static CodeType getType(String data) {
 
-		// Match numbers only to Code128
-		if (data.matches("[0-9]{1,8}")) {
+		// Match EAN-8 format
+		if (data.matches("[0-9]{7,8}")) {
 
-			return CodeType.Code39;
+			return CodeType.EAN8;
 		}
 
-		// Match numbers only to Code128
-		if (data.matches("[0-9]{1,24}")) {
+		// Match EAN-13 format
+		if (data.matches("[0-9]{12,13}")) {
 
-			return CodeType.Code128;
+			return CodeType.EAN13;
+		}
+
+		// Match letters and numbers to Code39
+		if (data.matches("[A-Z0-9]{1,12}")) {
+
+			return CodeType.Code39;
 		}
 
 		// Match URLs to QR
@@ -88,19 +104,19 @@ public enum CodeType {
 			return CodeType.QRCode;
 		}
 
-		// Match Amazon ASIN to Code128
-		if (data.matches("B[0-9a-zA-Z]{9}")) {
+		// Less then 16 bytes is Code128
+		if (data.length() < 16) {
 
 			return CodeType.Code128;
 		}
 
-		// Longer then 256 bytes is DataMatrix
-		if (data.length() > 64) {
+		// Longer then 64 bytes is DataMatrix
+		if (data.length() < 32) {
 
-			return CodeType.DataMatrix;
+			return CodeType.QRCode;
 		}
 
-		// Default to QR
-		return CodeType.QRCode;
+		// Default to DataMatrix
+		return CodeType.DataMatrix;
 	}
 }

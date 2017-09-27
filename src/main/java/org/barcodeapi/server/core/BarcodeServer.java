@@ -12,6 +12,8 @@ import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.types.Code128Generator;
 import org.barcodeapi.server.gen.types.Code39Generator;
 import org.barcodeapi.server.gen.types.DataMatrixGenerator;
+import org.barcodeapi.server.gen.types.Ean13Generator;
+import org.barcodeapi.server.gen.types.Ean8Generator;
 import org.barcodeapi.server.gen.types.QRCodeGenerator;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -26,6 +28,8 @@ public class BarcodeServer extends AbstractHandler {
 
 		codeGenerators = new HashMap<CodeType, CodeGenerator>();
 
+		codeGenerators.put(CodeType.EAN8, new Ean8Generator());
+		codeGenerators.put(CodeType.EAN13, new Ean13Generator());
 		codeGenerators.put(CodeType.Code39, new Code39Generator());
 		codeGenerators.put(CodeType.Code128, new Code128Generator());
 		codeGenerators.put(CodeType.QRCode, new QRCodeGenerator());

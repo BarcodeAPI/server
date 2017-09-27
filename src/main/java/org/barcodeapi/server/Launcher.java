@@ -1,8 +1,6 @@
 package org.barcodeapi.server;
 
-import org.barcodeapi.server.cache.ImageCache;
 import org.barcodeapi.server.core.BarcodeServer;
-import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.statistics.StatsServer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
@@ -26,12 +24,6 @@ public class Launcher {
 
 		System.out.println("Binding to port [ " + serverPort + " ]");
 		Server server = new Server(serverPort);
-
-		// create code caches
-		ImageCache.getInstance().createCache(CodeType.Code39);
-		ImageCache.getInstance().createCache(CodeType.Code128);
-		ImageCache.getInstance().createCache(CodeType.QRCode);
-		ImageCache.getInstance().createCache(CodeType.DataMatrix);
 
 		HandlerCollection handlers = new HandlerCollection();
 

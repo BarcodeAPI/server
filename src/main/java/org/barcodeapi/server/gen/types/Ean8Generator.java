@@ -11,25 +11,25 @@ import java.nio.file.Paths;
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.statistics.StatsCollector;
-import org.krysalis.barcode4j.impl.datamatrix.DataMatrixBean;
+import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
-public class DataMatrixGenerator extends CodeGenerator {
+public class Ean8Generator extends CodeGenerator {
 
-	private DataMatrixBean dataMatrixBean;
+	private EAN8Bean ean8Bean;
 
-	private final int dpi = 200;
+	private final int dpi = 150;
 
-	public DataMatrixGenerator() {
-		super(CodeType.DataMatrix);
+	public Ean8Generator() {
+		super(CodeType.EAN8);
 
-		dataMatrixBean = new DataMatrixBean();
+		ean8Bean = new EAN8Bean();
 
 		// configure barcode generator
-		dataMatrixBean.setQuietZone(2);
-		dataMatrixBean.doQuietZone(true);
-		dataMatrixBean.setModuleWidth(UnitConv.in2mm(5.0f / dpi));
+		ean8Bean.setModuleWidth(UnitConv.in2mm(2.5f / dpi));
+		ean8Bean.doQuietZone(true);
+		ean8Bean.setQuietZone(4);
 	}
 
 	@Override
@@ -37,10 +37,10 @@ public class DataMatrixGenerator extends CodeGenerator {
 
 		try {
 
-			StatsCollector.getInstance().incrementCounter("matrix.render");
+			StatsCollector.getInstance().incrementCounter("ean8.render");
 
 			String fileName = data.replace(File.separatorChar, '-');
-			fileName = "matrix" + File.separator + fileName;
+			fileName = "ean8" + File.separator + fileName;
 
 			// Open output file
 			File outputFile = new File("cache" + File.separator + fileName + ".png");
@@ -49,7 +49,7 @@ public class DataMatrixGenerator extends CodeGenerator {
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
 					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
 
-			dataMatrixBean.generateBarcode(canvasProvider, data);
+			ean8Bean.generateBarcode(canvasProvider, data);
 
 			canvasProvider.getBufferedImage();
 

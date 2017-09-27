@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
@@ -22,12 +23,13 @@ public class Code128Generator extends CodeGenerator {
 	private final int dpi = 150;
 
 	public Code128Generator() {
+		super(CodeType.Code128);
 
 		barcode128Bean = new Code128Bean();
 		barcode128Bean.setCodeset(Code128Constants.CODESET_B);
 
 		// configure barcode generator
-		barcode128Bean.setModuleWidth(UnitConv.in2mm(5.0f / dpi));
+		barcode128Bean.setModuleWidth(UnitConv.in2mm(2.5f / dpi));
 		barcode128Bean.doQuietZone(true);
 		barcode128Bean.setQuietZone(4);
 	}
