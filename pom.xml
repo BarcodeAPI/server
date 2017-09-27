@@ -20,6 +20,35 @@
 
 	</properties>
 
+	<build>
+
+		<sourceDirectory>src/main</sourceDirectory>
+		<testSourceDirectory>src/test</testSourceDirectory>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+
+				<configuration>
+
+					<finalName>launcher</finalName>
+					<mainClass>org.barcodeapi.server.Launcher</mainClass>
+
+					<archive>
+						<manifest>
+
+							<mainClass>org.barcodeapi.server.Launcher</mainClass>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 
 		<dependency>

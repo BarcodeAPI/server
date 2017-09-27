@@ -1,44 +1,31 @@
 package org.barcodeapi.server.code128;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.cache.ImageCache;
 import org.barcodeapi.server.core.CodeType;
-import org.barcodeapi.server.statistics.StatsCollector;
+import org.barcodeapi.server.gen.CodeGenerator;
+import org.barcodeapi.server.gen.types.Code128Generator;
+import org.barcodeapi.server.gen.types.DataMatrixGenerator;
+import org.barcodeapi.server.gen.types.QRCodeGenerator;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.krysalis.barcode4j.impl.code128.Code128Bean;
-import org.krysalis.barcode4j.impl.code128.Code128Constants;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
-import org.krysalis.barcode4j.tools.UnitConv;
 
 public class BarcodeServer extends AbstractHandler {
 
-	final int dpi = 150;
-
-	Code128Bean barcode128Bean;
+	HashMap<CodeType, CodeGenerator> codeGenerators;
 
 	public BarcodeServer() {
 
-		barcode128Bean = new Code128Bean();
-		barcode128Bean.setCodeset(Code128Constants.CODESET_B);
+		codeGenerators = new HashMap<CodeType, CodeGenerator>();
 
-		// Configure the barcode generator
-		// adjust barcode width here
-		barcode128Bean.setModuleWidth(UnitConv.in2mm(5.0f / dpi));
-		barcode128Bean.doQuietZone(true);
-
-		ImageCache.getInstance().createCache(CodeType.Code128);
+		codeGenerators.put(CodeType.Code128, new Code128Generator());
+		codeGenerators.put(CodeType.QRCode, new QRCodeGenerator());
+		codeGenerators.put(CodeType.DataMatrix, new DataMatrixGenerator());
 	}
 
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
@@ -46,12 +33,38 @@ public class BarcodeServer extends AbstractHandler {
 
 		String data = target.substring(1, target.length());
 
-		response.setStatus(HttpServletResponse.SC_OK);
-		response.addHeader("Server", "barcodeapi.org");
+		CodeType type;
+
+		int typeIndex = data.indexOf("/");
+		if (typeIndex > 0) {
+
+			String typeString = target.substring(1, typeIndex + 1);
+
+			type = CodeType.getType(typeString);
+
+			if (type == null) {
+
+				type = CodeType.getType(data);
+			} else {
+
+				data = data.substring(typeIndex + 1);
+			}
+		} else {
+
+			type = CodeType.getType(data);
+		}
+
+		// set response okay
 		baseRequest.setHandled(true);
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.addHeader("Server", "BarcodeAPI.org");
+
+		// add headers describing code
+		response.addHeader("X-CodeType", type.toString());
+		response.addHeader("X-CodeData", data);
 
 		// load from cache
-		byte[] image = ImageCache.getInstance().getImage(CodeType.Code128, data);
+		byte[] image = ImageCache.getInstance().getImage(type, data);
 
 		if (image != null) {
 
@@ -60,12 +73,12 @@ public class BarcodeServer extends AbstractHandler {
 
 			// render image
 			long start = System.currentTimeMillis();
-			image = render(data);
+			image = codeGenerators.get(type).generateCode(data);
 			long time = System.currentTimeMillis() - start;
 
-			System.out.println("Rendered [ " + data + " ] in [ " + time + "ms ]");
+			System.out.println("Rendered [ " + type.toString() + " : " + data + " ] in [ " + time + "ms ]");
 
-			ImageCache.getInstance().addImage(CodeType.Code128, data, image);
+			ImageCache.getInstance().addImage(type, data, image);
 		}
 
 		// print to stream
@@ -74,32 +87,4 @@ public class BarcodeServer extends AbstractHandler {
 		response.getOutputStream().write(image);
 	}
 
-	public byte[] render(String data) throws IOException {
-
-		StatsCollector.getInstance().incrementCounter("code128.render");
-
-		System.out.println("Rendering: " + data);
-
-		String fileName = data.replace(File.separatorChar, '-');
-		fileName = "128" + File.separator + fileName;
-
-		// Open output file
-		File outputFile = new File("cache" + File.separator + fileName + ".png");
-		OutputStream out = new FileOutputStream(outputFile);
-
-		BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-				out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
-
-		barcode128Bean.generateBarcode(canvasProvider, data);
-
-		canvasProvider.getBufferedImage();
-
-		canvasProvider.finish();
-
-		out.close();
-
-		Path path = Paths.get(outputFile.getAbsolutePath());
-
-		return Files.readAllBytes(path);
-	}
 }
