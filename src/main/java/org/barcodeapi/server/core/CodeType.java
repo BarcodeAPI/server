@@ -5,6 +5,11 @@ public enum CodeType {
 	/**
 	 * 
 	 */
+	Code39(new String[] { "39", "code39" }),
+
+	/**
+	 * 
+	 */
 	Code128(new String[] { "128", "code128" }),
 
 	/**
@@ -66,7 +71,13 @@ public enum CodeType {
 	public static CodeType getType(String data) {
 
 		// Match numbers only to Code128
-		if (data.matches("[0-9]{1,16}")) {
+		if (data.matches("[0-9]{1,8}")) {
+
+			return CodeType.Code39;
+		}
+
+		// Match numbers only to Code128
+		if (data.matches("[0-9]{1,24}")) {
 
 			return CodeType.Code128;
 		}

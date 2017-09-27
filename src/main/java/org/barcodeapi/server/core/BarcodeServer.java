@@ -1,6 +1,7 @@
 package org.barcodeapi.server.core;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.barcodeapi.server.cache.ImageCache;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.types.Code128Generator;
+import org.barcodeapi.server.gen.types.Code39Generator;
 import org.barcodeapi.server.gen.types.DataMatrixGenerator;
 import org.barcodeapi.server.gen.types.QRCodeGenerator;
 import org.eclipse.jetty.server.Request;
@@ -18,13 +20,22 @@ public class BarcodeServer extends AbstractHandler {
 
 	HashMap<CodeType, CodeGenerator> codeGenerators;
 
+	String serverName;
+
 	public BarcodeServer() {
 
 		codeGenerators = new HashMap<CodeType, CodeGenerator>();
 
+		codeGenerators.put(CodeType.Code39, new Code39Generator());
 		codeGenerators.put(CodeType.Code128, new Code128Generator());
 		codeGenerators.put(CodeType.QRCode, new QRCodeGenerator());
 		codeGenerators.put(CodeType.DataMatrix, new DataMatrixGenerator());
+
+		try {
+
+			serverName = InetAddress.getLocalHost().getHostName();
+		} catch (Exception e) {
+		}
 	}
 
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
@@ -62,6 +73,7 @@ public class BarcodeServer extends AbstractHandler {
 
 		// add headers describing request
 		response.setHeader("X-RequestTime", Long.toString(timeNow));
+		response.addHeader("X-CodeServer", serverName);
 		response.addHeader("X-CodeType", type.toString());
 		response.addHeader("X-CodeData", data);
 
@@ -90,7 +102,7 @@ public class BarcodeServer extends AbstractHandler {
 					" : Rendered [ " + type.toString() + " ] with [ " + data + " ] in [ " + time + "ms ]");
 
 			if (cached) {
-				
+
 				ImageCache.getInstance().addImage(type, data, image);
 			}
 		}

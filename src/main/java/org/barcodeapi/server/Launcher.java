@@ -28,6 +28,7 @@ public class Launcher {
 		Server server = new Server(serverPort);
 
 		// create code caches
+		ImageCache.getInstance().createCache(CodeType.Code39);
 		ImageCache.getInstance().createCache(CodeType.Code128);
 		ImageCache.getInstance().createCache(CodeType.QRCode);
 		ImageCache.getInstance().createCache(CodeType.DataMatrix);

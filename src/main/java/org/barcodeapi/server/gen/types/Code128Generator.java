@@ -29,7 +29,7 @@ public class Code128Generator extends CodeGenerator {
 		// configure barcode generator
 		barcode128Bean.setModuleWidth(UnitConv.in2mm(5.0f / dpi));
 		barcode128Bean.doQuietZone(true);
-		barcode128Bean.setQuietZone(5);
+		barcode128Bean.setQuietZone(4);
 	}
 
 	@Override
