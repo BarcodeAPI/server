@@ -1,7 +1,6 @@
 package org.barcodeapi.server.gen.types;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -9,7 +8,6 @@ import java.util.Map;
 
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.statistics.StatsCollector;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -26,14 +24,8 @@ public class QRCodeGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public byte[] generateCode(String data) {
+	public boolean onRender(String data, File outputFile) {
 
-		StatsCollector.getInstance().incrementCounter("qr.render");
-
-		String fileName = data.replace(File.separatorChar, '-');
-		fileName = "cache" + File.separator + "qr" + File.separator + fileName + ".png";
-
-		// Open output file
 		try {
 
 			int mWidth = 300;
@@ -46,15 +38,15 @@ public class QRCodeGenerator extends CodeGenerator {
 
 			BitMatrix bitMatrix = new QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, mWidth, mHeight, hintsMap);
 
-			Path path = Paths.get(fileName);
+			Path path = Paths.get(outputFile.getAbsolutePath());
 			MatrixToImageWriter.writeToPath(bitMatrix, "png", path);
 
-			return Files.readAllBytes(path);
+			return true;
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			return null;
+			return false;
 		}
 	}
 }

@@ -4,13 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.statistics.StatsCollector;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
 import org.krysalis.barcode4j.impl.code128.Code128Constants;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
@@ -35,17 +31,11 @@ public class Code128Generator extends CodeGenerator {
 	}
 
 	@Override
-	public byte[] generateCode(String data) {
+	public boolean onRender(String data, File outputFile) {
 
 		try {
 
-			StatsCollector.getInstance().incrementCounter("code128.render");
-
-			String fileName = data.replace(File.separatorChar, '-');
-			fileName = "128" + File.separator + fileName;
-
 			// Open output file
-			File outputFile = new File("cache" + File.separator + fileName + ".png");
 			OutputStream out = new FileOutputStream(outputFile);
 
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
@@ -58,14 +48,12 @@ public class Code128Generator extends CodeGenerator {
 			canvasProvider.finish();
 
 			out.close();
+			return true;
 
-			Path path = Paths.get(outputFile.getAbsolutePath());
-
-			return Files.readAllBytes(path);
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			return null;
+			return false;
 		}
 	}
 }

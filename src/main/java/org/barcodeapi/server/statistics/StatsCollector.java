@@ -15,13 +15,18 @@ public class StatsCollector {
 
 	public void incrementCounter(String counter) {
 
+		incrementCounter(counter, 1);
+	}
+
+	public void incrementCounter(String counter, long inc) {
+
 		Long value = hitCounters.get(counter);
 		if (value == null) {
 
 			value = 0l;
 		}
 
-		hitCounters.put(counter, value + 1);
+		hitCounters.put(counter, value + inc);
 	}
 
 	public double getCounter(String counter) {
@@ -42,4 +47,5 @@ public class StatsCollector {
 		}
 		return statsCollector;
 	}
+
 }

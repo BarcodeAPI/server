@@ -33,17 +33,11 @@ public class DataMatrixGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public byte[] generateCode(String data) {
+	public boolean onRender(String data, File outputFile) {
 
 		try {
 
-			StatsCollector.getInstance().incrementCounter("matrix.render");
-
-			String fileName = data.replace(File.separatorChar, '-');
-			fileName = "matrix" + File.separator + fileName;
-
 			// Open output file
-			File outputFile = new File("cache" + File.separator + fileName + ".png");
 			OutputStream out = new FileOutputStream(outputFile);
 
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
@@ -57,13 +51,12 @@ public class DataMatrixGenerator extends CodeGenerator {
 
 			out.close();
 
-			Path path = Paths.get(outputFile.getAbsolutePath());
+			return true;
 
-			return Files.readAllBytes(path);
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			return null;
+			return false;
 		}
 	}
 }

@@ -15,6 +15,7 @@ import org.barcodeapi.server.gen.types.DataMatrixGenerator;
 import org.barcodeapi.server.gen.types.Ean13Generator;
 import org.barcodeapi.server.gen.types.Ean8Generator;
 import org.barcodeapi.server.gen.types.QRCodeGenerator;
+import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
@@ -99,11 +100,21 @@ public class BarcodeServer extends AbstractHandler {
 
 			// render image
 			long start = System.currentTimeMillis();
-			image = codeGenerators.get(type).generateCode(data);
-			long time = System.currentTimeMillis() - start;
+			image = codeGenerators.get(type).getCode(data);
+			long renderTime = System.currentTimeMillis() - start;
+
+			StatsCollector.getInstance().incrementCounter("system.renderTime", renderTime);
+
+			if (image == null) {
+
+				System.out.println("Failed to render [ " + data + " ]");
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getOutputStream().println("Failed to render [ " + data + " ]");
+				return;
+			}
 
 			System.out.println(timeNow + //
-					" : Rendered [ " + type.toString() + " ] with [ " + data + " ] in [ " + time + "ms ]");
+					" : Rendered [ " + type.toString() + " ] with [ " + data + " ] in [ " + renderTime + "ms ]");
 
 			if (cached) {
 
