@@ -17,17 +17,16 @@ import org.krysalis.barcode4j.tools.UnitConv;
 
 public class Code128Generator extends CodeGenerator {
 
-	Code128Bean barcode128Bean;
+	private Code128Bean barcode128Bean;
 
-	final int dpi = 150;
+	private final int dpi = 150;
 
 	public Code128Generator() {
 
 		barcode128Bean = new Code128Bean();
 		barcode128Bean.setCodeset(Code128Constants.CODESET_B);
 
-		// Configure the barcode generator
-		// adjust barcode width here
+		// configure barcode generator
 		barcode128Bean.setModuleWidth(UnitConv.in2mm(5.0f / dpi));
 		barcode128Bean.doQuietZone(true);
 		barcode128Bean.setQuietZone(10);

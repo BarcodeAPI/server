@@ -40,7 +40,7 @@ public class BarcodeServer extends AbstractHandler {
 
 			String typeString = target.substring(1, typeIndex + 1);
 
-			type = CodeType.getType(typeString);
+			type = CodeType.fromString(typeString);
 
 			if (type == null) {
 
