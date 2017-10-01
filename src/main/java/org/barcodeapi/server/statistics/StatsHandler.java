@@ -35,7 +35,8 @@ public class StatsHandler extends AbstractHandler {
 		for (String key : counters.getCounters().keySet()) {
 
 			// print key and value
-			response.getOutputStream().println(key + " : " + counters.getCounter(key));
+			String value = String.format("%.0f", counters.getCounter(key));
+			response.getOutputStream().println(key + " : " + value);
 		}
 	}
 }
