@@ -78,6 +78,16 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			type = CodeType.getType(data);
 		}
 
+		if (data == null || data.equals("")) {
+
+			System.out.println("Empty request.");
+
+			baseRequest.setHandled(true);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getOutputStream().println("Empty request.");
+			return;
+		}
+
 		// image object
 		CachedObject barcode = null;
 
@@ -102,6 +112,8 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			if (image == null) {
 
 				System.out.println("Failed to render [ " + data + " ]");
+
+				baseRequest.setHandled(true);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.getOutputStream().println("Failed to render [ " + data + " ]");
 				return;
