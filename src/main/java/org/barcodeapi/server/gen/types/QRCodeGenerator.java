@@ -6,8 +6,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.CodeGenerator;
+import org.barcodeapi.server.gen.CodeType;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;

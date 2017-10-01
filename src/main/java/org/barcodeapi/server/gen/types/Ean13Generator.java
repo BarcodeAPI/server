@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.CodeGenerator;
+import org.barcodeapi.server.gen.CodeType;
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;

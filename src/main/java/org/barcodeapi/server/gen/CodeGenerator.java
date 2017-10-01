@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.barcodeapi.server.cache.BarcodeCache;
-import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.statistics.StatsCollector;
 
 public abstract class CodeGenerator {

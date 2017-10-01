@@ -1,7 +1,7 @@
 package org.barcodeapi.core;
 
-import org.barcodeapi.server.core.BarcodeServer;
-import org.barcodeapi.server.statistics.StatsServer;
+import org.barcodeapi.server.core.BarcodeAPIHandler;
+import org.barcodeapi.server.statistics.StatsHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
@@ -93,7 +93,7 @@ public class ServerLoader {
 
 		// setup statistics handler
 		ContextHandler statsHandler = new ContextHandler();
-		statsHandler.setHandler(new StatsServer());
+		statsHandler.setHandler(new StatsHandler());
 		statsHandler.setContextPath("/stats");
 		handlers.addHandler(statsHandler);
 	}
@@ -105,7 +105,7 @@ public class ServerLoader {
 
 		// setup API handler
 		ContextHandler apiHandler = new ContextHandler();
-		apiHandler.setHandler(new BarcodeServer());
+		apiHandler.setHandler(new BarcodeAPIHandler());
 		apiHandler.setContextPath("/");
 		handlers.addHandler(apiHandler);
 	}

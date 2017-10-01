@@ -1,40 +1,44 @@
-package org.barcodeapi.server.core;
+package org.barcodeapi.server.gen;
 
 public enum CodeType {
 
 	/**
-	 * 
+	 * EAN-8 type UPC code; 7 numerical digits followed by a single checksum digit.
 	 */
 	EAN8(new String[] { "8", "ean8" }),
 
 	/**
-	 * 
+	 * EAN-13 type UPC code; 12 numerical digits followed by a single checksum
+	 * digit.
 	 */
 	EAN13(new String[] { "13", "ean13" }),
 
 	/**
-	 * 
+	 * Code39 type code; variable length consisting of only numbers and upper-case
+	 * characters.
 	 */
 	Code39(new String[] { "39", "code39" }),
 
 	/**
-	 * 
+	 * Code128 type code; variable length consisting of numbers, letters, and
+	 * symbols.
 	 */
 	Code128(new String[] { "128", "code128" }),
 
 	/**
-	 * 
+	 * QR type code; a high density data code with error correction.
 	 */
 	QRCode(new String[] { "qr", "qrcode" }),
 
 	/**
-	 * 
+	 * Data Matrix type code; a high density data code with error correction.
 	 */
 	DataMatrix(new String[] { "matrix", "datamatrix", "data" });
 
 	private String[] typeStrings;
 
 	/**
+	 * Create a new CodeType with a list of its associated IDs.
 	 * 
 	 * @param typeStrings
 	 */
@@ -44,6 +48,7 @@ public enum CodeType {
 	}
 
 	/**
+	 * Get a list of all IDs associated with a CodeType.
 	 * 
 	 * @return
 	 */
@@ -53,6 +58,8 @@ public enum CodeType {
 	}
 
 	/**
+	 * Get a CodeType object by any of its associated string IDs. Will return null
+	 * if none are found.
 	 * 
 	 * @param codeType
 	 * @return
@@ -74,6 +81,7 @@ public enum CodeType {
 	}
 
 	/**
+	 * Returns a CodeType object best suited for the given data string.
 	 * 
 	 * @param data
 	 * @return

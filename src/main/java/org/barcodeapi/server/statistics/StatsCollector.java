@@ -6,24 +6,24 @@ public class StatsCollector {
 
 	private static StatsCollector statsCollector;
 
-	private ConcurrentHashMap<String, Long> hitCounters;
+	private ConcurrentHashMap<String, Double> hitCounters;
 
 	public StatsCollector() {
 
-		hitCounters = new ConcurrentHashMap<String, Long>();
+		hitCounters = new ConcurrentHashMap<String, Double>();
 	}
 
 	public void incrementCounter(String counter) {
 
-		incrementCounter(counter, 1);
+		incrementCounter(counter, 1d);
 	}
 
-	public void incrementCounter(String counter, long inc) {
+	public void incrementCounter(String counter, Double inc) {
 
-		Long value = hitCounters.get(counter);
+		Double value = hitCounters.get(counter);
 		if (value == null) {
 
-			value = 0l;
+			value = 0d;
 		}
 
 		hitCounters.put(counter, value + inc);
@@ -34,7 +34,12 @@ public class StatsCollector {
 		return hitCounters.get(counter);
 	}
 
-	public ConcurrentHashMap<String, Long> getCounters() {
+	public void setCounter(String counter, Double value) {
+
+		hitCounters.put(counter, value);
+	}
+
+	public ConcurrentHashMap<String, Double> getCounters() {
 
 		return hitCounters;
 	}

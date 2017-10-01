@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.cache.CachedObject;
 import org.barcodeapi.server.gen.CodeGenerator;
+import org.barcodeapi.server.gen.CodeType;
 import org.barcodeapi.server.gen.types.Code128Generator;
 import org.barcodeapi.server.gen.types.Code39Generator;
 import org.barcodeapi.server.gen.types.DataMatrixGenerator;
@@ -20,13 +21,13 @@ import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
-public class BarcodeServer extends AbstractHandler {
+public class BarcodeAPIHandler extends AbstractHandler {
 
 	HashMap<CodeType, CodeGenerator> codeGenerators;
 
 	String serverName;
 
-	public BarcodeServer() {
+	public BarcodeAPIHandler() {
 
 		codeGenerators = new HashMap<CodeType, CodeGenerator>();
 
@@ -47,13 +48,17 @@ public class BarcodeServer extends AbstractHandler {
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
+		// time of the request
 		long timeNow = System.currentTimeMillis();
 
+		// get the request string
 		String data = target.substring(1, target.length());
+
+		// use cache if within threshold
 		boolean useCache = data.length() <= 64;
 
+		// process selected type
 		CodeType type;
-
 		int typeIndex = data.indexOf("/");
 		if (typeIndex > 0) {
 
@@ -73,34 +78,27 @@ public class BarcodeServer extends AbstractHandler {
 			type = CodeType.getType(data);
 		}
 
-		// set response okay
-		baseRequest.setHandled(true);
-		response.setStatus(HttpServletResponse.SC_OK);
-		response.addHeader("Server", "BarcodeAPI.org");
-
-		// add headers describing request
-		response.setHeader("X-RequestTime", Long.toString(timeNow));
-		response.addHeader("X-CodeServer", serverName);
-		response.addHeader("X-CodeType", type.toString());
-		response.addHeader("X-CodeData", data);
-
-		// load from cache
+		// image object
 		CachedObject barcode = null;
 
+		// lookup in cache if allowed
 		if (useCache) {
 
 			barcode = BarcodeCache.getInstance().getBarcode(type, data);
 		}
 
+		// if not found in cache
 		if (barcode == null) {
 
 			// render image
 			long start = System.currentTimeMillis();
 			byte[] image = codeGenerators.get(type).getCode(data);
-			long renderTime = System.currentTimeMillis() - start;
+			double renderTime = System.currentTimeMillis() - start;
 
+			// add to total render time
 			StatsCollector.getInstance().incrementCounter("system.renderTime", renderTime);
 
+			// fail if render failed
 			if (image == null) {
 
 				System.out.println("Failed to render [ " + data + " ]");
@@ -112,8 +110,10 @@ public class BarcodeServer extends AbstractHandler {
 			System.out.println(timeNow + //
 					" : Rendered [ " + type.toString() + " ] with [ " + data + " ] in [ " + renderTime + "ms ]");
 
+			// add data to image object
 			barcode = new CachedObject(image);
 
+			// add to cache if allowed
 			if (useCache) {
 
 				BarcodeCache.getInstance().addImage(type, data, barcode);
@@ -124,9 +124,20 @@ public class BarcodeServer extends AbstractHandler {
 					" : Served [ " + type.toString() + " ] with [ " + data + " ] from cache");
 		}
 
-		// print to stream
+		// set response okay
+		baseRequest.setHandled(true);
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.setHeader("Server", "BarcodeAPI.org");
+
+		// add headers describing request
+		response.setHeader("X-RequestTime", Long.toString(timeNow));
+		response.setHeader("X-CodeServer", serverName);
+		response.setHeader("X-CodeType", type.toString());
+		response.setHeader("X-CodeData", data);
 		response.setHeader("Content-Type", "image/jpg");
 		response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
+
+		// print data to stream
 		response.getOutputStream().write(barcode.getData());
 	}
 }
