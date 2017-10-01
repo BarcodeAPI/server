@@ -7,7 +7,8 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.server.cache.ImageCache;
+import org.barcodeapi.server.cache.BarcodeCache;
+import org.barcodeapi.server.cache.CachedObject;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.types.Code128Generator;
 import org.barcodeapi.server.gen.types.Code39Generator;
@@ -49,6 +50,7 @@ public class BarcodeServer extends AbstractHandler {
 		long timeNow = System.currentTimeMillis();
 
 		String data = target.substring(1, target.length());
+		boolean useCache = data.length() <= 64;
 
 		CodeType type;
 
@@ -83,24 +85,18 @@ public class BarcodeServer extends AbstractHandler {
 		response.addHeader("X-CodeData", data);
 
 		// load from cache
-		boolean cached = false;
-		byte[] image = null;
+		CachedObject barcode = null;
 
-		if (data.length() < 128) {
+		if (useCache) {
 
-			cached = true;
-			image = ImageCache.getInstance().getImage(type, data);
+			barcode = BarcodeCache.getInstance().getBarcode(type, data);
 		}
 
-		if (image != null) {
-
-			System.out.println(timeNow + //
-					" : Served [ " + type.toString() + " ] with [ " + data + " ] from cache");
-		} else {
+		if (barcode == null) {
 
 			// render image
 			long start = System.currentTimeMillis();
-			image = codeGenerators.get(type).getCode(data);
+			byte[] image = codeGenerators.get(type).getCode(data);
 			long renderTime = System.currentTimeMillis() - start;
 
 			StatsCollector.getInstance().incrementCounter("system.renderTime", renderTime);
@@ -116,15 +112,21 @@ public class BarcodeServer extends AbstractHandler {
 			System.out.println(timeNow + //
 					" : Rendered [ " + type.toString() + " ] with [ " + data + " ] in [ " + renderTime + "ms ]");
 
-			if (cached) {
+			barcode = new CachedObject(image);
 
-				ImageCache.getInstance().addImage(type, data, image);
+			if (useCache) {
+
+				BarcodeCache.getInstance().addImage(type, data, barcode);
 			}
+		} else {
+
+			System.out.println(timeNow + //
+					" : Served [ " + type.toString() + " ] with [ " + data + " ] from cache");
 		}
 
 		// print to stream
 		response.setHeader("Content-Type", "image/jpg");
-		response.setHeader("Content-Length", Integer.toString(image.length));
-		response.getOutputStream().write(image);
+		response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
+		response.getOutputStream().write(barcode.getData());
 	}
 }

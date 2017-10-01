@@ -22,8 +22,8 @@
 
 	<build>
 
-		<sourceDirectory>src/main</sourceDirectory>
-		<testSourceDirectory>src/test</testSourceDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 
 		<plugins>
 			<plugin>
@@ -34,12 +34,12 @@
 				<configuration>
 
 					<finalName>launcher</finalName>
-					<mainClass>org.barcodeapi.server.Launcher</mainClass>
+					<mainClass>org.barcodeapi.Launcher</mainClass>
 
 					<archive>
 						<manifest>
 
-							<mainClass>org.barcodeapi.server.Launcher</mainClass>
+							<mainClass>org.barcodeapi.Launcher</mainClass>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
 						</manifest>

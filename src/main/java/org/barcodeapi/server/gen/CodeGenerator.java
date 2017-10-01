@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.barcodeapi.server.cache.ImageCache;
+import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.statistics.StatsCollector;
 
@@ -18,7 +18,7 @@ public abstract class CodeGenerator {
 
 		this.codeType = type;
 
-		ImageCache.getInstance().createCache(type);
+		BarcodeCache.getInstance().createCache(type);
 	}
 
 	public CodeType getType() {
