@@ -32,7 +32,7 @@ public class ServerLoader {
 	 * 
 	 * @throws Exception
 	 */
-	public void launch() throws Exception {
+	public void launch(boolean blocking) throws Exception {
 
 		initJetty();
 
@@ -41,6 +41,8 @@ public class ServerLoader {
 		initApiHandler();
 
 		startServer();
+
+		blockInput(blocking);
 	}
 
 	/**
@@ -121,7 +123,6 @@ public class ServerLoader {
 
 			// start server
 			server.start();
-			server.join();
 
 			return true;
 		} catch (Exception e) {
@@ -130,5 +131,44 @@ public class ServerLoader {
 			e.printStackTrace(System.err);
 			return false;
 		}
+	}
+
+	/**
+	 * Stop the Jetty server.
+	 * 
+	 * @throws Exception
+	 */
+	public boolean stop() throws Exception {
+
+		try {
+
+			// stop server
+			server.stop();
+			return true;
+		} catch (Exception e) {
+
+			System.err.println("Failed to stop server.");
+			e.printStackTrace(System.err);
+			return false;
+		}
+	}
+
+	/**
+	 * A simple blocking method based on boolean input.
+	 * 
+	 * @param blocking
+	 * @throws Exception
+	 */
+	private void blockInput(boolean blocking) throws Exception {
+
+		if (!blocking) {
+
+			return;
+		}
+
+		do {
+
+			Thread.sleep(1);
+		} while (true);
 	}
 }

@@ -84,6 +84,8 @@ public class BarcodeAPIHandler extends AbstractHandler {
 
 			baseRequest.setHandled(true);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setHeader("Server", "BarcodeAPI.org");
+
 			response.getOutputStream().println("Empty request.");
 			return;
 		}
@@ -115,6 +117,8 @@ public class BarcodeAPIHandler extends AbstractHandler {
 
 				baseRequest.setHandled(true);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setHeader("Server", "BarcodeAPI.org");
+
 				response.getOutputStream().println("Failed to render [ " + data + " ]");
 				return;
 			}
