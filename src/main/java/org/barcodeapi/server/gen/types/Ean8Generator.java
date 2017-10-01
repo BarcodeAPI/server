@@ -33,6 +33,21 @@ public class Ean8Generator extends CodeGenerator {
 
 		try {
 
+			int checksum = calculateChecksum(data);
+
+			if (data.length() == 8) {
+
+				char lastChar = data.charAt(data.length() - 1);
+				if (Character.getNumericValue(lastChar) != checksum) {
+
+					throw new IllegalArgumentException(//
+							"Invalid checksum; [ " + lastChar + " ] does not match [ " + checksum + " ]");
+				}
+			} else {
+
+				data = data + checksum;
+			}
+
 			OutputStream out = new FileOutputStream(outputFile);
 
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
@@ -52,6 +67,41 @@ public class Ean8Generator extends CodeGenerator {
 
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	private int calculateChecksum(String data) {
+
+		if (data.length() < 7 || data.length() > 8) {
+
+			throw new IllegalArgumentException("Invalid length.");
+		}
+
+		int sum1 = 0;
+		int sum2 = 0;
+		for (int x = 0; x < 7; x++) {
+
+			int digit = Character.getNumericValue(data.charAt(x));
+
+			if (x % 2 == 0) {
+
+				sum2 += digit;
+			} else {
+
+				sum1 += digit;
+			}
+		}
+
+		int sum = sum1 + (sum2 * 3);
+
+		int check = (10 - (sum % 10));
+
+		if (check == 10) {
+
+			return 0;
+		} else {
+
+			return check;
 		}
 	}
 }

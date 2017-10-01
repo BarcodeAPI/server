@@ -13,6 +13,9 @@ import org.junit.BeforeClass;
 
 public abstract class ServerTestBase {
 
+	private static final String SERVER_HOST = "127.0.0.1";
+	private static final String SERVER_PORT = "8899";
+
 	protected static URI serverUri;
 
 	protected static ServerLoader apiServer;
@@ -22,13 +25,13 @@ public abstract class ServerTestBase {
 
 		try {
 
-			apiServer = new ServerLoader(null);
+			apiServer = new ServerLoader(new String[] { "--port", SERVER_PORT });
 			apiServer.launch(false);
 
-			serverUri = new URI("http://127.0.0.1:8080/");
+			serverUri = new URI(String.format("http://%s:%s", SERVER_HOST, SERVER_PORT));
 
 		} catch (Exception e) {
-
+			
 			Assert.fail("Failed to initialize server.");
 		}
 	}
