@@ -44,13 +44,13 @@ public class Code128Generator extends CodeGenerator {
 		 * 
 		 */
 		barcode128Bean.doQuietZone(true);
-		barcode128Bean.setQuietZone(moduleWidth);
+		barcode128Bean.setQuietZone(10 * moduleWidth);
 	}
 
 	@Override
 	public void onValidateRequest(String data) {
 
-		if (!data.matches("[ !\"#$%&'()*+,-./0-9:;\\<=\\>?@A-Z[\\]^_`a-z{|}~]{1,24}")) {
+		if (!data.matches("[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,24}")) {
 
 			throw new IllegalArgumentException("Invalid Coade128 format.");
 		}
