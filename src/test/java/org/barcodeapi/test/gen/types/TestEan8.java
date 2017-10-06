@@ -8,7 +8,7 @@ import org.junit.Test;
 public class TestEan8 extends ServerTestBase {
 
 	@Test
-	public void testEan8_7Characters() throws Exception {
+	public void testEan8_7Characters() {
 
 		apiGet("/8/1234567");
 
@@ -23,7 +23,7 @@ public class TestEan8 extends ServerTestBase {
 	}
 
 	@Test
-	public void testEan8_8Characters() throws Exception {
+	public void testEan8_8Nums() {
 
 		apiGet("/8/12345670");
 
@@ -38,7 +38,7 @@ public class TestEan8 extends ServerTestBase {
 	}
 
 	@Test
-	public void testEan8_8CharactersInvalidChecksum() throws Exception {
+	public void testEan8_8NumsInvalidChecksum() throws Exception {
 
 		apiGet("/8/12345678");
 
@@ -95,5 +95,17 @@ public class TestEan8 extends ServerTestBase {
 
 		Assert.assertEquals("Error Message", //
 				"Failed [ EAN8 ] with [ !@ ]", getResponse().readLine());
+	}
+
+	@Test
+	public void testEan8_WithUnicode() throws Exception {
+
+		apiGet("/8/Ω");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.BAD_REQUEST_400, getResponseCode());
+
+		Assert.assertEquals("Error Message", //
+				"Failed [ EAN8 ] with [ ? ]", getResponse().readLine());
 	}
 }
