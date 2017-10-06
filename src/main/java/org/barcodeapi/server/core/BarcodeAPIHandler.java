@@ -116,13 +116,14 @@ public class BarcodeAPIHandler extends AbstractHandler {
 				if (image == null) {
 
 					System.out.println(requestTime + //
-							"Failed to render [ " + data + " ]");
+							" : Failed [ " + type.toString() + " ] with [ " + data + " ]");
 
 					baseRequest.setHandled(true);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					response.setHeader("Server", "BarcodeAPI.org");
 
-					response.getOutputStream().println("Failed to render [ " + data + " ]");
+					response.getOutputStream().println(//
+							"Failed [ " + type.toString() + " ] with [ " + data + " ]");
 					return;
 				}
 
@@ -140,13 +141,14 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			} catch (Exception e) {
 
 				System.out.println(requestTime + //
-						" : Failed to render [ " + data + " ]");
+						" : Failed [ " + type.toString() + " ] with [ " + data + " ]");
 
 				baseRequest.setHandled(true);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.setHeader("Server", "BarcodeAPI.org");
 
-				response.getOutputStream().println("Failed to render [ " + data + " ]");
+				response.getOutputStream().println(//
+						"Failed [ " + type.toString() + " ] with [ " + data + " ]");
 				return;
 			}
 		} else {

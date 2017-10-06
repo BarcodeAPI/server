@@ -46,7 +46,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed to render [ 12345678 ]", getResponse().readLine());
+				"Failed [ EAN8 ] with [ 12345678 ]", getResponse().readLine());
 	}
 
 	@Test
@@ -58,7 +58,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed to render [ 123456 ]", getResponse().readLine());
+				"Failed [ EAN8 ] with [ 123456 ]", getResponse().readLine());
 	}
 
 	@Test
@@ -70,7 +70,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed to render [ 123456789 ]", getResponse().readLine());
+				"Failed [ EAN8 ] with [ 123456789 ]", getResponse().readLine());
 	}
 
 	@Test
@@ -82,6 +82,18 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed to render [ ABCDEFGH ]", getResponse().readLine());
+				"Failed [ EAN8 ] with [ ABCDEFGH ]", getResponse().readLine());
+	}
+
+	@Test
+	public void testEan8_WithSymbols() throws Exception {
+
+		apiGet("/8/!@");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.BAD_REQUEST_400, getResponseCode());
+
+		Assert.assertEquals("Error Message", //
+				"Failed [ EAN8 ] with [ !@ ]", getResponse().readLine());
 	}
 }
