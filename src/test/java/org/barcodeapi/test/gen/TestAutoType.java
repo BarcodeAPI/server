@@ -10,7 +10,7 @@ public class TestAutoType extends ServerTestBase {
 	@Test
 	public void testAutoType_Ean8() {
 
-		apiGet("/00000000");
+		apiGet("00000000");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -25,7 +25,7 @@ public class TestAutoType extends ServerTestBase {
 	@Test
 	public void testAutoType_Ean8With7() {
 
-		apiGet("/0000000");
+		apiGet("0000000");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -40,7 +40,7 @@ public class TestAutoType extends ServerTestBase {
 	@Test
 	public void testAutoType_Ean13() {
 
-		apiGet("/0000000000000");
+		apiGet("0000000000000");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -55,7 +55,7 @@ public class TestAutoType extends ServerTestBase {
 	@Test
 	public void testAutoType_Ean13With12() {
 
-		apiGet("/000000000000");
+		apiGet("000000000000");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -70,7 +70,7 @@ public class TestAutoType extends ServerTestBase {
 	@Test
 	public void testAutoType_Code39() {
 
-		apiGet("/ABC123");
+		apiGet("ABC123");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -85,7 +85,7 @@ public class TestAutoType extends ServerTestBase {
 	@Test
 	public void testAutoType_Code128() {
 
-		apiGet("/abc123");
+		apiGet("abc123");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -100,7 +100,7 @@ public class TestAutoType extends ServerTestBase {
 	@Test
 	public void testAutoType_QRCode() {
 
-		apiGet("/$♠1A");
+		apiGet("$♠1A");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -121,7 +121,7 @@ public class TestAutoType extends ServerTestBase {
 			req += "0";
 		}
 
-		apiGet("/" + req);
+		apiGet(req);
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());

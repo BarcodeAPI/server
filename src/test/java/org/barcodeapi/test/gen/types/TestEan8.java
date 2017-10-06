@@ -10,7 +10,7 @@ public class TestEan8 extends ServerTestBase {
 	@Test
 	public void testEan8_7Characters() {
 
-		apiGet("/8/1234567");
+		apiGet("8/1234567");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -25,7 +25,7 @@ public class TestEan8 extends ServerTestBase {
 	@Test
 	public void testEan8_8Nums() {
 
-		apiGet("/8/12345670");
+		apiGet("8/12345670");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -40,7 +40,7 @@ public class TestEan8 extends ServerTestBase {
 	@Test
 	public void testEan8_8NumsInvalidChecksum() throws Exception {
 
-		apiGet("/8/12345678");
+		apiGet("8/12345678");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
@@ -52,7 +52,7 @@ public class TestEan8 extends ServerTestBase {
 	@Test
 	public void testEan8_TooShort() throws Exception {
 
-		apiGet("/8/123456");
+		apiGet("8/123456");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
@@ -64,7 +64,7 @@ public class TestEan8 extends ServerTestBase {
 	@Test
 	public void testEan8_TooLong() throws Exception {
 
-		apiGet("/8/123456789");
+		apiGet("8/123456789");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
@@ -76,7 +76,7 @@ public class TestEan8 extends ServerTestBase {
 	@Test
 	public void testEan8_WithLetters() throws Exception {
 
-		apiGet("/8/ABCDEFGH");
+		apiGet("8/ABCDEFGH");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
@@ -88,7 +88,7 @@ public class TestEan8 extends ServerTestBase {
 	@Test
 	public void testEan8_WithSymbols() throws Exception {
 
-		apiGet("/8/!@");
+		apiGet("8/!@");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
@@ -100,7 +100,7 @@ public class TestEan8 extends ServerTestBase {
 	@Test
 	public void testEan8_WithUnicode() throws Exception {
 
-		apiGet("/8/Ω");
+		apiGet("8/Ω");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());

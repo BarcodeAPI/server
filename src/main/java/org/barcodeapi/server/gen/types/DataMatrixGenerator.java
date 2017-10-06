@@ -15,6 +15,9 @@ public class DataMatrixGenerator extends CodeGenerator {
 
 	private final int dpi = 200;
 
+	/**
+	 * https://en.wikipedia.org/wiki/Data_Matrix
+	 */
 	public DataMatrixGenerator() {
 		super(CodeType.DataMatrix);
 
