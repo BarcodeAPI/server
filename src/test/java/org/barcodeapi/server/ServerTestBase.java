@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import org.barcodeapi.core.ServerLoader;
 import org.junit.AfterClass;
@@ -48,7 +49,9 @@ public abstract class ServerTestBase {
 
 		try {
 
-			URL url = serverUri.resolve(path).toURL();
+			String encoded = URLEncoder.encode(path, "UTF-8");
+
+			URL url = serverUri.resolve("/" + encoded).toURL();
 			urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.connect();
 

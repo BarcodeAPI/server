@@ -90,6 +90,9 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			return;
 		}
 
+		// build a header safe data response
+		String dataHeader = data.replaceAll("[^\\x00-\\x7F]", "?");
+
 		// image object
 		CachedObject barcode = null;
 
@@ -162,6 +165,10 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setHeader("Server", "BarcodeAPI.org");
 
+		// add character set
+		response.setCharacterEncoding("UTF-8");
+		response.setHeader("Accept-Charset", "utf-8");
+
 		// add cache headers
 		response.setHeader("Cache-Control", "max-age=86400, public");
 
@@ -169,11 +176,13 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		response.setHeader("X-RequestTime", Long.toString(requestTime));
 		response.setHeader("X-CodeServer", serverName);
 		response.setHeader("X-CodeType", type.toString());
-		response.setHeader("X-CodeData", data);
+		response.setHeader("X-CodeData", dataHeader);
+		response.setHeader("X-CodeHash", barcode.getChecksum());
 
 		// add content headers
-		response.setHeader("Content-Type", "image/jpg");
+		response.setHeader("Content-Type", "image/png");
 		response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
+		response.setHeader("Content-Disposition", "filename=" + dataHeader + ".png");
 
 		// print data to stream
 		response.getOutputStream().write(barcode.getData());

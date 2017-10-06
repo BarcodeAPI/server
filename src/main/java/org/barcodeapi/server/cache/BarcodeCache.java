@@ -1,11 +1,14 @@
 package org.barcodeapi.server.cache;
 
+import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.barcodeapi.server.gen.CodeType;
 import org.barcodeapi.server.statistics.StatsCollector;
 
 public class BarcodeCache {
+
+	private final String CACHE_DIR = "/tmp/codeCache";
 
 	private static BarcodeCache imageCache;
 
@@ -27,30 +30,44 @@ public class BarcodeCache {
 	public void createCache(CodeType type) {
 
 		cache.put(type, new ConcurrentHashMap<String, CachedObject>());
+
+		File cacheDir = new File(CACHE_DIR + "/" + type.toString());
+		if (!cacheDir.exists()) {
+
+			cacheDir.mkdir();
+		}
 	}
 
 	public CachedObject getBarcode(CodeType type, String data) {
 
-		if (cache.get(type).containsKey(data)) {
+		if (!cache.get(type).containsKey(data)) {
 
-			String counterName = "cache." + type.toString() + ".hit";
+			String counterName = "cache." + type.toString() + ".miss";
 			StatsCollector.getInstance().incrementCounter(counterName);
+			return null;
 		}
 
+		String counterName = "cache." + type.toString() + ".hit";
+		StatsCollector.getInstance().incrementCounter(counterName);
 		return cache.get(type).get(data);
 	}
 
 	public void addImage(CodeType type, String data, CachedObject image) {
 
-		StatsCollector.getInstance().incrementCounter("cache.add");
-
+		String counterName = "cache." + type.toString() + ".add";
+		StatsCollector.getInstance().incrementCounter(counterName);
 		cache.get(type).put(data, image);
 	}
 
 	public void removeImage(CodeType type, String data) {
 
-		StatsCollector.getInstance().incrementCounter("cache.remove");
+		if (getBarcode(type, data) == null) {
 
+			return;
+		}
+
+		String counterName = "cache." + type.toString() + ".remove";
+		StatsCollector.getInstance().incrementCounter(counterName);
 		cache.get(type).remove(data);
 	}
 

@@ -1,10 +1,9 @@
 package org.barcodeapi.server.gen.types;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
 
+import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
@@ -41,7 +40,7 @@ public class Ean8Generator extends CodeGenerator {
 			return;
 		}
 
-		int checksum = calculateChecksum(data);
+		int checksum = CodeUtils.calculateEanChecksum(data);
 		String provided = data.substring(data.length() - 1);
 		if (!Integer.toString(checksum).equals(provided)) {
 
@@ -50,11 +49,11 @@ public class Ean8Generator extends CodeGenerator {
 	}
 
 	@Override
-	public void onRender(String data, File outputFile) {
+	public byte[] onRender(String data) {
 
 		try {
 
-			OutputStream out = new FileOutputStream(outputFile);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
 					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
@@ -67,45 +66,12 @@ public class Ean8Generator extends CodeGenerator {
 
 			out.close();
 
+			return out.toByteArray();
+
 		} catch (Exception e) {
 
 			e.printStackTrace();
 			throw new IllegalStateException("An error has occured.");
-		}
-	}
-
-	private int calculateChecksum(String data) {
-
-		if (data.length() < 7 || data.length() > 8) {
-
-			throw new IllegalArgumentException("Invalid length.");
-		}
-
-		int sum1 = 0;
-		int sum2 = 0;
-		for (int x = 0; x < 7; x++) {
-
-			int digit = Character.getNumericValue(data.charAt(x));
-
-			if (x % 2 == 0) {
-
-				sum2 += digit;
-			} else {
-
-				sum1 += digit;
-			}
-		}
-
-		int sum = sum1 + (sum2 * 3);
-
-		int check = (10 - (sum % 10));
-
-		if (check == 10) {
-
-			return 0;
-		} else {
-
-			return check;
 		}
 	}
 }

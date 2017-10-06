@@ -100,7 +100,7 @@ public class TestAutoType extends ServerTestBase {
 	@Test
 	public void testAutoType_QRCode() {
 
-		apiGet("/$");
+		apiGet("/$♠1A");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -109,7 +109,7 @@ public class TestAutoType extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"$", getHeader("X-CodeData"));
+				"$?1A", getHeader("X-CodeData"));
 	}
 
 	@Test

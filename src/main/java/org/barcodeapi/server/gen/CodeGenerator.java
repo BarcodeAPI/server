@@ -1,11 +1,5 @@
 package org.barcodeapi.server.gen;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.statistics.StatsCollector;
 
@@ -29,29 +23,20 @@ public abstract class CodeGenerator {
 
 		onValidateRequest(data);
 
-		StatsCollector.getInstance().incrementCounter("render." + getType().toString());
+		String counterName = "render." + getType().toString() + ".hit";
+		StatsCollector.getInstance().incrementCounter(counterName);
 
-		String fileName = data.replace(File.separatorChar, '-');
-		fileName = getType().toString() + File.separator + fileName;
-		fileName = "cache" + File.separator + fileName + ".png";
+		long timeStart = System.currentTimeMillis();
+		byte[] image = onRender(data);
+		double time = System.currentTimeMillis() - timeStart;
 
-		File outputFile = new File(fileName);
+		counterName = "render." + getType().toString() + ".time";
+		StatsCollector.getInstance().incrementCounter(counterName, time);
 
-		onRender(data, outputFile);
-
-		Path path = Paths.get(fileName);
-
-		try {
-
-			return Files.readAllBytes(path);
-		} catch (IOException e) {
-
-			e.printStackTrace();
-			return null;
-		}
+		return image;
 	}
 
 	public abstract void onValidateRequest(String data);
 
-	public abstract void onRender(String data, File outputFile);
+	public abstract byte[] onRender(String data);
 }

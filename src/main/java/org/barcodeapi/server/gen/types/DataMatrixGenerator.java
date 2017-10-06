@@ -1,9 +1,7 @@
 package org.barcodeapi.server.gen.types;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
 
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
@@ -34,12 +32,11 @@ public class DataMatrixGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public void onRender(String data, File outputFile) {
+	public byte[] onRender(String data) {
 
 		try {
 
-			// Open output file
-			OutputStream out = new FileOutputStream(outputFile);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
 					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
@@ -51,6 +48,8 @@ public class DataMatrixGenerator extends CodeGenerator {
 			canvasProvider.finish();
 
 			out.close();
+
+			return out.toByteArray();
 
 		} catch (Exception e) {
 
