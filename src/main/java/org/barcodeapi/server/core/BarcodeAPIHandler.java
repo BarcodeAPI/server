@@ -49,7 +49,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			throws IOException {
 
 		// time of the request
-		long timeNow = System.currentTimeMillis();
+		long requestTime = System.currentTimeMillis();
 
 		// get the request string
 		String data = target.substring(1, target.length());
@@ -102,18 +102,45 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		// if not found in cache
 		if (barcode == null) {
 
-			// render image
-			long start = System.currentTimeMillis();
-			byte[] image = codeGenerators.get(type).getCode(data);
-			double renderTime = System.currentTimeMillis() - start;
+			try {
 
-			// add to total render time
-			StatsCollector.getInstance().incrementCounter("system.renderTime", renderTime);
+				// render image
+				long start = System.currentTimeMillis();
+				byte[] image = codeGenerators.get(type).getCode(data);
+				double renderTime = System.currentTimeMillis() - start;
 
-			// fail if render failed
-			if (image == null) {
+				// add to total render time
+				StatsCollector.getInstance().incrementCounter("system.renderTime", renderTime);
 
-				System.out.println("Failed to render [ " + data + " ]");
+				// fail if render failed
+				if (image == null) {
+
+					System.out.println(requestTime + //
+							"Failed to render [ " + data + " ]");
+
+					baseRequest.setHandled(true);
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setHeader("Server", "BarcodeAPI.org");
+
+					response.getOutputStream().println("Failed to render [ " + data + " ]");
+					return;
+				}
+
+				System.out.println(requestTime + //
+						" : Rendered [ " + type.toString() + " ] with [ " + data + " ] in [ " + renderTime + "ms ]");
+
+				// add data to image object
+				barcode = new CachedObject(image);
+
+				// add to cache if allowed
+				if (useCache) {
+
+					BarcodeCache.getInstance().addImage(type, data, barcode);
+				}
+			} catch (Exception e) {
+
+				System.out.println(requestTime + //
+						" : Failed to render [ " + data + " ]");
 
 				baseRequest.setHandled(true);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -122,21 +149,9 @@ public class BarcodeAPIHandler extends AbstractHandler {
 				response.getOutputStream().println("Failed to render [ " + data + " ]");
 				return;
 			}
-
-			System.out.println(timeNow + //
-					" : Rendered [ " + type.toString() + " ] with [ " + data + " ] in [ " + renderTime + "ms ]");
-
-			// add data to image object
-			barcode = new CachedObject(image);
-
-			// add to cache if allowed
-			if (useCache) {
-
-				BarcodeCache.getInstance().addImage(type, data, barcode);
-			}
 		} else {
 
-			System.out.println(timeNow + //
+			System.out.println(requestTime + //
 					" : Served [ " + type.toString() + " ] with [ " + data + " ] from cache");
 		}
 
@@ -145,11 +160,16 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setHeader("Server", "BarcodeAPI.org");
 
+		// add cache headers
+		response.setHeader("Cache-Control", "max-age=86400, public");
+
 		// add headers describing request
-		response.setHeader("X-RequestTime", Long.toString(timeNow));
+		response.setHeader("X-RequestTime", Long.toString(requestTime));
 		response.setHeader("X-CodeServer", serverName);
 		response.setHeader("X-CodeType", type.toString());
 		response.setHeader("X-CodeData", data);
+
+		// add content headers
 		response.setHeader("Content-Type", "image/jpg");
 		response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
 

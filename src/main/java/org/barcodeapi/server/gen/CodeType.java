@@ -5,45 +5,53 @@ public enum CodeType {
 	/**
 	 * EAN-8 type UPC code; 7 numerical digits followed by a single checksum digit.
 	 */
-	EAN8(new String[] { "8", "ean8" }),
+	EAN8("[0-9]{7,8}", //
+			new String[] { "8", "ean8" }),
 
 	/**
 	 * EAN-13 type UPC code; 12 numerical digits followed by a single checksum
 	 * digit.
 	 */
-	EAN13(new String[] { "13", "ean13" }),
+	EAN13("[0-9]{12,13}", //
+			new String[] { "13", "ean13" }),
 
 	/**
 	 * Code39 type code; variable length consisting of only numbers and upper-case
 	 * characters.
 	 */
-	Code39(new String[] { "39", "code39" }),
+	Code39("[0-9A-Z]{1,32}", //
+			new String[] { "39", "code39" }),
 
 	/**
 	 * Code128 type code; variable length consisting of numbers, letters, and
 	 * symbols.
 	 */
-	Code128(new String[] { "128", "code128" }),
+	Code128("[0-9A-Za-z]{1,32}", //
+			new String[] { "128", "code128" }),
 
 	/**
 	 * QR type code; a high density data code with error correction.
 	 */
-	QRCode(new String[] { "qr", "qrcode" }),
+	QRCode(".*", //
+			new String[] { "qr", "qrcode" }),
 
 	/**
 	 * Data Matrix type code; a high density data code with error correction.
 	 */
-	DataMatrix(new String[] { "matrix", "datamatrix", "data" });
+	DataMatrix(".*", //
+			new String[] { "matrix", "datamatrix", "data" });
 
-	private String[] typeStrings;
+	private final String pattern;
+	private final String[] typeStrings;
 
 	/**
 	 * Create a new CodeType with a list of its associated IDs.
 	 * 
 	 * @param typeStrings
 	 */
-	CodeType(String[] typeStrings) {
+	CodeType(String pattern, String[] typeStrings) {
 
+		this.pattern = pattern;
 		this.typeStrings = typeStrings;
 	}
 
@@ -55,6 +63,17 @@ public enum CodeType {
 	public String[] getTypeStrings() {
 
 		return typeStrings;
+	}
+
+	/**
+	 * Returns true if the pattern passes validation for the code type.
+	 * 
+	 * @param data
+	 * @return
+	 */
+	public boolean validateFormat(String data) {
+
+		return data.matches(pattern);
 	}
 
 	/**
@@ -89,42 +108,39 @@ public enum CodeType {
 	public static CodeType getType(String data) {
 
 		// Match EAN-8 format
-		if (data.matches("[0-9]{7,8}")) {
+		if (EAN8.validateFormat(data)) {
 
-			return CodeType.EAN8;
+			return EAN8;
 		}
 
 		// Match EAN-13 format
-		if (data.matches("[0-9]{12,13}")) {
+		if (EAN13.validateFormat(data)) {
 
-			return CodeType.EAN13;
+			return EAN13;
 		}
 
-		// Match letters and numbers to Code39
-		if (data.matches("[A-Z0-9]{1,12}")) {
+		// Match Code39 format
+		if (Code39.validateFormat(data) //
+				&& data.length() < 16) {
 
-			return CodeType.Code39;
+			return Code39;
 		}
 
-		// Match URLs to QR
-		if (data.matches("^(http://|https://).*")) {
+		// Match Code128 format
+		if (Code128.validateFormat(data) //
+				&& data.length() < 24) {
 
-			return CodeType.QRCode;
+			return Code128;
 		}
 
-		// Less then 16 bytes is Code128
-		if (data.length() < 16) {
+		// Match QR format
+		if (QRCode.validateFormat(data) //
+				&& data.length() < 64) {
 
-			return CodeType.Code128;
+			return QRCode;
 		}
 
-		// Longer then 64 bytes is DataMatrix
-		if (data.length() < 32) {
-
-			return CodeType.QRCode;
-		}
-
-		// Default to DataMatrix
-		return CodeType.DataMatrix;
+		// Default to Data Matrix format
+		return DataMatrix;
 	}
 }

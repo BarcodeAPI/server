@@ -31,7 +31,12 @@ public class Code128Generator extends CodeGenerator {
 	}
 
 	@Override
-	public boolean onRender(String data, File outputFile) {
+	public void onValidateRequest(String data) {
+
+	}
+
+	@Override
+	public void onRender(String data, File outputFile) {
 
 		try {
 
@@ -48,12 +53,11 @@ public class Code128Generator extends CodeGenerator {
 			canvasProvider.finish();
 
 			out.close();
-			return true;
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			return false;
+			throw new IllegalStateException("An error has occured.");
 		}
 	}
 }

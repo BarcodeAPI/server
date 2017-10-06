@@ -1,6 +1,8 @@
 package org.barcodeapi.server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -20,6 +22,12 @@ public abstract class ServerTestBase {
 
 	protected static ServerLoader apiServer;
 
+	private HttpURLConnection urlConnection;
+
+	private int responseCode;
+
+	private BufferedReader response;
+
 	@BeforeClass
 	public static void startServer() {
 
@@ -31,32 +39,53 @@ public abstract class ServerTestBase {
 			serverUri = new URI(String.format("http://%s:%s", SERVER_HOST, SERVER_PORT));
 
 		} catch (Exception e) {
-			
+
 			Assert.fail("Failed to initialize server.");
 		}
 	}
 
-	protected HttpURLConnection apiGet(String path) {
+	protected void apiGet(String path) {
 
 		try {
 
 			URL url = serverUri.resolve(path).toURL();
-			HttpURLConnection http = (HttpURLConnection) url.openConnection();
-			http.connect();
+			urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection.connect();
 
-			return http;
+			responseCode = urlConnection.getResponseCode();
+
+			if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+
+				response = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+			} else {
+
+				response = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
+			}
 
 		} catch (MalformedURLException e) {
 
 			Assert.fail("Malformed URL.");
 			e.printStackTrace(System.err);
-			return null;
 		} catch (IOException e) {
 
 			Assert.fail("IOException.");
 			e.printStackTrace(System.err);
-			return null;
 		}
+	}
+
+	protected int getResponseCode() {
+
+		return responseCode;
+	}
+
+	protected String getHeader(String header) {
+
+		return urlConnection.getHeaderField(header);
+	}
+
+	protected BufferedReader getResponse() {
+
+		return response;
 	}
 
 	@AfterClass

@@ -27,6 +27,8 @@ public abstract class CodeGenerator {
 
 	public byte[] getCode(String data) {
 
+		onValidateRequest(data);
+
 		StatsCollector.getInstance().incrementCounter("render." + getType().toString());
 
 		String fileName = data.replace(File.separatorChar, '-');
@@ -35,10 +37,7 @@ public abstract class CodeGenerator {
 
 		File outputFile = new File(fileName);
 
-		if (!onRender(data, outputFile)) {
-
-			return null;
-		}
+		onRender(data, outputFile);
 
 		Path path = Paths.get(fileName);
 
@@ -52,5 +51,7 @@ public abstract class CodeGenerator {
 		}
 	}
 
-	public abstract boolean onRender(String data, File outputFile);
+	public abstract void onValidateRequest(String data);
+
+	public abstract void onRender(String data, File outputFile);
 }

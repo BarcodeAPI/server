@@ -29,24 +29,30 @@ public class Ean8Generator extends CodeGenerator {
 	}
 
 	@Override
-	public boolean onRender(String data, File outputFile) {
+	public void onValidateRequest(String data) {
+
+		if (!CodeType.EAN8.validateFormat(data)) {
+
+			throw new IllegalArgumentException("Invalid format.");
+		}
+
+		if (data.length() == 7) {
+
+			return;
+		}
+
+		int checksum = calculateChecksum(data);
+		String provided = data.substring(data.length() - 1);
+		if (!Integer.toString(checksum).equals(provided)) {
+
+			throw new IllegalArgumentException("Invalid checksum.");
+		}
+	}
+
+	@Override
+	public void onRender(String data, File outputFile) {
 
 		try {
-
-			int checksum = calculateChecksum(data);
-
-			if (data.length() == 8) {
-
-				char lastChar = data.charAt(data.length() - 1);
-				if (Character.getNumericValue(lastChar) != checksum) {
-
-					throw new IllegalArgumentException(//
-							"Invalid checksum; [ " + lastChar + " ] does not match [ " + checksum + " ]");
-				}
-			} else {
-
-				data = data + checksum;
-			}
 
 			OutputStream out = new FileOutputStream(outputFile);
 
@@ -61,12 +67,10 @@ public class Ean8Generator extends CodeGenerator {
 
 			out.close();
 
-			return true;
-
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			return false;
+			throw new IllegalStateException("An error has occured.");
 		}
 	}
 

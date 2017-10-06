@@ -11,11 +11,19 @@ public class BarcodeCache {
 
 	private ConcurrentHashMap<CodeType, ConcurrentHashMap<String, CachedObject>> cache;
 
+	/**
+	 * Initialize the cache.
+	 */
 	public BarcodeCache() {
 
 		cache = new ConcurrentHashMap<CodeType, ConcurrentHashMap<String, CachedObject>>();
 	}
 
+	/**
+	 * Create a cache for a given code type.
+	 * 
+	 * @param type
+	 */
 	public void createCache(CodeType type) {
 
 		cache.put(type, new ConcurrentHashMap<String, CachedObject>());
