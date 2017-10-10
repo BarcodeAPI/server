@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
+import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
 import org.krysalis.barcode4j.impl.code128.Code128Constants;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
@@ -32,6 +33,7 @@ public class Code128Generator extends CodeGenerator {
 		 */
 		barcode128Bean.setCodeset(Code128Constants.CODESET_B);
 
+		// barcode128Bean.setBarHeight(height);
 		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
 		barcode128Bean.setModuleWidth(moduleWidth);
 
@@ -45,14 +47,35 @@ public class Code128Generator extends CodeGenerator {
 		 */
 		barcode128Bean.doQuietZone(true);
 		barcode128Bean.setQuietZone(10 * moduleWidth);
+		barcode128Bean.setVerticalQuietZone(2 * moduleWidth);
+		
+		barcode128Bean.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
+
+		barcode128Bean.setHeight(UnitConv.in2mm(1));
+		// barcode128Bean.setBarHeight(UnitConv.in2mm(.5));
+
+		// barcode128Bean.setFontName(name);
+		// barcode128Bean.setFontSize(size);
 	}
 
 	@Override
 	public void onValidateRequest(String data) {
 
+		/**
+		 * Validate against Code128 specifications.
+		 * 
+		 * https://en.wikipedia.org/wiki/Code_128#Bar_code_widths
+		 * 
+		 */
 		if (!data.matches("[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,24}")) {
 
 			throw new IllegalArgumentException("Invalid Coade128 format.");
+		}
+
+		// Allow max of 50 characters
+		if (data.length() > 50) {
+
+			throw new IllegalArgumentException("Too many characters.");
 		}
 	}
 
@@ -69,7 +92,6 @@ public class Code128Generator extends CodeGenerator {
 			barcode128Bean.generateBarcode(canvasProvider, data);
 
 			canvasProvider.getBufferedImage();
-
 			canvasProvider.finish();
 
 			out.close();
