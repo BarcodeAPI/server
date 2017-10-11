@@ -11,6 +11,7 @@ import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.cache.CachedObject;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
+import org.barcodeapi.server.gen.types.CodabarGenerator;
 import org.barcodeapi.server.gen.types.Code128Generator;
 import org.barcodeapi.server.gen.types.Code39Generator;
 import org.barcodeapi.server.gen.types.DataMatrixGenerator;
@@ -31,6 +32,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 
 		codeGenerators = new HashMap<CodeType, CodeGenerator>();
 
+		codeGenerators.put(CodeType.CODABAR, new CodabarGenerator());
 		codeGenerators.put(CodeType.EAN8, new Ean8Generator());
 		codeGenerators.put(CodeType.EAN13, new Ean13Generator());
 		codeGenerators.put(CodeType.Code39, new Code39Generator());
@@ -82,7 +84,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 
 			if (data == null || data.equals("")) {
 
-				System.out.println("Empty request.");
+				System.out.println(requestTime + " : Empty request.");
 
 				baseRequest.setHandled(true);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -110,33 +112,21 @@ public class BarcodeAPIHandler extends AbstractHandler {
 				try {
 
 					// render image
-					long start = System.currentTimeMillis();
+					double start = System.nanoTime();
 					byte[] image = codeGenerators.get(type).getCode(data);
-					double renderTime = System.currentTimeMillis() - start;
+					double renderTime = (System.nanoTime() - start) / 1000 / 1000;
+					String length = String.format("%.2f", renderTime);
 
 					// add to total render time
 					StatsCollector.getInstance().incrementCounter("system.renderTime", renderTime);
 
-					// fail if render failed
-					if (image == null) {
+					System.out.println(requestTime + " :" + //
+							" Rendered [ " + type.toString() + " ] " + //
+							" with [ " + data + " ]" + //
+							" in [ " + length + "ms ]" + //
+							" size [ " + image.length + "B ]");
 
-						System.out.println(requestTime + //
-								" : Failed [ " + type.toString() + " ] with [ " + data + " ]");
-
-						baseRequest.setHandled(true);
-						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-						response.setHeader("Server", "BarcodeAPI.org");
-
-						response.getOutputStream().println(//
-								"Failed [ " + type.toString() + " ] with [ " + data + " ]");
-						return;
-					}
-
-					System.out.println(requestTime + //
-							" : Rendered [ " + type.toString() + " ] with [ " + data + " ] in [ " + renderTime
-							+ "ms ]");
-
-					// add data to image object
+					// create new object with image
 					barcode = new CachedObject(image);
 
 					// add to cache if allowed
@@ -146,15 +136,17 @@ public class BarcodeAPIHandler extends AbstractHandler {
 					}
 				} catch (Exception e) {
 
-					System.out.println(requestTime + //
-							" : Failed [ " + type.toString() + " ] with [ " + data + " ]");
+					String message = "Failed [ " + type.toString() + " ]" + //
+							" with [ " + data + " ]" + //
+							" reason [ " + e.getMessage() + " ]";
+
+					System.out.println(requestTime + " : " + message);
 
 					baseRequest.setHandled(true);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					response.setHeader("Server", "BarcodeAPI.org");
 
-					response.getOutputStream().println(//
-							"Failed [ " + type.toString() + " ] with [ " + data + " ]");
+					response.getOutputStream().println(message);
 					return;
 				}
 			} else {

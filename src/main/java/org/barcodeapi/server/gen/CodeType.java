@@ -3,6 +3,12 @@ package org.barcodeapi.server.gen;
 public enum CodeType {
 
 	/**
+	 * Codabar type code;
+	 */
+	CODABAR("[0-9-:$\\/.+]+", //
+			new String[] { "codabar" }),
+
+	/**
 	 * EAN-8 type UPC code; 7 numerical digits followed by a single checksum digit.
 	 */
 	EAN8("[0-9]{7,8}", //
@@ -19,14 +25,14 @@ public enum CodeType {
 	 * Code39 type code; variable length consisting of only numbers and upper-case
 	 * characters.
 	 */
-	Code39("[0-9A-Z]{1,32}", //
+	Code39("[A-Z*0-9 -$%./+]+", //
 			new String[] { "39", "code39" }),
 
 	/**
 	 * Code128 type code; variable length consisting of numbers, letters, and
 	 * symbols.
 	 */
-	Code128("[0-9A-Za-z]{1,32}", //
+	Code128("[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+", //
 			new String[] { "128", "code128" }),
 
 	/**
@@ -38,7 +44,7 @@ public enum CodeType {
 	/**
 	 * Data Matrix type code; a high density data code with error correction.
 	 */
-	DataMatrix(".*", //
+	DataMatrix("[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}", //
 			new String[] { "matrix", "datamatrix", "data" });
 
 	private final String pattern;

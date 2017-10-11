@@ -46,7 +46,8 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 12345678 ]", getResponse().readLine());
+				"Failed [ EAN8 ] with [ 12345678 ] reason [ Invalid checksum. ]", //
+				getResponse().readLine());
 	}
 
 	@Test
@@ -58,7 +59,8 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 123456 ]", getResponse().readLine());
+				"Failed [ EAN8 ] with [ 123456 ] reason [ Invalid format. ]", //
+				getResponse().readLine());
 	}
 
 	@Test
@@ -70,7 +72,8 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 123456789 ]", getResponse().readLine());
+				"Failed [ EAN8 ] with [ 123456789 ] reason [ Invalid format. ]", //
+				getResponse().readLine());
 	}
 
 	@Test
@@ -82,7 +85,8 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ ABCDEFGH ]", getResponse().readLine());
+				"Failed [ EAN8 ] with [ ABCDEFGH ] reason [ Invalid format. ]", //
+				getResponse().readLine());
 	}
 
 	@Test
@@ -94,7 +98,8 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ !@ ]", getResponse().readLine());
+				"Failed [ EAN8 ] with [ !@ ] reason [ Invalid format. ]", //
+				getResponse().readLine());
 	}
 
 	@Test
@@ -106,6 +111,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ ? ]", getResponse().readLine());
+				"Failed [ EAN8 ] with [ ? ] reason [ Invalid format. ]", //
+				getResponse().readLine());
 	}
 }

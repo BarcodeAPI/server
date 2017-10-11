@@ -12,7 +12,7 @@ import org.krysalis.barcode4j.tools.UnitConv;
 
 public class Code39Generator extends CodeGenerator {
 
-	private Code39Bean barcode39Bean;
+	private Code39Bean generator;
 
 	private final int dpi = 150;
 
@@ -23,21 +23,21 @@ public class Code39Generator extends CodeGenerator {
 		super(CodeType.Code39);
 
 		// Setup Code39 generator
-		barcode39Bean = new Code39Bean();
+		generator = new Code39Bean();
 
 		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
-		barcode39Bean.setModuleWidth(moduleWidth);
+		generator.setModuleWidth(moduleWidth);
 
 		/**
 		 * Set quiet zone
 		 */
-		barcode39Bean.doQuietZone(true);
-		barcode39Bean.setQuietZone(10 * moduleWidth);
-		barcode39Bean.setVerticalQuietZone(2 * moduleWidth);
+		generator.doQuietZone(true);
+		generator.setQuietZone(10 * moduleWidth);
+		generator.setVerticalQuietZone(2 * moduleWidth);
 
-		barcode39Bean.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
+		generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
 
-		barcode39Bean.setHeight(UnitConv.in2mm(1));
+		generator.setHeight(UnitConv.in2mm(1));
 		// barcode39Bean.setBarHeight(UnitConv.in2mm(.5));
 
 		// barcode39Bean.setFontName(name);
@@ -74,7 +74,7 @@ public class Code39Generator extends CodeGenerator {
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
 					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
 
-			barcode39Bean.generateBarcode(canvasProvider, data);
+			generator.generateBarcode(canvasProvider, data);
 
 			canvasProvider.getBufferedImage();
 			canvasProvider.finish();

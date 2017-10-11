@@ -12,19 +12,19 @@ import org.krysalis.barcode4j.tools.UnitConv;
 
 public class Ean8Generator extends CodeGenerator {
 
-	private EAN8Bean ean8Bean;
+	private EAN8Bean generator;
 
 	private final int dpi = 150;
 
 	public Ean8Generator() {
 		super(CodeType.EAN8);
 
-		ean8Bean = new EAN8Bean();
+		generator = new EAN8Bean();
 
 		// configure barcode generator
-		ean8Bean.setModuleWidth(UnitConv.in2mm(2.5f / dpi));
-		ean8Bean.doQuietZone(true);
-		ean8Bean.setQuietZone(4);
+		generator.setModuleWidth(UnitConv.in2mm(2.5f / dpi));
+		generator.doQuietZone(true);
+		generator.setQuietZone(4);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class Ean8Generator extends CodeGenerator {
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
 					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
 
-			ean8Bean.generateBarcode(canvasProvider, data);
+			generator.generateBarcode(canvasProvider, data);
 
 			canvasProvider.getBufferedImage();
 

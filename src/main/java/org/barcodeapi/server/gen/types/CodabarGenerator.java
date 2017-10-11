@@ -6,32 +6,24 @@ import java.io.ByteArrayOutputStream;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.krysalis.barcode4j.HumanReadablePlacement;
-import org.krysalis.barcode4j.impl.code128.Code128Bean;
-import org.krysalis.barcode4j.impl.code128.Code128Constants;
+import org.krysalis.barcode4j.impl.codabar.CodabarBean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
-public class Code128Generator extends CodeGenerator {
+public class CodabarGenerator extends CodeGenerator {
 
-	private Code128Bean generator;
+	private CodabarBean generator;
 
 	private final int dpi = 150;
 
 	/**
-	 * 
+	 * Constructor for the Codabar generator.
 	 */
-	public Code128Generator() {
-		super(CodeType.Code128);
+	public CodabarGenerator() {
+		super(CodeType.CODABAR);
 
-		// Setup Code128 generator
-		generator = new Code128Bean();
-
-		/**
-		 * Character map
-		 * 
-		 * https://en.wikipedia.org/wiki/Code_128#Bar_code_widths
-		 */
-		generator.setCodeset(Code128Constants.CODESET_B);
+		// Setup Codabar generator
+		generator = new CodabarBean();
 
 		// barcode128Bean.setBarHeight(height);
 		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
@@ -47,7 +39,7 @@ public class Code128Generator extends CodeGenerator {
 		 */
 		generator.doQuietZone(true);
 		generator.setQuietZone(10 * moduleWidth);
-		generator.setVerticalQuietZone(2 * moduleWidth);
+		// generator.setVerticalQuietZone(2 * moduleWidth);
 
 		generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
 
@@ -58,22 +50,32 @@ public class Code128Generator extends CodeGenerator {
 		// barcode128Bean.setFontSize(size);
 	}
 
+	/**
+	 * Called before looking up an image in cache, or rendering;
+	 * 
+	 * Validate the requested string's format and length.
+	 */
 	@Override
 	public void onValidateRequest(String data) {
 
 		// Validate format
-		if (!CodeType.Code128.validateFormat(data)) {
+		if (!CodeType.CODABAR.validateFormat(data)) {
 
-			throw new IllegalArgumentException("Invalid format.");
+			throw new IllegalArgumentException("Invalid Codabar format.");
 		}
 
-		// Allow max of 50 characters
-		if (data.length() > 50) {
+		// Allow max of 25 characters
+		if (data.length() > 25) {
 
 			throw new IllegalArgumentException("Too many characters.");
 		}
 	}
 
+	/**
+	 * Called when an image was not found in cache and must be rendered;
+	 * 
+	 * Return a PNG image as bytes.
+	 */
 	@Override
 	public byte[] onRender(String data) {
 
@@ -95,7 +97,7 @@ public class Code128Generator extends CodeGenerator {
 
 		} catch (Exception e) {
 
-			e.printStackTrace();
+			e.printStackTrace(System.err);
 			throw new IllegalStateException("An error has occured.");
 		}
 	}

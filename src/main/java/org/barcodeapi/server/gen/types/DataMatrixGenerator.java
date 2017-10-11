@@ -11,7 +11,7 @@ import org.krysalis.barcode4j.tools.UnitConv;
 
 public class DataMatrixGenerator extends CodeGenerator {
 
-	private DataMatrixBean dataMatrixBean;
+	private DataMatrixBean generator;
 
 	private final int dpi = 200;
 
@@ -21,17 +21,21 @@ public class DataMatrixGenerator extends CodeGenerator {
 	public DataMatrixGenerator() {
 		super(CodeType.DataMatrix);
 
-		dataMatrixBean = new DataMatrixBean();
+		generator = new DataMatrixBean();
 
 		// configure barcode generator
-		dataMatrixBean.setQuietZone(2);
-		dataMatrixBean.doQuietZone(true);
-		dataMatrixBean.setModuleWidth(UnitConv.in2mm(5.0f / dpi));
+		generator.setQuietZone(2);
+		generator.doQuietZone(true);
+		generator.setModuleWidth(UnitConv.in2mm(5.0f / dpi));
 	}
 
 	@Override
 	public void onValidateRequest(String data) {
 
+		if (!CodeType.DataMatrix.validateFormat(data)) {
+
+			throw new IllegalArgumentException("Invalid format.");
+		}
 	}
 
 	@Override
@@ -44,7 +48,7 @@ public class DataMatrixGenerator extends CodeGenerator {
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
 					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
 
-			dataMatrixBean.generateBarcode(canvasProvider, data);
+			generator.generateBarcode(canvasProvider, data);
 
 			canvasProvider.getBufferedImage();
 

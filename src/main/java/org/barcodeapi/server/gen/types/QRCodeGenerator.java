@@ -16,14 +16,33 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class QRCodeGenerator extends CodeGenerator {
 
+	private QRCodeWriter codeWriter;
+
 	public QRCodeGenerator() {
 		super(CodeType.QRCode);
 
+		codeWriter = new QRCodeWriter();
 	}
 
 	@Override
 	public void onValidateRequest(String data) {
 
+		/**
+		 * Validate against Code128 specifications.
+		 * 
+		 * https://en.wikipedia.org/wiki/Code_128#Bar_code_widths
+		 * 
+		 */
+		if (!data.matches("[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+")) {
+
+			throw new IllegalArgumentException("Invalid QRCode format.");
+		}
+
+		// Allow max of 50 characters
+		if (data.length() > 50) {
+
+			throw new IllegalArgumentException("Too many characters.");
+		}
 	}
 
 	@Override
@@ -39,7 +58,8 @@ public class QRCodeGenerator extends CodeGenerator {
 			hintsMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
 			hintsMap.put(EncodeHintType.MARGIN, 2);
 
-			BitMatrix bitMatrix = new QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, mWidth, mHeight, hintsMap);
+			BitMatrix bitMatrix = codeWriter.encode(//
+					data, BarcodeFormat.QR_CODE, mWidth, mHeight, hintsMap);
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 

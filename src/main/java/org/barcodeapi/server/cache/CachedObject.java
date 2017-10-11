@@ -10,6 +10,8 @@ public class CachedObject {
 
 	private final String checksum;
 
+	private long lastAccess = 0;
+
 	public CachedObject(byte[] data) {
 
 		this.timeCreated = System.currentTimeMillis();
@@ -26,6 +28,7 @@ public class CachedObject {
 
 	public byte[] getData() {
 
+		lastAccess = System.currentTimeMillis();
 		return barcodeData;
 	}
 
@@ -37,5 +40,10 @@ public class CachedObject {
 	public String getChecksum() {
 
 		return checksum;
+	}
+
+	public long getLastAccess() {
+
+		return lastAccess;
 	}
 }
