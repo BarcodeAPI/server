@@ -47,16 +47,6 @@ public class Code39Generator extends CodeGenerator {
 	@Override
 	public void onValidateRequest(String data) {
 
-		/**
-		 * Validate against Code39 specifications.
-		 * 
-		 * https://en.wikipedia.org/wiki/Code_39#Encoding
-		 */
-		if (!data.matches("[A-Z0-9* -$%.\\/+]+")) {
-
-			throw new IllegalArgumentException("Invalid Coade128 format.");
-		}
-
 		// Allow max of 50 characters
 		if (data.length() > 50) {
 

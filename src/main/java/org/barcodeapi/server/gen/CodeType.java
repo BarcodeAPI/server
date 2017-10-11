@@ -5,60 +5,81 @@ public enum CodeType {
 	/**
 	 * Codabar type code;
 	 */
-	CODABAR("[0-9-:$\\/.+]+", //
-			new String[] { "codabar" }),
+	CODABAR(new String[] { "codabar" }, //
+			"[0-9-:$\\/.+]+", //
+			"[0-9-:$\\/.+]+"), //
 
 	/**
-	 * EAN-8 type UPC code; 7 numerical digits followed by a single checksum digit.
+	 * EAN-8 type UPC code;
+	 * 
+	 * 7 numerical digits followed by a single checksum digit.
 	 */
-	EAN8("[0-9]{7,8}", //
-			new String[] { "8", "ean8" }),
+	EAN8(new String[] { "8", "ean8" }, //
+			"[0-9]{7,8}", //
+			"[0-9]{7,8}"),
 
 	/**
-	 * EAN-13 type UPC code; 12 numerical digits followed by a single checksum
-	 * digit.
+	 * EAN-13 type UPC code;
+	 * 
+	 * 12 numerical digits followed by a single checksum digit.
 	 */
-	EAN13("[0-9]{12,13}", //
-			new String[] { "13", "ean13" }),
+	EAN13(new String[] { "13", "ean13" }, //
+			"[0-9]{12,13}", //
+			"[0-9]{12,13}"),
 
 	/**
-	 * Code39 type code; variable length consisting of only numbers and upper-case
-	 * characters.
+	 * Code39 type code;
+	 * 
+	 * Variable length consisting of only numbers and upper-case characters.
 	 */
-	Code39("[A-Z*0-9 -$%./+]+", //
-			new String[] { "39", "code39" }),
+	Code39(new String[] { "39", "code39" }, //
+			"[A-Z*0-9 -$%./+]+", //
+			"[A-Z*0-9 -$%./+]+"),
 
 	/**
-	 * Code128 type code; variable length consisting of numbers, letters, and
-	 * symbols.
+	 * Code128 type code;
+	 * 
+	 * Variable length consisting of numbers, letters, and symbols.
 	 */
-	Code128("[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+", //
-			new String[] { "128", "code128" }),
+	Code128(new String[] { "128", "code128" }, //
+			"[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+", //
+			"[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+"),
 
 	/**
-	 * QR type code; a high density data code with error correction.
+	 * QR type code;
+	 * 
+	 * A high density data code with error correction.
 	 */
-	QRCode(".*", //
-			new String[] { "qr", "qrcode" }),
+	QRCode(new String[] { "qr", "qrcode" }, //
+			".*", //
+			".*"),
 
 	/**
-	 * Data Matrix type code; a high density data code with error correction.
+	 * Data Matrix type code;
+	 * 
+	 * A high density data code with error correction.
 	 */
-	DataMatrix("[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}", //
-			new String[] { "matrix", "datamatrix", "data" });
+	DataMatrix(new String[] { "matrix", "datamatrix", "data" }, //
+			"[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}", //
+			"[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}");
 
+	/**
+	 * Local Variables
+	 */
+	private final String[] types;
 	private final String pattern;
-	private final String[] typeStrings;
+	private final String extended;
 
 	/**
-	 * Create a new CodeType with a list of its associated IDs.
+	 * Create a new CodeType with its pattern and list of associated IDs.
 	 * 
 	 * @param typeStrings
 	 */
-	CodeType(String pattern, String[] typeStrings) {
+	CodeType(String[] typeStrings, String pattern, String extendedPattern) {
 
+		this.types = typeStrings;
 		this.pattern = pattern;
-		this.typeStrings = typeStrings;
+		this.extended = extendedPattern;
 	}
 
 	/**
@@ -68,33 +89,49 @@ public enum CodeType {
 	 */
 	public String[] getTypeStrings() {
 
-		return typeStrings;
+		return types;
 	}
 
 	/**
-	 * Returns true if the pattern passes validation for the code type.
+	 * Get the regular expression that matches on auto-typing.
 	 * 
-	 * @param data
 	 * @return
 	 */
-	public boolean validateFormat(String data) {
+	public String getPattern() {
 
-		return data.matches(pattern);
+		return pattern;
 	}
 
 	/**
-	 * Get a CodeType object by any of its associated string IDs. Will return null
-	 * if none are found.
+	 * Get the regular expression that validates the data for the code type.
+	 * 
+	 * @return
+	 */
+	public String getExtendedPattern() {
+
+		return extended;
+	}
+
+	/**
+	 * Get a CodeType object by any of its associated string IDs.
+	 * 
+	 * Will return null if none are found.
 	 * 
 	 * @param codeType
 	 * @return
 	 */
 	public static CodeType fromString(String codeType) {
 
+		// Convert to lower case
+		codeType = codeType.toLowerCase();
+
+		// Loop all known types
 		for (CodeType type : CodeType.values()) {
 
+			// Loop each defined type string
 			for (String typeString : type.getTypeStrings()) {
 
+				// Return on match
 				if (codeType.equals(typeString)) {
 
 					return type;
@@ -102,6 +139,7 @@ public enum CodeType {
 			}
 		}
 
+		// Return no matches
 		return null;
 	}
 
@@ -114,39 +152,42 @@ public enum CodeType {
 	public static CodeType getType(String data) {
 
 		// Match EAN-8 format
-		if (EAN8.validateFormat(data)) {
+		if (data.matches(EAN8.getPattern())) {
 
 			return EAN8;
 		}
 
 		// Match EAN-13 format
-		if (EAN13.validateFormat(data)) {
+		if (data.matches(EAN13.getPattern())) {
 
 			return EAN13;
 		}
 
 		// Match Code39 format
-		if (Code39.validateFormat(data) //
-				&& data.length() < 16) {
+		if (data.matches(Code39.getPattern())) {
 
 			return Code39;
 		}
 
 		// Match Code128 format
-		if (Code128.validateFormat(data) //
-				&& data.length() < 24) {
+		if (data.matches(Code128.getPattern())) {
 
 			return Code128;
 		}
 
 		// Match QR format
-		if (QRCode.validateFormat(data) //
-				&& data.length() < 64) {
+		if (data.matches(QRCode.getPattern())) {
 
 			return QRCode;
 		}
 
-		// Default to Data Matrix format
-		return DataMatrix;
+		// Match DataMatrix format
+		if (data.matches(DataMatrix.getPattern())) {
+
+			return DataMatrix;
+		}
+
+		// Return null on no matches
+		return null;
 	}
 }

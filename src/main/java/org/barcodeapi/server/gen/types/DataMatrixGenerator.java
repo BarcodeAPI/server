@@ -31,11 +31,6 @@ public class DataMatrixGenerator extends CodeGenerator {
 
 	@Override
 	public void onValidateRequest(String data) {
-
-		if (!CodeType.DataMatrix.validateFormat(data)) {
-
-			throw new IllegalArgumentException("Invalid format.");
-		}
 	}
 
 	@Override

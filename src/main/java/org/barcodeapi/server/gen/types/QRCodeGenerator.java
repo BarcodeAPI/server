@@ -27,17 +27,6 @@ public class QRCodeGenerator extends CodeGenerator {
 	@Override
 	public void onValidateRequest(String data) {
 
-		/**
-		 * Validate against Code128 specifications.
-		 * 
-		 * https://en.wikipedia.org/wiki/Code_128#Bar_code_widths
-		 * 
-		 */
-		if (!data.matches("[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+")) {
-
-			throw new IllegalArgumentException("Invalid QRCode format.");
-		}
-
 		// Allow max of 50 characters
 		if (data.length() > 50) {
 

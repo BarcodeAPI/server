@@ -61,12 +61,6 @@ public class Code128Generator extends CodeGenerator {
 	@Override
 	public void onValidateRequest(String data) {
 
-		// Validate format
-		if (!CodeType.Code128.validateFormat(data)) {
-
-			throw new IllegalArgumentException("Invalid format.");
-		}
-
 		// Allow max of 50 characters
 		if (data.length() > 50) {
 

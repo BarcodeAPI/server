@@ -30,11 +30,6 @@ public class Ean13Generator extends CodeGenerator {
 	@Override
 	public void onValidateRequest(String data) {
 
-		if (!CodeType.EAN13.validateFormat(data)) {
-
-			throw new IllegalArgumentException("Invalid format.");
-		}
-
 		if (data.length() == 12) {
 
 			return;

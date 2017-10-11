@@ -30,11 +30,6 @@ public class Ean8Generator extends CodeGenerator {
 	@Override
 	public void onValidateRequest(String data) {
 
-		if (!CodeType.EAN8.validateFormat(data)) {
-
-			throw new IllegalArgumentException("Invalid format.");
-		}
-
 		if (data.length() == 7) {
 
 			return;

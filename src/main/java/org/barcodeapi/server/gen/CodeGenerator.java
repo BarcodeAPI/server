@@ -21,6 +21,12 @@ public abstract class CodeGenerator {
 
 	public byte[] getCode(String data) {
 
+		// Validate data format
+		if (!data.matches(getType().getExtendedPattern())) {
+
+			throw new IllegalArgumentException("Invalid data for code type [ " + getType().getExtendedPattern() + " ]");
+		}
+
 		onValidateRequest(data);
 
 		String counterName = "render." + getType().toString() + ".hit";
