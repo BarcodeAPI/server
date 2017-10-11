@@ -16,7 +16,7 @@ public class TestSymbols extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"QRCode", getHeader("X-CodeType"));
+				"Code128", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
 				"test/123", getHeader("X-CodeData"));
@@ -31,7 +31,7 @@ public class TestSymbols extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"QRCode", getHeader("X-CodeType"));
+				"Code128", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
 				"test#123", getHeader("X-CodeData"));
@@ -46,25 +46,10 @@ public class TestSymbols extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"QRCode", getHeader("X-CodeType"));
+				"Code128", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
 				"test;123", getHeader("X-CodeData"));
-	}
-
-	@Test
-	public void testSymbols_TestPercent() {
-
-		apiGet("test%123");
-
-		Assert.assertEquals("Response Code", //
-				HttpStatus.OK_200, getResponseCode());
-
-		Assert.assertEquals("Code Type", //
-				"QRCode", getHeader("X-CodeType"));
-
-		Assert.assertEquals("Code Data", //
-				"test%123", getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -76,7 +61,7 @@ public class TestSymbols extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"QRCode", getHeader("X-CodeType"));
+				"Code128", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
 				"test?123", getHeader("X-CodeData"));
@@ -91,10 +76,25 @@ public class TestSymbols extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"QRCode", getHeader("X-CodeType"));
+				"Code128", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
 				"test:123", getHeader("X-CodeData"));
+	}
+
+	@Test
+	public void testSymbols_TestParentheses() {
+
+		apiGet("test()123");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"Code128", getHeader("X-CodeType"));
+
+		Assert.assertEquals("Code Data", //
+				"test()123", getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -113,6 +113,21 @@ public class TestSymbols extends ServerTestBase {
 	}
 
 	@Test
+	public void testSymbols_TestPercent() {
+
+		apiGet("test%123");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"QRCode", getHeader("X-CodeType"));
+
+		Assert.assertEquals("Code Data", //
+				"test%123", getHeader("X-CodeData"));
+	}
+
+	@Test
 	public void testSymbols_TestCurlyBrackets() {
 
 		apiGet("test{}123");
@@ -125,21 +140,6 @@ public class TestSymbols extends ServerTestBase {
 
 		Assert.assertEquals("Code Data", //
 				"test{}123", getHeader("X-CodeData"));
-	}
-
-	@Test
-	public void testSymbols_TestParentheses() {
-
-		apiGet("test()123");
-
-		Assert.assertEquals("Response Code", //
-				HttpStatus.OK_200, getResponseCode());
-
-		Assert.assertEquals("Code Type", //
-				"QRCode", getHeader("X-CodeType"));
-
-		Assert.assertEquals("Code Data", //
-				"test()123", getHeader("X-CodeData"));
 	}
 
 	@Test

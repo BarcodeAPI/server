@@ -6,7 +6,7 @@ public enum CodeType {
 	 * Codabar type code;
 	 */
 	CODABAR(new String[] { "codabar" }, //
-			"[0-9-:$\\/.+]+", //
+			"[0-9:$]{1,12}", //
 			"[0-9-:$\\/.+]+"), //
 
 	/**
@@ -33,7 +33,7 @@ public enum CodeType {
 	 * Variable length consisting of only numbers and upper-case characters.
 	 */
 	Code39(new String[] { "39", "code39" }, //
-			"[A-Z*0-9 -$%./+]+", //
+			"[A-Z*0-9 -$%./+]{1,16}", //
 			"[A-Z*0-9 -$%./+]+"),
 
 	/**
@@ -42,7 +42,7 @@ public enum CodeType {
 	 * Variable length consisting of numbers, letters, and symbols.
 	 */
 	Code128(new String[] { "128", "code128" }, //
-			"[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+", //
+			"[ !#$'()*+,-.\\/0-9:;=?@A-Z^_a-z~]{1,24}", //
 			"[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+"),
 
 	/**
@@ -51,8 +51,8 @@ public enum CodeType {
 	 * A high density data code with error correction.
 	 */
 	QRCode(new String[] { "qr", "qrcode" }, //
-			".*", //
-			".*"),
+			".{1,64}", //
+			".{1,65535}"),
 
 	/**
 	 * Data Matrix type code;
@@ -67,7 +67,7 @@ public enum CodeType {
 	 * Local Variables
 	 */
 	private final String[] types;
-	private final String pattern;
+	private final String simple;
 	private final String extended;
 
 	/**
@@ -75,10 +75,11 @@ public enum CodeType {
 	 * 
 	 * @param typeStrings
 	 */
-	CodeType(String[] typeStrings, String pattern, String extendedPattern) {
+	CodeType(String[] typeStrings, String automatchPattern, String extendedPattern) {
 
 		this.types = typeStrings;
-		this.pattern = pattern;
+
+		this.simple = automatchPattern;
 		this.extended = extendedPattern;
 	}
 
@@ -97,9 +98,9 @@ public enum CodeType {
 	 * 
 	 * @return
 	 */
-	public String getPattern() {
+	public String getAutomatchPattern() {
 
-		return pattern;
+		return simple;
 	}
 
 	/**
@@ -152,37 +153,37 @@ public enum CodeType {
 	public static CodeType getType(String data) {
 
 		// Match EAN-8 format
-		if (data.matches(EAN8.getPattern())) {
+		if (data.matches(EAN8.getAutomatchPattern())) {
 
 			return EAN8;
 		}
 
 		// Match EAN-13 format
-		if (data.matches(EAN13.getPattern())) {
+		if (data.matches(EAN13.getAutomatchPattern())) {
 
 			return EAN13;
 		}
 
 		// Match Code39 format
-		if (data.matches(Code39.getPattern())) {
+		if (data.matches(Code39.getAutomatchPattern())) {
 
 			return Code39;
 		}
 
 		// Match Code128 format
-		if (data.matches(Code128.getPattern())) {
+		if (data.matches(Code128.getAutomatchPattern())) {
 
 			return Code128;
 		}
 
 		// Match QR format
-		if (data.matches(QRCode.getPattern())) {
+		if (data.matches(QRCode.getAutomatchPattern())) {
 
 			return QRCode;
 		}
 
 		// Match DataMatrix format
-		if (data.matches(DataMatrix.getPattern())) {
+		if (data.matches(DataMatrix.getAutomatchPattern())) {
 
 			return DataMatrix;
 		}

@@ -29,14 +29,9 @@ public class CodeUtils {
 
 	public static int calculateEanChecksum(String data) {
 
-		if (data.length() < 7 || data.length() > 8) {
-
-			throw new IllegalArgumentException("Invalid length.");
-		}
-
 		int sum1 = 0;
 		int sum2 = 0;
-		for (int x = 0; x < 7; x++) {
+		for (int x = 0; x < data.length() - 1; x++) {
 
 			int digit = Character.getNumericValue(data.charAt(x));
 

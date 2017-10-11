@@ -59,7 +59,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 123456 ] reason [ Invalid format. ]", //
+				"Failed [ EAN8 ] with [ 123456 ] reason [ Invalid data for code type [ EAN8 ] ]", //
 				getResponse().readLine());
 	}
 
@@ -72,7 +72,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 123456789 ] reason [ Invalid format. ]", //
+				"Failed [ EAN8 ] with [ 123456789 ] reason [ Invalid data for code type [ EAN8 ] ]", //
 				getResponse().readLine());
 	}
 
@@ -85,7 +85,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ ABCDEFGH ] reason [ Invalid format. ]", //
+				"Failed [ EAN8 ] with [ ABCDEFGH ] reason [ Invalid data for code type [ EAN8 ] ]", //
 				getResponse().readLine());
 	}
 
@@ -98,7 +98,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ !@ ] reason [ Invalid format. ]", //
+				"Failed [ EAN8 ] with [ !@ ] reason [ Invalid data for code type [ EAN8 ] ]", //
 				getResponse().readLine());
 	}
 
@@ -111,7 +111,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ ? ] reason [ Invalid format. ]", //
+				"Failed [ EAN8 ] with [ ? ] reason [ Invalid data for code type [ EAN8 ] ]", //
 				getResponse().readLine());
 	}
 }
