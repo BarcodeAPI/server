@@ -6,8 +6,8 @@ public enum CodeType {
 	 * Codabar type code;
 	 */
 	CODABAR(new String[] { "codabar" }, //
-			"[0-9:$]{1,12}", //
-			"[0-9-:$\\/.+]+"), //
+			"^[0-9:$]{1,12}$", //
+			"^[0-9-:$\\/.+]+$"), //
 
 	/**
 	 * EAN-8 type UPC code;
@@ -15,8 +15,8 @@ public enum CodeType {
 	 * 7 numerical digits followed by a single checksum digit.
 	 */
 	EAN8(new String[] { "8", "ean8" }, //
-			"[0-9]{7,8}", //
-			"[0-9]{7,8}"),
+			"^[0-9]{7,8}$", //
+			"^[0-9]{7,8}$"),
 
 	/**
 	 * EAN-13 type UPC code;
@@ -24,8 +24,8 @@ public enum CodeType {
 	 * 12 numerical digits followed by a single checksum digit.
 	 */
 	EAN13(new String[] { "13", "ean13" }, //
-			"[0-9]{12,13}", //
-			"[0-9]{12,13}"),
+			"^[0-9]{12,13}$", //
+			"^[0-9]{12,13}$"),
 
 	/**
 	 * Code39 type code;
@@ -33,8 +33,8 @@ public enum CodeType {
 	 * Variable length consisting of only numbers and upper-case characters.
 	 */
 	Code39(new String[] { "39", "code39" }, //
-			"[A-Z*0-9 -$%./+]{1,16}", //
-			"[A-Z*0-9 -$%./+]+"),
+			"^[A-Z0-9 $.\\/]{1,16}$", //
+			"^[A-Z*0-9 -$%.\\/+]+$"),
 
 	/**
 	 * Code128 type code;
@@ -42,8 +42,8 @@ public enum CodeType {
 	 * Variable length consisting of numbers, letters, and symbols.
 	 */
 	Code128(new String[] { "128", "code128" }, //
-			"[ !#$'()*+,-.\\/0-9:;=?@A-Z^_a-z~]{1,24}", //
-			"[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+"),
+			"^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,24}$", //
+			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+$"),
 
 	/**
 	 * QR type code;
@@ -51,8 +51,8 @@ public enum CodeType {
 	 * A high density data code with error correction.
 	 */
 	QRCode(new String[] { "qr", "qrcode" }, //
-			".{1,64}", //
-			".{1,65535}"),
+			"^.{1,64}$", //
+			"^.{1,65535}$"),
 
 	/**
 	 * Data Matrix type code;
@@ -60,8 +60,8 @@ public enum CodeType {
 	 * A high density data code with error correction.
 	 */
 	DataMatrix(new String[] { "matrix", "datamatrix", "data" }, //
-			"[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}", //
-			"[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}");
+			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
+			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$");
 
 	/**
 	 * Local Variables
