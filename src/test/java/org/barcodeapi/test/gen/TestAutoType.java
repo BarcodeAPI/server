@@ -3,6 +3,7 @@ package org.barcodeapi.test.gen;
 import org.barcodeapi.server.ServerTestBase;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestAutoType extends ServerTestBase {
@@ -38,6 +39,22 @@ public class TestAutoType extends ServerTestBase {
 	}
 
 	@Test
+	@Ignore
+	public void testAutoType_Ean8WithInvalidChecksumBecomesCode39() {
+
+		apiGet("00000009");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"Code39", getHeader("X-CodeType"));
+
+		Assert.assertEquals("Code Data", //
+				"000000009", getHeader("X-CodeData"));
+	}
+
+	@Test
 	public void testAutoType_Ean13() {
 
 		apiGet("0000000000000");
@@ -65,6 +82,22 @@ public class TestAutoType extends ServerTestBase {
 
 		Assert.assertEquals("Code Data", //
 				"000000000000", getHeader("X-CodeData"));
+	}
+
+	@Test
+	@Ignore
+	public void testAutoType_Ean13WithInvalidChecksumBecomesCode39() {
+
+		apiGet("0000000000009");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"Code39", getHeader("X-CodeType"));
+
+		Assert.assertEquals("Code Data", //
+				"0000000000009", getHeader("X-CodeData"));
 	}
 
 	@Test

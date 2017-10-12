@@ -39,7 +39,7 @@ public class Ean13Generator extends CodeGenerator {
 		String provided = data.substring(data.length() - 1);
 		if (!Integer.toString(checksum).equals(provided)) {
 
-			throw new IllegalArgumentException("Invalid checksum.");
+			throw new IllegalArgumentException("Invalid checksum");
 		}
 	}
 

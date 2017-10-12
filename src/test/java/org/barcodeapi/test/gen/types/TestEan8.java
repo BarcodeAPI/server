@@ -46,7 +46,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 12345678 ] reason [ Invalid checksum. ]", //
+				"Failed [ EAN8 ] with [ 12345678 ] reason [ Invalid checksum ]", //
 				getResponse().readLine());
 	}
 
@@ -59,7 +59,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 123456 ] reason [ Invalid data for code type [ EAN8 ] ]", //
+				"Failed [ EAN8 ] with [ 123456 ] reason [ Invalid data for selected code type ]", //
 				getResponse().readLine());
 	}
 
@@ -72,7 +72,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 123456789 ] reason [ Invalid data for code type [ EAN8 ] ]", //
+				"Failed [ EAN8 ] with [ 123456789 ] reason [ Invalid data for selected code type ]", //
 				getResponse().readLine());
 	}
 
@@ -85,7 +85,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ ABCDEFGH ] reason [ Invalid data for code type [ EAN8 ] ]", //
+				"Failed [ EAN8 ] with [ ABCDEFGH ] reason [ Invalid data for selected code type ]", //
 				getResponse().readLine());
 	}
 
@@ -98,7 +98,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ !@ ] reason [ Invalid data for code type [ EAN8 ] ]", //
+				"Failed [ EAN8 ] with [ !@ ] reason [ Invalid data for selected code type ]", //
 				getResponse().readLine());
 	}
 
@@ -111,7 +111,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ ? ] reason [ Invalid data for code type [ EAN8 ] ]", //
+				"Failed [ EAN8 ] with [ ? ] reason [ Invalid data for selected code type ]", //
 				getResponse().readLine());
 	}
 }
