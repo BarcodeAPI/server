@@ -1,7 +1,8 @@
 package org.barcodeapi.core;
 
 import org.barcodeapi.server.core.BarcodeAPIHandler;
-import org.barcodeapi.server.statistics.StatsHandler;
+import org.barcodeapi.server.core.SessionHandler;
+import org.barcodeapi.server.core.StatsHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
@@ -37,6 +38,8 @@ public class ServerLoader {
 		initJetty();
 
 		initStatsHandler();
+
+		initSessionHandler();
 
 		initApiHandler();
 
@@ -98,6 +101,18 @@ public class ServerLoader {
 		statsHandler.setHandler(new StatsHandler());
 		statsHandler.setContextPath("/stats");
 		handlers.addHandler(statsHandler);
+	}
+
+	/**
+	 * Initialize the session end-point.
+	 */
+	private void initSessionHandler() {
+
+		// setup statistics handler
+		ContextHandler sessionHandler = new ContextHandler();
+		sessionHandler.setHandler(new SessionHandler());
+		sessionHandler.setContextPath("/session");
+		handlers.addHandler(sessionHandler);
 	}
 
 	/**

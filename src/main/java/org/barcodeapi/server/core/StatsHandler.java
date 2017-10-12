@@ -1,4 +1,4 @@
-package org.barcodeapi.server.statistics;
+package org.barcodeapi.server.core;
 
 import java.io.IOException;
 
@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.cache.BarcodeCache;
+import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 

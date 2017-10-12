@@ -18,6 +18,8 @@ import org.barcodeapi.server.gen.types.DataMatrixGenerator;
 import org.barcodeapi.server.gen.types.Ean13Generator;
 import org.barcodeapi.server.gen.types.Ean8Generator;
 import org.barcodeapi.server.gen.types.QRCodeGenerator;
+import org.barcodeapi.server.session.SessionCache;
+import org.barcodeapi.server.session.SessionObject;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -27,6 +29,8 @@ public class BarcodeAPIHandler extends AbstractHandler {
 	HashMap<CodeType, CodeGenerator> codeGenerators;
 
 	String serverName;
+
+	SessionCache sessionCache;
 
 	public BarcodeAPIHandler() {
 
@@ -40,6 +44,8 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		codeGenerators.put(CodeType.QRCode, new QRCodeGenerator());
 		codeGenerators.put(CodeType.DataMatrix, new DataMatrixGenerator());
 
+		sessionCache = SessionCache.getInstance();
+
 		try {
 
 			serverName = InetAddress.getLocalHost().getHostName();
@@ -50,6 +56,8 @@ public class BarcodeAPIHandler extends AbstractHandler {
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
+		SessionObject session = sessionCache.getSession(baseRequest);
+
 		// time of the request
 		long requestTime = System.currentTimeMillis();
 
@@ -57,6 +65,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 
 			// get the request string
 			String data = target.substring(1, target.length());
+			session.onRender(data);
 
 			// use cache if within threshold
 			boolean useCache = data.length() <= 64;
@@ -159,6 +168,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			baseRequest.setHandled(true);
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setHeader("Server", "BarcodeAPI.org");
+			response.addHeader("Set-Cookie", "session=" + session.getKey() + ";");
 
 			// add character set
 			response.setCharacterEncoding("UTF-8");
