@@ -64,7 +64,8 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		try {
 
 			// get the request string
-			String data = target.substring(1, target.length());
+			String requestURI = request.getRequestURI();
+			String data = requestURI.substring(1, requestURI.length());
 			session.onRender(data);
 
 			// use cache if within threshold
