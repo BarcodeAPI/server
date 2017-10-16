@@ -2,6 +2,7 @@ package org.barcodeapi.server.core;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.URLDecoder;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,6 +67,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			// get the request string
 			String requestURI = request.getRequestURI();
 			String data = requestURI.substring(1, requestURI.length());
+			data = URLDecoder.decode(data, "UTF-8");
 			session.onRender(data);
 
 			// use cache if within threshold
