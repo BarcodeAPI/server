@@ -1,0 +1,86 @@
+package org.barcodeapi.server.core;
+
+import java.util.HashMap;
+
+import org.barcodeapi.server.gen.CodeGenerator;
+import org.barcodeapi.server.gen.CodeType;
+import org.barcodeapi.server.gen.types.CodabarGenerator;
+import org.barcodeapi.server.gen.types.Code128Generator;
+import org.barcodeapi.server.gen.types.Code39Generator;
+import org.barcodeapi.server.gen.types.DataMatrixGenerator;
+import org.barcodeapi.server.gen.types.Ean13Generator;
+import org.barcodeapi.server.gen.types.Ean8Generator;
+import org.barcodeapi.server.gen.types.QRCodeGenerator;
+import org.barcodeapi.server.gen.types.UPCAGenerator;
+import org.barcodeapi.server.gen.types.UPCEGenerator;
+
+public class CodeGenerators {
+
+	private static CodeGenerators codeGenerators;
+
+	private HashMap<CodeType, CodeGenerator> generators;
+
+	public CodeGenerators() {
+
+		generators = new HashMap<CodeType, CodeGenerator>();
+
+		generators.put(CodeType.EAN8, new Ean8Generator());
+		generators.put(CodeType.EAN13, new Ean13Generator());
+
+		generators.put(CodeType.UPC_A, new UPCAGenerator());
+		generators.put(CodeType.UPC_E, new UPCEGenerator());
+
+		generators.put(CodeType.CODABAR, new CodabarGenerator());
+
+		generators.put(CodeType.Code39, new Code39Generator());
+		generators.put(CodeType.Code128, new Code128Generator());
+
+		generators.put(CodeType.QRCode, new QRCodeGenerator());
+		generators.put(CodeType.DataMatrix, new DataMatrixGenerator());
+	}
+
+	/**
+	 * Get a CodeType object by any of its associated string IDs.
+	 * 
+	 * Will return null if none are found.
+	 * 
+	 * @param codeType
+	 * @return
+	 */
+	public CodeGenerator getGenerator(String codeType) {
+
+		// Convert to lower case
+		codeType = codeType.toLowerCase();
+
+		// Loop all known types
+		for (CodeType type : generators.keySet()) {
+
+			// Loop each defined type string
+			for (String typeString : type.getTypeStrings()) {
+
+				// Return on match
+				if (codeType.equals(typeString)) {
+
+					return getGenerator(type);
+				}
+			}
+		}
+
+		// Return no matches
+		return null;
+	}
+
+	public CodeGenerator getGenerator(CodeType codeType) {
+
+		return generators.get(codeType);
+	}
+
+	public static synchronized CodeGenerators getInstance() {
+
+		if (codeGenerators == null) {
+
+			codeGenerators = new CodeGenerators();
+		}
+		return codeGenerators;
+	}
+}

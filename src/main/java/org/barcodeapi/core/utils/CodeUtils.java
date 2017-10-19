@@ -27,6 +27,7 @@ public class CodeUtils {
 		}
 	}
 
+	// FIXME does not work correctly
 	public static int calculateEanChecksum(String data) {
 
 		int sum1 = 0;

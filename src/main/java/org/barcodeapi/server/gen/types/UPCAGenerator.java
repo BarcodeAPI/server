@@ -6,44 +6,30 @@ import java.io.ByteArrayOutputStream;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.krysalis.barcode4j.HumanReadablePlacement;
-import org.krysalis.barcode4j.impl.code128.Code128Bean;
-import org.krysalis.barcode4j.impl.code128.Code128Constants;
+import org.krysalis.barcode4j.impl.upcean.UPCABean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
-public class Code128Generator extends CodeGenerator {
+public class UPCAGenerator extends CodeGenerator {
 
-	private Code128Bean generator;
+	private UPCABean generator;
 
 	private final int dpi = 150;
 
 	/**
 	 * 
 	 */
-	public Code128Generator() {
-		super(CodeType.Code128);
+	public UPCAGenerator() {
+		super(CodeType.UPC_A);
 
-		// Setup Code128 generator
-		generator = new Code128Bean();
+		// Setup Code39 generator
+		generator = new UPCABean();
 
-		/**
-		 * Character map
-		 * 
-		 * https://en.wikipedia.org/wiki/Code_128#Bar_code_widths
-		 */
-		generator.setCodeset(Code128Constants.CODESET_B);
-
-		// barcode128Bean.setBarHeight(height);
 		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
 		generator.setModuleWidth(moduleWidth);
 
 		/**
-		 * The minimum width of the Quiet Zone to the left and right of the 128 Bar Code
-		 * is 10x, where x is the minimum width of a module. It is mandatory at the left
-		 * and right side of the barcode.
-		 * 
-		 * https://en.wikipedia.org/wiki/Code_128#Quiet_zone
-		 * 
+		 * Set quiet zone
 		 */
 		generator.doQuietZone(true);
 		generator.setQuietZone(10 * moduleWidth);
@@ -52,10 +38,6 @@ public class Code128Generator extends CodeGenerator {
 		generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
 
 		generator.setHeight(UnitConv.in2mm(1));
-		// barcode128Bean.setBarHeight(UnitConv.in2mm(.5));
-
-		// barcode128Bean.setFontName(name);
-		// barcode128Bean.setFontSize(size);
 	}
 
 	@Override

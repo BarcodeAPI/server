@@ -57,12 +57,6 @@ public class CodabarGenerator extends CodeGenerator {
 	 */
 	@Override
 	public void onValidateRequest(String data) {
-
-		// Allow max of 25 characters
-		if (data.length() > 25) {
-
-			throw new IllegalArgumentException("Too many characters.");
-		}
 	}
 
 	/**

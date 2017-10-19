@@ -46,12 +46,6 @@ public class Code39Generator extends CodeGenerator {
 
 	@Override
 	public void onValidateRequest(String data) {
-
-		// Allow max of 50 characters
-		if (data.length() > 50) {
-
-			throw new IllegalArgumentException("Too many characters.");
-		}
 	}
 
 	@Override

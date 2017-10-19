@@ -3,7 +3,6 @@ package org.barcodeapi.server.core;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URLDecoder;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,13 +11,6 @@ import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.cache.CachedObject;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
-import org.barcodeapi.server.gen.types.CodabarGenerator;
-import org.barcodeapi.server.gen.types.Code128Generator;
-import org.barcodeapi.server.gen.types.Code39Generator;
-import org.barcodeapi.server.gen.types.DataMatrixGenerator;
-import org.barcodeapi.server.gen.types.Ean13Generator;
-import org.barcodeapi.server.gen.types.Ean8Generator;
-import org.barcodeapi.server.gen.types.QRCodeGenerator;
 import org.barcodeapi.server.session.SessionCache;
 import org.barcodeapi.server.session.SessionObject;
 import org.barcodeapi.server.statistics.StatsCollector;
@@ -27,25 +19,15 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 public class BarcodeAPIHandler extends AbstractHandler {
 
-	HashMap<CodeType, CodeGenerator> codeGenerators;
+	private String serverName;
 
-	String serverName;
-
-	SessionCache sessionCache;
+	private CodeGenerators generators;
+	private SessionCache sessions;
 
 	public BarcodeAPIHandler() {
 
-		codeGenerators = new HashMap<CodeType, CodeGenerator>();
-
-		codeGenerators.put(CodeType.CODABAR, new CodabarGenerator());
-		codeGenerators.put(CodeType.EAN8, new Ean8Generator());
-		codeGenerators.put(CodeType.EAN13, new Ean13Generator());
-		codeGenerators.put(CodeType.Code39, new Code39Generator());
-		codeGenerators.put(CodeType.Code128, new Code128Generator());
-		codeGenerators.put(CodeType.QRCode, new QRCodeGenerator());
-		codeGenerators.put(CodeType.DataMatrix, new DataMatrixGenerator());
-
-		sessionCache = SessionCache.getInstance();
+		generators = CodeGenerators.getInstance();
+		sessions = SessionCache.getInstance();
 
 		try {
 
@@ -57,7 +39,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
-		SessionObject session = sessionCache.getSession(baseRequest);
+		SessionObject session = sessions.getSession(baseRequest);
 
 		// time of the request
 		long requestTime = System.currentTimeMillis();
@@ -74,24 +56,28 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			boolean useCache = data.length() <= 64;
 
 			// process selected type
+			CodeGenerator generator;
 			CodeType type;
+
 			int typeIndex = data.indexOf("/");
 			if (typeIndex > 0) {
 
 				String typeString = target.substring(1, typeIndex + 1);
 
-				type = CodeType.fromString(typeString);
+				generator = generators.getGenerator(typeString);
+				type = generator.getType();
 
 				if (type == null) {
 
-					type = CodeType.getType(data);
+					type = TypeSelector.getType(data);
 				} else {
 
 					data = data.substring(typeIndex + 1);
 				}
 			} else {
 
-				type = CodeType.getType(data);
+				type = TypeSelector.getType(data);
+				generator = generators.getGenerator(type);
 			}
 
 			if (data == null || data.equals("")) {
@@ -125,7 +111,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 
 					// render image
 					double start = System.nanoTime();
-					byte[] image = codeGenerators.get(type).getCode(data);
+					byte[] image = generator.getCode(data);
 					double renderTime = (System.nanoTime() - start) / 1000 / 1000;
 					String length = String.format("%.2f", renderTime);
 

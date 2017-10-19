@@ -3,11 +3,18 @@ package org.barcodeapi.server.gen;
 public enum CodeType {
 
 	/**
-	 * Codabar type code;
+	 * UPC-E type UPC code;
 	 */
-	CODABAR(new String[] { "codabar" }, //
-			"^[0-9:$]{1,12}$", //
-			"^[0-9-:$\\/.+]+$"), //
+	UPC_E(new String[] { "e", "upc-e" }, //
+			"^(?=.*0)[0-9]{8}$", //
+			"^(?=.*0)[0-9]{7,8}$"),
+
+	/**
+	 * UPC-A type UPC code;
+	 */
+	UPC_A(new String[] { "a", "upc-a", "upc" }, //
+			"^(?=.*0)[0-9]{12}$", //
+			"^(?=.*0)[0-9]{11,12}$"),
 
 	/**
 	 * EAN-8 type UPC code;
@@ -15,7 +22,7 @@ public enum CodeType {
 	 * 7 numerical digits followed by a single checksum digit.
 	 */
 	EAN8(new String[] { "8", "ean8" }, //
-			"^[0-9]{7,8}$", //
+			"^[0-9]{8}$", //
 			"^[0-9]{7,8}$"),
 
 	/**
@@ -24,8 +31,15 @@ public enum CodeType {
 	 * 12 numerical digits followed by a single checksum digit.
 	 */
 	EAN13(new String[] { "13", "ean13" }, //
-			"^[0-9]{12,13}$", //
+			"^[0-9]{13}$", //
 			"^[0-9]{12,13}$"),
+
+	/**
+	 * Codabar type code;
+	 */
+	CODABAR(new String[] { "codabar" }, //
+			"^[0-9:$]{1,16}$", //
+			"^[0-9-:$\\/.+]+$"), //
 
 	/**
 	 * Code39 type code;
@@ -33,7 +47,7 @@ public enum CodeType {
 	 * Variable length consisting of only numbers and upper-case characters.
 	 */
 	Code39(new String[] { "39", "code39" }, //
-			"^[A-Z0-9 $.\\/]{1,16}$", //
+			"^[A-Z0-9 $.\\/]{1,20}$", //
 			"^[A-Z*0-9 -$%.\\/+]+$"),
 
 	/**
@@ -67,8 +81,9 @@ public enum CodeType {
 	 * Local Variables
 	 */
 	private final String[] types;
-	private final String simple;
-	private final String extended;
+
+	private final String autoPattern;
+	private final String formatPattern;
 
 	/**
 	 * Create a new CodeType with its pattern and list of associated IDs.
@@ -79,8 +94,8 @@ public enum CodeType {
 
 		this.types = typeStrings;
 
-		this.simple = automatchPattern;
-		this.extended = extendedPattern;
+		this.autoPattern = automatchPattern;
+		this.formatPattern = extendedPattern;
 	}
 
 	/**
@@ -100,7 +115,7 @@ public enum CodeType {
 	 */
 	public String getAutomatchPattern() {
 
-		return simple;
+		return autoPattern;
 	}
 
 	/**
@@ -108,87 +123,8 @@ public enum CodeType {
 	 * 
 	 * @return
 	 */
-	public String getExtendedPattern() {
+	public String getFormatPattern() {
 
-		return extended;
-	}
-
-	/**
-	 * Get a CodeType object by any of its associated string IDs.
-	 * 
-	 * Will return null if none are found.
-	 * 
-	 * @param codeType
-	 * @return
-	 */
-	public static CodeType fromString(String codeType) {
-
-		// Convert to lower case
-		codeType = codeType.toLowerCase();
-
-		// Loop all known types
-		for (CodeType type : CodeType.values()) {
-
-			// Loop each defined type string
-			for (String typeString : type.getTypeStrings()) {
-
-				// Return on match
-				if (codeType.equals(typeString)) {
-
-					return type;
-				}
-			}
-		}
-
-		// Return no matches
-		return null;
-	}
-
-	/**
-	 * Returns a CodeType object best suited for the given data string.
-	 * 
-	 * @param data
-	 * @return
-	 */
-	public static CodeType getType(String data) {
-
-		// Match EAN-8 format
-		if (data.matches(EAN8.getAutomatchPattern())) {
-
-			return EAN8;
-		}
-
-		// Match EAN-13 format
-		if (data.matches(EAN13.getAutomatchPattern())) {
-
-			return EAN13;
-		}
-
-		// Match Code39 format
-		if (data.matches(Code39.getAutomatchPattern())) {
-
-			return Code39;
-		}
-
-		// Match Code128 format
-		if (data.matches(Code128.getAutomatchPattern())) {
-
-			return Code128;
-		}
-
-		// Match QR format
-		if (data.matches(QRCode.getAutomatchPattern())) {
-
-			return QRCode;
-		}
-
-		// Match DataMatrix format
-		if (data.matches(DataMatrix.getAutomatchPattern())) {
-
-			return DataMatrix;
-		}
-
-		// Return null on no matches
-		return null;
+		return formatPattern;
 	}
 }

@@ -9,7 +9,7 @@ import org.junit.Test;
 public class TestAutoType extends ServerTestBase {
 
 	@Test
-	public void testAutoType_Ean8() {
+	public void testAutoType_UPC_E() {
 
 		apiGet("00000000");
 
@@ -17,60 +17,14 @@ public class TestAutoType extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"EAN8", getHeader("X-CodeType"));
+				"UPC_E", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
 				"00000000", getHeader("X-CodeData"));
 	}
-
+	
 	@Test
-	public void testAutoType_Ean8With7() {
-
-		apiGet("0000000");
-
-		Assert.assertEquals("Response Code", //
-				HttpStatus.OK_200, getResponseCode());
-
-		Assert.assertEquals("Code Type", //
-				"EAN8", getHeader("X-CodeType"));
-
-		Assert.assertEquals("Code Data", //
-				"0000000", getHeader("X-CodeData"));
-	}
-
-	@Test
-	@Ignore
-	public void testAutoType_Ean8WithInvalidChecksumBecomesCode39() {
-
-		apiGet("00000009");
-
-		Assert.assertEquals("Response Code", //
-				HttpStatus.OK_200, getResponseCode());
-
-		Assert.assertEquals("Code Type", //
-				"Code39", getHeader("X-CodeType"));
-
-		Assert.assertEquals("Code Data", //
-				"000000009", getHeader("X-CodeData"));
-	}
-
-	@Test
-	public void testAutoType_Ean13() {
-
-		apiGet("0000000000000");
-
-		Assert.assertEquals("Response Code", //
-				HttpStatus.OK_200, getResponseCode());
-
-		Assert.assertEquals("Code Type", //
-				"EAN13", getHeader("X-CodeType"));
-
-		Assert.assertEquals("Code Data", //
-				"0000000000000", getHeader("X-CodeData"));
-	}
-
-	@Test
-	public void testAutoType_Ean13With12() {
+	public void testAutoType_UPC_A() {
 
 		apiGet("000000000000");
 
@@ -78,26 +32,40 @@ public class TestAutoType extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"EAN13", getHeader("X-CodeType"));
+				"UPC_A", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
 				"000000000000", getHeader("X-CodeData"));
 	}
-
+	
 	@Test
-	@Ignore
-	public void testAutoType_Ean13WithInvalidChecksumBecomesCode39() {
+	public void testAutoType_Ean8() {
 
-		apiGet("0000000000009");
+		apiGet("99999999");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"Code39", getHeader("X-CodeType"));
+				"EAN8", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"0000000000009", getHeader("X-CodeData"));
+				"99999999", getHeader("X-CodeData"));
+	}
+
+	@Test
+	public void testAutoType_Ean13() {
+
+		apiGet("9999999999999");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"EAN13", getHeader("X-CodeType"));
+
+		Assert.assertEquals("Code Data", //
+				"9999999999999", getHeader("X-CodeData"));
 	}
 
 	@Test

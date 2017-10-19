@@ -21,24 +21,29 @@ public abstract class CodeGenerator {
 
 	public byte[] getCode(String data) {
 
-		// Validate data format
-		if (!data.matches(getType().getExtendedPattern())) {
+		// validate code format
+		if (!data.matches(getType().getFormatPattern())) {
 
-			throw new IllegalArgumentException("Invalid data for selected code type");
+			throw new IllegalArgumentException("Invalid data for selected code type.");
 		}
 
+		// any additional generator validations
 		onValidateRequest(data);
 
+		// increment counter
 		String counterName = "render." + getType().toString() + ".hit";
 		StatsCollector.getInstance().incrementCounter(counterName);
 
+		// time and render
 		long timeStart = System.currentTimeMillis();
 		byte[] image = onRender(data);
 		double time = System.currentTimeMillis() - timeStart;
 
+		// increment counter
 		counterName = "render." + getType().toString() + ".time";
 		StatsCollector.getInstance().incrementCounter(counterName, time);
 
+		// return image
 		return image;
 	}
 
