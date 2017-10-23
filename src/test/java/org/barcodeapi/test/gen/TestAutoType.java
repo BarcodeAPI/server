@@ -3,7 +3,6 @@ package org.barcodeapi.test.gen;
 import org.barcodeapi.server.ServerTestBase;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestAutoType extends ServerTestBase {
@@ -22,7 +21,7 @@ public class TestAutoType extends ServerTestBase {
 		Assert.assertEquals("Code Data", //
 				"00000000", getHeader("X-CodeData"));
 	}
-	
+
 	@Test
 	public void testAutoType_UPC_A() {
 
@@ -37,11 +36,11 @@ public class TestAutoType extends ServerTestBase {
 		Assert.assertEquals("Code Data", //
 				"000000000000", getHeader("X-CodeData"));
 	}
-	
+
 	@Test
 	public void testAutoType_Ean8() {
 
-		apiGet("99999999");
+		apiGet("99999995");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -50,13 +49,13 @@ public class TestAutoType extends ServerTestBase {
 				"EAN8", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"99999999", getHeader("X-CodeData"));
+				"99999995", getHeader("X-CodeData"));
 	}
 
 	@Test
 	public void testAutoType_Ean13() {
 
-		apiGet("9999999999999");
+		apiGet("0000000000000");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -65,7 +64,7 @@ public class TestAutoType extends ServerTestBase {
 				"EAN13", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"9999999999999", getHeader("X-CodeData"));
+				"0000000000000", getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -110,7 +109,7 @@ public class TestAutoType extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"$?1A", getHeader("X-CodeData"));
+				encode("$♠1A"), getHeader("X-CodeData"));
 	}
 
 	@Test

@@ -46,7 +46,7 @@ public class TestEan8 extends ServerTestBase {
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 12345678 ] reason [ Invalid checksum ]", //
+				"Failed [ EAN8 ] with [ 12345678 ] reason [ Expected Checksum : 0 ]", //
 				getResponse().readLine());
 	}
 

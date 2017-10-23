@@ -3,6 +3,7 @@ package org.barcodeapi.server.core;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -93,7 +94,8 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			}
 
 			// build a header safe data response
-			String dataHeader = data.replaceAll("[^\\x00-\\x7F]", "?");
+			String dataEncoded = URLEncoder.encode(data, "UTF-8");
+			String fileName = "barcode";
 
 			// image object
 			CachedObject barcode = null;
@@ -170,13 +172,13 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			response.setHeader("X-RequestTime", Long.toString(requestTime));
 			response.setHeader("X-CodeServer", serverName);
 			response.setHeader("X-CodeType", type.toString());
-			response.setHeader("X-CodeData", dataHeader);
+			response.setHeader("X-CodeData", dataEncoded);
 			response.setHeader("X-CodeHash", barcode.getChecksum());
 
 			// add content headers
 			response.setHeader("Content-Type", "image/png");
 			response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
-			response.setHeader("Content-Disposition", "filename=" + dataHeader + ".png");
+			response.setHeader("Content-Disposition", "filename=" + fileName + ".png");
 
 			// print data to stream
 			response.getOutputStream().write(barcode.getData());

@@ -24,7 +24,7 @@ public abstract class CodeGenerator {
 		// validate code format
 		if (!data.matches(getType().getFormatPattern())) {
 
-			throw new IllegalArgumentException("Invalid data for selected code type.");
+			throw new IllegalArgumentException("Invalid data for selected code type");
 		}
 
 		// any additional generator validations

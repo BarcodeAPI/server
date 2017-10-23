@@ -19,7 +19,7 @@ public class TestSymbols extends ServerTestBase {
 				"Code128", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test!123", getHeader("X-CodeData"));
+				encode("test!123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -34,7 +34,7 @@ public class TestSymbols extends ServerTestBase {
 				"Code128", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test?123", getHeader("X-CodeData"));
+				encode("test?123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -49,7 +49,7 @@ public class TestSymbols extends ServerTestBase {
 				"Code128", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test$123", getHeader("X-CodeData"));
+				encode("test$123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -94,7 +94,7 @@ public class TestSymbols extends ServerTestBase {
 				"Code128", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test#123", getHeader("X-CodeData"));
+				encode("test#123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -109,7 +109,7 @@ public class TestSymbols extends ServerTestBase {
 				"Code128", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test()123", getHeader("X-CodeData"));
+				encode("test()123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test:123", getHeader("X-CodeData"));
+				encode("test:123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -139,7 +139,7 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test;123", getHeader("X-CodeData"));
+				encode("test;123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -154,7 +154,7 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test@123", getHeader("X-CodeData"));
+				encode("test@123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -169,7 +169,7 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test^123", getHeader("X-CodeData"));
+				encode("test^123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -184,7 +184,7 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test'123", getHeader("X-CodeData"));
+				encode("test'123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -199,7 +199,7 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test\"123", getHeader("X-CodeData"));
+				encode("test\"123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -214,7 +214,7 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test[|]123", getHeader("X-CodeData"));
+				encode("test[|]123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -229,7 +229,7 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test{}123", getHeader("X-CodeData"));
+				encode("test{}123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -244,7 +244,7 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test<=>123", getHeader("X-CodeData"));
+				encode("test<=>123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -259,7 +259,7 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test%123", getHeader("X-CodeData"));
+				encode("test%123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -274,7 +274,7 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test&123", getHeader("X-CodeData"));
+				encode("test&123"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -289,6 +289,6 @@ public class TestSymbols extends ServerTestBase {
 				"QRCode", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test?123", getHeader("X-CodeData"));
+				encode("testΩ123"), getHeader("X-CodeData"));
 	}
 }

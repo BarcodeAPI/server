@@ -1,10 +1,8 @@
 package org.barcodeapi.server;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -45,6 +43,17 @@ public abstract class ServerTestBase {
 		}
 	}
 
+	protected String encode(String data) {
+
+		try {
+
+			return URLEncoder.encode(data, "UTF-8");
+		} catch (Exception e) {
+
+			return null;
+		}
+	};
+
 	protected void apiGet(String path) {
 
 		try {
@@ -65,11 +74,7 @@ public abstract class ServerTestBase {
 				response = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
 			}
 
-		} catch (MalformedURLException e) {
-
-			Assert.fail("Malformed URL.");
-			e.printStackTrace(System.err);
-		} catch (IOException e) {
+		} catch (Exception e) {
 
 			Assert.fail("IOException.");
 			e.printStackTrace(System.err);

@@ -19,7 +19,7 @@ public class TestSpecial extends ServerTestBase {
 				"Code39", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"$12.34", getHeader("X-CodeData"));
+				encode("$12.34"), getHeader("X-CodeData"));
 	}
 
 	@Test
@@ -36,7 +36,7 @@ public class TestSpecial extends ServerTestBase {
 		Assert.assertEquals("Code Data", //
 				"BXXXXXXXXX", getHeader("X-CodeData"));
 	}
-	
+
 	@Test
 	public void testSpecial_testAmazonPod() {
 
@@ -46,12 +46,12 @@ public class TestSpecial extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"Code39", getHeader("X-CodeType"));
+				"CODABAR", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
 				"000001234", getHeader("X-CodeData"));
 	}
-	
+
 	@Test
 	public void testSpecial_testAmazonBin() {
 
