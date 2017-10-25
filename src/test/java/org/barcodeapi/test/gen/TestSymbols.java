@@ -64,7 +64,7 @@ public class TestSymbols extends ServerTestBase {
 				"Code128", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"test/123", getHeader("X-CodeData"));
+				"test%2F123", getHeader("X-CodeData"));
 	}
 
 	@Test

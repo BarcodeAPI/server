@@ -66,13 +66,14 @@ public class BarcodeAPIHandler extends AbstractHandler {
 				String typeString = target.substring(1, typeIndex + 1);
 
 				generator = generators.getGenerator(typeString);
-				type = generator.getType();
 
-				if (type == null) {
+				if (generator == null) {
 
 					type = TypeSelector.getType(data);
+					generator = generators.getGenerator(type);
 				} else {
 
+					type = generator.getType();
 					data = data.substring(typeIndex + 1);
 				}
 			} else {
