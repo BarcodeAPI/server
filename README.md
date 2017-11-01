@@ -1,6 +1,6 @@
 ## BarcodeAPI.org
 
-The barcode server was designed to serve an east to use API via web protocol for use in mobile applications.
+The barcode server was designed to serve an easy to use API via web protocol for use in mobile applications.
 
 When served behind a simple Apache web server providing a UI the barcode server can be used for a wide range of tasks.
 

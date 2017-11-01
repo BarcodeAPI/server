@@ -7,7 +7,6 @@ import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
-import org.krysalis.barcode4j.impl.code128.Code128Constants;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
@@ -25,13 +24,6 @@ public class Code128Generator extends CodeGenerator {
 
 		// Setup Code128 generator
 		generator = new Code128Bean();
-
-		/**
-		 * Character map
-		 * 
-		 * https://en.wikipedia.org/wiki/Code_128#Bar_code_widths
-		 */
-		generator.setCodeset(Code128Constants.CODESET_B);
 
 		// barcode128Bean.setBarHeight(height);
 		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
@@ -65,6 +57,19 @@ public class Code128Generator extends CodeGenerator {
 	@Override
 	public byte[] onRender(String data) {
 
+		String newData = "";
+
+		for (int x = 0; x < data.length(); x++) {
+
+			if (data.charAt(x) == '$' && data.charAt(x + 1) == '$') {
+
+				newData += (char)(((int) data.charAt(x+=2)) - 64);
+			} else {
+
+				newData += data.charAt(x);
+			}
+		}
+
 		try {
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -72,7 +77,7 @@ public class Code128Generator extends CodeGenerator {
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
 					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
 
-			generator.generateBarcode(canvasProvider, data);
+			generator.generateBarcode(canvasProvider, newData);
 
 			canvasProvider.getBufferedImage();
 			canvasProvider.finish();
