@@ -5,113 +5,113 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestEan8 extends ServerTestBase {
+public class TestEan13 extends ServerTestBase {
 
 	@Test
-	public void testEan8_7Nums() {
+	public void testEan13_12Nums() {
 
-		apiGet("8/1234567");
+		apiGet("13/123456789012");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"EAN8", getHeader("X-CodeType"));
+				"EAN13", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"1234567", getHeader("X-CodeData"));
+				"123456789012", getHeader("X-CodeData"));
 	}
 
 	@Test
-	public void testEan8_8Nums() {
+	public void testEan13_13Nums() {
 
-		apiGet("8/12345670");
+		apiGet("13/1234567890128");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"EAN8", getHeader("X-CodeType"));
+				"EAN13", getHeader("X-CodeType"));
 
 		Assert.assertEquals("Code Data", //
-				"12345670", getHeader("X-CodeData"));
+				"1234567890128", getHeader("X-CodeData"));
 	}
 
 	@Test
-	public void testEan8_8NumsInvalidChecksum() throws Exception {
+	public void testEan13_8NumsInvalidChecksum() throws Exception {
 
-		apiGet("8/12345678");
+		apiGet("13/1234567890123");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 12345678 ] reason [ Expected checksum : 0 ]", //
+				"Failed [ EAN13 ] with [ 1234567890123 ] reason [ Expected checksum : 8 ]", //
 				getResponse().readLine());
 	}
 
 	@Test
-	public void testEan8_TooShort() throws Exception {
+	public void testEan13_TooShort() throws Exception {
 
-		apiGet("8/123456");
+		apiGet("13/12345678901");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 123456 ] reason [ Invalid data for selected code type ]", //
+				"Failed [ EAN13 ] with [ 12345678901 ] reason [ Invalid data for selected code type ]", //
 				getResponse().readLine());
 	}
 
 	@Test
-	public void testEan8_TooLong() throws Exception {
+	public void testEan13_TooLong() throws Exception {
 
-		apiGet("8/123456789");
+		apiGet("13/12345678901234");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ 123456789 ] reason [ Invalid data for selected code type ]", //
+				"Failed [ EAN13 ] with [ 12345678901234 ] reason [ Invalid data for selected code type ]", //
 				getResponse().readLine());
 	}
 
 	@Test
-	public void testEan8_WithLetters() throws Exception {
+	public void testEan13_WithLetters() throws Exception {
 
-		apiGet("8/ABCDEFGH");
+		apiGet("13/123456789O123");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ ABCDEFGH ] reason [ Invalid data for selected code type ]", //
+				"Failed [ EAN13 ] with [ 123456789O123 ] reason [ Invalid data for selected code type ]", //
 				getResponse().readLine());
 	}
 
 	@Test
 	public void testEan8_WithSymbols() throws Exception {
 
-		apiGet("8/!@");
+		apiGet("13/!@");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ !@ ] reason [ Invalid data for selected code type ]", //
+				"Failed [ EAN13 ] with [ !@ ] reason [ Invalid data for selected code type ]", //
 				getResponse().readLine());
 	}
 
 	@Test
 	public void testEan8_WithUnicode() throws Exception {
 
-		apiGet("8/Ω");
+		apiGet("13/Ω");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
 
 		Assert.assertEquals("Error Message", //
-				"Failed [ EAN8 ] with [ ? ] reason [ Invalid data for selected code type ]", //
+				"Failed [ EAN13 ] with [ ? ] reason [ Invalid data for selected code type ]", //
 				getResponse().readLine());
 	}
 }

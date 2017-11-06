@@ -46,26 +46,27 @@ public class CodeUtils {
 	}
 
 	// FIXME does not work correctly
-	public static int calculateEanChecksum(String data) {
+	public static int calculateEanChecksum(String data, int count) {
 
+		int sum0 = 0;
 		int sum1 = 0;
-		int sum2 = 0;
-		for (int x = 0; x < data.length() - 1; x++) {
 
-			int digit = Character.getNumericValue(data.charAt(x));
+		for (int x = count; x > 1; x--) {
+
+			int digit = Character.getNumericValue(data.charAt(count - x));
 
 			if (x % 2 == 0) {
 
-				sum2 += digit;
+				sum1 += (3 * digit);
 			} else {
 
-				sum1 += digit;
+				sum0 += digit;
 			}
 		}
 
-		int sum = sum1 + (sum2 * 3);
+		int sum = sum0 + sum1;
 
-		int check = (10 - (sum % 10));
+		int check = 10 - (sum % 10);
 
 		if (check == 10) {
 
