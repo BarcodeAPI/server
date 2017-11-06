@@ -3,6 +3,7 @@ package org.barcodeapi.server.gen.types;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
+import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.krysalis.barcode4j.HumanReadablePlacement;
@@ -39,15 +40,10 @@ public class Code128Generator extends CodeGenerator {
 		 */
 		generator.doQuietZone(true);
 		generator.setQuietZone(10 * moduleWidth);
-		generator.setVerticalQuietZone(2 * moduleWidth);
 
 		generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
 
 		generator.setHeight(UnitConv.in2mm(1));
-		// barcode128Bean.setBarHeight(UnitConv.in2mm(.5));
-
-		// barcode128Bean.setFontName(name);
-		// barcode128Bean.setFontSize(size);
 	}
 
 	@Override
@@ -57,18 +53,7 @@ public class Code128Generator extends CodeGenerator {
 	@Override
 	public byte[] onRender(String data) {
 
-		String newData = "";
-
-		for (int x = 0; x < data.length(); x++) {
-
-			if (data.charAt(x) == '$' && data.charAt(x + 1) == '$') {
-
-				newData += (char)(((int) data.charAt(x+=2)) - 64);
-			} else {
-
-				newData += data.charAt(x);
-			}
-		}
+		data = CodeUtils.parseControlChars(64, data);
 
 		try {
 
@@ -77,7 +62,7 @@ public class Code128Generator extends CodeGenerator {
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
 					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
 
-			generator.generateBarcode(canvasProvider, newData);
+			generator.generateBarcode(canvasProvider, data);
 
 			canvasProvider.getBufferedImage();
 			canvasProvider.finish();
@@ -92,4 +77,5 @@ public class Code128Generator extends CodeGenerator {
 			throw new IllegalStateException("An error has occured.");
 		}
 	}
+
 }

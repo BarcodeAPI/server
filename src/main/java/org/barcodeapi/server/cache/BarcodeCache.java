@@ -1,6 +1,7 @@
 package org.barcodeapi.server.cache;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.barcodeapi.server.gen.CodeType;
@@ -83,6 +84,20 @@ public class BarcodeCache {
 		}
 
 		return cacheSize;
+	}
+
+	public String[] getCacheKeys() {
+
+		ArrayList<String> keys = new ArrayList<String>();
+		for (CodeType type : cache.keySet()) {
+
+			for (String key : cache.get(type).keySet()) {
+
+				keys.add(type.toString() + " : " + key);
+			}
+		}
+
+		return keys.toArray(new String[keys.size()]);
 	}
 
 	public static synchronized BarcodeCache getInstance() {

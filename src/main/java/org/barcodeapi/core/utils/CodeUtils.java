@@ -27,6 +27,24 @@ public class CodeUtils {
 		}
 	}
 
+	public static String parseControlChars(int offset, String data) {
+
+		String newData = "";
+
+		for (int x = 0; x < data.length(); x++) {
+
+			if (data.charAt(x) == '$' && data.charAt(x + 1) == '$') {
+
+				newData += (char) (((int) data.charAt(x += 2)) - offset);
+			} else {
+
+				newData += data.charAt(x);
+			}
+		}
+
+		return newData;
+	}
+
 	// FIXME does not work correctly
 	public static int calculateEanChecksum(String data) {
 

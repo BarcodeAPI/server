@@ -1,6 +1,7 @@
 package org.barcodeapi.core;
 
 import org.barcodeapi.server.core.BarcodeAPIHandler;
+import org.barcodeapi.server.core.CacheHandler;
 import org.barcodeapi.server.core.SessionHandler;
 import org.barcodeapi.server.core.StatsHandler;
 import org.eclipse.jetty.server.Server;
@@ -40,6 +41,8 @@ public class ServerLoader {
 		initStatsHandler();
 
 		initSessionHandler();
+
+		initCacheHandler();
 
 		initApiHandler();
 
@@ -113,6 +116,18 @@ public class ServerLoader {
 		sessionHandler.setHandler(new SessionHandler());
 		sessionHandler.setContextPath("/session");
 		handlers.addHandler(sessionHandler);
+	}
+
+	/**
+	 * Initialize the cache end-point.
+	 */
+	private void initCacheHandler() {
+
+		// setup statistics handler
+		ContextHandler cacheHandler = new ContextHandler();
+		cacheHandler.setHandler(new CacheHandler());
+		cacheHandler.setContextPath("/cache");
+		handlers.addHandler(cacheHandler);
 	}
 
 	/**
