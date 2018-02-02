@@ -2,7 +2,6 @@ package org.barcodeapi.core;
 
 import org.barcodeapi.server.core.BarcodeAPIHandler;
 import org.barcodeapi.server.core.CacheHandler;
-import org.barcodeapi.server.core.PingHandler;
 import org.barcodeapi.server.core.SessionHandler;
 import org.barcodeapi.server.core.StatsHandler;
 import org.eclipse.jetty.server.Server;
@@ -39,8 +38,6 @@ public class ServerLoader {
 	public void launch(boolean blocking) throws Exception {
 
 		initJetty();
-
-		initPingHandler();
 
 		initStatsHandler();
 
@@ -98,18 +95,6 @@ public class ServerLoader {
 		// initialize API server
 		server = new Server(serverPort);
 		server.setHandler(handlers);
-	}
-
-	/**
-	 * Initialize the ping end-point.
-	 */
-	private void initPingHandler() {
-
-		// setup statistics handler
-		ContextHandler pingHandler = new ContextHandler();
-		pingHandler.setHandler(new PingHandler());
-		pingHandler.setContextPath("/ping");
-		handlers.addHandler(pingHandler);
 	}
 
 	/**
