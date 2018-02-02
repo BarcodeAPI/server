@@ -1,0 +1,58 @@
+#global_wrapper {
+}
+
+#content_wrapper {
+
+	width: auto;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#header_wrapper {
+
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
+
+#header_img {
+
+	width: 800px;
+}
+
+#search_wrapper {
+
+	width: 100%;
+}
+
+#search_text {
+
+	width: 80%;
+	height: 35px;
+	text-align: center;
+	border-radius: 5px;
+}
+
+#search_type {
+
+	width: 15%;
+	height: 30px;
+	margin-left: 2.5%;
+	text-align: center;
+}
+
+#barcode_wrapper {
+}
+
+#barcode_output {
+
+	max-width: 100%;
+}
+
+#barcode_outout[src=""] {
+	display: none;
+}
+
+#footer_wrapper {
+}
+

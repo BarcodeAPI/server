@@ -7,6 +7,7 @@ import org.barcodeapi.server.core.StatsHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 
 public class ServerLoader {
 
@@ -45,6 +46,8 @@ public class ServerLoader {
 		initCacheHandler();
 
 		initApiHandler();
+
+		initResourceHandler();
 
 		startServer();
 
@@ -138,8 +141,21 @@ public class ServerLoader {
 		// setup API handler
 		ContextHandler apiHandler = new ContextHandler();
 		apiHandler.setHandler(new BarcodeAPIHandler());
-		apiHandler.setContextPath("/");
+		apiHandler.setContextPath("/api");
 		handlers.addHandler(apiHandler);
+	}
+
+	/**
+	 * Initialize the resource handler.
+	 */
+	private void initResourceHandler() {
+
+		ResourceHandler resourceHandler = new ResourceHandler();
+
+		resourceHandler.setResourceBase("resources");
+		resourceHandler.setWelcomeFiles(new String[] { "index.html" });
+
+		handlers.addHandler(resourceHandler);
 	}
 
 	/**

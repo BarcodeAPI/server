@@ -48,8 +48,8 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		try {
 
 			// get the request string
-			String requestURI = request.getRequestURI();
-			String data = requestURI.substring(1, requestURI.length());
+			String requestPath = request.getPathInfo();
+			String data = requestPath.substring(1, requestPath.length());
 			data = URLDecoder.decode(data, "UTF-8");
 			session.onRender(data);
 
