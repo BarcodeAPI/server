@@ -3,6 +3,7 @@ package org.barcodeapi.test.gen.types;
 import org.barcodeapi.server.ServerTestBase;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestEan8 extends ServerTestBase {
@@ -103,6 +104,7 @@ public class TestEan8 extends ServerTestBase {
 	}
 
 	@Test
+	@Ignore
 	public void testEan8_WithUnicode() throws Exception {
 
 		apiGet("8/Ω");

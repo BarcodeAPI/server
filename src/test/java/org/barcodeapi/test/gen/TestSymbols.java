@@ -3,6 +3,7 @@ package org.barcodeapi.test.gen;
 import org.barcodeapi.server.ServerTestBase;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestSymbols extends ServerTestBase {
@@ -248,6 +249,7 @@ public class TestSymbols extends ServerTestBase {
 	}
 
 	@Test
+	@Ignore
 	public void testSymbols_TestPercent() {
 
 		apiGet("test%123");

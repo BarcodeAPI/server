@@ -60,7 +60,7 @@ public abstract class ServerTestBase {
 
 			String encoded = URLEncoder.encode(path, "UTF-8");
 
-			URL url = serverUri.resolve("/" + encoded).toURL();
+			URL url = serverUri.resolve("/api/" + encoded).toURL();
 			urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.connect();
 
