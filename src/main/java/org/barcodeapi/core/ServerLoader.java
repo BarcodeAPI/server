@@ -2,7 +2,9 @@ package org.barcodeapi.core;
 
 import org.barcodeapi.server.core.BarcodeAPIHandler;
 import org.barcodeapi.server.core.CacheHandler;
+import org.barcodeapi.server.core.DefaultHandler;
 import org.barcodeapi.server.core.SessionHandler;
+import org.barcodeapi.server.core.StaticHandler;
 import org.barcodeapi.server.core.StatsHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
@@ -95,6 +97,8 @@ public class ServerLoader {
 		// initialize API server
 		server = new Server(serverPort);
 		server.setHandler(handlers);
+
+		server.setErrorHandler(new DefaultHandler());
 	}
 
 	/**
@@ -150,9 +154,8 @@ public class ServerLoader {
 	 */
 	private void initResourceHandler() {
 
-		ResourceHandler resourceHandler = new ResourceHandler();
+		ResourceHandler resourceHandler = new StaticHandler();
 
-		resourceHandler.setResourceBase("resources");
 		resourceHandler.setWelcomeFiles(new String[] { "index.html" });
 
 		handlers.addHandler(resourceHandler);

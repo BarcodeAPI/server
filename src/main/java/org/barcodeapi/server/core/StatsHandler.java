@@ -13,6 +13,8 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 public class StatsHandler extends AbstractHandler {
 
+	private static final long timeStart = System.currentTimeMillis();
+
 	public StatsHandler() {
 
 	}
@@ -23,6 +25,9 @@ public class StatsHandler extends AbstractHandler {
 		// get counters and increment stats hits
 		StatsCollector counters = StatsCollector.getInstance();
 		counters.incrementCounter("stats.hits");
+
+		// current up-time
+		counters.setCounter("system.uptime", (double) (System.currentTimeMillis() - timeStart));
 
 		// calculate cache size
 		double cacheSize = BarcodeCache.getInstance().getCacheSize();
