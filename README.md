@@ -7,6 +7,45 @@ When served behind a simple Apache web server providing a UI the barcode server 
 
 ## About
 
+### API Server
+
+The server will generate a barcode for any content passed to the `/api` endpoint; this can be done using a web browser, fetched through a user script, or even simply with cURL.
+
+```
+curl https://barcodeapi.org/api/A_Barcode > gen.png
+```
+
+#### Automatic Code Type Detection
+
+When simply calling the api endpoint without specifying an eplitit code type, the server will make its best judgement as to which code type will be best suited for the supplied data.
+
+#### Defined Code Type
+
+Also available at the api endpoint, a user may optionally define their required code type:
+
+```
+# EAN-8
+curl https://barcodeapi.org/api/8/00000000
+
+# EAN-13
+curl https://barcodeapi.org/api/13/0000000000000
+
+# Code 39
+curl https://barcodeapi.org/api/39/CODE39
+
+# Code 128
+curl https://barcodeapi.org/api/128/Code-128
+
+# QA Code
+curl https://barcodeapi.org/api/qr/QR_Code
+
+# Data Matrix
+curl https://barcodeapi.org/api/qr/Data_Matrix
+
+# Codabar
+curl https://barcodeapi.org/api/codabar/000000
+```
+
 ### Server Statistics
 
 The server will keep counters for most basic actions, such as total number of hits, generation requests, and render times for each type of code.
@@ -53,7 +92,6 @@ The BarcodeAPI server was built around the [Jetty](https://www.eclipse.org/jetty
 [Apache 2.0](https://github.com/zxing/zxing/blob/master/LICENSE)<br/>
 [ZXing](https://github.com/zxing/zxing/) is a barcode processing library that makes QR code generation possible.
 
-
 ## License
 
 ```text
@@ -71,3 +109,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
