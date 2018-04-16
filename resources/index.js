@@ -5,12 +5,19 @@ function genCode() {
 	var type = document.getElementById("search_type").value;
 	var text = document.getElementById("search_text").value;
 
-	if ( type != "auto" ) {
+	if ( text == "" ) {
 
-		url = url + "/" + type;
+		url = "";
+	} else {
+
+		if ( type != "auto" ) {
+
+			url = url + "/" + type;
+		}
+
+		url += "/" + encodeURIComponent(text);
+		console.log( "Generating: " + url );
 	}
-	
-	url += "/" + encodeURIComponent(text);
-	console.log( "Generating: " + url );
+
 	document.getElementById("barcode_output").src = url;
 }
