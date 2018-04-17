@@ -27,12 +27,15 @@
 			</div>
 
 			<div id="search_wrapper">
-				<form>
+				<form onsubmit="return false;">
 
 					<input id="search_text" onkeyup="genCode()" type="text"
-						placeholder="a code for anything..." /> <select id="search_type"
-						onchange="genCode()">
+						placeholder="a code for anything..." />
+						
+					<select id="search_type" onchange="genCode()">
 						<option value="auto" selected>Auto</option>
+						<option value="e">UPC-E</option>
+						<option value="a">UPC-A</option>
 						<option value="8">EAN-8</option>
 						<option value="13">EAN-13</option>
 						<option value="39">Code39</option>
@@ -41,7 +44,6 @@
 						<option value="matrix">Data Matrix</option>
 						<option value="codabar">Codabar</option>
 					</select>
-
 				</form>
 			</div>
 
@@ -53,7 +55,7 @@
 
 		</div>
 		<div id="footer_wrapper">
-			<p>Hi.</p>
+			<p>2018</p>
 		</div>
 	</div>
 </body>

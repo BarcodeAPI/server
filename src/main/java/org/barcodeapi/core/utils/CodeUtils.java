@@ -50,17 +50,11 @@ public class CodeUtils {
 
 		String newData = "";
 
-		for (int x = 0; x < (data.length()); x++) {
+		for (int x = 0; x < data.length(); x++) {
 
-			if (x + 2 > data.length()) {
+			if (data.length() > x + 2 && data.charAt(x) == '$' && data.charAt(x + 1) == '$') {
 
-				if (data.charAt(x) == '$' && data.charAt(x + 1) == '$') {
-
-					newData += (char) (((int) data.charAt(x += 2)) - 64);
-				} else {
-
-					newData += data.charAt(x);
-				}
+				newData += (char) (((int) data.charAt(x += 2)) - 64);
 			} else {
 
 				newData += data.charAt(x);
