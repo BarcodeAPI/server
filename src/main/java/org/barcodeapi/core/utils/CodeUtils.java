@@ -4,11 +4,17 @@ import java.security.MessageDigest;
 
 public class CodeUtils {
 
-	public static String getMD5Sum(byte[] image) {
+	/**
+	 * Calculate the MD5 hash of some bytes.
+	 * 
+	 * @param bytes
+	 * @return
+	 */
+	public static String getMD5Sum(byte[] bytes) {
 
 		try {
 
-			byte[] hash = MessageDigest.getInstance("MD5").digest(image);
+			byte[] hash = MessageDigest.getInstance("MD5").digest(bytes);
 
 			StringBuilder hexString = new StringBuilder();
 
@@ -27,15 +33,34 @@ public class CodeUtils {
 		}
 	}
 
-	public static String parseControlChars(int offset, String data) {
+	/**
+	 * Converts a data string into a string containing control characters; Any
+	 * instance of [$$?] will be converted into it's control character equivalent,
+	 * offset by 64 from the given character.
+	 * 
+	 * A$$@A --> A(NUL)A
+	 * 
+	 * A$$_A --> A(US)A
+	 * 
+	 * @param offset
+	 * @param data
+	 * @return
+	 */
+	public static String parseControlChars(String data) {
 
 		String newData = "";
 
-		for (int x = 0; x < data.length(); x++) {
+		for (int x = 0; x < (data.length()); x++) {
 
-			if (data.charAt(x) == '$' && data.charAt(x + 1) == '$') {
+			if (x + 2 > data.length()) {
 
-				newData += (char) (((int) data.charAt(x += 2)) - offset);
+				if (data.charAt(x) == '$' && data.charAt(x + 1) == '$') {
+
+					newData += (char) (((int) data.charAt(x += 2)) - 64);
+				} else {
+
+					newData += data.charAt(x);
+				}
 			} else {
 
 				newData += data.charAt(x);

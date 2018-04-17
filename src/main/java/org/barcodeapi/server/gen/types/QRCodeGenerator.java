@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 
@@ -25,7 +26,9 @@ public class QRCodeGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public void onValidateRequest(String data) {
+	public String onValidateRequest(String data) {
+
+		return CodeUtils.parseControlChars(data);
 	}
 
 	@Override

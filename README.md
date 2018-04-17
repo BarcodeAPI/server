@@ -24,25 +24,32 @@ When simply calling the api endpoint without specifying an eplitit code type, th
 Also available at the api endpoint, a user may optionally define their required code type:
 
 ```
-# EAN-8
+# UPC-E (e, upc-e, upce)
+curl https://barcodeapi.org/api/e/00000000
+
+# UCP-A (a, upc-a, upca, upc)
+curl https://barcodeapi.org/api/a/000000000000
+
+# EAN-8 (8, ean-8, ean8)
 curl https://barcodeapi.org/api/8/00000000
 
-# EAN-13
+# EAN-13 (13, ean-13, ean13)
 curl https://barcodeapi.org/api/13/0000000000000
 
-# Code 39
+# Code 39 (39, code39)
 curl https://barcodeapi.org/api/39/CODE39
 
-# Code 128
+# Code 128 (128, code128)
 curl https://barcodeapi.org/api/128/Code-128
 
-# QA Code
+# QR Code (qr, qrcode)
 curl https://barcodeapi.org/api/qr/QR_Code
 
-# Data Matrix
-curl https://barcodeapi.org/api/qr/Data_Matrix
+# Data Matrix (matrix, datamatrix, data)
+curl https://barcodeapi.org/api/matrix/Data_Matrix
 
-# Codabar
+# Codabar (codabar)
+
 curl https://barcodeapi.org/api/codabar/000000
 ```
 

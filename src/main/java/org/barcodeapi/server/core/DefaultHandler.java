@@ -9,9 +9,6 @@ import org.eclipse.jetty.server.handler.ErrorHandler;
 
 public class DefaultHandler extends ErrorHandler {
 
-	public DefaultHandler() {
-	}
-
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 
 		// hit counter

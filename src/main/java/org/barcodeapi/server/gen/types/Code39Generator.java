@@ -16,9 +16,6 @@ public class Code39Generator extends CodeGenerator {
 
 	private final int dpi = 150;
 
-	/**
-	 * 
-	 */
 	public Code39Generator() {
 		super(CodeType.Code39);
 
@@ -42,10 +39,6 @@ public class Code39Generator extends CodeGenerator {
 
 		// barcode39Bean.setFontName(name);
 		// barcode39Bean.setFontSize(size);
-	}
-
-	@Override
-	public void onValidateRequest(String data) {
 	}
 
 	@Override

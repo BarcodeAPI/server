@@ -28,11 +28,11 @@ public class Ean8Generator extends CodeGenerator {
 	}
 
 	@Override
-	public void onValidateRequest(String data) {
+	public String onValidateRequest(String data) {
 
 		if (data.length() == 7) {
 
-			return;
+			return data;
 		}
 
 		int checksum = CodeUtils.calculateEanChecksum(data, 8);
@@ -42,6 +42,8 @@ public class Ean8Generator extends CodeGenerator {
 
 			throw new IllegalArgumentException("Expected checksum : " + checksum);
 		}
+
+		return data;
 	}
 
 	@Override

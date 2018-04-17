@@ -44,19 +44,6 @@ public class CodabarGenerator extends CodeGenerator {
 		generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
 
 		generator.setHeight(UnitConv.in2mm(1));
-		// barcode128Bean.setBarHeight(UnitConv.in2mm(.5));
-
-		// barcode128Bean.setFontName(name);
-		// barcode128Bean.setFontSize(size);
-	}
-
-	/**
-	 * Called before looking up an image in cache, or rendering;
-	 * 
-	 * Validate the requested string's format and length.
-	 */
-	@Override
-	public void onValidateRequest(String data) {
 	}
 
 	/**

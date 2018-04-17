@@ -47,6 +47,11 @@ public class SessionCache {
 		return session;
 	}
 
+	public double getSessionCount() {
+
+		return cache.size();
+	}
+
 	public static synchronized SessionCache getInstance() {
 
 		if (sessionCache == null) {

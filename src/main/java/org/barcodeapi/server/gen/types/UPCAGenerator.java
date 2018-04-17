@@ -41,10 +41,6 @@ public class UPCAGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public void onValidateRequest(String data) {
-	}
-
-	@Override
 	public byte[] onRender(String data) {
 
 		try {

@@ -33,7 +33,7 @@ public abstract class ServerTestBase {
 		try {
 
 			apiServer = new ServerLoader(new String[] { "--port", SERVER_PORT });
-			apiServer.launch(false);
+			apiServer.launch();
 
 			serverUri = new URI(String.format("http://%s:%s", SERVER_HOST, SERVER_PORT));
 

@@ -37,7 +37,7 @@ public class ServerLoader {
 	 * 
 	 * @throws Exception
 	 */
-	public void launch(boolean blocking) throws Exception {
+	public void launch() throws Exception {
 
 		initJetty();
 
@@ -52,8 +52,6 @@ public class ServerLoader {
 		initResourceHandler();
 
 		startServer();
-
-		blockInput(blocking);
 	}
 
 	/**
@@ -172,7 +170,6 @@ public class ServerLoader {
 
 			// start server
 			server.start();
-
 			return true;
 		} catch (Exception e) {
 
@@ -200,24 +197,5 @@ public class ServerLoader {
 			e.printStackTrace(System.err);
 			return false;
 		}
-	}
-
-	/**
-	 * A simple blocking method based on boolean input.
-	 * 
-	 * @param blocking
-	 * @throws Exception
-	 */
-	private void blockInput(boolean blocking) throws Exception {
-
-		if (!blocking) {
-
-			return;
-		}
-
-		do {
-
-			Thread.sleep(1);
-		} while (true);
 	}
 }

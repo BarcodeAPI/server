@@ -13,10 +13,6 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 public class CacheHandler extends AbstractHandler {
 
-	public CacheHandler() {
-
-	}
-
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 

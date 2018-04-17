@@ -3,6 +3,7 @@ package org.barcodeapi.server.gen.types;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
+import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.krysalis.barcode4j.impl.datamatrix.DataMatrixBean;
@@ -30,7 +31,9 @@ public class DataMatrixGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public void onValidateRequest(String data) {
+	public String onValidateRequest(String data) {
+
+		return CodeUtils.parseControlChars(data);
 	}
 
 	@Override

@@ -17,9 +17,6 @@ public class Code128Generator extends CodeGenerator {
 
 	private final int dpi = 150;
 
-	/**
-	 * 
-	 */
 	public Code128Generator() {
 		super(CodeType.Code128);
 
@@ -47,13 +44,13 @@ public class Code128Generator extends CodeGenerator {
 	}
 
 	@Override
-	public void onValidateRequest(String data) {
+	public String onValidateRequest(String data) {
+
+		return CodeUtils.parseControlChars(data);
 	}
 
 	@Override
 	public byte[] onRender(String data) {
-
-		data = CodeUtils.parseControlChars(64, data);
 
 		try {
 

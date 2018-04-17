@@ -50,8 +50,9 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			// get the request string
 			String requestPath = request.getPathInfo();
 			String data = requestPath.substring(1, requestPath.length());
+
+			// decode the data string
 			data = URLDecoder.decode(data, "UTF-8");
-			session.onRender(data);
 
 			// use cache if within threshold
 			boolean useCache = data.length() <= 64;
@@ -60,28 +61,34 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			CodeGenerator generator;
 			CodeType type;
 
+			// parse code type / data string
 			int typeIndex = data.indexOf("/");
 			if (typeIndex > 0) {
 
+				// get the type string
 				String typeString = target.substring(1, typeIndex + 1);
 
+				// check if generator found for given type
 				generator = generators.getGenerator(typeString);
-
 				if (generator == null) {
 
+					// no type specified
 					type = TypeSelector.getType(data);
 					generator = generators.getGenerator(type);
 				} else {
 
+					// get generator type and data string
 					type = generator.getType();
 					data = data.substring(typeIndex + 1);
 				}
 			} else {
 
+				// no type specified
 				type = TypeSelector.getType(data);
 				generator = generators.getGenerator(type);
 			}
 
+			// check for valid render data
 			if (data == null || data.equals("")) {
 
 				System.out.println(requestTime + " : Empty request.");
@@ -94,6 +101,9 @@ public class BarcodeAPIHandler extends AbstractHandler {
 				return;
 			}
 
+			// update user session
+			session.onRender(data);
+
 			// build a header safe data response
 			String dataEncoded = URLEncoder.encode(data, "UTF-8");
 			String fileName = "barcode";
@@ -101,10 +111,12 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			// image object
 			CachedObject barcode = null;
 
-			// lookup in cache if allowed
+			// is cache allowed
 			if (useCache) {
 
-				barcode = BarcodeCache.getInstance().getBarcode(type, data);
+				// lookup image from cache
+				barcode = BarcodeCache.getInstance()//
+						.getBarcode(type, data);
 			}
 
 			// if not found in cache
@@ -112,20 +124,21 @@ public class BarcodeAPIHandler extends AbstractHandler {
 
 				try {
 
-					// render image
+					// time and render image
 					double start = System.nanoTime();
 					byte[] image = generator.getCode(data);
 					double renderTime = (System.nanoTime() - start) / 1000 / 1000;
 					String length = String.format("%.2f", renderTime);
 
 					// add to total render time
-					StatsCollector.getInstance().incrementCounter("system.renderTime", renderTime);
+					StatsCollector.getInstance()//
+							.incrementCounter("system.renderTime", renderTime);
 
-					System.out.println(requestTime + " :" + //
-							" Rendered [ " + type.toString() + " ] " + //
-							" with [ " + data + " ]" + //
-							" in [ " + length + "ms ]" + //
-							" size [ " + image.length + "B ]");
+					System.out.println(requestTime + " : " + //
+							"Rendered [ " + type.toString() + " ] " + //
+							"with [ " + data + " ] " + //
+							"in [ " + length + "ms ] " + //
+							"size [ " + image.length + "B ]");
 
 					// create new object with image
 					barcode = new CachedObject(image);
@@ -152,8 +165,9 @@ public class BarcodeAPIHandler extends AbstractHandler {
 				}
 			} else {
 
-				System.out.println(requestTime + //
-						" : Served [ " + type.toString() + " ] with [ " + data + " ] from cache");
+				System.out.println(requestTime + " : " + //
+						"Served [ " + type.toString() + " ] " + //
+						"with [ " + data + " ] from cache");
 			}
 
 			// set response okay
@@ -185,8 +199,10 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			response.getOutputStream().write(barcode.getData());
 		} catch (Exception e) {
 
+			// print error to log
 			e.printStackTrace();
 
+			// set response error
 			baseRequest.setHandled(true);
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.setHeader("Server", "BarcodeAPI.org");

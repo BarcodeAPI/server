@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.cache.BarcodeCache;
+import org.barcodeapi.server.session.SessionCache;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -14,10 +15,6 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 public class StatsHandler extends AbstractHandler {
 
 	private static final long timeStart = System.currentTimeMillis();
-
-	public StatsHandler() {
-
-	}
 
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -32,6 +29,10 @@ public class StatsHandler extends AbstractHandler {
 		// calculate cache size
 		double cacheSize = BarcodeCache.getInstance().getCacheSize();
 		counters.setCounter("cache.size", cacheSize);
+
+		// number of total sessions
+		double sessions = SessionCache.getInstance().getSessionCount();
+		counters.setCounter("sessions.created", sessions);
 
 		// set response code
 		response.setStatus(HttpServletResponse.SC_OK);

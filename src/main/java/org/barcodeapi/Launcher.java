@@ -19,7 +19,7 @@ public class Launcher {
 			loader = new ServerLoader(args);
 
 			// Launch the system
-			loader.launch(true);
+			loader.launch();
 
 		} catch (Exception e) {
 

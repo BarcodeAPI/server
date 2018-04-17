@@ -1,6 +1,5 @@
 package org.barcodeapi.server.cache;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -8,8 +7,6 @@ import org.barcodeapi.server.gen.CodeType;
 import org.barcodeapi.server.statistics.StatsCollector;
 
 public class BarcodeCache {
-
-	private final String CACHE_DIR = "/tmp/codeCache";
 
 	private static BarcodeCache imageCache;
 
@@ -31,14 +28,15 @@ public class BarcodeCache {
 	public void createCache(CodeType type) {
 
 		cache.put(type, new ConcurrentHashMap<String, CachedObject>());
-
-		File cacheDir = new File(CACHE_DIR + "/" + type.toString());
-		if (!cacheDir.exists()) {
-
-			cacheDir.mkdir();
-		}
 	}
 
+	/**
+	 * Lookup an object from a specific type cache. Will return null if not found.
+	 * 
+	 * @param type
+	 * @param data
+	 * @return
+	 */
 	public CachedObject getBarcode(CodeType type, String data) {
 
 		if (!cache.get(type).containsKey(data)) {
@@ -53,6 +51,13 @@ public class BarcodeCache {
 		return cache.get(type).get(data);
 	}
 
+	/**
+	 * Add an object to the cache.
+	 * 
+	 * @param type
+	 * @param data
+	 * @param image
+	 */
 	public void addImage(CodeType type, String data, CachedObject image) {
 
 		String counterName = "cache." + type.toString() + ".add";
@@ -60,6 +65,12 @@ public class BarcodeCache {
 		cache.get(type).put(data, image);
 	}
 
+	/**
+	 * Remove an object from the cache.
+	 * 
+	 * @param type
+	 * @param data
+	 */
 	public void removeImage(CodeType type, String data) {
 
 		if (getBarcode(type, data) == null) {
@@ -72,6 +83,11 @@ public class BarcodeCache {
 		cache.get(type).remove(data);
 	}
 
+	/**
+	 * Get the current size of the cache.
+	 * 
+	 * @return
+	 */
 	public long getCacheSize() {
 
 		long cacheSize = 0;
@@ -86,6 +102,11 @@ public class BarcodeCache {
 		return cacheSize;
 	}
 
+	/**
+	 * Get all of the keys in the cache.
+	 * 
+	 * @return
+	 */
 	public String[] getCacheKeys() {
 
 		ArrayList<String> keys = new ArrayList<String>();
@@ -100,6 +121,11 @@ public class BarcodeCache {
 		return keys.toArray(new String[keys.size()]);
 	}
 
+	/**
+	 * Get an instance of the cache.
+	 * 
+	 * @return
+	 */
 	public static synchronized BarcodeCache getInstance() {
 
 		if (imageCache == null) {
