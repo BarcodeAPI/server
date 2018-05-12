@@ -73,7 +73,7 @@ public enum CodeType {
 	 * 
 	 * A high density data code with error correction.
 	 */
-	DataMatrix(new String[] { "matrix", "datamatrix", "data" }, //
+	DataMatrix(new String[] { "dm", "data-matrix", "datamatrix", "matrix", "data" }, //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$");
 

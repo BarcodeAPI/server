@@ -8,14 +8,14 @@
 
 #content_wrapper {
 	width: auto;
-	max-width: 800px;
+	max-width: 900px;
 	margin-left: auto;
 	margin-right: auto;
 }
 
 #header_wrapper {
-	margin-top: 16px;
 	margin-bottom: 16px;
+	margin-top: 16px;
 }
 
 #header_img {
@@ -31,6 +31,10 @@
 	height: 35px;
 	text-align: center;
 	border-radius: 5px;
+}
+
+#frame {
+	border: solid 1px;
 }
 
 #barcode_wrapper {
