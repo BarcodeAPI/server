@@ -14,7 +14,12 @@ public class DefaultHandler extends ErrorHandler {
 		// hit counter
 		StatsCollector.getInstance().incrementCounter("error.hits");
 
-		// default to 404
-		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		try {
+
+			response.sendRedirect("/api" + request.getPathInfo());
+		} catch (Exception e) {
+
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 	}
 }
