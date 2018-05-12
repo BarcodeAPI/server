@@ -15,35 +15,36 @@
 
 <link rel="stylesheet" type="text/css" href="/index.css" />
 </head>
-<body>
+<body onload="loadHash()">
 	<div id="global_wrapper">
 
 		<div id="content_wrapper">
 
 			<div id="header_wrapper">
 				<center>
-					<h1>BarcodeAPI.org</h1>
+					<img src="/logo.png"/>
 				</center>
 			</div>
 
-			<div id="search_wrapper">
+			<div id="input_wrapper">
+				<div id="topnav" class="topnav">
+					<a id="type-auto" onclick="location.hash='auto'">Auto</a>
+					<a id="type-e" onclick="location.hash='e'">UPC-E</a>
+					<a id="type-a" onclick="location.hash='a'">UPC-A</a>
+					<a id="type-8" onclick="location.hash='8'">EAN-8</a>
+					<a id="type-13" onclick="location.hash='13'">EAN-13</a>
+					<a id="type-39" onclick="location.hash='39'">Code39</a>
+					<a id="type-128" onclick="location.hash='128'">Code128</a>
+					<a id="type-qr" onclick="location.hash='qr'">QR Code</a>
+					<a id="type-matrix" onclick="location.hash='matrix'">Data Matrix</a>
+					<a id="type-codabar" onclick="location.hash='codabar'">Codabar</a>
+				</div>
+
 				<form onsubmit="return false;">
 
-					<ul>
-						<li><a onclick="location.hash='auto'">Auto</a></li>
-						<li><a onclick="location.hash='e'">UPC-E</a></li>
-						<li><a onclick="location.hash='a'">UPC-A</a></li>
-						<li><a onclick="location.hash='8'">EAN-8</a></li>
-						<li><a onclick="location.hash='13'">EAN-13</a></li>
-						<li><a onclick="location.hash='39'">Code39</a></li>
-						<li><a onclick="location.hash='128'">Code128</a></li>
-						<li><a onclick="location.hash='qr'">QR Code</a></li>
-						<li><a onclick="location.hash='matrix'">Data Matrix</a></li>
-						<li><a onclick="location.hash='codabar'">Codabar</a></li>
-					</ul>
-
-					<input id="search_text" onkeyup="genCode()" type="text"
-						placeholder="a code for anything..." />
+					<input id="text" onkeyup="genCode()" type="text"
+						placeholder="a code for anything..."
+						autocomplete="off" maxlength="100"/>
 				</form>
 			</div>
 

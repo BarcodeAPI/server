@@ -1,4 +1,28 @@
-window.onhashchange = genCode;
+window.onhashchange = loadHash;
+
+function loadHash() {
+
+	var hash = location.hash.substring(1);
+
+	var topnav = document.getElementById("topnav");
+	for ( var x in topnav.childNodes) {
+		var classList = topnav.childNodes[x].classList;
+		if (classList != null) {
+			classList.remove("active");
+		}
+	}
+
+	var selected = document.getElementById("type-" + hash);
+	if (selected == null) {
+
+		location.hash = "auto";
+		return;
+	}
+
+	selected.setAttribute("class", "active");
+
+	genCode();
+}
 
 function genCode() {
 
@@ -9,7 +33,7 @@ function genCode() {
 		type = "auto";
 	}
 
-	var text = document.getElementById("search_text").value;
+	var text = document.getElementById("text").value;
 	if (text == "") {
 
 		url = "";

@@ -1,7 +1,6 @@
 # BarcodeAPI.org
 
-The BarcodeAPI.org web server was designed to provide an easy to use API via HTTP protocol for use in mobile applications.
-
+The BarcodeAPI.org web server was designed to provide an easy to use barcode generation API via the HTTP protocol for use in external / mobile applications where generation libraries might not exist; the WebUI is also designed to be responsive such that users may generate barcodes to be scanned directly in their web browser, or download the barcodes after testing them out.
 
 ## Mirrors
 
