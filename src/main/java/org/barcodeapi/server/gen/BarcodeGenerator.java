@@ -47,18 +47,28 @@ public class BarcodeGenerator {
 			// get the type string
 			String typeString = target.substring(1, typeIndex + 1);
 
-			// check if generator found for given type
-			generator = generators.getGenerator(typeString);
-			if (generator == null) {
+			// type is auto
+			if (typeString.equals("auto")) {
 
 				// no type specified
+				data = data.substring(5);
 				type = TypeSelector.getType(data);
 				generator = generators.getGenerator(type);
 			} else {
 
-				// get generator type and data string
-				type = generator.getType();
-				data = data.substring(typeIndex + 1);
+				// check if generator found for given type
+				generator = generators.getGenerator(typeString);
+				if (generator == null) {
+
+					// no type specified
+					type = TypeSelector.getType(data);
+					generator = generators.getGenerator(type);
+				} else {
+
+					// get generator type and data string
+					type = generator.getType();
+					data = data.substring(typeIndex + 1);
+				}
 			}
 		} else {
 
@@ -136,6 +146,6 @@ public class BarcodeGenerator {
 
 	private static String stripIllegal(String data) {
 
-		return data.replaceAll("[$@]", "");
+		return data.replaceAll("[!@#$%^&*\\(\\)\\[\\]\\{\\};:\\',\\<\\>\\\"]", "");
 	}
 }

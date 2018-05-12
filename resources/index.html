@@ -33,11 +33,12 @@
 					<a id="type-a" onclick="location.hash='a'">UPC-A</a>
 					<a id="type-8" onclick="location.hash='8'">EAN-8</a>
 					<a id="type-13" onclick="location.hash='13'">EAN-13</a>
+					<a id="type-codabar" onclick="location.hash='codabar'">Codabar</a>
 					<a id="type-39" onclick="location.hash='39'">Code39</a>
 					<a id="type-128" onclick="location.hash='128'">Code128</a>
 					<a id="type-qr" onclick="location.hash='qr'">QR Code</a>
 					<a id="type-dm" onclick="location.hash='dm'">Data Matrix</a>
-					<a id="type-codabar" onclick="location.hash='codabar'">Codabar</a>
+					<a id="type-417" onclick="location.hash='417'">PDF 417</a>
 				</div>
 
 				<div id="frame">
@@ -45,7 +46,7 @@
 
 						<input id="text" onkeyup="genCode()" type="text"
 							placeholder="a code for anything..." autocomplete="off"
-							maxlength="100" />
+							maxlength="200" />
 					</form>
 					<div id="barcode_wrapper">
 						<center>

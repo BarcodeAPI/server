@@ -10,6 +10,7 @@ import org.barcodeapi.server.gen.types.Code39Generator;
 import org.barcodeapi.server.gen.types.DataMatrixGenerator;
 import org.barcodeapi.server.gen.types.Ean13Generator;
 import org.barcodeapi.server.gen.types.Ean8Generator;
+import org.barcodeapi.server.gen.types.PDF417Generator;
 import org.barcodeapi.server.gen.types.QRCodeGenerator;
 import org.barcodeapi.server.gen.types.UPCAGenerator;
 import org.barcodeapi.server.gen.types.UPCEGenerator;
@@ -37,6 +38,8 @@ public class CodeGenerators {
 
 		generators.put(CodeType.QRCode, new QRCodeGenerator());
 		generators.put(CodeType.DataMatrix, new DataMatrixGenerator());
+
+		generators.put(CodeType.PDF417, new PDF417Generator());
 	}
 
 	/**
