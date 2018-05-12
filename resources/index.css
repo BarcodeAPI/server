@@ -27,17 +27,10 @@
 }
 
 #search_text {
-	width: 80%;
+	width: 100%;
 	height: 35px;
 	text-align: center;
 	border-radius: 5px;
-}
-
-#search_type {
-	width: 15%;
-	height: 30px;
-	margin-left: 2.5%;
-	text-align: center;
 }
 
 #barcode_wrapper {
@@ -55,5 +48,25 @@
 #footer_wrapper {
 	position: absolute;
 	bottom: 0px;
-	height: 125px;
+	width: 100%;
+}
+
+#footer_help {
+	font-size: 18px;
+	max-width: 650px;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	max-width: 650px;
+	max-height: 350px;
+	max-width: 650px;
+	padding: 16px;
+}
+
+#footer_link {
+	padding: 8px;
+	font-size: 14px;
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
 }

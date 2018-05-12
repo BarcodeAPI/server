@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.Cookie;
 
+import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 
 public class SessionCache {
@@ -21,6 +22,9 @@ public class SessionCache {
 	}
 
 	public SessionObject getSession(Request request) {
+
+		StatsCollector.getInstance()//
+				.incrementCounter("session.total.lookup");
 
 		// check for cookie
 		if (request.getCookies() != null) {
@@ -40,6 +44,9 @@ public class SessionCache {
 				}
 			}
 		}
+
+		StatsCollector.getInstance()//
+				.incrementCounter("session.total.create");
 
 		// create and return new session object
 		SessionObject session = new SessionObject();

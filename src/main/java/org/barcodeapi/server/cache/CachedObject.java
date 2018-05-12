@@ -1,5 +1,7 @@
 package org.barcodeapi.server.cache;
 
+import java.util.Properties;
+
 import org.barcodeapi.core.utils.CodeUtils;
 
 public class CachedObject {
@@ -12,6 +14,8 @@ public class CachedObject {
 
 	private long lastAccess = 0;
 
+	private Properties properties;
+
 	public CachedObject(byte[] data) {
 
 		this.timeCreated = System.currentTimeMillis();
@@ -19,6 +23,8 @@ public class CachedObject {
 		this.barcodeData = data;
 
 		this.checksum = CodeUtils.getMD5Sum(data);
+
+		this.properties = new Properties();
 	}
 
 	public long getTimeCreated() {
@@ -45,5 +51,10 @@ public class CachedObject {
 	public long getLastAccess() {
 
 		return lastAccess;
+	}
+
+	public Properties getProperties() {
+
+		return properties;
 	}
 }

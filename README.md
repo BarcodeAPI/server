@@ -1,11 +1,18 @@
 # BarcodeAPI.org
 
-The barcode server was designed to serve an easy to use API via web protocol for use in mobile applications.
+The BarcodeAPI.org web server was designed to provide an easy to use API via HTTP protocol for use in mobile applications.
 
-When served behind a simple Apache web server providing a UI the barcode server can be used for a wide range of tasks.
 
+## Mirrors
+
+[Master Repo](https://git.mclarkdev.com/BarcodeAPI.org/server)<br/>
+[GitHub Mirror](https://github.com/BarcodeAPI/server)
 
 ## About
+
+### Web Server
+
+The server comes with a set of static HTML and Javascript files that allow users to navigate to a simple UI and generate barcodes in their web browser with ease.
 
 ### API Server
 
@@ -45,11 +52,10 @@ curl https://barcodeapi.org/api/128/Code-128
 # QR Code (qr, qrcode)
 curl https://barcodeapi.org/api/qr/QR_Code
 
-# Data Matrix (matrix, datamatrix, data)
+# Data Matrix (matrix, datamatrix, dm)
 curl https://barcodeapi.org/api/matrix/Data_Matrix
 
 # Codabar (codabar)
-
 curl https://barcodeapi.org/api/codabar/000000
 ```
 
@@ -71,32 +77,20 @@ A simple session cache will track a users render requests. This can be used to p
 
 A user's session details are available at the `/session` endpoint.
 
-
 ## Third-Party
 
 BarcodeAPI.org is only made possible with the use of third-party software.
 
-### Jetty
+### Jetty, [Apache 2.0](https://www.eclipse.org/jetty/licenses.html)
 
-[Apache 2.0](https://www.eclipse.org/jetty/licenses.html)<br/>
 The BarcodeAPI server was built around the [Jetty](https://www.eclipse.org/jetty/) web server framework.
 
-### Barcode4J
+### Barcode4J, [Apache 2.0](http://barcode4j.sourceforge.net/#Introduction)
 
-[Apache 2.0](http://barcode4j.sourceforge.net/#Introduction)<br/>
 [Barcode4J](http://barcode4j.sourceforge.net/) is an open source barcode generator; it is used for the generation of the following code types:
 
-- Code39
-- Code128
-- Codabar
-- EAN-8
-- EAN-13
-- UPC-A
-- UPC-E
+### ZXing, [Apache 2.0](https://github.com/zxing/zxing/blob/master/LICENSE)
 
-### ZXing
-
-[Apache 2.0](https://github.com/zxing/zxing/blob/master/LICENSE)<br/>
 [ZXing](https://github.com/zxing/zxing/) is a barcode processing library that makes QR code generation possible.
 
 ## License

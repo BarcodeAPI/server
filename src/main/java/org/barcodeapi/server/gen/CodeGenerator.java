@@ -50,17 +50,30 @@ public abstract class CodeGenerator {
 		String counterName = "render." + getType().toString() + ".hit";
 		StatsCollector.getInstance().incrementCounter(counterName);
 
-		// time and render
+		// start timer
 		long timeStart = System.currentTimeMillis();
-		byte[] image = onRender(validated);
-		double time = System.currentTimeMillis() - timeStart;
 
-		// increment counter
-		counterName = "render." + getType().toString() + ".time";
-		StatsCollector.getInstance().incrementCounter(counterName, time);
+		try {
 
-		// return image
-		return image;
+			// render image
+			byte[] img = onRender(validated);
+
+			// time and update counter
+			double time = System.currentTimeMillis() - timeStart;
+			counterName = "render." + getType().toString() + ".time";
+			StatsCollector.getInstance().incrementCounter(counterName, time);
+
+			// return image
+			return img;
+		} catch (Exception e) {
+
+			// hit fail counter
+			counterName = "render." + getType().toString() + ".fail";
+			StatsCollector.getInstance().incrementCounter(counterName);
+
+			// return null
+			return null;
+		}
 	}
 
 	/**
