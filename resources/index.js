@@ -57,8 +57,7 @@ function genCode() {
 	var text = document.getElementById("text").value;
 	if (text == "") {
 
-		document.getElementById("barcode_output").src = "";
-		return;
+		text = "Try Me!";
 	}
 
 	// Build URL with type
