@@ -17,10 +17,10 @@ public class TestEan13 extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"EAN13", getHeader("X-CodeType"));
+				"EAN13", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				"123456789012", getHeader("X-CodeData"));
+				"123456789012", getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -32,10 +32,10 @@ public class TestEan13 extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"EAN13", getHeader("X-CodeType"));
+				"EAN13", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				"1234567890128", getHeader("X-CodeData"));
+				"1234567890128", getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -45,10 +45,6 @@ public class TestEan13 extends ServerTestBase {
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
-
-		Assert.assertEquals("Error Message", //
-				"Failed [ EAN13 ] with [ 1234567890123 ] reason [ Expected checksum : 8 ]", //
-				getResponse().readLine());
 	}
 
 	@Test
@@ -58,10 +54,6 @@ public class TestEan13 extends ServerTestBase {
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
-
-		Assert.assertEquals("Error Message", //
-				"Failed [ EAN13 ] with [ 12345678901 ] reason [ Invalid data for selected code type ]", //
-				getResponse().readLine());
 	}
 
 	@Test
@@ -71,10 +63,6 @@ public class TestEan13 extends ServerTestBase {
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
-
-		Assert.assertEquals("Error Message", //
-				"Failed [ EAN13 ] with [ 12345678901234 ] reason [ Invalid data for selected code type ]", //
-				getResponse().readLine());
 	}
 
 	@Test
@@ -84,10 +72,6 @@ public class TestEan13 extends ServerTestBase {
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
-
-		Assert.assertEquals("Error Message", //
-				"Failed [ EAN13 ] with [ 123456789O123 ] reason [ Invalid data for selected code type ]", //
-				getResponse().readLine());
 	}
 
 	@Test
@@ -97,10 +81,6 @@ public class TestEan13 extends ServerTestBase {
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
-
-		Assert.assertEquals("Error Message", //
-				"Failed [ EAN13 ] with [ !@ ] reason [ Invalid data for selected code type ]", //
-				getResponse().readLine());
 	}
 
 	@Test
@@ -111,9 +91,5 @@ public class TestEan13 extends ServerTestBase {
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.BAD_REQUEST_400, getResponseCode());
-
-		Assert.assertEquals("Error Message", //
-				"Failed [ EAN13 ] with [ ? ] reason [ Invalid data for selected code type ]", //
-				getResponse().readLine());
 	}
 }

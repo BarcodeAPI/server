@@ -24,11 +24,12 @@ public class SessionHandler extends AbstractHandler {
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
+		// get the users session
 		SessionObject session = sessionCache.getSession(baseRequest);
 
 		// get counters and increment session hits
 		StatsCollector counters = StatsCollector.getInstance();
-		counters.incrementCounter("session.hits");
+		counters.incrementCounter("session.dump.hits");
 
 		// set response code
 		response.setStatus(HttpServletResponse.SC_OK);
@@ -36,7 +37,7 @@ public class SessionHandler extends AbstractHandler {
 
 		response.addHeader("Set-Cookie", "session=" + session.getKey() + ";");
 
-		response.getOutputStream().println(session.getDetails());
 		// print user session details
+		response.getOutputStream().println(session.getDetails());
 	}
 }

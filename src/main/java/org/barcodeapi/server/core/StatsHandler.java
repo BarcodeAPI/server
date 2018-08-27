@@ -14,14 +14,19 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 public class StatsHandler extends AbstractHandler {
 
-	private static final long timeStart = System.currentTimeMillis();
+	private final long timeStart;
+
+	public StatsHandler() {
+
+		timeStart = System.currentTimeMillis();
+	}
 
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
 		// get counters and increment stats hits
 		StatsCollector counters = StatsCollector.getInstance();
-		counters.incrementCounter("stats.hits");
+		counters.incrementCounter("stats.dump.hits");
 
 		// current up-time
 		counters.setCounter("system.uptime", (double) (System.currentTimeMillis() - timeStart));
@@ -31,8 +36,9 @@ public class StatsHandler extends AbstractHandler {
 		counters.setCounter("cache.size", cacheSize);
 
 		// number of total sessions
-		double sessions = SessionCache.getInstance().getSessionCount();
-		counters.setCounter("sessions.created", sessions);
+		SessionCache sessions = SessionCache.getInstance();
+		counters.setCounter("sessions.created", sessions.getTotalSessionCount());
+		counters.setCounter("sessions.active", sessions.getActiveSessionCount());
 
 		// set response code
 		response.setStatus(HttpServletResponse.SC_OK);

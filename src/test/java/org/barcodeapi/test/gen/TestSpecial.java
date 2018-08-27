@@ -16,10 +16,10 @@ public class TestSpecial extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"Code39", getHeader("X-CodeType"));
+				"Code39", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				encode("$12.34"), getHeader("X-CodeData"));
+				encode("$12.34"), getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -31,10 +31,10 @@ public class TestSpecial extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"Code39", getHeader("X-CodeType"));
+				"Code39", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				"BXXXXXXXXX", getHeader("X-CodeData"));
+				"BXXXXXXXXX", getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -46,10 +46,10 @@ public class TestSpecial extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"CODABAR", getHeader("X-CodeType"));
+				"CODABAR", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				"000001234", getHeader("X-CodeData"));
+				"000001234", getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -61,9 +61,9 @@ public class TestSpecial extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"QRCode", getHeader("X-CodeType"));
+				"QRCode", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				"P-4-059G945", getHeader("X-CodeData"));
+				"P-4-059G945", getHeader("X-Barcode-Content"));
 	}
 }

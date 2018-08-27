@@ -12,7 +12,7 @@ public class DefaultHandler extends ErrorHandler {
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 
 		// hit counter
-		StatsCollector.getInstance().incrementCounter("error.hits");
+		StatsCollector.getInstance().incrementCounter("error.redirect");
 
 		try {
 

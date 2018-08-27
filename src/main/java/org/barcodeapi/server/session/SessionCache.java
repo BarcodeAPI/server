@@ -1,5 +1,6 @@
 package org.barcodeapi.server.session;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.Cookie;
@@ -12,6 +13,8 @@ public class SessionCache {
 	private static SessionCache sessionCache;
 
 	private ConcurrentHashMap<String, SessionObject> cache;
+
+	private double totalSessionCount = 0;
 
 	/**
 	 * Initialize session cache.
@@ -45,16 +48,37 @@ public class SessionCache {
 			}
 		}
 
-		StatsCollector.getInstance()//
-				.incrementCounter("session.total.create");
+		return createNewSession();
+	}
+	
+	public void expireOldSessions() {
+		
+		for ( Map.Entry<String, SessionObject> entry : cache.entrySet()) {
+			
+			  
+		}
+	}
 
-		// create and return new session object
+	private SessionObject createNewSession() {
+
+		totalSessionCount++;
+
+		// create the new session object
 		SessionObject session = new SessionObject();
+
+		// add session to the cache
 		cache.put(session.getKey(), session);
+
+		// return the session
 		return session;
 	}
 
-	public double getSessionCount() {
+	public double getTotalSessionCount() {
+
+		return totalSessionCount;
+	}
+
+	public double getActiveSessionCount() {
 
 		return cache.size();
 	}

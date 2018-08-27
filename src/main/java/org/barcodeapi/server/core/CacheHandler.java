@@ -18,7 +18,7 @@ public class CacheHandler extends AbstractHandler {
 
 		// get counters and increment stats hits
 		StatsCollector counters = StatsCollector.getInstance();
-		counters.incrementCounter("cache.hits");
+		counters.incrementCounter("cache.dump.hits");
 
 		// set response code
 		response.setStatus(HttpServletResponse.SC_OK);

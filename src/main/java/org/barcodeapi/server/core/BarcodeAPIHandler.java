@@ -69,9 +69,10 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		}
 
 		// additional properties
+		String type = barcode.getProperties().getProperty("type");
 		String data = barcode.getProperties().getProperty("data");
 		String nice = barcode.getProperties().getProperty("nice");
-		String type = barcode.getProperties().getProperty("type");
+		String encd = barcode.getProperties().getProperty("encd");
 
 		// FIXME parse data and cookies here
 		// pass only session id to sessions
@@ -98,7 +99,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 
 		// barcode type
 		response.setHeader("X-Barcode-Type", type);
-		response.setHeader("X-Barcode-Content", nice);
+		response.setHeader("X-Barcode-Content", encd);
 
 		// print data to stream
 		response.getOutputStream().write(barcode.getData());

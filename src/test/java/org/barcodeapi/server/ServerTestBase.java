@@ -52,7 +52,7 @@ public abstract class ServerTestBase {
 
 			return null;
 		}
-	};
+	}
 
 	protected void apiGet(String path) {
 

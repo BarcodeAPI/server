@@ -16,10 +16,10 @@ public class TestAutoType extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"UPC_E", getHeader("X-CodeType"));
+				"UPC_E", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				"00000000", getHeader("X-CodeData"));
+				"00000000", getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -31,10 +31,10 @@ public class TestAutoType extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"UPC_A", getHeader("X-CodeType"));
+				"UPC_A", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				"000000000000", getHeader("X-CodeData"));
+				"000000000000", getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -46,10 +46,10 @@ public class TestAutoType extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"EAN8", getHeader("X-CodeType"));
+				"EAN8", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				"99999995", getHeader("X-CodeData"));
+				"99999995", getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -61,10 +61,10 @@ public class TestAutoType extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"EAN13", getHeader("X-CodeType"));
+				"EAN13", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				"0000000000000", getHeader("X-CodeData"));
+				"0000000000000", getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -76,10 +76,10 @@ public class TestAutoType extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"Code39", getHeader("X-CodeType"));
+				"Code39", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				"ABC123", getHeader("X-CodeData"));
+				"ABC123", getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -91,10 +91,10 @@ public class TestAutoType extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"Code128", getHeader("X-CodeType"));
+				"Code128", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				"abc123", getHeader("X-CodeData"));
+				"abc123", getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -106,10 +106,10 @@ public class TestAutoType extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"QRCode", getHeader("X-CodeType"));
+				"QRCode", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				encode("$♠1A"), getHeader("X-CodeData"));
+				encode("$♠1A"), getHeader("X-Barcode-Content"));
 	}
 
 	@Test
@@ -127,9 +127,9 @@ public class TestAutoType extends ServerTestBase {
 				HttpStatus.OK_200, getResponseCode());
 
 		Assert.assertEquals("Code Type", //
-				"DataMatrix", getHeader("X-CodeType"));
+				"DataMatrix", getHeader("X-Barcode-Type"));
 
 		Assert.assertEquals("Code Data", //
-				req, getHeader("X-CodeData"));
+				req, getHeader("X-Barcode-Content"));
 	}
 }

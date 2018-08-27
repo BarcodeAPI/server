@@ -2,6 +2,7 @@ package org.barcodeapi.server.gen;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.cache.CachedObject;
@@ -113,9 +114,10 @@ public class BarcodeGenerator {
 			}
 		}
 
+		barcode.getProperties().setProperty("type", type.toString());
 		barcode.getProperties().setProperty("data", data);
 		barcode.getProperties().setProperty("nice", stripIllegal(data));
-		barcode.getProperties().setProperty("type", type.toString());
+		barcode.getProperties().setProperty("encd", encode(data));
 
 		return barcode;
 	}
@@ -142,6 +144,17 @@ public class BarcodeGenerator {
 				"size [ " + image.length + "B ]");
 
 		return image;
+	}
+
+	private static String encode(String data) {
+
+		try {
+
+			return URLEncoder.encode(data, "UTF-8");
+		} catch (Exception e) {
+
+			return null;
+		}
 	}
 
 	private static String stripIllegal(String data) {
