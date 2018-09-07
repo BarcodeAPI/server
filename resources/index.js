@@ -66,6 +66,19 @@ function genCode() {
 	// Build URL with encoded request
 	url += "/" + encodeURIComponent(text);
 
+	// Update download button
+	document.getElementById("barcode_download_button").setAttribute("href", url);
+
 	// Update IMG element source
 	document.getElementById("barcode_output").src = url;
+}
+
+function printCode() {
+
+	var content = document.getElementById("barcode_wrapper").innerHTML;
+
+	w = window.open();
+	w.document.write(content);
+	w.print();
+	w.close();
 }
