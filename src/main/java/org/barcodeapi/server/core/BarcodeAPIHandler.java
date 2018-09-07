@@ -35,8 +35,22 @@ public class BarcodeAPIHandler extends AbstractHandler {
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
+		// the current time
+		long timeStart = System.currentTimeMillis();
+
 		// request is handled
 		baseRequest.setHandled(true);
+
+		// get users IP
+		String ip = request.getHeader("X-Forwarded-For");
+		String via = request.getRemoteAddr();
+
+		String from;
+		if (ip != null) {
+			from = ip + " ] via [ " + via;
+		} else {
+			from = via;
+		}
 
 		// server name
 		response.setHeader("Server", "BarcodeAPI.org");
@@ -58,7 +72,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 
 			String message = "Failed [ " + target + " ]" + //
 					" reason [ " + e.toString() + " ]";
-			System.out.println(System.nanoTime() + " : " + message);
+			System.out.println(System.currentTimeMillis() + " : " + message);
 
 			// generate error barcode
 			barcode = BarcodeGenerator.requestBarcode(ERR);
@@ -68,20 +82,28 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			response.setHeader("X-Error-Message", message);
 		}
 
+		// time it took to process request
+		long time = System.currentTimeMillis() - timeStart;
+
 		// additional properties
 		String type = barcode.getProperties().getProperty("type");
 		String data = barcode.getProperties().getProperty("data");
 		String nice = barcode.getProperties().getProperty("nice");
 		String encd = barcode.getProperties().getProperty("encd");
 
+		System.out.println(System.nanoTime() + " : " + //
+				"Served [ " + type + " ] " + //
+				"with [ " + data + " ] " + //
+				"in [ " + time + "ms ] " + //
+				"size [ " + barcode.getDataSize() + "B ] " + //
+				"for [ " + from + " ]");
+
 		// FIXME parse data and cookies here
 		// pass only session id to sessions
 		// pass only session takes type and data
 
-		// get the user session
+		// get and update the user session
 		SessionObject session = sessions.getSession(baseRequest);
-
-		// update user session
 		session.onRender(data);
 
 		// set session cookie
@@ -97,11 +119,11 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		// file name when clicking save
 		response.setHeader("Content-Disposition", "filename=" + nice + ".png");
 
-		// barcode type
+		// barcode details
 		response.setHeader("X-Barcode-Type", type);
 		response.setHeader("X-Barcode-Content", encd);
 
-		// print data to stream
+		// print image to stream
 		response.getOutputStream().write(barcode.getData());
 	}
 }

@@ -46,20 +46,20 @@ public abstract class CodeGenerator {
 		// any additional generator validations
 		String validated = onValidateRequest(data);
 
-		// increment counter
-		String counterName = "render." + getType().toString() + ".hit";
+		// update global and engine counters
+		StatsCollector.getInstance().incrementCounter("render.total.count");
+		String counterName = "render." + getType().toString() + ".count";
 		StatsCollector.getInstance().incrementCounter(counterName);
-
-		// start timer
-		long timeStart = System.currentTimeMillis();
 
 		try {
 
-			// render image
+			// start timer and render
+			long timeStart = System.currentTimeMillis();
 			byte[] img = onRender(validated);
-
-			// time and update counter
 			double time = System.currentTimeMillis() - timeStart;
+
+			// update global and engine counters
+			StatsCollector.getInstance().incrementCounter("render.total.time", time);
 			counterName = "render." + getType().toString() + ".time";
 			StatsCollector.getInstance().incrementCounter(counterName, time);
 
@@ -67,7 +67,8 @@ public abstract class CodeGenerator {
 			return img;
 		} catch (Exception e) {
 
-			// hit fail counter
+			// update global and engine counters
+			StatsCollector.getInstance().incrementCounter("render.total.fail");
 			counterName = "render." + getType().toString() + ".fail";
 			StatsCollector.getInstance().incrementCounter(counterName);
 

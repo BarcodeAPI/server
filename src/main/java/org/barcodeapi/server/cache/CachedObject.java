@@ -8,7 +8,7 @@ public class CachedObject {
 
 	private final long timeCreated;
 
-	private final byte[] barcodeData;
+	private final byte[] cachedData;
 
 	private final String checksum;
 
@@ -20,7 +20,7 @@ public class CachedObject {
 
 		this.timeCreated = System.currentTimeMillis();
 
-		this.barcodeData = data;
+		this.cachedData = data;
 
 		this.checksum = CodeUtils.getMD5Sum(data);
 
@@ -35,12 +35,12 @@ public class CachedObject {
 	public byte[] getData() {
 
 		lastAccess = System.currentTimeMillis();
-		return barcodeData;
+		return cachedData;
 	}
 
 	public long getDataSize() {
 
-		return barcodeData.length;
+		return cachedData.length;
 	}
 
 	public String getChecksum() {
