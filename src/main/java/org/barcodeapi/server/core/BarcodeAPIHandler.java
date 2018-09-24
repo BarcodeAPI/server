@@ -52,13 +52,10 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			from = via;
 		}
 
-		// server name
+		// server details
 		response.setHeader("Server", "BarcodeAPI.org");
-		response.setHeader("X-CodeServer", serverName);
-
-		// add character set
-		response.setCharacterEncoding("UTF-8");
 		response.setHeader("Accept-Charset", "utf-8");
+		response.setCharacterEncoding("UTF-8");
 
 		CachedObject barcode;
 		try {
@@ -91,7 +88,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		String nice = barcode.getProperties().getProperty("nice");
 		String encd = barcode.getProperties().getProperty("encd");
 
-		System.out.println(System.nanoTime() + " : " + //
+		System.out.println(System.currentTimeMillis() + " : " + //
 				"Served [ " + type + " ] " + //
 				"with [ " + data + " ] " + //
 				"in [ " + time + "ms ] " + //
@@ -120,6 +117,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		response.setHeader("Content-Disposition", "filename=" + nice + ".png");
 
 		// barcode details
+		response.setHeader("X-Barcode-Server", serverName);
 		response.setHeader("X-Barcode-Type", type);
 		response.setHeader("X-Barcode-Content", encd);
 

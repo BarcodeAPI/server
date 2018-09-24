@@ -2,6 +2,7 @@ package org.barcodeapi.server.gen.types;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
@@ -50,30 +51,24 @@ public class CodabarGenerator extends CodeGenerator {
 	 * Called when an image was not found in cache and must be rendered;
 	 * 
 	 * Return a PNG image as bytes.
+	 * 
+	 * @throws IOException
 	 */
 	@Override
-	public byte[] onRender(String data) {
+	public byte[] onRender(String data) throws IOException {
 
-		try {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
+				out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
 
-			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+		generator.generateBarcode(canvasProvider, data);
 
-			generator.generateBarcode(canvasProvider, data);
+		canvasProvider.getBufferedImage();
+		canvasProvider.finish();
 
-			canvasProvider.getBufferedImage();
-			canvasProvider.finish();
+		out.close();
 
-			out.close();
-
-			return out.toByteArray();
-
-		} catch (Exception e) {
-
-			e.printStackTrace(System.err);
-			throw new IllegalStateException("An error has occured.");
-		}
+		return out.toByteArray();
 	}
 }

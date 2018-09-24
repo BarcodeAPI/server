@@ -94,5 +94,5 @@ public abstract class CodeGenerator {
 	 * @param data
 	 * @return
 	 */
-	public abstract byte[] onRender(String data);
+	public abstract byte[] onRender(String data) throws Exception;
 }

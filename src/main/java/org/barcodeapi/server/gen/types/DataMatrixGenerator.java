@@ -2,6 +2,7 @@ package org.barcodeapi.server.gen.types;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
@@ -37,29 +38,21 @@ public class DataMatrixGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public byte[] onRender(String data) {
+	public byte[] onRender(String data) throws IOException {
 
-		try {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
+				out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
 
-			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+		generator.generateBarcode(canvasProvider, data);
 
-			generator.generateBarcode(canvasProvider, data);
+		canvasProvider.getBufferedImage();
 
-			canvasProvider.getBufferedImage();
+		canvasProvider.finish();
 
-			canvasProvider.finish();
+		out.close();
 
-			out.close();
-
-			return out.toByteArray();
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			throw new IllegalStateException("An error has occured.");
-		}
+		return out.toByteArray();
 	}
 }
