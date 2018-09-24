@@ -38,7 +38,7 @@ public enum CodeType {
 	 * Codabar type code;
 	 */
 	CODABAR(new String[] { "codabar" }, //
-			"^[0-9:$]{1,16}$", //
+			"^[0-9:$]{4,12}$", //
 			"^[0-9-:$\\/.+]+$"), //
 
 	/**
