@@ -40,7 +40,7 @@ public class CachedObject {
 
 	public long getDataSize() {
 
-		return cachedData.length;
+		return cachedData == null ? 0 : cachedData.length;
 	}
 
 	public String getChecksum() {
