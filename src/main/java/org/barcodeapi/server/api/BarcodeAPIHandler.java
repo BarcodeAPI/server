@@ -15,15 +15,18 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 public class BarcodeAPIHandler extends AbstractHandler {
 
-	private final String ERR = "/128/$$@E$$@R$$@R$$@O$$@R$$@";
+	private final CachedObject ERR;
 
 	private String serverName;
 
-	private SessionCache sessions;
-
 	public BarcodeAPIHandler() {
 
-		sessions = SessionCache.getInstance();
+		try {
+
+			ERR = BarcodeGenerator.requestBarcode("/128/$$@E$$@R$$@R$$@O$$@R$$@");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
 		try {
 
@@ -72,7 +75,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			System.out.println(System.currentTimeMillis() + " : " + message);
 
 			// generate error barcode
-			barcode = BarcodeGenerator.requestBarcode(ERR);
+			barcode = ERR;
 
 			// set HTTP response code and add message to headers
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -100,7 +103,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		// pass only session takes type and data
 
 		// get and update the user session
-		SessionObject session = sessions.getSession(baseRequest);
+		SessionObject session = SessionCache.getInstance().getSession(baseRequest);
 		session.onRender(data);
 
 		// set session cookie

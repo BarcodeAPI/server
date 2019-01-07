@@ -1,6 +1,7 @@
 package org.barcodeapi.server.gen;
 
 import org.barcodeapi.server.cache.BarcodeCache;
+import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.statistics.StatsCollector;
 
 public abstract class CodeGenerator {
@@ -35,7 +36,7 @@ public abstract class CodeGenerator {
 	 * @param data
 	 * @return
 	 */
-	public byte[] getCode(String data) {
+	public byte[] getCode(String data) throws GenerationException {
 
 		// validate code format
 		if (!data.matches(getType().getFormatPattern())) {
@@ -63,7 +64,6 @@ public abstract class CodeGenerator {
 			counterName = "render." + getType().toString() + ".time";
 			StatsCollector.getInstance().incrementCounter(counterName, time);
 
-			// return image
 			return img;
 		} catch (Exception e) {
 
@@ -72,8 +72,7 @@ public abstract class CodeGenerator {
 			counterName = "render." + getType().toString() + ".fail";
 			StatsCollector.getInstance().incrementCounter(counterName);
 
-			// return null
-			return null;
+			throw new GenerationException(e);
 		}
 	}
 

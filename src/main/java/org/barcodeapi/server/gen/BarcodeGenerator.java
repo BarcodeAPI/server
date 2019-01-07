@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.cache.CachedObject;
 import org.barcodeapi.server.core.CodeGenerators;
+import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.TypeSelector;
 import org.barcodeapi.server.statistics.StatsCollector;
 
@@ -15,7 +16,7 @@ public class BarcodeGenerator {
 	private BarcodeGenerator() {
 	}
 
-	public static CachedObject requestBarcode(String target) {
+	public static CachedObject requestBarcode(String target) throws GenerationException {
 
 		StatsCollector.getInstance()//
 				.incrementCounter("request.total.count");
