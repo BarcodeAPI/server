@@ -1,26 +1,39 @@
 package org.barcodeapi.core;
 
-import org.barcodeapi.server.core.BarcodeAPIHandler;
+import org.barcodeapi.server.api.BarcodeAPIHandler;
+import org.barcodeapi.server.api.DefaultHandler;
+import org.barcodeapi.server.api.SessionHandler;
+import org.barcodeapi.server.api.StaticHandler;
+import org.barcodeapi.server.api.StatsHandler;
 import org.barcodeapi.server.core.CacheHandler;
-import org.barcodeapi.server.core.DefaultHandler;
-import org.barcodeapi.server.core.SessionHandler;
-import org.barcodeapi.server.core.StaticHandler;
-import org.barcodeapi.server.core.StatsHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 
+/**
+ * This class should handle the processing of the command line arguments passed
+ * on startup in addition to the setup of the main Jetty API server and it's
+ * associated handlers.
+ * 
+ * @author Matthew R. Clark, 2019
+ *
+ */
 public class ServerLoader {
 
+	// The port for the API server to bind to.
 	private int serverPort = 8080;
 
+	// Whether static resources should be served.
+	private boolean serverStatic = true;
+
+	// The instance of the running Jetty server and it's handlers.
 	private Server server;
 	private HandlerCollection handlers;
 
 	/**
-	 * Initialize the server loader by parsing the command line arguments supplied
-	 * by the user.
+	 * Initialize the server loader by processing the command line arguments
+	 * supplied by the user.
 	 * 
 	 * @param args
 	 */
@@ -32,8 +45,7 @@ public class ServerLoader {
 	/**
 	 * Main entry point to start the server; jetty will be initialized followed by
 	 * each handler. Once initialized the server will be started and ready to server
-	 * requests. This is a blocking method that will not return until the server is
-	 * shutdown.
+	 * requests.
 	 * 
 	 * @throws Exception
 	 */
@@ -61,19 +73,23 @@ public class ServerLoader {
 	 */
 	private void parseLaunchArgs(String[] args) {
 
-		// do nothing if null arguments
+		// Do nothing if null arguments
 		if (args == null) {
 
 			return;
 		}
 
-		// loop all arguments
+		// Loop all arguments
 		for (int x = 0; x < args.length; x++) {
 
 			switch (args[x]) {
 
 			case "--port":
 				serverPort = Integer.parseInt(args[++x]);
+				break;
+
+			case "--no-web":
+				serverStatic = false;
 				break;
 
 			default:
@@ -152,10 +168,13 @@ public class ServerLoader {
 	 */
 	private void initResourceHandler() {
 
+		if (!serverStatic) {
+			return;
+		}
+
+		// Instantiate the static resource handler and add it to the collection
 		ResourceHandler resourceHandler = new StaticHandler();
-
 		resourceHandler.setWelcomeFiles(new String[] { "index.html" });
-
 		handlers.addHandler(resourceHandler);
 	}
 
@@ -184,7 +203,7 @@ public class ServerLoader {
 	 * 
 	 * @throws Exception
 	 */
-	public boolean stop() throws Exception {
+	public boolean stop() {
 
 		try {
 

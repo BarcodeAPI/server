@@ -1,4 +1,4 @@
-package org.barcodeapi.server.core;
+package org.barcodeapi.server.api;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

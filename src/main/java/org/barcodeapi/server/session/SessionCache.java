@@ -30,32 +30,31 @@ public class SessionCache {
 				.incrementCounter("session.total.lookup");
 
 		// check for cookie
-		if (request.getCookies() != null) {
+		if (request.getCookies() == null) {
+			return createNewSession();
+		}
 
-			// loop each cookie
-			for (Cookie cookie : request.getCookies()) {
+		// loop each cookie
+		for (Cookie cookie : request.getCookies()) {
 
-				// check for session cookie
-				if (cookie.getName().equals("session")) {
+			// check for session cookie
+			if (cookie.getName().equals("session")) {
 
-					// check if cache has requested session
-					if (cache.containsKey(cookie.getValue())) {
+				// check if cache has requested session
+				if (cache.containsKey(cookie.getValue())) {
 
-						// return session object
-						return cache.get(cookie.getValue());
-					}
+					// return session object
+					return cache.get(cookie.getValue());
 				}
 			}
 		}
-
 		return createNewSession();
 	}
-	
+
 	public void expireOldSessions() {
-		
-		for ( Map.Entry<String, SessionObject> entry : cache.entrySet()) {
-			
-			  
+
+		for (Map.Entry<String, SessionObject> entry : cache.entrySet()) {
+
 		}
 	}
 
