@@ -44,11 +44,19 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		// request is handled
 		baseRequest.setHandled(true);
 
-		// get users IP
-		String ip = request.getHeader("X-Forwarded-For");
-		String via = request.getRemoteAddr();
+		// get source of the request
+		String source;
+		String ref = request.getHeader("Referer");
+		if (ref != null) {
+			source = ref;
+		} else {
+			source = "API";
+		}
 
+		// get users IP
 		String from;
+		String via = request.getRemoteAddr();
+		String ip = request.getHeader("X-Forwarded-For");
 		if (ip != null) {
 			from = ip + " ] via [ " + via;
 		} else {
@@ -96,6 +104,7 @@ public class BarcodeAPIHandler extends AbstractHandler {
 				"with [ " + data + " ] " + //
 				"in [ " + time + "ms ] " + //
 				"size [ " + barcode.getDataSize() + "B ] " + //
+				"using [ " + source + " ] " + //
 				"for [ " + from + " ]");
 
 		// FIXME parse data and cookies here
