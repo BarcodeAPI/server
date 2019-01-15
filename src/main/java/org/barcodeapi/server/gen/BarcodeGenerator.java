@@ -6,14 +6,17 @@ import java.net.URLEncoder;
 
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.cache.CachedObject;
+import org.barcodeapi.server.core.Blacklist;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.GenerationException;
+import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.core.TypeSelector;
 import org.barcodeapi.server.statistics.StatsCollector;
 
 public class BarcodeGenerator {
 
 	private BarcodeGenerator() {
+
 	}
 
 	public static CachedObject requestBarcode(String target) throws GenerationException {
@@ -82,7 +85,16 @@ public class BarcodeGenerator {
 		// check for valid render data
 		if (data == null || data.equals("")) {
 
-			throw new IllegalArgumentException("Empty Request");
+			throw new GenerationException(ExceptionType.EMPTY);
+		}
+
+		// match against blacklist
+		for (String invalid : Blacklist.getBlacklist()) {
+
+			if (data.matches(invalid)) {
+
+				throw new GenerationException(ExceptionType.BLACKLIST);
+			}
 		}
 
 		// image object

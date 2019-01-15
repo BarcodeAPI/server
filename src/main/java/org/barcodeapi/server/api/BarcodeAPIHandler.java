@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.cache.CachedObject;
+import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.gen.BarcodeGenerator;
 import org.barcodeapi.server.session.SessionCache;
 import org.barcodeapi.server.session.SessionObject;
@@ -16,22 +17,21 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 public class BarcodeAPIHandler extends AbstractHandler {
 
 	private final CachedObject ERR;
+	private final CachedObject BLK;
 
-	private String serverName;
+	private final String serverName;
 
 	public BarcodeAPIHandler() {
 
 		try {
 
 			ERR = BarcodeGenerator.requestBarcode("/128/$$@E$$@R$$@R$$@O$$@R$$@");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-		try {
+			BLK = BarcodeGenerator.requestBarcode("/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@");
 
 			serverName = InetAddress.getLocalHost().getHostName();
+
 		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -76,14 +76,25 @@ public class BarcodeAPIHandler extends AbstractHandler {
 
 			// response okay
 			response.setStatus(HttpServletResponse.SC_OK);
-		} catch (Exception e) {
+		} catch (GenerationException e) {
 
 			String message = "Failed [ " + target + " ]" + //
 					" reason [ " + e.toString() + " ]";
 			System.out.println(System.currentTimeMillis() + " : " + message);
 
-			// generate error barcode
-			barcode = ERR;
+			switch (e.getExceptionType()) {
+			case BLACKLIST:
+				// serve blacklist code
+				barcode = BLK;
+				break;
+
+			case EMPTY:
+			case FAILED:
+			default:
+				// serve error code
+				barcode = ERR;
+				break;
+			}
 
 			// set HTTP response code and add message to headers
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

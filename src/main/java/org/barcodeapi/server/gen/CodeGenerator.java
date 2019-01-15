@@ -2,6 +2,7 @@ package org.barcodeapi.server.gen;
 
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.core.GenerationException;
+import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.statistics.StatsCollector;
 
 public abstract class CodeGenerator {
@@ -72,7 +73,7 @@ public abstract class CodeGenerator {
 			counterName = "render." + getType().toString() + ".fail";
 			StatsCollector.getInstance().incrementCounter(counterName);
 
-			throw new GenerationException(e);
+			throw new GenerationException(ExceptionType.FAILED, e);
 		}
 	}
 
