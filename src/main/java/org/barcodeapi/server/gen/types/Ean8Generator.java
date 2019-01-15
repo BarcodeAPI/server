@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.barcodeapi.core.utils.CodeUtils;
+import org.barcodeapi.server.core.GenerationException;
+import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
@@ -29,7 +31,7 @@ public class Ean8Generator extends CodeGenerator {
 	}
 
 	@Override
-	public String onValidateRequest(String data) {
+	public String onValidateRequest(String data) throws GenerationException {
 
 		if (data.length() == 7) {
 
@@ -41,7 +43,8 @@ public class Ean8Generator extends CodeGenerator {
 
 		if (!Integer.toString(checksum).equals(provided)) {
 
-			throw new IllegalArgumentException("Expected checksum : " + checksum);
+			throw new GenerationException(ExceptionType.INVALID, //
+					new Throwable("Expected checksum : " + checksum));
 		}
 
 		return data;

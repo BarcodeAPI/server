@@ -42,7 +42,8 @@ public abstract class CodeGenerator {
 		// validate code format
 		if (!data.matches(getType().getFormatPattern())) {
 
-			throw new IllegalArgumentException("Invalid data for selected code type");
+			throw new GenerationException(ExceptionType.INVALID, //
+					new Throwable("Invalid data for selected code type"));
 		}
 
 		// any additional generator validations
@@ -82,8 +83,9 @@ public abstract class CodeGenerator {
 	 * 
 	 * @param data
 	 * @return
+	 * @throws GenerationException
 	 */
-	public String onValidateRequest(String data) {
+	public String onValidateRequest(String data) throws GenerationException {
 
 		return data;
 	}
