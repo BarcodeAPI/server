@@ -1,25 +1,21 @@
 package org.barcodeapi.server.api;
 
 import java.io.IOException;
-import java.net.InetAddress;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.cache.CachedObject;
 import org.barcodeapi.server.core.GenerationException;
+import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.gen.BarcodeGenerator;
-import org.barcodeapi.server.session.SessionCache;
-import org.barcodeapi.server.session.SessionObject;
 import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 
-public class BarcodeAPIHandler extends AbstractHandler {
+public class BarcodeAPIHandler extends RestHandler {
 
 	private final CachedObject ERR;
 	private final CachedObject BLK;
-
-	private final String serverName;
 
 	public BarcodeAPIHandler() {
 
@@ -27,22 +23,18 @@ public class BarcodeAPIHandler extends AbstractHandler {
 
 			ERR = BarcodeGenerator.requestBarcode("/128/$$@E$$@R$$@R$$@O$$@R$$@");
 			BLK = BarcodeGenerator.requestBarcode("/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@");
-
-			serverName = InetAddress.getLocalHost().getHostName();
-
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		} catch (GenerationException e) {
+			throw new RuntimeException("init failed");
 		}
 	}
 
+	@Override
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+			throws IOException, ServletException {
+		super.handle(target, baseRequest, request, response);
 
 		// the current time
 		long timeStart = System.currentTimeMillis();
-
-		// request is handled
-		baseRequest.setHandled(true);
 
 		// get source of the request
 		String source;
@@ -63,19 +55,12 @@ public class BarcodeAPIHandler extends AbstractHandler {
 			from = via;
 		}
 
-		// server details
-		response.setHeader("Server", "BarcodeAPI.org");
-		response.setHeader("Accept-Charset", "utf-8");
-		response.setCharacterEncoding("UTF-8");
-
 		CachedObject barcode;
 		try {
 
 			// generate user requested barcode
 			barcode = BarcodeGenerator.requestBarcode(target);
 
-			// response okay
-			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (GenerationException e) {
 
 			String message = "Failed [ " + target + " ]" + //
@@ -118,16 +103,8 @@ public class BarcodeAPIHandler extends AbstractHandler {
 				"using [ " + source + " ] " + //
 				"for [ " + from + " ]");
 
-		// FIXME parse data and cookies here
-		// pass only session id to sessions
-		// pass only session takes type and data
-
-		// get and update the user session
-		SessionObject session = SessionCache.getInstance().getSession(baseRequest);
-		session.onRender(data);
-
-		// set session cookie
-		response.addHeader("Set-Cookie", "session=" + session.getKey() + ";");
+		// FIXME session
+		// session.onRender(data);
 
 		// add cache headers
 		response.setHeader("Cache-Control", "max-age=86400, public");
@@ -140,7 +117,6 @@ public class BarcodeAPIHandler extends AbstractHandler {
 		response.setHeader("Content-Disposition", "filename=" + nice + ".png");
 
 		// barcode details
-		response.setHeader("X-Barcode-Server", serverName);
 		response.setHeader("X-Barcode-Type", type);
 		response.setHeader("X-Barcode-Content", encd);
 

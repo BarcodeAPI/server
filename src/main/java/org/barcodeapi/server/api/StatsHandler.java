@@ -7,12 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.cache.BarcodeCache;
-import org.barcodeapi.server.session.SessionCache;
+import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 
-public class StatsHandler extends AbstractHandler {
+public class StatsHandler extends RestHandler {
 
 	private final long timeStart;
 
@@ -21,8 +20,10 @@ public class StatsHandler extends AbstractHandler {
 		timeStart = System.currentTimeMillis();
 	}
 
+	@Override
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+		super.handle(target, baseRequest, request, response);
 
 		// get counters and increment stats hits
 		StatsCollector counters = StatsCollector.getInstance();
@@ -35,21 +36,15 @@ public class StatsHandler extends AbstractHandler {
 		double cacheSize = BarcodeCache.getInstance().getCacheSize();
 		counters.setCounter("cache.size", cacheSize);
 
-		// number of total sessions
-		SessionCache sessions = SessionCache.getInstance();
-		counters.setCounter("sessions.created", sessions.getTotalSessionCount());
-		counters.setCounter("sessions.active", sessions.getActiveSessionCount());
-
-		// set response code
-		response.setStatus(HttpServletResponse.SC_OK);
-		baseRequest.setHandled(true);
-
 		// loop each counter
+		String output = "";
 		for (String key : counters.getCounters().keySet()) {
 
 			// print key and value
 			String value = String.format("%.0f", counters.getCounter(key));
-			response.getOutputStream().println(key + " : " + value);
+			output += key + " : " + value + "\n";
 		}
+
+		response.getOutputStream().println(output);
 	}
 }

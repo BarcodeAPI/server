@@ -9,7 +9,6 @@ import org.barcodeapi.server.core.CacheHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.server.handler.ResourceHandler;
 
 /**
  * This class should handle the processing of the command line arguments passed
@@ -166,16 +165,19 @@ public class ServerLoader {
 	/**
 	 * Initialize the resource handler.
 	 */
-	private void initResourceHandler() {
+	private void initResourceHandler() throws Exception {
 
 		if (!serverStatic) {
 			return;
 		}
 
 		// Instantiate the static resource handler and add it to the collection
-		ResourceHandler resourceHandler = new StaticHandler();
-		resourceHandler.setWelcomeFiles(new String[] { "index.html" });
-		handlers.addHandler(resourceHandler);
+		// StaticHandler resourceHandler = new StaticHandler();
+		// handlers.addHandler(resourceHandler);
+		ContextHandler apiHandler = new ContextHandler();
+		apiHandler.setHandler(new StaticHandler());
+		apiHandler.setContextPath("/");
+		handlers.addHandler(apiHandler);
 	}
 
 	/**

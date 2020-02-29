@@ -19,6 +19,7 @@ public class DefaultHandler extends ErrorHandler {
 			response.sendRedirect("/api" + request.getPathInfo());
 		} catch (Exception e) {
 
+			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
