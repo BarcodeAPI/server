@@ -18,10 +18,11 @@ public class Log {
 	static {
 
 		logFiles = new HashMap<>();
+		(new File("log")).mkdirs();
 		for (LOG log : LOG.values()) {
 			File f = new File("log", log.name() + ".log");
 			try {
-				logFiles.put(log, new PrintWriter(new FileWriter(f)));
+				logFiles.put(log, new PrintWriter(new FileWriter(f, true), true));
 			} catch (Exception e) {
 				System.err.println("Failed to setup log: " + f.getAbsolutePath());
 			}

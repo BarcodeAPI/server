@@ -1,5 +1,7 @@
 package org.barcodeapi.core;
 
+import org.barcodeapi.core.utils.Log;
+import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.DefaultHandler;
 import org.barcodeapi.server.api.SessionHandler;
@@ -104,6 +106,8 @@ public class ServerLoader {
 	 */
 	private void initJetty() {
 
+		Log.out(LOG.SERVER, "Initializing Jetty...");
+
 		// initialize handler collection
 		handlers = new HandlerCollection();
 
@@ -120,6 +124,7 @@ public class ServerLoader {
 	private void initStatsHandler() {
 
 		// setup statistics handler
+		Log.out(LOG.SERVER, "Initializing handler: /stats");
 		ContextHandler statsHandler = new ContextHandler();
 		statsHandler.setHandler(new StatsHandler());
 		statsHandler.setContextPath("/stats");
@@ -132,6 +137,7 @@ public class ServerLoader {
 	private void initSessionHandler() {
 
 		// setup statistics handler
+		Log.out(LOG.SERVER, "Initializing handler: /session");
 		ContextHandler sessionHandler = new ContextHandler();
 		sessionHandler.setHandler(new SessionHandler());
 		sessionHandler.setContextPath("/session");
@@ -144,6 +150,7 @@ public class ServerLoader {
 	private void initCacheHandler() {
 
 		// setup statistics handler
+		Log.out(LOG.SERVER, "Initializing handler: /cache");
 		ContextHandler cacheHandler = new ContextHandler();
 		cacheHandler.setHandler(new CacheHandler());
 		cacheHandler.setContextPath("/cache");
@@ -156,6 +163,7 @@ public class ServerLoader {
 	private void initApiHandler() {
 
 		// setup API handler
+		Log.out(LOG.SERVER, "Initializing handler: /api");
 		ContextHandler apiHandler = new ContextHandler();
 		apiHandler.setHandler(new BarcodeAPIHandler());
 		apiHandler.setContextPath("/api");
@@ -172,8 +180,7 @@ public class ServerLoader {
 		}
 
 		// Instantiate the static resource handler and add it to the collection
-		// StaticHandler resourceHandler = new StaticHandler();
-		// handlers.addHandler(resourceHandler);
+		Log.out(LOG.SERVER, "Initializing static resource handler...");
 		ContextHandler apiHandler = new ContextHandler();
 		apiHandler.setHandler(new StaticHandler());
 		apiHandler.setContextPath("/");

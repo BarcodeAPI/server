@@ -6,14 +6,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SessionObject {
 
 	private final String key;
+	private final long timeCreated;
+	private final ConcurrentHashMap<String, Integer> sessionRequests;
 
-	private ConcurrentHashMap<String, Integer> renderRequests;
+	private long hitCount = 0;
+	private long timeTouched = 0;
 
 	public SessionObject() {
 
-		key = UUID.randomUUID().toString();
-
-		renderRequests = new ConcurrentHashMap<String, Integer>();
+		this.key = UUID.randomUUID().toString();
+		this.timeCreated = System.currentTimeMillis();
+		this.sessionRequests = new ConcurrentHashMap<String, Integer>();
 	}
 
 	public String getKey() {
@@ -21,23 +24,33 @@ public class SessionObject {
 		return key;
 	}
 
-	public void onRender(String data) {
+	public long getLastTouchTime() {
 
-		if (!renderRequests.containsKey(data)) {
+		return timeTouched;
+	}
 
-			renderRequests.put(data, 1);
+	public void hit(String data) {
+
+		hitCount++;
+		timeTouched = System.currentTimeMillis();
+		if (!sessionRequests.containsKey(data)) {
+
+			sessionRequests.put(data, 1);
 			return;
 		}
 
-		renderRequests.put(data, renderRequests.get(data) + 1);
+		sessionRequests.put(data, sessionRequests.get(data) + 1);
 	}
 
 	public String getDetails() {
 
-		String details = "";
-		for (String key : renderRequests.keySet()) {
+		String details = "" + //
+				"Key: " + key + "\n" + //
+				"Created: " + timeCreated + "\n" + //
+				"Hits: " + hitCount + "\n\n";
+		for (String key : sessionRequests.keySet()) {
 
-			details += key + " : " + renderRequests.get(key) + "\n";
+			details += key + " : " + sessionRequests.get(key) + "\n";
 		}
 
 		return details;

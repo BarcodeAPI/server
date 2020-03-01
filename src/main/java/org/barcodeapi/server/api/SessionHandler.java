@@ -25,7 +25,7 @@ public class SessionHandler extends RestHandler {
 		counters.incrementCounter("session.dump.hits");
 
 		// print user session details
-		// FIXME session
-		// response.getOutputStream().println(session.getDetails());
+		response.getOutputStream()//
+				.println(getSession(request).getDetails());
 	}
 }

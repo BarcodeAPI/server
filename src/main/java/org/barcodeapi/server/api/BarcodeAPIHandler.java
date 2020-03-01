@@ -65,9 +65,9 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		} catch (GenerationException e) {
 
-			String message = "Failed [ " + target + " ]" + //
-					" reason [ " + e.toString() + " ]";
-			System.out.println(System.currentTimeMillis() + " : " + message);
+			Log.out(LOG.ERROR, "" + //
+					"Failed [ " + target + " ] " + //
+					"reason [ " + e.getMessage() + " ]");
 
 			switch (e.getExceptionType()) {
 			case BLACKLIST:
@@ -85,7 +85,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// set HTTP response code and add message to headers
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.setHeader("X-Error-Message", message);
+			response.setHeader("X-Error-Message", e.getMessage());
 		}
 
 		// time it took to process request

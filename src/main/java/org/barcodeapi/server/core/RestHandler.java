@@ -74,6 +74,29 @@ public abstract class RestHandler extends AbstractHandler {
 		response.setHeader("Accept-Charset", "utf-8");
 		response.setCharacterEncoding("UTF-8");
 
+		// user session info
+		SessionObject session = getSession(request);
+		session.hit(baseRequest.getOriginalURI().toString());
+		response.addHeader("Set-Cookie", "session=" + session.getKey() + ";");
+	}
+
+	protected void addCORS(HttpServletRequest request, HttpServletResponse response) {
+
+		String origin = request.getHeader("origin");
+		if (origin != null) {
+
+			response.setHeader("Access-Control-Max-Age", "86400");
+			response.setHeader("Access-Control-Allow-Origin", origin);
+			response.setHeader("Access-Control-Allow-Credentials", "true");
+		}
+
+		if (request.getMethod().equals("OPTIONS")) {
+			response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+		}
+	}
+
+	protected SessionObject getSession(HttpServletRequest request) {
+
 		// get existing user session
 		SessionObject session = null;
 		if (request.getCookies() != null) {
@@ -89,22 +112,6 @@ public abstract class RestHandler extends AbstractHandler {
 			session = SessionCache.getInstance().createNewSession();
 		}
 
-		// set session cookie
-		response.addHeader("Set-Cookie", "session=" + session.getKey() + ";");
-	}
-
-	private void addCORS(HttpServletRequest request, HttpServletResponse response) {
-
-		String origin = request.getHeader("origin");
-		if (origin != null) {
-
-			response.setHeader("Access-Control-Max-Age", "86400");
-			response.setHeader("Access-Control-Allow-Origin", origin);
-			response.setHeader("Access-Control-Allow-Credentials", "true");
-		}
-
-		if (request.getMethod().equals("OPTIONS")) {
-			response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-		}
+		return session;
 	}
 }
