@@ -1,6 +1,5 @@
 package org.barcodeapi.server.gen;
 
-import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.statistics.StatsCollector;
@@ -17,8 +16,6 @@ public abstract class CodeGenerator {
 	public CodeGenerator(CodeType type) {
 
 		this.codeType = type;
-
-		BarcodeCache.getInstance().createCache(type);
 	}
 
 	/**

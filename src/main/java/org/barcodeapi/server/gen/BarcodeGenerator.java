@@ -5,7 +5,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import org.barcodeapi.server.cache.BarcodeCache;
-import org.barcodeapi.server.cache.CachedObject;
+import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.Blacklist;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.GenerationException;
@@ -19,7 +19,7 @@ public class BarcodeGenerator {
 
 	}
 
-	public static CachedObject requestBarcode(String target) throws GenerationException {
+	public static CachedBarcode requestBarcode(String target) throws GenerationException {
 
 		StatsCollector.getInstance()//
 				.incrementCounter("request.total.count");
@@ -98,14 +98,13 @@ public class BarcodeGenerator {
 		}
 
 		// image object
-		CachedObject barcode = null;
+		CachedBarcode barcode = null;
 
 		// is cache allowed
 		if (useCache) {
 
 			// lookup image from cache
-			barcode = BarcodeCache.getInstance()//
-					.getBarcode(type, data);
+			barcode = BarcodeCache.getBarcode(type, data);
 
 			// return the image if found
 			if (barcode != null) {
@@ -114,7 +113,7 @@ public class BarcodeGenerator {
 		}
 
 		// render image and create new object with image
-		barcode = new CachedObject(generator.getCode(data));
+		barcode = new CachedBarcode(generator.getCode(data));
 		barcode.getProperties().setProperty("type", type.toString());
 		barcode.getProperties().setProperty("data", data);
 		barcode.getProperties().setProperty("nice", stripIllegal(data));
@@ -123,7 +122,7 @@ public class BarcodeGenerator {
 		// add to cache if allowed
 		if (useCache) {
 
-			BarcodeCache.getInstance().addImage(type, data, barcode);
+			BarcodeCache.addBarcode(type, data, barcode);
 		}
 
 		return barcode;

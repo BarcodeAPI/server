@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
@@ -31,10 +30,6 @@ public class StatsHandler extends RestHandler {
 
 		// current up-time
 		counters.setCounter("system.uptime", (double) (System.currentTimeMillis() - timeStart));
-
-		// calculate cache size
-		double cacheSize = BarcodeCache.getInstance().getCacheSize();
-		counters.setCounter("cache.size", cacheSize);
 
 		// loop each counter
 		String output = "";

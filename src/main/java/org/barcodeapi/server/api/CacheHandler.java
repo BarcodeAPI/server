@@ -1,4 +1,4 @@
-package org.barcodeapi.server.core;
+package org.barcodeapi.server.api;
 
 import java.io.IOException;
 
@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.cache.BarcodeCache;
+import org.barcodeapi.server.gen.CodeType;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -29,9 +30,16 @@ public class CacheHandler extends AbstractHandler {
 		baseRequest.setHandled(true);
 
 		// loop each counter
-		for (String key : BarcodeCache.getInstance().getCacheKeys()) {
+		String output = "";
 
-			response.getOutputStream().println(key);
+		// loop all barcode caches
+		for (CodeType type : CodeType.values()) {
+			for (String key : BarcodeCache.getCache(type).getKeys()) {
+				output += type.toString() + ":" + key + "\n";
+			}
 		}
+
+		// write to client
+		response.getOutputStream().println(output);
 	}
 }

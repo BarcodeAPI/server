@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.core.utils.Log;
 import org.barcodeapi.core.utils.Log.LOG;
-import org.barcodeapi.server.cache.CachedObject;
+import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.gen.BarcodeGenerator;
@@ -16,8 +16,8 @@ import org.eclipse.jetty.server.Request;
 
 public class BarcodeAPIHandler extends RestHandler {
 
-	private final CachedObject ERR;
-	private final CachedObject BLK;
+	private final CachedBarcode ERR;
+	private final CachedBarcode BLK;
 
 	public BarcodeAPIHandler() {
 
@@ -57,7 +57,7 @@ public class BarcodeAPIHandler extends RestHandler {
 			from = via;
 		}
 
-		CachedObject barcode;
+		CachedBarcode barcode;
 		try {
 
 			// generate user requested barcode

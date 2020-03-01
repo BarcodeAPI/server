@@ -1,42 +1,29 @@
 package org.barcodeapi.server.session;
 
-import org.barcodeapi.core.cache.ObjectCache;
+import org.barcodeapi.server.core.CachedObject;
+import org.barcodeapi.server.core.ObjectCache;
 
-public class SessionCache extends ObjectCache<String, SessionObject> {
+public class SessionCache {
 
-	private static SessionCache sessionCache;
+	public static CachedSession getSession(String key) {
 
-	/**
-	 * Initialize session cache.
-	 */
-	public SessionCache() {
-		super("session");
+		CachedObject o = ObjectCache.getCache("sessions").get(key);
+		if (o == null) {
+			return null;
+		}
+
+		return (CachedSession) o;
 	}
 
-	public SessionObject createNewSession() {
+	public static CachedSession createNewSession() {
 
 		// create the new session object
-		SessionObject session = new SessionObject();
+		CachedSession session = new CachedSession();
 
 		// add session to the cache
-		put(session.getKey(), session);
+		ObjectCache.getCache("sessions").put(session.getKey(), session);
 
 		// return the session
 		return session;
-	}
-
-	public static synchronized SessionCache getInstance() {
-
-		if (sessionCache == null) {
-
-			sessionCache = new SessionCache();
-		}
-		return sessionCache;
-	}
-
-	@Override
-	public void onExpire(String key, SessionObject value) {
-		// TODO Auto-generated method stub
-
 	}
 }

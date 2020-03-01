@@ -3,7 +3,9 @@ package org.barcodeapi.server.session;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SessionObject {
+import org.barcodeapi.server.core.CachedObject;
+
+public class CachedSession implements CachedObject {
 
 	private final String key;
 	private final long timeCreated;
@@ -12,7 +14,7 @@ public class SessionObject {
 	private long hitCount = 0;
 	private long timeTouched = 0;
 
-	public SessionObject() {
+	public CachedSession() {
 
 		this.key = UUID.randomUUID().toString();
 		this.timeCreated = System.currentTimeMillis();

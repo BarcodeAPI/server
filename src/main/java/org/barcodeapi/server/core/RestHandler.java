@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.barcodeapi.core.utils.Log;
 import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.session.SessionCache;
-import org.barcodeapi.server.session.SessionObject;
+import org.barcodeapi.server.session.CachedSession;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -75,7 +75,7 @@ public abstract class RestHandler extends AbstractHandler {
 		response.setCharacterEncoding("UTF-8");
 
 		// user session info
-		SessionObject session = getSession(request);
+		CachedSession session = getSession(request);
 		session.hit(baseRequest.getOriginalURI().toString());
 		response.addHeader("Set-Cookie", "session=" + session.getKey() + ";");
 	}
@@ -95,21 +95,21 @@ public abstract class RestHandler extends AbstractHandler {
 		}
 	}
 
-	protected SessionObject getSession(HttpServletRequest request) {
+	protected CachedSession getSession(HttpServletRequest request) {
 
 		// get existing user session
-		SessionObject session = null;
+		CachedSession session = null;
 		if (request.getCookies() != null) {
 			for (Cookie cookie : request.getCookies()) {
 				if (cookie.getName().equals("session")) {
-					session = SessionCache.getInstance().get(cookie.getValue());
+					session = SessionCache.getSession(cookie.getValue());
 				}
 			}
 		}
 
 		// new session if none existing
 		if (session == null) {
-			session = SessionCache.getInstance().createNewSession();
+			session = SessionCache.createNewSession();
 		}
 
 		return session;
