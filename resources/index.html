@@ -135,6 +135,8 @@
                            maxlength="200"/>
                 </form>
                 <div id="barcode_wrapper">
+                    <input aria-hidden="true" id="barcode_image_link" />
+                    <div id="message">Barcode link copied to clipboard.</div>
                     <img id="barcode_output"/>
                 </div>
 
@@ -147,7 +149,7 @@
                     </div>
 
                     <div class="barcode-icon" id="barcode_link">
-                        <a id="barcode_link_button">
+                        <a id="barcode_link_button" onclick="copyBarcodeLink()">
                             <img src="img/chain.svg" alt="Get barcode link" aria-label="Get barcode link">
                         </a>
                     </div>

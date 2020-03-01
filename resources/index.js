@@ -68,6 +68,7 @@ function genCode() {
 
 	// Update download button
 	document.getElementById("barcode_download_button").setAttribute("href", url);
+	document.getElementById("barcode_image_link").setAttribute("value", url);
 
 	// Update IMG element source
 	document.getElementById("barcode_output").src = url;
@@ -81,4 +82,25 @@ function printCode() {
 	w.document.write(content);
 	w.print();
 	w.close();
+}
+
+function copyBarcodeLink() {
+	/* Get the text field */
+	const copyText = document.getElementById("barcode_image_link");
+	const copyTextMessage = document.getElementById("message");
+	copyTextMessage.setAttribute("class", "message-fade");
+
+	/* Select the text field */
+	copyText.select();
+	copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+	/* Copy the text inside the text field */
+	document.execCommand("copy");
+
+	console.log("hmm", copyText.value)
+
+	/* Alert the copied text */
+	// alert("Copied the text: " + copyText.value);
+
+	setTimeout(function(){ copyTextMessage.setAttribute("class", ""); }, 4000);
 }
