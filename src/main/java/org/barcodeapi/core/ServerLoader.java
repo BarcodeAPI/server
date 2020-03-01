@@ -8,6 +8,7 @@ import org.barcodeapi.server.api.DefaultHandler;
 import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.StatsHandler;
+import org.barcodeapi.server.api.TypesHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
@@ -59,6 +60,8 @@ public class ServerLoader {
 		initSessionHandler();
 
 		initCacheHandler();
+
+		initTypesHandler();
 
 		initApiHandler();
 
@@ -155,6 +158,19 @@ public class ServerLoader {
 		cacheHandler.setHandler(new CacheHandler());
 		cacheHandler.setContextPath("/cache");
 		handlers.addHandler(cacheHandler);
+	}
+
+	/**
+	 * Initialize the types end-point.
+	 */
+	private void initTypesHandler() {
+
+		// setup statistics handler
+		Log.out(LOG.SERVER, "Initializing handler: /types");
+		ContextHandler typesHandler = new ContextHandler();
+		typesHandler.setHandler(new TypesHandler());
+		typesHandler.setContextPath("/types");
+		handlers.addHandler(typesHandler);
 	}
 
 	/**

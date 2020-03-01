@@ -26,7 +26,6 @@ public class StatsHandler extends RestHandler {
 
 		// get counters and increment stats hits
 		StatsCollector counters = StatsCollector.getInstance();
-		counters.incrementCounter("stats.dump.hits");
 
 		// current up-time
 		counters.setCounter("system.uptime", (double) (System.currentTimeMillis() - timeStart));

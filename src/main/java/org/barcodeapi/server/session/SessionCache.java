@@ -5,9 +5,13 @@ import org.barcodeapi.server.core.ObjectCache;
 
 public class SessionCache {
 
+	public static ObjectCache getCache() {
+		return ObjectCache.getCache("sessions");
+	}
+
 	public static CachedSession getSession(String key) {
 
-		CachedObject o = ObjectCache.getCache("sessions").get(key);
+		CachedObject o = getCache().get(key);
 		if (o == null) {
 			return null;
 		}
@@ -21,7 +25,7 @@ public class SessionCache {
 		CachedSession session = new CachedSession();
 
 		// add session to the cache
-		ObjectCache.getCache("sessions").put(session.getKey(), session);
+		getCache().put(session.getKey(), session);
 
 		// return the session
 		return session;
