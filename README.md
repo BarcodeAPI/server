@@ -1,12 +1,10 @@
 # BarcodeAPI.org
 
-The BarcodeAPI.org web server was designed to provide an easy to use barcode generation API via the HTTP protocol for use in external / mobile applications where generation libraries might not exist; the WebUI is also designed to be responsive such that users may generate barcodes to be scanned directly in their web browser, or download the barcodes after testing them out.
+The BarcodeAPI.org web server was designed to provide an easy to use barcode generation API via the HTTP protocol for use in external / mobile applications where generation libraries might not exist or resources limited; the WebUI is also designed to be responsive such that users may generate barcodes to be scanned directly from their web browser or download the barcodes after testing them out.
 
-## About
+## Web Server
 
-### Web Server
-
-The server comes with a set of static HTML and Javascript files that allow users to navigate to a simple UI and generate barcodes in their web browser with ease.
+The server comes with a minimal set of static HTML and Javascript files that allow users to generate barcodes in their web browser with ease. The UI allows users to quickly download, print, or copy the images for use in other applications.
 
 ### API Server
 
@@ -18,7 +16,7 @@ curl https://barcodeapi.org/api/A_Barcode > gen.png
 
 #### Automatic Code Type Detection
 
-When simply calling the api endpoint without specifying an eplitit code type, the server will make its best judgement as to which code type will be best suited for the supplied data.
+When calling the API endpoint without specifying an eplitit code type the server will make its best judgement as to which code type will be best suited for the supplied data.
 
 ```
 curl https://barcodeapi.org/api/abc123
@@ -27,19 +25,18 @@ curl https://barcodeapi.org/api/auto/abc123
 
 #### Defined Code Type
 
-A list of all supported barcodes types is available by calling the `/types/` endpoint; this will be a JSON Array containing details for each type.
+A list of all supported barcodes types is available by calling the `/types/` endpoint; this will be a JSON Array containing details for each type including a regex format to prevalidate the date before a request.
 
-A specific barcode type may be requested by adding the type string in the request URL:
+Specific barcode types may be requested by adding the type string in the request URL:
 
 ```
-# Code 128 (128, code128)
-curl https://barcodeapi.org/api/128/Code-128
-
-# QR Code (qr, qrcode)
-curl https://barcodeapi.org/api/qr/QR_Code
+curl https://barcodeapi.org/api/128/abc123
+curl https://barcodeapi.org/api/qr/abc123
 ```
 
 #### Response Headers
+
+The server will add several headers related to the barcode including the type and encoded contents.
 
 ```
 $ curl --head https://barcodeapi.org/api/auto/abc123
@@ -50,23 +47,32 @@ Content-Type: image/png;charset=utf-8
 Content-Disposition: filename=abc123.png
 ```
 
+#### Control Characters
+
+Barcodes will frequently contain control characters for various reasons; as they can be difficult to enter in a text field, the API server has implemented a special mechanism for allowing users to easily generate barcodes containing these characters. Using a supported barcode, the prefix `$$` will shift any character value by -64. See the below table for examples.
+
+```
+@ -> NUL
+A -> SOH
+B -> STX
+...
+```
+
+Refer to [ascii.cl](https://ascii.cl/) for a complete table.
+
 ### Server Statistics
 
-The server will keep counters for most basic actions, such as total number of hits, generation requests, and render times for each type of code.
-
-Server statistics are available at the `/stats/` endpoint.
+The server will keep counters for all handlers and caches, these statistics are available at the `/stats/` endpoint.
 
 ### Caching
 
-The server implements a basic cache for rendered images. Provided the image has not expired and evicted from cache, a render request will first attempt a cache lookup before being rendered. Only requests matching certain criteria will be cached.
+The server implements a basic cache for rendered images, details about the current cache state can be found at the `/cache/` endpoint.
 
-All cache details are available at the `/cache/` endpoint.
+Provided the cached object has not expired and been evicted, a request for a previously rendered barcode will will be rapidly served from memory insted of being rendered; the cache will only render requests matching a certain criteria.
 
 ### Sessions
 
-A simple session cache will track a users render requests. This can be used to provide a UI that will show a user a list of their most used codes.
-
-A user's session details are available at the `/session/` endpoint.
+A simple session cache will track all user actions; this can be used to provide the user with a list of their most used barcodes; this information is available at the `/session/` endpoint.
 
 ## Third-Party
 
@@ -87,7 +93,7 @@ BarcodeAPI.org is only made possible with the use of third-party software.
 ## License
 
 ```text
-Copyright 2017 BarcodeAPI.org
+Copyright 2020 BarcodeAPI.org
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
