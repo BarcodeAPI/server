@@ -16,7 +16,7 @@ public class DefaultHandler extends ErrorHandler {
 
 		try {
 
-			response.sendRedirect("/api" + request.getPathInfo());
+			response.sendRedirect("/api/auto" + request.getPathInfo());
 		} catch (Exception e) {
 
 			e.printStackTrace();

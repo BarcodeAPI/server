@@ -2,6 +2,7 @@ package org.barcodeapi.server;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -29,6 +30,8 @@ public abstract class ServerTestBase {
 
 	@BeforeClass
 	public static void startServer() {
+
+		HttpURLConnection.setFollowRedirects(false);
 
 		try {
 
@@ -59,8 +62,20 @@ public abstract class ServerTestBase {
 		try {
 
 			String encoded = URLEncoder.encode(path, "UTF-8");
+			serverGet("/api/" + encoded);
 
-			URL url = serverUri.resolve("/api/" + encoded).toURL();
+		} catch (UnsupportedEncodingException e) {
+
+			e.printStackTrace(System.err);
+			Assert.fail("IOException.");
+		}
+	}
+
+	protected void serverGet(String path) {
+
+		try {
+
+			URL url = serverUri.resolve(path).toURL();
 			urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.connect();
 
@@ -69,15 +84,13 @@ public abstract class ServerTestBase {
 			if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
 				response = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-			} else {
-
-				response = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
 			}
 
 		} catch (Exception e) {
 
-			Assert.fail("IOException.");
 			e.printStackTrace(System.err);
+			Assert.fail("IOException.");
+
 		}
 	}
 

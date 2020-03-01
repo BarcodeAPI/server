@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.core.utils.Log;
+import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.cache.CachedObject;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.RestHandler;
@@ -95,7 +97,7 @@ public class BarcodeAPIHandler extends RestHandler {
 		String nice = barcode.getProperties().getProperty("nice");
 		String encd = barcode.getProperties().getProperty("encd");
 
-		System.out.println(System.currentTimeMillis() + " : " + //
+		Log.out(LOG.BARCODE, "" + //
 				"Served [ " + type + " ] " + //
 				"with [ " + data + " ] " + //
 				"in [ " + time + "ms ] " + //
