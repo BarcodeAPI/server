@@ -1,84 +1,227 @@
 <html>
 <head>
-<title>BarcodeAPI.org</title>
+    <title>BarcodeAPI.org</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="keywords"
-	content="barcode, barcode app, barcode generator, barcode api, qr code, qr code generator, code 128, code128, ean8, eac-8, ean13, ean-13, codabar, download barcode, barcodes, pdf, pdf 417">
-<meta name="description"
-	content="Generate barcodes of nearly any type, scan it in the web browser, or download the generated images for free.">
+    <meta name="keywords"
+          content="barcode, barcode app, barcode generator, barcode api, qr code, qr code generator, code 128, code128, ean8, eac-8, ean13, ean-13, codabar, download barcode, barcodes, pdf, pdf 417">
+    <meta name="description"
+          content="Generate barcodes of nearly any type, scan it in the web browser, or download the generated images for free.">
 
-<link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" href="/favicon.png"/>
 
-<script src="/index.js"></script>
-
-<link rel="stylesheet" type="text/css" href="/index.css" />
+    <script src="/index.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
+          type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/index.css"/>
 </head>
 <body onload="loadHash()">
-	<div id="global_wrapper">
+<div class="wrap container-fluid">
+    <div class="header row middle-xs between-xs">
+        <div class="col-xs-12 col-sm-3">
+            <div class="logo"><img src="img/barcodeapi-logo.svg" alt="BarcodeAPI Logo" aria-label="Logo"></div>
+        </div>
+        <div class="header-share col-sm-9">
+            <div class="row end-xs middle-xs">
+                <div class="col-xs"><h4>SHARE US</h4></div>
+                <div class="share-icon facebook">
+                    <a href="">
+                        <img src="img/facebook.svg" alt="Share on Facebook" aria-label="Share Icon">
+                    </a>
+                </div>
+                <div class="share-icon twitter">
+                    <a href=""><img src="img/twitter.svg" alt="Share on Twitter" aria-label="Share Icon">
+                    </a>
+                </div>
+                <div class="share-icon linkedin">
+                    <a href=""><img src="img/linkedin2.svg" alt="Share on LinkedIn" aria-label="Share Icon">
+                    </a>
+                </div>
+                <div class="share-icon email">
+                    <a href=""><img src="img/email.svg" alt="Share via Email" aria-label="Share Icon">
+                    </a>
+                </div>
+            </div>
+        </div>
 
-		<div id="content_wrapper">
+        <!--		<div id="content_wrapper">-->
 
-			<div id="header"></div>
+        <!--			<div id="header"></div>-->
 
-			<div id="input_wrapper">
-				<div id="topnav" class="topnav">
-					<a id="type-auto" onclick="location.hash='auto'">Auto</a>
-					<a id="type-e" onclick="location.hash='e'">UPC-E</a>
-					<a id="type-a" onclick="location.hash='a'">UPC-A</a>
-					<a id="type-8" onclick="location.hash='8'">EAN-8</a>
-					<a id="type-13" onclick="location.hash='13'">EAN-13</a>
-					<a id="type-codabar" onclick="location.hash='codabar'">Codabar</a>
-					<a id="type-39" onclick="location.hash='39'">Code39</a>
-					<a id="type-128" onclick="location.hash='128'">Code128</a>
-					<a id="type-qr" onclick="location.hash='qr'">QR Code</a>
-					<a id="type-dm" onclick="location.hash='dm'">Data Matrix</a>
-					<a id="type-417" onclick="location.hash='417'">PDF 417</a>
-				</div>
+<!--        			<div id="input_wrapper">-->
+<!--        				<div id="topnav" class="topnav">-->
+<!--                					<a id="type-auto" onclick="location.hash='auto'">Auto</a>-->
+<!--                					<a id="type-e" onclick="location.hash='e'">UPC-E</a>-->
+<!--                					<a id="type-a" onclick="location.hash='a'">UPC-A</a>-->
+<!--                					<a id="type-8" onclick="location.hash='8'">EAN-8</a>-->
+<!--                					<a id="type-13" onclick="location.hash='13'">EAN-13</a>-->
+<!--                					<a id="type-codabar" onclick="location.hash='codabar'">Codabar</a>-->
+<!--                					<a id="type-39" onclick="location.hash='39'">Code39</a>-->
+<!--                					<a id="type-128" onclick="location.hash='128'">Code128</a>-->
+<!--                					<a id="type-qr" onclick="location.hash='qr'">QR Code</a>-->
+<!--                					<a id="type-dm" onclick="location.hash='dm'">Data Matrix</a>-->
+<!--                					<a id="type-417" onclick="location.hash='417'">PDF 417</a>-->
+<!--        				</div>-->
 
-				<div id="frame">
-					<form onsubmit="return false;">
+<!--        				<div id="frame">-->
+<!--                					<form onsubmit="return false;">-->
 
-						<input id="text" onkeyup="genCode()" type="text"
-							placeholder="a code for anything..." autocomplete="off"
-							maxlength="200" />
-					</form>
-					<div id="barcode_wrapper">
-						<img id="barcode_output" />
-					</div>
+<!--                						<input id="text" onkeyup="genCode()" type="text"-->
+<!--                							placeholder="Enter a code for anything..." autocomplete="off"-->
+<!--                							maxlength="200" />-->
+<!--                					</form>-->
+<!--                					<div id="barcode_wrapper">-->
+<!--                						<img id="barcode_output" />-->
+<!--                					</div>-->
 
-					<div id="barcode_options">
+<!--        					<div id="barcode_options">-->
 
-						<div id="barcode_print">
-							<a id="barcode_print_button" onclick="printCode()">
-								<span id="barcode_print_content">Print!</span>
-							</a>
-						</div>
+<!--        						<div id="barcode_print">-->
+<!--        							<a id="barcode_print_button" onclick="printCode()">-->
+<!--        								<span id="barcode_print_content">Print!</span>-->
+<!--        							</a>-->
+<!--        						</div>-->
 
-						<div id="barcode_download">
-							<a id="barcode_download_button" download>
-								<span id="barcode_download_content">Download!</span>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+<!--        						<div id="barcode_download">-->
+<!--        							<a id="barcode_download_button" download>-->
+<!--        								<span id="barcode_download_content">Download!</span>-->
+<!--        							</a>-->
+<!--        						</div>-->
+<!--        					</div>-->
+<!--        				</div>-->
+<!--        			</div>-->
+<!--        		</div>-->
 
-		<div id="footer_wrapper">
-			<div id="footer_help">
-				<p>Generate barcodes of nearly any type, scan it in the web
-					browser, or download the generated images for free. BarcodeAPI.org
-					is an open source barcode server capable of generating a wide range
-					of barcodes over a RESTful HTTP server.</p>
-			</div>
-			<div id="footer_link">
-				<a href="https://git.mclarkdev.com/BarcodeAPI.org/server">Free,
-					Open Source</a> <br /> BarcodeAPI.org, 2018
-			</div>
-		</div>
-	</div>
+        <!--		<div id="footer_wrapper">-->
+        <!--			<div id="footer_help">-->
+<!--        				<p>Generate barcodes of nearly any type, scan it in the web-->
+<!--        					browser, or download the generated images for free. BarcodeAPI.org-->
+<!--        					is an open source barcode server capable of generating a wide range-->
+<!--        					of barcodes over a RESTful HTTP server.</p>-->
+        <!--			</div>-->
+        <!--			<div id="footer_link">-->
+        <!--				<a href="https://git.mclarkdev.com/BarcodeAPI.org/server">Free,-->
+        <!--					Open Source</a> <br /> BarcodeAPI.org, 2018-->
+        <!--			</div>-->
+        <!--		</div>-->
+    </div>
+
+
+    <div class="row main start-xs between-xs">
+
+        <div class="choose-barcode-type col-xs-12 col-sm-6">
+            <h3>CHOOSE YOUR BARCODE TYPE</h3>
+            <div class="barcode-types" id="topnav">
+                <a id="type-auto" onclick="location.hash='auto'">Auto</a>
+                <a id="type-e" onclick="location.hash='e'">UPC-E</a>
+                <a id="type-a" onclick="location.hash='a'">UPC-A</a>
+                <a id="type-8" onclick="location.hash='8'">EAN-8</a>
+                <a id="type-13" onclick="location.hash='13'">EAN-13</a>
+                <a id="type-codabar" onclick="location.hash='codabar'">Codabar</a>
+                <a id="type-39" onclick="location.hash='39'">Code39</a>
+                <a id="type-128" onclick="location.hash='128'">Code128</a>
+                <a id="type-qr" onclick="location.hash='qr'">QR Code</a>
+                <a id="type-dm" onclick="location.hash='dm'">Data Matrix</a>
+                <a id="type-417" onclick="location.hash='417'">PDF 417</a>
+            </div>
+        </div>
+        <div class="display-barcode col-xs-12 col-sm-6">
+            <div id="frame">
+                <form onsubmit="return false;">
+                    <input id="text" class="barcode-text-input" onkeyup="genCode()" type="text"
+                           placeholder="ENTER A CODE FOR ANYTHING..." autocomplete="off"
+                           maxlength="200"/>
+                </form>
+                <div id="barcode_wrapper">
+                    <img id="barcode_output"/>
+                </div>
+
+                <div id="barcode_options" class="row middle-xs center-xs">
+
+                    <div class="barcode-icon" id="barcode_print">
+                        <a id="barcode_print_button" onclick="printCode()">
+                            <img src="img/print.svg" alt="Print barcode" aria-label="Print barcode">
+                        </a>
+                    </div>
+
+                    <div class="barcode-icon" id="barcode_link">
+                        <a id="barcode_link_button">
+                            <img src="img/chain.svg" alt="Get barcode link" aria-label="Get barcode link">
+                        </a>
+                    </div>
+
+                    <div class="barcode-icon" id="barcode_download">
+                        <a id="barcode_download_button" download>
+                            <img src="img/file_download.svg" alt="Download barcode" aria-label="Download barcode">
+                        </a>
+                    </div>
+
+
+<!--                    <div id="barcode_print">-->
+<!--                        <a id="barcode_print_button" onclick="printCode()">-->
+<!--                            <span id="barcode_print_content">Print!</span>-->
+<!--                        </a>-->
+<!--                    </div>-->
+
+<!--                    <div id="barcode_download">-->
+<!--                        <a id="barcode_download_button" download>-->
+<!--                            <span id="barcode_download_content">Download!</span>-->
+<!--                        </a>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div class="footer row middle-xs top-sm between-xs">
+        <div class="col-xs-12 col-sm-8">
+            <h5>Free, Open Source <a href="www.barcodeapi.org">BarcodeAPI.org</a>, 2018</h5>
+            <p>Generate barcodes of nearly any type, scan it in the web
+                browser, or download the generated images for free. BarcodeAPI.org
+                is an open source barcode server capable of generating a wide range
+                of barcodes over a RESTful HTTP server.</p>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="docs-link row start-xs end-sm">
+            <a href="https://git.mclarkdev.com/BarcodeAPI.org/server" target="_blank" class="col-xs">
+                <span class="docs-icon"><img src="img/docs.svg"></span>
+                <span>Read the API Docs</span>
+            </a>
+        </div>
+
+            <div class="row footer-share start-xs middle-xs">
+                <div class="col-xs-12"><h4>SHARE US</h4></div>
+                <div class="share-icon facebook">
+                    <a href="">
+                        <img src="img/facebook.svg" alt="Share on Facebook" aria-label="Share Icon">
+                    </a>
+                </div>
+                <div class="share-icon twitter">
+                    <a href=""><img src="img/twitter.svg" alt="Share on Twitter" aria-label="Share Icon">
+                    </a>
+                </div>
+                <div class="share-icon linkedin">
+                    <a href=""><img src="img/linkedin2.svg" alt="Share on LinkedIn" aria-label="Share Icon">
+                    </a>
+                </div>
+                <div class="share-icon email">
+                    <a href=""><img src="img/email.svg" alt="Share via Email" aria-label="Share Icon">
+                    </a>
+                </div>
+            </div>
+
+    </div>
+
+
+
+
+
+</div>
+
+
 </body>
 </html>
 
