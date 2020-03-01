@@ -190,6 +190,45 @@ h5 a {
 	}
 }
 
+#barcode_wrapper {
+	position: relative;
+}
+
+@keyframes fadeOut {
+	from {opacity: 1;}
+	to {opacity: 0;}
+}
+
+#message {
+	display: none;
+	padding: 10px;
+	border: 1px solid #CCC;
+	background: #FFF;
+	color: #222;
+	text-align: center;
+	width: 200px;
+	left: -100px;
+	box-sizing: border-box;
+	margin: 2rem auto 0 50%;
+	position: absolute;
+	font-size: 13px;
+	line-height: 19px;
+}
+
+#barcode_image_link {
+	position: absolute;
+	left: -1999em;
+}
+
+#message.message-fade {
+	display: block;
+}
+
+.message-fade {
+	animation-name: fadeOut;
+	animation-duration: 1s;
+	animation-delay: 2s;
+}
 
 #input_wrapper {
 	width: 100%;
