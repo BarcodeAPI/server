@@ -1,5 +1,7 @@
 package org.barcodeapi.server.gen;
 
+import org.barcodeapi.core.utils.Log;
+import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.statistics.StatsCollector;
@@ -47,9 +49,8 @@ public abstract class CodeGenerator {
 		String validated = onValidateRequest(data);
 
 		// update global and engine counters
-		StatsCollector.getInstance().incrementCounter("render.total.count");
-		String counterName = "render." + getType().toString() + ".count";
-		StatsCollector.getInstance().incrementCounter(counterName);
+		StatsCollector.getInstance().incrementCounter("render.count.total");
+		StatsCollector.getInstance().incrementCounter("render.count." + getType().toString());
 
 		try {
 
@@ -59,17 +60,21 @@ public abstract class CodeGenerator {
 			double time = System.currentTimeMillis() - timeStart;
 
 			// update global and engine counters
-			StatsCollector.getInstance().incrementCounter("render.total.time", time);
-			counterName = "render." + getType().toString() + ".time";
-			StatsCollector.getInstance().incrementCounter(counterName, time);
+			StatsCollector.getInstance().incrementCounter("render.time.total", time);
+			StatsCollector.getInstance().incrementCounter("render.time." + getType(), time);
+
+			Log.out(LOG.BARCODE, "" + //
+					"Rendered [ " + getType().toString() + " ] " + //
+					"with [ " + data + " ] " + //
+					"size [ " + img.length + "B ] " + //
+					"in [ " + time + "ms ] ");
 
 			return img;
 		} catch (Exception e) {
 
 			// update global and engine counters
-			StatsCollector.getInstance().incrementCounter("render.total.fail");
-			counterName = "render." + getType().toString() + ".fail";
-			StatsCollector.getInstance().incrementCounter(counterName);
+			StatsCollector.getInstance().incrementCounter("render.fail.total");
+			StatsCollector.getInstance().incrementCounter("render.fail." + getType().toString());
 
 			throw new GenerationException(ExceptionType.FAILED, e);
 		}

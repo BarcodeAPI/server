@@ -2,11 +2,6 @@
 
 The BarcodeAPI.org web server was designed to provide an easy to use barcode generation API via the HTTP protocol for use in external / mobile applications where generation libraries might not exist; the WebUI is also designed to be responsive such that users may generate barcodes to be scanned directly in their web browser, or download the barcodes after testing them out.
 
-## Mirrors
-
-[Master Repo](https://git.mclarkdev.com/BarcodeAPI.org/server)<br/>
-[GitHub Mirror](https://github.com/BarcodeAPI/server)
-
 ## About
 
 ### Web Server
@@ -25,72 +20,69 @@ curl https://barcodeapi.org/api/A_Barcode > gen.png
 
 When simply calling the api endpoint without specifying an eplitit code type, the server will make its best judgement as to which code type will be best suited for the supplied data.
 
+```
+curl https://barcodeapi.org/api/abc123
+curl https://barcodeapi.org/api/auto/abc123
+```
+
 #### Defined Code Type
 
-Also available at the api endpoint, a user may optionally define their required code type:
+A list of all supported barcodes types is available by calling the `/types/` endpoint; this will be a JSON Array containing details for each type.
+
+A specific barcode type may be requested by adding the type string in the request URL:
 
 ```
-# UPC-E (e, upc-e, upce)
-curl https://barcodeapi.org/api/e/00000000
-
-# UCP-A (a, upc-a, upca, upc)
-curl https://barcodeapi.org/api/a/000000000000
-
-# EAN-8 (8, ean-8, ean8)
-curl https://barcodeapi.org/api/8/00000000
-
-# EAN-13 (13, ean-13, ean13)
-curl https://barcodeapi.org/api/13/0000000000000
-
-# Code 39 (39, code39)
-curl https://barcodeapi.org/api/39/CODE39
-
 # Code 128 (128, code128)
 curl https://barcodeapi.org/api/128/Code-128
 
 # QR Code (qr, qrcode)
 curl https://barcodeapi.org/api/qr/QR_Code
+```
 
-# Data Matrix (matrix, datamatrix, dm)
-curl https://barcodeapi.org/api/matrix/Data_Matrix
+#### Response Headers
 
-# Codabar (codabar)
-curl https://barcodeapi.org/api/codabar/000000
+```
+$ curl --head https://barcodeapi.org/api/auto/abc123
+
+X-Barcode-Type: Code128
+X-Barcode-Content: abc123
+Content-Type: image/png;charset=utf-8
+Content-Disposition: filename=abc123.png
 ```
 
 ### Server Statistics
 
 The server will keep counters for most basic actions, such as total number of hits, generation requests, and render times for each type of code.
 
-Server statistic are available at the `/stats` endpoint.
+Server statistics are available at the `/stats/` endpoint.
 
 ### Caching
 
 The server implements a basic cache for rendered images. Provided the image has not expired and evicted from cache, a render request will first attempt a cache lookup before being rendered. Only requests matching certain criteria will be cached.
 
-All cache details are available at the `/cache` endpoint.
+All cache details are available at the `/cache/` endpoint.
 
 ### Sessions
 
 A simple session cache will track a users render requests. This can be used to provide a UI that will show a user a list of their most used codes.
 
-A user's session details are available at the `/session` endpoint.
+A user's session details are available at the `/session/` endpoint.
 
 ## Third-Party
 
 BarcodeAPI.org is only made possible with the use of third-party software.
 
-### Jetty, [Apache 2.0](https://www.eclipse.org/jetty/licenses.html)
+**Jetty, [Apache 2.0](https://www.eclipse.org/jetty/licenses.html)**
 
-The BarcodeAPI server was built around the [Jetty](https://www.eclipse.org/jetty/) web server framework.
+* The BarcodeAPI server was built around the [Jetty](https://www.eclipse.org/jetty/) web server framework.
 
-### Barcode4J, [Apache 2.0](http://barcode4j.sourceforge.net/#Introduction)
+**Barcode4J, [Apache 2.0](http://barcode4j.sourceforge.net/#Introduction)**
 
-[Barcode4J](http://barcode4j.sourceforge.net/) is an open source barcode generator; it is used for the generation of the following code types:
+* [Barcode4J](http://barcode4j.sourceforge.net/) is an open source barcode generator; it is used for the generation of the following code types:
 
-### ZXing, [Apache 2.0](https://github.com/zxing/zxing/blob/master/LICENSE)
+**ZXing, [Apache 2.0](https://github.com/zxing/zxing/blob/master/LICENSE)**
 
-[ZXing](https://github.com/zxing/zxing/) is a barcode processing library that makes QR code generation possible.
+* [ZXing](https://github.com/zxing/zxing/) is a barcode processing library that makes QR code generation possible.
 
 ## License
 

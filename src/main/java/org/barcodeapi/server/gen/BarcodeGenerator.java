@@ -11,18 +11,13 @@ import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.core.TypeSelector;
-import org.barcodeapi.server.statistics.StatsCollector;
 
 public class BarcodeGenerator {
 
 	private BarcodeGenerator() {
-
 	}
 
 	public static CachedBarcode requestBarcode(String target) throws GenerationException {
-
-		StatsCollector.getInstance()//
-				.incrementCounter("request.total.count");
 
 		// get the request string
 		String data = target.substring(1, target.length());
@@ -31,9 +26,9 @@ public class BarcodeGenerator {
 
 			// decode the data string
 			data = URLDecoder.decode(data, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException | IllegalArgumentException e) {
 
-			throw new IllegalArgumentException("Failed to decode target");
+			throw new GenerationException(ExceptionType.INVALID, e);
 		}
 
 		// use cache if within threshold
@@ -103,16 +98,14 @@ public class BarcodeGenerator {
 		// is cache allowed
 		if (useCache) {
 
-			// lookup image from cache
+			// lookup image from cache, serve if found
 			barcode = BarcodeCache.getBarcode(type, data);
-
-			// return the image if found
 			if (barcode != null) {
 				return barcode;
 			}
 		}
 
-		// render image and create new object with image
+		// render new image and create its cached object
 		barcode = new CachedBarcode(generator.getCode(data));
 		barcode.getProperties().setProperty("type", type.toString());
 		barcode.getProperties().setProperty("data", data);

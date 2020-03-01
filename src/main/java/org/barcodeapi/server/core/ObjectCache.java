@@ -3,6 +3,8 @@ package org.barcodeapi.server.core;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
+import org.barcodeapi.core.utils.Log;
+import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.statistics.StatsCollector;
 
 public class ObjectCache {
@@ -55,6 +57,7 @@ public class ObjectCache {
 	public static synchronized ObjectCache getCache(String name) {
 
 		if (!caches.containsKey(name)) {
+			Log.out(LOG.SERVER, "Initialized cache: " + name);
 			caches.put(name, new ObjectCache(name));
 		}
 

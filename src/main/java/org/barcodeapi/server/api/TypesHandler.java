@@ -28,7 +28,7 @@ public class TypesHandler extends RestHandler {
 					.put("name", type.name())//
 					.put("target", type.getTypeStrings()[0])//
 					.put("pattern", type.getFormatPattern())//
-					.put("description", "A barcode!"));
+					.put("description", type.getDescription()));
 		}
 
 		response.getOutputStream().println(output.toString());

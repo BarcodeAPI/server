@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
+import org.json.JSONObject;
 
 public class StatsHandler extends RestHandler {
 
@@ -28,17 +29,17 @@ public class StatsHandler extends RestHandler {
 		StatsCollector counters = StatsCollector.getInstance();
 
 		// current up-time
+		// TODO add to system watchdog
 		counters.setCounter("system.uptime", (double) (System.currentTimeMillis() - timeStart));
 
 		// loop each counter
-		String output = "";
+		JSONObject stats = new JSONObject();
 		for (String key : counters.getCounters().keySet()) {
 
 			// print key and value
-			String value = String.format("%.0f", counters.getCounter(key));
-			output += key + " : " + value + "\n";
+			stats.put(key, counters.getCounter(key));
 		}
 
-		response.getOutputStream().println(output);
+		response.getOutputStream().println(stats.toString());
 	}
 }

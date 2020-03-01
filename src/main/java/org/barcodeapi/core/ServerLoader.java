@@ -4,7 +4,7 @@ import org.barcodeapi.core.utils.Log;
 import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.CacheHandler;
-import org.barcodeapi.server.api.DefaultHandler;
+import org.barcodeapi.server.api.RedirectHandler;
 import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.StatsHandler;
@@ -109,7 +109,7 @@ public class ServerLoader {
 	 */
 	private void initJetty() {
 
-		Log.out(LOG.SERVER, "Initializing Jetty...");
+		Log.out(LOG.SERVER, "Initializing Jetty");
 
 		// initialize handler collection
 		handlers = new HandlerCollection();
@@ -118,7 +118,7 @@ public class ServerLoader {
 		server = new Server(serverPort);
 		server.setHandler(handlers);
 
-		server.setErrorHandler(new DefaultHandler());
+		server.setErrorHandler(new RedirectHandler());
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class ServerLoader {
 		}
 
 		// Instantiate the static resource handler and add it to the collection
-		Log.out(LOG.SERVER, "Initializing static resource handler...");
+		Log.out(LOG.SERVER, "Initializing static resource handler");
 		ContextHandler apiHandler = new ContextHandler();
 		apiHandler.setHandler(new StaticHandler());
 		apiHandler.setContextPath("/");

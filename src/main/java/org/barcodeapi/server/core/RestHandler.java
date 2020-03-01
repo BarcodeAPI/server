@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.core.utils.Log;
 import org.barcodeapi.core.utils.Log.LOG;
-import org.barcodeapi.server.session.SessionCache;
 import org.barcodeapi.server.session.CachedSession;
+import org.barcodeapi.server.session.SessionCache;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
-public abstract class RestHandler extends AbstractHandler {
+public class RestHandler extends AbstractHandler {
 
 	private final String serverName;
 
@@ -53,12 +53,33 @@ public abstract class RestHandler extends AbstractHandler {
 		String className = getClass().getName();
 		className = className.substring(className.lastIndexOf('.') + 1);
 
+		// get source of the request
+		String source;
+		String ref = request.getHeader("Referer");
+		if (ref != null) {
+			source = ref;
+		} else {
+			source = "API";
+		}
+
+		// get users IP
+		String from;
+		String via = request.getRemoteAddr();
+		String ip = request.getHeader("X-Forwarded-For");
+		if (ip != null) {
+			from = ip + " ] via [ " + via;
+		} else {
+			from = via;
+		}
+
 		// log the request
-		Log.out(LOG.REQUEST, className + " : " + target + " : " + baseRequest.getRemoteAddr());
+		Log.out(LOG.REQUEST,
+				className + " : " + target + " : " + baseRequest.getRemoteAddr() + " : " + source + " : " + from);
 
 		// hit the counters
-		getStats().incrementCounter("request.handler." + className + ".count");
-		getStats().incrementCounter("request.method." + request.getMethod() + ".count");
+		getStats().incrementCounter("request.count.total");
+		getStats().incrementCounter("request.count." + className);
+		getStats().incrementCounter("request.method." + request.getMethod());
 
 		// add CORS headers
 		addCORS(baseRequest, response);

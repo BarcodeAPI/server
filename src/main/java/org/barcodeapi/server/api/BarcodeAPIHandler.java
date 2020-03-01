@@ -35,28 +35,6 @@ public class BarcodeAPIHandler extends RestHandler {
 			throws IOException, ServletException {
 		super.handle(target, baseRequest, request, response);
 
-		// the current time
-		long timeStart = System.currentTimeMillis();
-
-		// get source of the request
-		String source;
-		String ref = request.getHeader("Referer");
-		if (ref != null) {
-			source = ref;
-		} else {
-			source = "API";
-		}
-
-		// get users IP
-		String from;
-		String via = request.getRemoteAddr();
-		String ip = request.getHeader("X-Forwarded-For");
-		if (ip != null) {
-			from = ip + " ] via [ " + via;
-		} else {
-			from = via;
-		}
-
 		CachedBarcode barcode;
 		try {
 
@@ -88,25 +66,10 @@ public class BarcodeAPIHandler extends RestHandler {
 			response.setHeader("X-Error-Message", e.getMessage());
 		}
 
-		// time it took to process request
-		long time = System.currentTimeMillis() - timeStart;
-
 		// additional properties
 		String type = barcode.getProperties().getProperty("type");
-		String data = barcode.getProperties().getProperty("data");
 		String nice = barcode.getProperties().getProperty("nice");
 		String encd = barcode.getProperties().getProperty("encd");
-
-		Log.out(LOG.BARCODE, "" + //
-				"Served [ " + type + " ] " + //
-				"with [ " + data + " ] " + //
-				"in [ " + time + "ms ] " + //
-				"size [ " + barcode.getDataSize() + "B ] " + //
-				"using [ " + source + " ] " + //
-				"for [ " + from + " ]");
-
-		// FIXME session
-		// session.onRender(data);
 
 		// add cache headers
 		response.setHeader("Cache-Control", "max-age=86400, public");
