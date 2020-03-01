@@ -196,8 +196,8 @@ h5 a {
 }
 
 #barcode_output {
-	max-width: 280px;
-	max-height: 160px;
+	max-width: 400px;
+	max-height: 250px;
 	margin: 0 auto;
 	display: block;
 	padding: 1rem;
