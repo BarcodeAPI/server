@@ -42,6 +42,11 @@ function loadHash() {
 	genCode();
 }
 
+function closeMenu() {
+	const menu = document.getElementById("topnav");
+
+}
+
 /**
  * Called each time we should generate a new barcode.
  * 
@@ -87,6 +92,31 @@ function printCode() {
 	w.document.write(content);
 	w.print();
 	w.close();
+}
+
+var isOpen = false;
+
+function closeMenu() {
+	const dropdown = document.getElementById("select-type");
+	const menu = document.getElementById("topnav");
+	dropdown.setAttribute("class", "select-type");
+	menu.setAttribute("class", "barcode-types");
+	isOpen = false;
+}
+
+function toggleOpenBarcodeTypes() {
+
+	const dropdown = document.getElementById("select-type");
+	const menu = document.getElementById("topnav");
+	isOpen = !isOpen;
+
+	if(isOpen) {
+		dropdown.setAttribute("class", "select-type open");
+		menu.setAttribute("class", "barcode-types open");
+	} else {
+		dropdown.setAttribute("class", "select-type");
+		menu.setAttribute("class", "barcode-types");
+	}
 }
 
 function copyBarcodeLink() {

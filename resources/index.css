@@ -78,7 +78,7 @@ h5 a {
 	text-align: center;
 	padding-bottom: 1rem;
 	border-bottom: 2px solid #222;
-	margin-bottom: 2rem;
+	margin-bottom: 1rem;
 }
 
 .footer {
@@ -141,6 +141,7 @@ h5 a {
 	outline: none;
 	padding: 0.5rem 1rem;
 	/*border-bottom: 1px solid #222;*/
+	border: 1px solid #EEE;
 	text-align: left;
 	border-radius: 2rem;
 	width: 100%;
@@ -191,6 +192,72 @@ h5 a {
 	top:3px;
 }
 
+.select-type {
+	position:relative;
+	text-transform: uppercase;
+	font-weight: 600;
+	display: none;
+	margin-bottom: 0.5rem;
+	background-color: #F7F7F7;
+	border: 1px solid #DDD;
+	border-radius: 2rem;
+}
+
+.select-type:after {
+	content: "";
+	position: absolute;
+	background-image: url("/img/arrow_drop_down.svg");
+	background-size: contain;
+	background-position: right center;
+	background-repeat: no-repeat;
+	width: 32px;
+	height: 32px;
+	right: 10px;
+	top: 2px;
+	transition: transform 0.2s ease-in-out;
+	pointer-events: none;
+}
+
+.select-type.open:after {
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+.select-type a {
+	width: 100%;
+	display: block;
+	cursor: pointer;
+	text-decoration: none;
+	outline: none;
+	padding: 0.5rem 1rem;
+}
+
+.barcode-types {
+	display: block;
+}
+
+@media only screen and (max-width: 600px) {
+	.barcode-types a {
+		width: calc(50% - 30px);
+		margin-bottom: 0;
+		float: left;
+	}
+	.barcode-types {
+		display: none;
+	}
+	.barcode-types.open {
+		display: block;
+	}
+	.select-type {
+		display: block;
+	}
+	.choose-barcode-type {
+		margin-bottom: 1rem;
+	}
+}
+
 /* between sm and xs */
 @media only screen and (min-width: 600px) {
 	.logo {
@@ -212,6 +279,9 @@ h5 a {
 	.footer-share {
 		display: none;
 	}
+	.header {
+		margin-bottom: 2rem;
+	}
 }
 
 #barcode_wrapper, #frame {
@@ -224,9 +294,9 @@ h5 a {
 }
 
 @keyframes pulseBg {
-	0% { background-color: #F7F7F7; }
-	50% { background-color: #fcf8ea; }
-	100% { background-color: #F7F7F7; }
+	0% { background-color: #F7F7F7; border-color: #DDD; }
+	50% { background-color: #fcf8ea; border-color: #f5ead3; }
+	100% { background-color: #F7F7F7; border-color: #DDD; }
 }
 
 #message {
@@ -279,7 +349,6 @@ h5 a {
 
 #barcode_output {
 	max-width: 400px;
-	max-height: 250px;
 	width: 100%;
 	margin: 0 auto;
 	display: block;
@@ -288,32 +357,6 @@ h5 a {
 
 #barcode_outout[src=""] {
 	display: none;
-}
-
-#footer_wrapper {
-	position: absolute;
-	bottom: 0px;
-	width: 100%;
-}
-
-#footer_help {
-	font-size: 18px;
-	max-width: 650px;
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
-	max-width: 650px;
-	max-height: 350px;
-	max-width: 650px;
-	padding: 16px;
-}
-
-#footer_link {
-	padding: 8px;
-	font-size: 14px;
-	position: absolute;
-	bottom: 0px;
-	right: 0px;
 }
 
 #barcode_options {
