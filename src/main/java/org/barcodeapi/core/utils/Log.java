@@ -13,16 +13,18 @@ public class Log {
 		SERVER, REQUEST, BARCODE, ERROR;
 	}
 
-	private static final HashMap<LOG, PrintWriter> logFiles;
-
+	private static final String _LOGS;
 	private static final SimpleDateFormat _DFORMAT;
+	private static final HashMap<LOG, PrintWriter> logFiles;
 
 	static {
 
-		logFiles = new HashMap<>();
+		String dir = System.getenv("_LOGDIR");
+		_LOGS = (dir == null) ? "logs" : dir;
 		_DFORMAT = new SimpleDateFormat("YYYYMMdd HH:mm:ss");
 
-		(new File("log")).mkdirs();
+		(new File(_LOGS)).mkdirs();
+		logFiles = new HashMap<>();
 
 		rollLogs();
 	}
@@ -32,7 +34,7 @@ public class Log {
 
 		for (LOG log : LOG.values()) {
 
-			File f = new File("log", String.format("%s-%s.log", //
+			File f = new File(_LOGS, String.format("%s-%s.log", //
 					getTime().substring(0, 8), log.name()));
 
 			try {

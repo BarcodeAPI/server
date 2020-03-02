@@ -1,12 +1,9 @@
 package org.barcodeapi.server.tasks;
 
-import java.util.TimerTask;
-
-import org.barcodeapi.core.utils.Log;
-import org.barcodeapi.core.utils.Log.LOG;
+import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.statistics.StatsCollector;
 
-public class WatchdogTask extends TimerTask {
+public class WatchdogTask extends BackgroundTask {
 
 	private final long timeStart;
 
@@ -16,9 +13,8 @@ public class WatchdogTask extends TimerTask {
 	}
 
 	@Override
-	public void run() {
+	public void onRun() {
 
-		Log.out(LOG.SERVER, "Watchdog Task");
 		double timeUp = System.currentTimeMillis() - timeStart;
 		StatsCollector.getInstance().setCounter("system.uptime", timeUp);
 	}
