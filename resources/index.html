@@ -28,20 +28,20 @@
             <div class="row end-xs middle-xs">
                 <div class="col-xs"><h4>SHARE US</h4></div>
                 <div class="share-icon facebook">
-                    <a href="">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=" target="_blank">
                         <img src="img/facebook.svg" alt="Share on Facebook" aria-label="Share Icon">
                     </a>
                 </div>
                 <div class="share-icon twitter">
-                    <a href=""><img src="img/twitter.svg" alt="Share on Twitter" aria-label="Share Icon">
+                    <a href="https://twitter.com/home?status=http://barcodeapi.org Website to generate barcodes for free" target="_blank"><img src="img/twitter.svg" alt="Share on Twitter" aria-label="Share Icon">
                     </a>
                 </div>
                 <div class="share-icon linkedin">
-                    <a href=""><img src="img/linkedin2.svg" alt="Share on LinkedIn" aria-label="Share Icon">
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://barcodeapi.org&title=&summary=Website to generate barcodes for free&source=" target="_blank"><img src="img/linkedin2.svg" alt="Share on LinkedIn" aria-label="Share Icon">
                     </a>
                 </div>
                 <div class="share-icon email">
-                    <a href=""><img src="img/email.svg" alt="Share via Email" aria-label="Share Icon">
+                    <a href="mailto:?body=I%20thought%20you%20would%20like%20this%20websit%20that%20generates%20barcodes%20for%20free%20https%3A%2F%2Fbarcodeapi.org%2F&amp;subject=https%3A%2F%2Fbarcodeapi.org%2F" target="_blank"><img src="img/email.svg" alt="Share via Email" aria-label="Share Icon">
                     </a>
                 </div>
             </div>
@@ -74,10 +74,10 @@
                         <div class="col-xs-9">
                             <input id="text" class="barcode-text-input pulse-bg" onkeyup="genCode()" type="text"
                            placeholder="TRY ME!" autocomplete="off"
-                           maxlength="200"/>
+                           maxlength="200" title="Enter a code for anything"/>
                         </div>
                         <div class="col-xs-3">
-                            <input class="barcode-text-input-clear" type="reset" value="CLEAR" />
+                            <input class="barcode-text-input-clear" type="reset" value="CLEAR" title="Clear text"/>
                         </div>
                     </div>
                 </form>
@@ -90,25 +90,25 @@
                 <div id="barcode_options" class="row middle-xs center-xs">
 
                     <div class="barcode-icon" id="barcode_print">
-                        <a id="barcode_print_button" onclick="printCode()">
+                        <a id="barcode_print_button" onclick="printCode()" title="Print Barcode">
                             <img src="img/print.svg" alt="Print barcode" aria-label="Print barcode">
                         </a>
                     </div>
 
                     <div class="barcode-icon" id="barcode_link">
-                        <a id="barcode_link_button" onclick="copyBarcodeLink()">
+                        <a id="barcode_link_button" onclick="copyBarcodeLink()" title="Get Link to Barcode">
                             <img src="img/chain.svg" alt="Get barcode link" aria-label="Get barcode link">
                         </a>
                     </div>
 
                     <div class="barcode-icon" id="barcode_image">
-                        <a id="barcode_image_button" onclick="copyImageToClipboard()">
-                            <img src="img/image.svg" alt="Open barcode image" aria-label="Open barcode image">
+                        <a id="barcode_image_button" onclick="copyImageToClipboard()" title="Copy Barcode as Image">
+                            <img src="img/image.svg" alt="Copy barcode image" aria-label="Copy barcode image">
                         </a>
                     </div>
 
                     <div class="barcode-icon" id="barcode_download">
-                        <a id="barcode_download_button" target="_blank">
+                        <a id="barcode_download_button" target="_blank" title="Download Barcode Image">
                             <img src="img/file_download.svg" alt="Download barcode" aria-label="Download barcode">
                         </a>
                     </div>
