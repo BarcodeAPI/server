@@ -2,21 +2,19 @@ package org.barcodeapi.server.session;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.server.core.CachedObject;
 
-public class CachedSession implements CachedObject {
+public class CachedSession extends CachedObject {
 
 	private final String key;
-	private final long timeCreated;
 	private final ConcurrentHashMap<String, Integer> sessionRequests;
 
-	private long timeTouched = 0;
-
 	public CachedSession() {
+		this.setTimeout(6, TimeUnit.HOURS);
 
 		this.key = UUID.randomUUID().toString();
-		this.timeCreated = System.currentTimeMillis();
 		this.sessionRequests = new ConcurrentHashMap<String, Integer>();
 	}
 
@@ -25,19 +23,9 @@ public class CachedSession implements CachedObject {
 		return key;
 	}
 
-	public long getTimeCreated() {
-
-		return timeCreated;
-	}
-
-	public long getTimeTouched() {
-
-		return timeTouched;
-	}
-
 	public void hit(String data) {
 
-		timeTouched = System.currentTimeMillis();
+		this.touch();
 		if (!sessionRequests.containsKey(data)) {
 
 			sessionRequests.put(data, 1);
@@ -50,10 +38,7 @@ public class CachedSession implements CachedObject {
 	public String getDetails() {
 
 		String details = "" + //
-				"Key: " + getKey() + "\n" + //
-				"Created: " + getTimeCreated() + "\n" + //
-				"Last Touched: " + getTimeTouched() + "\n";
-
+				"Key: " + getKey() + "\n\n";
 		for (String key : sessionRequests.keySet()) {
 
 			details += String.format("%s:%s\n", key, sessionRequests.get(key));

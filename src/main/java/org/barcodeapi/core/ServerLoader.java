@@ -1,5 +1,8 @@
 package org.barcodeapi.core;
 
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
+
 import org.barcodeapi.core.utils.Log;
 import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
@@ -9,6 +12,8 @@ import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.StatsHandler;
 import org.barcodeapi.server.api.TypesHandler;
+import org.barcodeapi.server.tasks.CacheCleanupTask;
+import org.barcodeapi.server.tasks.WatchdogTask;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
@@ -22,6 +27,9 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
  *
  */
 public class ServerLoader {
+
+	// Background task timer
+	private final Timer timer = new Timer();
 
 	// The port for the API server to bind to.
 	private int serverPort = 8080;
@@ -66,6 +74,8 @@ public class ServerLoader {
 		initApiHandler();
 
 		initResourceHandler();
+
+		initSystemTasks();
 
 		startServer();
 	}
@@ -117,7 +127,6 @@ public class ServerLoader {
 		// initialize API server
 		server = new Server(serverPort);
 		server.setHandler(handlers);
-
 		server.setErrorHandler(new RedirectHandler());
 	}
 
@@ -201,6 +210,22 @@ public class ServerLoader {
 		apiHandler.setHandler(new StaticHandler());
 		apiHandler.setContextPath("/");
 		handlers.addHandler(apiHandler);
+	}
+
+	/**
+	 * Initialize the system tasks which run periodically in the background.
+	 */
+	private void initSystemTasks() {
+
+		// cleanup caches every 5 minutes
+		CacheCleanupTask cacheCleanup = new CacheCleanupTask();
+		timer.schedule(cacheCleanup, 0, //
+				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
+
+		// run watch-dog every 1 minute
+		WatchdogTask watchdogTask = new WatchdogTask();
+		timer.schedule(watchdogTask, 0, //
+				TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES));
 	}
 
 	/**

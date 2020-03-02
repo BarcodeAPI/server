@@ -13,11 +13,7 @@ import org.json.JSONObject;
 
 public class StatsHandler extends RestHandler {
 
-	private final long timeStart;
-
 	public StatsHandler() {
-
-		timeStart = System.currentTimeMillis();
 	}
 
 	@Override
@@ -27,10 +23,6 @@ public class StatsHandler extends RestHandler {
 
 		// get counters and increment stats hits
 		StatsCollector counters = StatsCollector.getInstance();
-
-		// current up-time
-		// TODO add to system watchdog
-		counters.setCounter("system.uptime", (double) (System.currentTimeMillis() - timeStart));
 
 		// loop each counter
 		JSONObject stats = new JSONObject();

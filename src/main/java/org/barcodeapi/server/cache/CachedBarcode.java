@@ -1,41 +1,28 @@
 package org.barcodeapi.server.cache;
 
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.CachedObject;
 
-public class CachedBarcode implements CachedObject {
-
-	private final long timeCreated;
+public class CachedBarcode extends CachedObject {
 
 	private final byte[] cachedData;
-
 	private final String checksum;
-
-	private long lastAccess = 0;
-
 	private Properties properties;
 
 	public CachedBarcode(byte[] data) {
-
-		this.timeCreated = System.currentTimeMillis();
+		this.setTimeout(3, TimeUnit.DAYS);
 
 		this.cachedData = data;
-
 		this.checksum = CodeUtils.getMD5Sum(data);
-
 		this.properties = new Properties();
-	}
-
-	public long getTimeCreated() {
-
-		return timeCreated;
 	}
 
 	public byte[] getData() {
 
-		lastAccess = System.currentTimeMillis();
+		this.touch();
 		return cachedData;
 	}
 
@@ -47,11 +34,6 @@ public class CachedBarcode implements CachedObject {
 	public String getChecksum() {
 
 		return checksum;
-	}
-
-	public long getLastAccess() {
-
-		return lastAccess;
 	}
 
 	public Properties getProperties() {
