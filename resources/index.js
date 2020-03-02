@@ -8,6 +8,8 @@ window.onhashchange = loadHash;
  * 
  * @returns
  */
+const sUsrAg = navigator.userAgent;
+
 function loadHash() {
 
 	// Get current hash ( minus # )
@@ -40,6 +42,11 @@ function loadHash() {
 	genCode();
 }
 
+function closeMenu() {
+	const menu = document.getElementById("topnav");
+
+}
+
 /**
  * Called each time we should generate a new barcode.
  * 
@@ -56,7 +63,6 @@ function genCode() {
 	// Get the requested text
 	var text = document.getElementById("text").value;
 	if (text == "") {
-
 		text = "Try Me!";
 	}
 
@@ -68,6 +74,10 @@ function genCode() {
 
 	// Update download button
 	document.getElementById("barcode_download_button").setAttribute("href", url);
+
+	if (sUsrAg.indexOf("Firefox") === -1) {
+		document.getElementById("barcode_download_button").setAttribute("download", url);
+	}
 	document.getElementById("barcode_image_link").setAttribute("value", url);
 
 	// Update IMG element source
@@ -82,6 +92,31 @@ function printCode() {
 	w.document.write(content);
 	w.print();
 	w.close();
+}
+
+var isOpen = false;
+
+function closeMenu() {
+	const dropdown = document.getElementById("select-type");
+	const menu = document.getElementById("topnav");
+	dropdown.setAttribute("class", "select-type");
+	menu.setAttribute("class", "barcode-types");
+	isOpen = false;
+}
+
+function toggleOpenBarcodeTypes() {
+
+	const dropdown = document.getElementById("select-type");
+	const menu = document.getElementById("topnav");
+	isOpen = !isOpen;
+
+	if(isOpen) {
+		dropdown.setAttribute("class", "select-type open");
+		menu.setAttribute("class", "barcode-types open");
+	} else {
+		dropdown.setAttribute("class", "select-type");
+		menu.setAttribute("class", "barcode-types");
+	}
 }
 
 function copyBarcodeLink() {
@@ -102,5 +137,40 @@ function copyBarcodeLink() {
 	/* Alert the copied text */
 	// alert("Copied the text: " + copyText.value);
 
-	setTimeout(function(){ copyTextMessage.setAttribute("class", ""); }, 4000);
+	setTimeout(function(){ copyTextMessage.setAttribute("class", ""); }, 2500);
+}
+
+async function loadBlob(fileName) {
+	const fetched = await fetch(fileName);
+	return await fetched.blob();
+}
+
+
+async function copyImageToClipboard() {
+
+	const url = document.getElementById("barcode_image_link").getAttribute("value");
+
+	if (sUsrAg.indexOf("Firefox") > -1) {
+		console.log("firefox");
+
+	} else {
+
+		try {
+			const blobInput = await loadBlob(url);
+			const clipboardItemInput = new ClipboardItem({'image/png': blobInput});
+			await navigator.clipboard.write([clipboardItemInput]);
+
+			console.log('Image copied.');
+		} catch (e) {
+			console.log(e);
+		}
+	}
+}
+
+function init() {
+	// hide copy image button in FF
+	if (sUsrAg.indexOf("Firefox") > -1) {
+		var imageCopyButton = document.getElementById("barcode_image");
+		imageCopyButton.style.display = "none";
+	}
 }
