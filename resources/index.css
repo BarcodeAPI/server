@@ -5,13 +5,17 @@ body {
 }
 
 .wrap {
-	padding: 20px;
+	padding: 20px 30px;
 	max-width: 1024px;
-	margin: 0 auto;
 }
 
-.row {
-	width:100%;
+@media print {
+	* {
+		display: none;
+	}
+	#barcode_output {
+		display: block;
+	}
 }
 
 a:visited, a:active, a:link {
@@ -38,6 +42,7 @@ h5 a {
 	border-radius: 18px;
 	margin: 5px;
 	display: flex;
+	cursor: pointer;
 	align-items: center;
 	justify-content: center;
 	transition: background-color 0.2s ease-in-out;
@@ -134,12 +139,31 @@ h5 a {
 	font-family: 'IBM Plex Mono';
 	border: 0;
 	outline: none;
-	padding: 0.5rem 0;
-	border-bottom: 1px solid #222;
-	text-align: center;
-	border-radius: 0;
-	width: 90%;
-	margin-left: 5%;
+	padding: 0.5rem 1rem;
+	/*border-bottom: 1px solid #222;*/
+	text-align: left;
+	border-radius: 2rem;
+	width: 100%;
+}
+
+.barcode-text-input-clear {
+	width: 100%;
+	border-radius: 1.5rem;
+	background: #222;
+	padding: 1rem;
+	/*height:36px;*/
+	margin: 0;
+	outline: none;
+	color: #FFF;
+	border: 0;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease-in-out;
+}
+
+.barcode-text-input-clear:hover {
+	background: #ea4335;
 }
 
 .docs-link {
@@ -190,13 +214,19 @@ h5 a {
 	}
 }
 
-#barcode_wrapper {
+#barcode_wrapper, #frame {
 	position: relative;
 }
 
 @keyframes fadeOut {
 	from {opacity: 1;}
 	to {opacity: 0;}
+}
+
+@keyframes pulseBg {
+	0% { background-color: #F7F7F7; }
+	50% { background-color: #fcf8ea; }
+	100% { background-color: #F7F7F7; }
 }
 
 #message {
@@ -209,7 +239,7 @@ h5 a {
 	width: 200px;
 	left: -100px;
 	box-sizing: border-box;
-	margin: 2rem auto 0 50%;
+	margin: 1rem auto 0 50%;
 	position: absolute;
 	font-size: 13px;
 	line-height: 19px;
@@ -226,8 +256,21 @@ h5 a {
 
 .message-fade {
 	animation-name: fadeOut;
-	animation-duration: 1s;
+	animation-duration: 0.5s;
 	animation-delay: 2s;
+	animation-iteration-count: 1;
+}
+
+.pulse-bg {
+	animation-name: pulseBg;
+	animation-duration: 1.5s;
+	animation-iteration-count: infinite;
+}
+
+.pulse-bg:focus {
+	animation-play-state: paused;
+	background-color: #F7F7F7;
+	animation: 0
 }
 
 #input_wrapper {
@@ -237,9 +280,10 @@ h5 a {
 #barcode_output {
 	max-width: 400px;
 	max-height: 250px;
+	width: 100%;
 	margin: 0 auto;
 	display: block;
-	padding: 1rem;
+	padding: 1rem 0;
 }
 
 #barcode_outout[src=""] {
