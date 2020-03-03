@@ -1,21 +1,29 @@
 package org.barcodeapi.server.tasks;
 
 import org.barcodeapi.server.core.BackgroundTask;
-import org.barcodeapi.server.statistics.StatsCollector;
 
 public class WatchdogTask extends BackgroundTask {
 
+	private final Runtime runtime;
 	private final long timeStart;
 
 	public WatchdogTask() {
+		super();
 
-		timeStart = System.currentTimeMillis();
+		this.runtime = Runtime.getRuntime();
+		this.timeStart = System.currentTimeMillis();
 	}
 
 	@Override
 	public void onRun() {
 
-		double timeUp = System.currentTimeMillis() - timeStart;
-		StatsCollector.getInstance().setCounter("system.uptime", timeUp);
+		// update uptime metric
+		getStats().setCounter("system.uptime", //
+				(double) (System.currentTimeMillis() - timeStart));
+
+		// update jvm memory stats
+		getStats().setCounter("jvm.memory.used", (double) (runtime.totalMemory() - runtime.freeMemory()));
+		getStats().setCounter("jvm.memory.free", (double) (runtime.freeMemory()));
+		getStats().setCounter("jvm.memory.total", (double) (runtime.totalMemory()));
 	}
 }

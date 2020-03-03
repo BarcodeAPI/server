@@ -1,6 +1,9 @@
 package org.barcodeapi.server.statistics;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.json.JSONObject;;
 
 public class StatsCollector {
 
@@ -42,6 +45,16 @@ public class StatsCollector {
 	public ConcurrentHashMap<String, Double> getCounters() {
 
 		return hitCounters;
+	}
+
+	public JSONObject dumpJSON() {
+
+		JSONObject output = new JSONObject();
+		for (Map.Entry<String, Double> entry : hitCounters.entrySet()) {
+			output.put(entry.getKey(), entry.getValue());
+		}
+
+		return output;
 	}
 
 	public static synchronized StatsCollector getInstance() {

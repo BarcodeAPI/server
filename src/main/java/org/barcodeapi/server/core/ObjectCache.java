@@ -1,5 +1,6 @@
 package org.barcodeapi.server.core;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
@@ -31,6 +32,32 @@ public class ObjectCache {
 
 		stats.incrementCounter("cache." + name + ".add");
 		cache.put(key, value);
+	}
+
+	public int count() {
+
+		return cache.size();
+	}
+
+	public int expireOldObjects() {
+
+		int removed = 0;
+		for (Map.Entry<String, CachedObject> entry : cache.entrySet()) {
+
+			// skip if not expired
+			if (!entry.getValue().isExpired()) {
+				continue;
+			}
+
+			// skip if not removed
+			if (remove(entry.getKey()) == null) {
+				continue;
+			}
+
+			removed++;
+		}
+
+		return removed;
 	}
 
 	public CachedObject get(String key) {

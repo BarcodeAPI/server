@@ -1,4 +1,4 @@
 .settings/
 target/
 cache/
-log/
+logs/

@@ -12,7 +12,9 @@ import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.StatsHandler;
 import org.barcodeapi.server.api.TypesHandler;
-import org.barcodeapi.server.tasks.CacheCleanupTask;
+import org.barcodeapi.server.tasks.BarcodeCleanupTask;
+import org.barcodeapi.server.tasks.SessionCleanupTask;
+import org.barcodeapi.server.tasks.StatsDumpTask;
 import org.barcodeapi.server.tasks.WatchdogTask;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
@@ -217,15 +219,25 @@ public class ServerLoader {
 	 */
 	private void initSystemTasks() {
 
-		// cleanup caches every 5 minutes
-		CacheCleanupTask cacheCleanup = new CacheCleanupTask();
-		timer.schedule(cacheCleanup, 0, //
-				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
-
 		// run watch-dog every 1 minute
 		WatchdogTask watchdogTask = new WatchdogTask();
 		timer.schedule(watchdogTask, 0, //
 				TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES));
+
+		// print stats to log every 5 minutes
+		StatsDumpTask statsTask = new StatsDumpTask();
+		timer.schedule(statsTask, 0, //
+				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
+
+		// cleanup sessions every 15 minutes
+		SessionCleanupTask sessionCleanup = new SessionCleanupTask();
+		timer.schedule(sessionCleanup, 0, //
+				TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES));
+
+		// cleanup barcodes every hour
+		BarcodeCleanupTask barcodeCleanup = new BarcodeCleanupTask();
+		timer.schedule(barcodeCleanup, 0, //
+				TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS));
 	}
 
 	/**

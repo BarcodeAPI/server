@@ -67,7 +67,7 @@ public class RestHandler extends AbstractHandler {
 		String via = request.getRemoteAddr();
 		String ip = request.getHeader("X-Forwarded-For");
 		if (ip != null) {
-			from = ip + " ] via [ " + via;
+			from = ip + " : " + via;
 		} else {
 			from = via;
 		}

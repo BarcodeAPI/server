@@ -7,9 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.core.RestHandler;
-import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
-import org.json.JSONObject;
 
 public class StatsHandler extends RestHandler {
 
@@ -21,17 +19,6 @@ public class StatsHandler extends RestHandler {
 			throws IOException, ServletException {
 		super.handle(target, baseRequest, request, response);
 
-		// get counters and increment stats hits
-		StatsCollector counters = StatsCollector.getInstance();
-
-		// loop each counter
-		JSONObject stats = new JSONObject();
-		for (String key : counters.getCounters().keySet()) {
-
-			// print key and value
-			stats.put(key, counters.getCounter(key));
-		}
-
-		response.getOutputStream().println(stats.toString());
+		response.getOutputStream().println(getStats().dumpJSON().toString());
 	}
 }
