@@ -135,15 +135,15 @@ h5 a {
 
 .barcode-text-input {
 	font-size: 24px;
-	font-weight: 300;
+	font-weight: 400;
 	font-family: 'IBM Plex Mono';
 	border: 0;
 	outline: none;
 	padding: 0.5rem 1rem;
-	/*border-bottom: 1px solid #222;*/
-	border: 1px solid #EEE;
+	border-bottom: 2px solid #222;
+	/*border: 1px solid #EEE;*/
 	text-align: left;
-	border-radius: 2rem;
+	/*border-radius: 2rem;*/
 	width: 100%;
 }
 
@@ -199,8 +199,7 @@ h5 a {
 	display: none;
 	margin-bottom: 0.5rem;
 	background-color: #F7F7F7;
-	border: 1px solid #DDD;
-	border-radius: 2rem;
+	border-bottom: 1px solid #222;
 }
 
 .select-type:after {
@@ -294,9 +293,9 @@ h5 a {
 }
 
 @keyframes pulseBg {
-	0% { background-color: #F7F7F7; border-color: #DDD; }
-	50% { background-color: #fcf8ea; border-color: #f5ead3; }
-	100% { background-color: #F7F7F7; border-color: #DDD; }
+	0% { border-color: #222; }
+	50% { border-color: #EEE; }
+	100% { border-color: #222; }
 }
 
 #message {
@@ -313,6 +312,7 @@ h5 a {
 	position: absolute;
 	font-size: 13px;
 	line-height: 19px;
+	z-index: 1000;
 }
 
 #barcode_image_link {
@@ -339,7 +339,7 @@ h5 a {
 
 .pulse-bg:focus {
 	animation-play-state: paused;
-	background-color: #F7F7F7;
+	border-color: #222;
 	animation: 0
 }
 
