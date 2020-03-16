@@ -2,6 +2,7 @@
  * Call our method when the URL hash changes.
  */
 window.onhashchange = loadHash;
+let types
 
 /**
  * Called each time we should read the hash of the URL.
@@ -44,7 +45,6 @@ function loadHash() {
 
 function closeMenu() {
 	const menu = document.getElementById("topnav");
-
 }
 
 /**
@@ -61,10 +61,14 @@ function genCode() {
 	var type = location.hash.substring(1);
 
 	// Get the requested text
-	var text = document.getElementById("text").value;
-	if (text == "") {
+	const textInput = document.getElementById("text");
+	let text = textInput.value
+
+	if (text === "") {
 		text = "Try Me!";
 	}
+
+	const isValidCode = textInput.checkValidity()
 
 	// Build URL with type
 	url = url + "/" + type;
@@ -81,7 +85,9 @@ function genCode() {
 	document.getElementById("barcode_image_link").setAttribute("value", url);
 
 	// Update IMG element source
-	document.getElementById("barcode_output").src = url;
+	if(isValidCode) {
+		document.getElementById("barcode_output").src = url;
+	}
 }
 
 function printCode() {
@@ -134,9 +140,6 @@ function copyBarcodeLink() {
 
 	console.log("hmm", copyText.value)
 
-	/* Alert the copied text */
-	// alert("Copied the text: " + copyText.value);
-
 	setTimeout(function(){ copyTextMessage.setAttribute("class", ""); }, 2500);
 }
 
@@ -144,7 +147,6 @@ async function loadBlob(fileName) {
 	const fetched = await fetch(fileName);
 	return await fetched.blob();
 }
-
 
 async function copyImageToClipboard() {
 
@@ -167,7 +169,55 @@ async function copyImageToClipboard() {
 	}
 }
 
-function init() {
+async function getTypes() {
+	// var url = location.origin + "/types/";
+	const url = 'https://barcodeapi.org/types/'
+	const t = await fetch(url).then((response) => {
+		return response.json();
+	})
+	.then((data) => {
+		return data;
+	});
+	return t
+}
+
+function getCode(code, types) {
+
+	console.log('types getcode: ', types)
+	if(code === 'auto') {
+		return null
+	}
+
+	for(let i in types){
+		if(types[i].target === code) {
+			console.log(types[i].target)
+			const selectedType = types[i]
+			return selectedType
+		}
+	}
+}
+
+function showCodeDescription(code) {
+	//console.log(getCode(code))
+}
+
+async function setPattern(hash) {
+	const code = getCode(hash, await types)
+	const textInput = document.getElementById("text")
+	console.log('selected:', hash, 'code:', code)
+	if(code !== null) {
+		textInput.setAttribute("pattern", code.pattern)
+	} else {
+		textInput.setAttribute("pattern", '.*')
+	}
+}
+
+async function init() {
+	types = await getTypes()
+	const hash = location.hash.substring(1);
+	console.log('types:',types)
+	await setPattern(hash)
+
 	// hide copy image button in FF
 	if (sUsrAg.indexOf("Firefox") > -1) {
 		var imageCopyButton = document.getElementById("barcode_image");
