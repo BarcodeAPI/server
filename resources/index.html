@@ -58,17 +58,17 @@
             <h3>CHOOSE YOUR BARCODE TYPE</h3>
             <div class="select-type" id="select-type"><a onclick="toggleOpenBarcodeTypes()">Select Barcode</a></div>
             <div class="barcode-types" id="topnav">
-                <a id="type-auto" onclick="location.hash='auto'; closeMenu()">Auto</a>
-                <a id="type-e" onclick="location.hash='e'; closeMenu()">UPC-E</a>
-                <a id="type-a" onclick="location.hash='a'; closeMenu()">UPC-A</a>
-                <a id="type-8" onclick="location.hash='8'; closeMenu()">EAN-8</a>
-                <a id="type-13" onclick="location.hash='13'; closeMenu()">EAN-13</a>
-                <a id="type-codabar" onclick="location.hash='codabar'; closeMenu()">Codabar</a>
-                <a id="type-39" onclick="location.hash='39'; closeMenu()">Code39</a>
-                <a id="type-128" onclick="location.hash='128'; closeMenu()">Code128</a>
-                <a id="type-qr" onclick="location.hash='qr'; closeMenu()">QR Code</a>
-                <a id="type-dm" onclick="location.hash='dm'; closeMenu()">Data Matrix</a>
-                <a id="type-417" onclick="location.hash='417'; closeMenu()">PDF 417</a>
+                <a id="type-auto" onclick="location.hash='auto'; closeMenu(); setPattern('auto');" onmouseover="showCodeDescription('auto')">Auto</a>
+                <a id="type-e" onclick="location.hash='e'; closeMenu(); setPattern('e');" onmouseover="showCodeDescription('e')">UPC-E</a>
+                <a id="type-a" onclick="location.hash='a'; closeMenu(); setPattern('a');" onmouseover="showCodeDescription('a')">UPC-A</a>
+                <a id="type-8" onclick="location.hash='8'; closeMenu(); setPattern('8');" onmouseover="showCodeDescription('8')">EAN-8</a>
+                <a id="type-13" onclick="location.hash='13'; closeMenu(); setPattern('13');" onmouseover="showCodeDescription('13')">EAN-13</a>
+                <a id="type-codabar" onclick="location.hash='codabar'; closeMenu(); setPattern('codabar');" onmouseover="showCodeDescription('codabar')">Codabar</a>
+                <a id="type-39" onclick="location.hash='39'; closeMenu(); setPattern('39');" onmouseover="showCodeDescription('39')">Code39</a>
+                <a id="type-128" onclick="location.hash='128'; closeMenu(); setPattern('128');" onmouseover="showCodeDescription('128')">Code128</a>
+                <a id="type-qr" onclick="location.hash='qr'; closeMenu(); setPattern('qr');" onmouseover="showCodeDescription('qr')">QR Code</a>
+                <a id="type-dm" onclick="location.hash='dm'; closeMenu(); setPattern('dm');" onmouseover="showCodeDescription('dm')">Data Matrix</a>
+                <a id="type-417" onclick="location.hash='417'; closeMenu(); setPattern('417');" onmouseover="showCodeDescription('417')">PDF 417</a>
             </div>
         </div>
         <div class="display-barcode col-xs-12 col-sm-6">
