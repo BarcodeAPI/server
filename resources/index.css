@@ -60,19 +60,13 @@ h5 a {
 	background: #999;
 }
 
-.share-icon.facebook:hover {
-	background: #3b5998;
-}
-.share-icon.twitter:hover {
-	background: #1da1f2;
-}
-.share-icon.linkedin:hover {
-	background: #0077b5;
-}
 .share-icon.email:hover {
 	background: #ea4335;
 }
 
+.feedback {
+	font-size: 80%;
+}
 
 .header {
 	text-align: center;
