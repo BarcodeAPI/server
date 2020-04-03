@@ -133,7 +133,7 @@ function copyBarcodeLink() {
 
 	/* Select the text field */
 	copyText.select();
-	copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+	copyText.setSelectionRange(0, 99999); /* For mobile devices */
 
 	/* Copy the text inside the text field */
 	document.execCommand("copy");
@@ -170,8 +170,7 @@ async function copyImageToClipboard() {
 }
 
 async function getTypes() {
-	// var url = location.origin + "/types/";
-	const url = 'https://barcodeapi.org/types/'
+	const url = location.origin + "/tyes/";
 	const t = await fetch(url).then((response) => {
 		return response.json();
 	})
@@ -198,7 +197,7 @@ function getCode(code, types) {
 }
 
 function showCodeDescription(code) {
-	//console.log(getCode(code))
+	// console.log(getCode(code))
 }
 
 async function setPattern(hash) {
