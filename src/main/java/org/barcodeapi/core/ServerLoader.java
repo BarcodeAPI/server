@@ -7,7 +7,6 @@ import org.barcodeapi.core.utils.Log;
 import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.CacheHandler;
-import org.barcodeapi.server.api.RedirectHandler;
 import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.StatsHandler;
@@ -129,7 +128,6 @@ public class ServerLoader {
 		// initialize API server
 		server = new Server(serverPort);
 		server.setHandler(handlers);
-		server.setErrorHandler(new RedirectHandler());
 	}
 
 	/**

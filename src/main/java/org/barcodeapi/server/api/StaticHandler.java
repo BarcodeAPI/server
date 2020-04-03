@@ -29,8 +29,18 @@ public class StaticHandler extends RestHandler {
 			throws IOException, ServletException {
 		super.handle(target, baseRequest, request, response);
 
+		String proto = request.getHeader("X-Forwarded-Proto");
+		if (proto != null) {
+			baseRequest.getMetaData().getURI().setScheme(proto);
+		}
+
 		// call through to resources
 		baseRequest.setHandled(false);
 		resources.handle(target, baseRequest, request, response);
+
+		// send non resources to api
+		if (!baseRequest.isHandled()) {
+			response.sendRedirect("/api/auto" + request.getPathInfo());
+		}
 	}
 }
