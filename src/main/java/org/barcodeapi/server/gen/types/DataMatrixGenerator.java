@@ -8,6 +8,7 @@ import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.krysalis.barcode4j.impl.datamatrix.DataMatrixBean;
+import org.krysalis.barcode4j.impl.datamatrix.SymbolShapeHint;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
@@ -28,6 +29,7 @@ public class DataMatrixGenerator extends CodeGenerator {
 		// configure barcode generator
 		generator.setQuietZone(2);
 		generator.doQuietZone(true);
+		generator.setShape(SymbolShapeHint.FORCE_SQUARE);
 		generator.setModuleWidth(UnitConv.in2mm(5.0f / dpi));
 	}
 
