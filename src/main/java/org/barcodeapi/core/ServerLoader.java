@@ -24,7 +24,7 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
  * on startup in addition to the setup of the main Jetty API server and it's
  * associated handlers.
  * 
- * @author Matthew R. Clark, 2019
+ * @author Matthew R. Clark, 2020
  *
  */
 public class ServerLoader {

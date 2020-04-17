@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
+import org.barcodeapi.server.gen.types.AztecGenerator;
 import org.barcodeapi.server.gen.types.CodabarGenerator;
 import org.barcodeapi.server.gen.types.Code128Generator;
 import org.barcodeapi.server.gen.types.Code39Generator;
@@ -36,6 +37,7 @@ public class CodeGenerators {
 		generators.put(CodeType.Code39, new Code39Generator());
 		generators.put(CodeType.Code128, new Code128Generator());
 
+		generators.put(CodeType.Aztec, new AztecGenerator());
 		generators.put(CodeType.QRCode, new QRCodeGenerator());
 		generators.put(CodeType.DataMatrix, new DataMatrixGenerator());
 

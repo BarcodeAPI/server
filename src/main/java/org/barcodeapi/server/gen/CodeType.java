@@ -52,7 +52,7 @@ public enum CodeType {
 	 * Variable length consisting of only numbers and upper-case characters.
 	 */
 	Code39(new String[] { "39", "code-39", "code39" }, //
-			"^[A-Z0-9 $.\\/]{1,16}$", //
+			"^[A-Z0-9 $.\\/]{1,12}$", //
 			"^[A-Z*0-9 -$%.\\/+]+$", //
 			""),
 
@@ -62,7 +62,17 @@ public enum CodeType {
 	 * Variable length consisting of numbers, letters, and symbols.
 	 */
 	Code128(new String[] { "128", "code-128", "code128" }, //
-			"^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,20}$", //
+			"^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$", //
+			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+$", //
+			""),
+
+	/**
+	 * Aztec type barcode.
+	 *
+	 * A square 2d barcode resembling a pyramid.
+	 */
+	Aztec(new String[] { "aztec" }, //
+			"^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+$", //
 			""),
 
