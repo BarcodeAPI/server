@@ -20,7 +20,7 @@ public class AztecGenerator extends CodeGenerator {
 	private AztecWriter codeWriter;
 
 	public AztecGenerator() {
-		super(CodeType.QRCode);
+		super(CodeType.Aztec);
 
 		codeWriter = new AztecWriter();
 	}
