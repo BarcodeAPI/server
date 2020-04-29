@@ -74,6 +74,14 @@ Provided the cached object has not expired and been evicted, a request for a pre
 
 A simple session cache will track all user actions; this can be used to provide the user with a list of their most used barcodes; this information is available at the `/session/` endpoint.
 
+### Multi-Barcode Generation
+
+Some users will want to generate a large number of barcodes with one request - a basic JavaScript utility is provided at `/multi.html` which will generate as many images as requested then prepare the file to be printed.
+
+```
+https://barcodeapi.org/multi.html?Barcode1&Barcode2&dm/A%20Data%20Matrix&qr/And%20QR/Automatic
+```
+
 ## Third-Party
 
 BarcodeAPI.org is only made possible with the use of third-party software.
