@@ -26,13 +26,6 @@ public class AztecGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public String onValidateRequest(String data) {
-
-		return data;
-		// return CodeUtils.parseControlChars(data);
-	}
-
-	@Override
 	public byte[] onRender(String data) throws WriterException, IOException {
 
 		int mWidth = 300;

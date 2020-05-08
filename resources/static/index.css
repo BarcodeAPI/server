@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('IBM Plex Mono'), local('IBMPlexMono'), url(/static/IBM-Plex-Mono.ttf) format('truetype');
+}
+
 body {
 	margin: 0;
 	padding: 0;
@@ -383,3 +391,4 @@ h5 a {
 	display: block;
 	height: 24px;
 }
+

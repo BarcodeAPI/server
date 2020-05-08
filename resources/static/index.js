@@ -2,7 +2,6 @@
  * Call our method when the URL hash changes.
  */
 window.onhashchange = loadHash;
-let types
 
 /**
  * Called each time we should read the hash of the URL.
@@ -62,7 +61,7 @@ function genCode() {
 
 	// Get the requested text
 	const textInput = document.getElementById("text");
-	let text = textInput.value
+	let text = textInput.value;
 
 	if (text === "") {
 		text = "Try Me!";
@@ -126,6 +125,7 @@ function toggleOpenBarcodeTypes() {
 }
 
 function copyBarcodeLink() {
+
 	/* Get the text field */
 	const copyText = document.getElementById("barcode_image_link");
 	const copyTextMessage = document.getElementById("message");
@@ -138,12 +138,11 @@ function copyBarcodeLink() {
 	/* Copy the text inside the text field */
 	document.execCommand("copy");
 
-	console.log("hmm", copyText.value)
-
 	setTimeout(function(){ copyTextMessage.setAttribute("class", ""); }, 2500);
 }
 
 async function loadBlob(fileName) {
+
 	const fetched = await fetch(fileName);
 	return await fetched.blob();
 }
@@ -152,74 +151,74 @@ async function copyImageToClipboard() {
 
 	const url = document.getElementById("barcode_image_link").getAttribute("value");
 
-	if (sUsrAg.indexOf("Firefox") > -1) {
-		console.log("firefox");
-
-	} else {
-
+	if (!sUsrAg.indexOf("Firefox") > -1) {
+		
 		try {
 			const blobInput = await loadBlob(url);
 			const clipboardItemInput = new ClipboardItem({'image/png': blobInput});
 			await navigator.clipboard.write([clipboardItemInput]);
-
-			console.log('Image copied.');
 		} catch (e) {
 			console.log(e);
 		}
 	}
 }
 
-async function getTypes() {
-	const url = location.origin + "/tyes/";
-	const t = await fetch(url).then((response) => {
+var types = getTypes();
+function getTypes() {
+	const url = location.origin + "/types/";
+	const t = fetch(url).then((response) => {
 		return response.json();
 	})
 	.then((data) => {
 		return data;
 	});
-	return t
+	return t;
 }
 
-function getCode(code, types) {
+function getCode(code) {
 
-	console.log('types getcode: ', types)
 	if(code === 'auto') {
-		return null
+		return null;
 	}
 
 	for(let i in types){
 		if(types[i].target === code) {
-			console.log(types[i].target)
-			const selectedType = types[i]
-			return selectedType
+			return types[i];
 		}
 	}
 }
 
 function showCodeDescription(code) {
-	// console.log(getCode(code))
+	 console.log(getCode(code))
 }
 
 async function setPattern(hash) {
-	const code = getCode(hash, await types)
-	const textInput = document.getElementById("text")
-	console.log('selected:', hash, 'code:', code)
+
+	const code = getCode(hash);
+	const textInput = document.getElementById("text");
+	
 	if(code !== null) {
-		textInput.setAttribute("pattern", code.pattern)
+		textInput.setAttribute("pattern", code.pattern);
 	} else {
-		textInput.setAttribute("pattern", '.*')
+		textInput.setAttribute("pattern", '.*');
 	}
 }
 
 async function init() {
-	types = await getTypes()
-	const hash = location.hash.substring(1);
-	console.log('types:',types)
-	await setPattern(hash)
+	types = await getTypes();
+	 hash = location.hash.substring(1);
+	await setPattern(hash);
 
 	// hide copy image button in FF
 	if (sUsrAg.indexOf("Firefox") > -1) {
 		var imageCopyButton = document.getElementById("barcode_image");
 		imageCopyButton.style.display = "none";
 	}
+}
+
+function setType(type) {
+	
+	location.hash   =type;
+	closeMenu();
+	setPattern(type);
 }

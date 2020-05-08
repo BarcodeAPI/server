@@ -1,9 +1,4 @@
 User-agent: *
+Allow: /
 Allow: /index.html
-Allow: /help.html
-Allow: /index.css
-Allow: /index.js
-Allow: /logo.png
-Allow: /ping
-Allow: /robots.txt
-Allow: /api/
+Disallow: /api/
