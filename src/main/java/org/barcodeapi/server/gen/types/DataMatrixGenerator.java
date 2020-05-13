@@ -41,8 +41,8 @@ public class DataMatrixGenerator extends CodeGenerator {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		int dpi = options.optInt("dpi", 200);
-		int quiet = options.optInt("qz", (dpi / 10));
 		double size = options.optDouble("size", 1.5);
+		int quiet = options.optInt("qz", (int) (size * 2));
 
 		BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
 				out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
@@ -52,9 +52,7 @@ public class DataMatrixGenerator extends CodeGenerator {
 		generator.generateBarcode(canvasProvider, data);
 
 		canvasProvider.getBufferedImage();
-
 		canvasProvider.finish();
-
 		out.close();
 
 		return out.toByteArray();
