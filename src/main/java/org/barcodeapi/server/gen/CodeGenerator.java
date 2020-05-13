@@ -5,6 +5,7 @@ import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.statistics.StatsCollector;
+import org.json.JSONObject;
 
 public abstract class CodeGenerator {
 
@@ -36,7 +37,7 @@ public abstract class CodeGenerator {
 	 * @param data
 	 * @return
 	 */
-	public byte[] getCode(String data) throws GenerationException {
+	public byte[] getCode(String data, JSONObject options) throws GenerationException {
 
 		// validate code format
 		if (!data.matches(getType().getFormatPattern())) {
@@ -56,7 +57,7 @@ public abstract class CodeGenerator {
 
 			// start timer and render
 			long timeStart = System.currentTimeMillis();
-			byte[] img = onRender(validated);
+			byte[] img = onRender(validated, options);
 			double time = System.currentTimeMillis() - timeStart;
 
 			// update global and engine counters
@@ -98,5 +99,5 @@ public abstract class CodeGenerator {
 	 * @param data
 	 * @return
 	 */
-	public abstract byte[] onRender(String data) throws Exception;
+	public abstract byte[] onRender(String data, JSONObject options) throws Exception;
 }

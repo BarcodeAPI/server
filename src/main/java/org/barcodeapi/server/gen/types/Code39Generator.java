@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
+import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
@@ -43,7 +44,7 @@ public class Code39Generator extends CodeGenerator {
 	}
 
 	@Override
-	public byte[] onRender(String data) throws IOException {
+	public synchronized byte[] onRender(String data, JSONObject options) throws IOException {
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 

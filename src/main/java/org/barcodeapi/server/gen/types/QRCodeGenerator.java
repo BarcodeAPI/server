@@ -8,6 +8,7 @@ import java.util.Map;
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
+import org.json.JSONObject;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -34,7 +35,7 @@ public class QRCodeGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public byte[] onRender(String data) throws WriterException, IOException {
+	public synchronized byte[] onRender(String data, JSONObject options) throws WriterException, IOException {
 
 		int mWidth = 300;
 		int mHeight = 300;

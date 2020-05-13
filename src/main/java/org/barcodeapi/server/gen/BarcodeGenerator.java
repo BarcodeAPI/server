@@ -11,30 +11,43 @@ import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.core.TypeSelector;
+import org.json.JSONObject;
 
 public class BarcodeGenerator {
+
+	private static final CodeGenerators generators = CodeGenerators.getInstance();
 
 	private BarcodeGenerator() {
 	}
 
 	public static CachedBarcode requestBarcode(String target) throws GenerationException {
 
-		// get the request string
-		String data = target.substring(1, target.length());
-
-		try {
-
-			// decode the data string
-			data = URLDecoder.decode(data, "UTF-8");
-		} catch (UnsupportedEncodingException | IllegalArgumentException e) {
-
-			throw new GenerationException(ExceptionType.INVALID, e);
+		// remove [ /api ]
+		if (target.startsWith("/api")) {
+			target = target.substring(4);
 		}
 
-		// use cache if within threshold
-		boolean useCache = data.length() <= 64;
+		// get and decode the request string
+		String[] parts = target.split("\\?");
+		String data = decode(parts[0].substring(1));
 
-		CodeGenerators generators = CodeGenerators.getInstance();
+		// get and parse options
+		JSONObject options = new JSONObject();
+		if (parts.length == 2) {
+			options = parseOptions(parts[1]);
+		}
+
+		// use cache based on options
+		boolean useCache = true;
+		if (options.length() > 0) {
+			useCache = false;
+		}
+		if (data.length() > 64) {
+			useCache = false;
+		}
+		if (options.optBoolean("no-cache", false)) {
+			useCache = false;
+		}
 
 		// process selected type
 		CodeGenerator generator;
@@ -45,7 +58,7 @@ public class BarcodeGenerator {
 		if (typeIndex > 0) {
 
 			// get the type string
-			String typeString = target.substring(1, typeIndex + 1);
+			String typeString = data.substring(0, typeIndex);
 
 			// type is auto
 			if (typeString.equals("auto")) {
@@ -106,7 +119,7 @@ public class BarcodeGenerator {
 		}
 
 		// render new image and create its cached object
-		barcode = new CachedBarcode(generator.getCode(data));
+		barcode = new CachedBarcode(generator.getCode(data, options));
 		barcode.getProperties().setProperty("type", type.toString());
 		barcode.getProperties().setProperty("data", data);
 		barcode.getProperties().setProperty("nice", stripIllegal(data));
@@ -119,6 +132,33 @@ public class BarcodeGenerator {
 		}
 
 		return barcode;
+	}
+
+	private static JSONObject parseOptions(String opts) {
+
+		JSONObject options = new JSONObject();
+
+		String[] parts = opts.split("&");
+
+		for (String option : parts) {
+
+			String[] kv = option.split("=");
+			options.put(kv[0], kv[1]);
+		}
+
+		return options;
+	}
+
+	public static String decode(String data) throws GenerationException {
+
+		try {
+
+			return URLDecoder.decode(data, "UTF-8");
+
+		} catch (UnsupportedEncodingException | IllegalArgumentException e) {
+
+			throw new GenerationException(ExceptionType.INVALID, e);
+		}
 	}
 
 	private static String encode(String data) {

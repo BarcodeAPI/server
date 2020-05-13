@@ -39,7 +39,7 @@ public class BarcodeAPIHandler extends RestHandler {
 		try {
 
 			// generate user requested barcode
-			barcode = BarcodeGenerator.requestBarcode(target);
+			barcode = BarcodeGenerator.requestBarcode(baseRequest.getOriginalURI());
 
 		} catch (GenerationException e) {
 
