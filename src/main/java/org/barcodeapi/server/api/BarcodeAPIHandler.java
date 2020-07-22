@@ -24,10 +24,10 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		try {
 
-			ERR = BarcodeGenerator.requestBarcode(BarcodeRequest//
-					.fromURI("/128/$$@E$$@R$$@R$$@O$$@R$$@"));
-			BLK = BarcodeGenerator.requestBarcode(BarcodeRequest//
-					.fromURI("/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
+			ERR = BarcodeGenerator.requestBarcode(new BarcodeRequest(//
+					"/128/$$@E$$@R$$@R$$@O$$@R$$@"));
+			BLK = BarcodeGenerator.requestBarcode(new BarcodeRequest(//
+					"/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
 		} catch (GenerationException e) {
 			throw new RuntimeException("init failed");
 		}
@@ -43,7 +43,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// generate user requested barcode
 			String uri = baseRequest.getOriginalURI();
-			BarcodeRequest barcodeRequest = BarcodeRequest.fromURI(uri);
+			BarcodeRequest barcodeRequest = new BarcodeRequest(uri);
 			barcode = BarcodeGenerator.requestBarcode(barcodeRequest);
 
 		} catch (GenerationException e) {

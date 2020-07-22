@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
+import org.json.JSONObject;
 
 public class StringUtils {
 
@@ -35,5 +36,20 @@ public class StringUtils {
 	public static String stripIllegal(String data) {
 
 		return data.replaceAll("[!@#$%^&*\\(\\)\\[\\]\\{\\};:\\',\\<\\>\\\"]", "");
+	}
+
+	public static JSONObject parseOptions(String opts) {
+
+		JSONObject options = new JSONObject();
+
+		String[] parts = opts.split("&");
+
+		for (String option : parts) {
+
+			String[] kv = option.split("=");
+			options.put(kv[0], kv[1]);
+		}
+
+		return options;
 	}
 }
