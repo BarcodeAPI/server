@@ -4,8 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
-import org.barcodeapi.core.utils.Log;
-import org.barcodeapi.core.utils.Log.LOG;
+import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.statistics.StatsCollector;
 
 public class ObjectCache {

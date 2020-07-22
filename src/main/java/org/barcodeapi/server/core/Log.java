@@ -1,4 +1,4 @@
-package org.barcodeapi.core.utils;
+package org.barcodeapi.server.core;
 
 import java.io.File;
 import java.io.FileWriter;

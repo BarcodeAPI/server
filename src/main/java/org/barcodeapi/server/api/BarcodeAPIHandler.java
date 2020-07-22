@@ -6,12 +6,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.core.utils.Log;
-import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.GenerationException;
+import org.barcodeapi.server.core.Log;
+import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.gen.BarcodeGenerator;
+import org.barcodeapi.server.gen.BarcodeRequest;
 import org.eclipse.jetty.server.Request;
 
 public class BarcodeAPIHandler extends RestHandler {
@@ -23,8 +24,10 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		try {
 
-			ERR = BarcodeGenerator.requestBarcode("/128/$$@E$$@R$$@R$$@O$$@R$$@");
-			BLK = BarcodeGenerator.requestBarcode("/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@");
+			ERR = BarcodeGenerator.requestBarcode(BarcodeRequest//
+					.fromURI("/128/$$@E$$@R$$@R$$@O$$@R$$@"));
+			BLK = BarcodeGenerator.requestBarcode(BarcodeRequest//
+					.fromURI("/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
 		} catch (GenerationException e) {
 			throw new RuntimeException("init failed");
 		}
@@ -39,7 +42,9 @@ public class BarcodeAPIHandler extends RestHandler {
 		try {
 
 			// generate user requested barcode
-			barcode = BarcodeGenerator.requestBarcode(baseRequest.getOriginalURI());
+			String uri = baseRequest.getOriginalURI();
+			BarcodeRequest barcodeRequest = BarcodeRequest.fromURI(uri);
+			barcode = BarcodeGenerator.requestBarcode(barcodeRequest);
 
 		} catch (GenerationException e) {
 

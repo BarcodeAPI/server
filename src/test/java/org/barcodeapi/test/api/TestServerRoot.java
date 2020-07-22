@@ -32,7 +32,7 @@ public class TestServerRoot extends ServerTestBase {
 	@Test
 	public void testServer_StaticImage() {
 
-		serverGet("/logo.png");
+		serverGet("/img/barcodeapi-logo.svg");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());

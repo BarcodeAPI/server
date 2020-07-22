@@ -3,14 +3,15 @@ package org.barcodeapi.core;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
-import org.barcodeapi.core.utils.Log;
-import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
+import org.barcodeapi.server.api.BulkHandler;
 import org.barcodeapi.server.api.CacheHandler;
 import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.StatsHandler;
 import org.barcodeapi.server.api.TypesHandler;
+import org.barcodeapi.server.core.Log;
+import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.tasks.BarcodeCleanupTask;
 import org.barcodeapi.server.tasks.SessionCleanupTask;
 import org.barcodeapi.server.tasks.StatsDumpTask;
@@ -71,6 +72,8 @@ public class ServerLoader {
 		initCacheHandler();
 
 		initTypesHandler();
+
+		initBulkHandler();
 
 		initApiHandler();
 
@@ -180,6 +183,19 @@ public class ServerLoader {
 		typesHandler.setHandler(new TypesHandler());
 		typesHandler.setContextPath("/types");
 		handlers.addHandler(typesHandler);
+	}
+
+	/**
+	 * Initialize the bulk-download end-point.
+	 */
+	private void initBulkHandler() {
+
+		// setup statistics handler
+		Log.out(LOG.SERVER, "Initializing handler: /bulk");
+		ContextHandler bulkHandler = new ContextHandler();
+		bulkHandler.setHandler(new BulkHandler());
+		bulkHandler.setContextPath("/bulk");
+		handlers.addHandler(bulkHandler);
 	}
 
 	/**

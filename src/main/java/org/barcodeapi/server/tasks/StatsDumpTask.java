@@ -1,8 +1,8 @@
 package org.barcodeapi.server.tasks;
 
-import org.barcodeapi.core.utils.Log;
-import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.core.BackgroundTask;
+import org.barcodeapi.server.core.Log;
+import org.barcodeapi.server.core.Log.LOG;
 
 public class StatsDumpTask extends BackgroundTask {
 

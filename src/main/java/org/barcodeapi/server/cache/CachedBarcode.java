@@ -26,7 +26,7 @@ public class CachedBarcode extends CachedObject {
 		return cachedData;
 	}
 
-	public long getDataSize() {
+	public int getDataSize() {
 
 		return cachedData == null ? 0 : cachedData.length;
 	}

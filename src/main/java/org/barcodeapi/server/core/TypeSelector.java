@@ -5,12 +5,43 @@ import org.barcodeapi.server.gen.CodeType;
 public class TypeSelector {
 
 	/**
+	 * Get a CodeType object by any of its associated string IDs.
+	 * 
+	 * Will return null if none are found.
+	 * 
+	 * @param codeType
+	 * @return
+	 */
+	public static CodeType getTypeFromString(String codeType) {
+
+		// Convert to lower case
+		codeType = codeType.toLowerCase();
+
+		// Loop all known types
+		for (CodeType type : CodeType.values()) {
+
+			// Loop each defined type string
+			for (String typeString : type.getTypeStrings()) {
+
+				// Return on match
+				if (codeType.equals(typeString)) {
+
+					return type;
+				}
+			}
+		}
+
+		// Return no matches
+		return null;
+	}
+
+	/**
 	 * Returns a CodeType object best suited for the given data string.
 	 * 
 	 * @param data
 	 * @return
 	 */
-	public static CodeType getType(String data) {
+	public static CodeType getTypeFromData(String data) {
 
 		// Match UPC-E format
 		if (data.matches(CodeType.UPC_E.getAutomatchPattern())) {

@@ -1,9 +1,9 @@
 package org.barcodeapi.server.gen;
 
-import org.barcodeapi.core.utils.Log;
-import org.barcodeapi.core.utils.Log.LOG;
 import org.barcodeapi.server.core.GenerationException;
+import org.barcodeapi.server.core.Log;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
+import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.json.JSONObject;
 

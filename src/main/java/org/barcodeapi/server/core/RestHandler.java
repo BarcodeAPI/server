@@ -8,8 +8,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.core.utils.Log;
-import org.barcodeapi.core.utils.Log.LOG;
+import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.session.CachedSession;
 import org.barcodeapi.server.session.SessionCache;
 import org.barcodeapi.server.statistics.StatsCollector;

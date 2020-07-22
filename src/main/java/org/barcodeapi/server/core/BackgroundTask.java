@@ -2,8 +2,7 @@ package org.barcodeapi.server.core;
 
 import java.util.TimerTask;
 
-import org.barcodeapi.core.utils.Log;
-import org.barcodeapi.core.utils.Log.LOG;
+import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.statistics.StatsCollector;
 
 public abstract class BackgroundTask extends TimerTask {

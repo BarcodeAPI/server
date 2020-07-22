@@ -44,37 +44,6 @@ public class CodeGenerators {
 		generators.put(CodeType.PDF417, new PDF417Generator());
 	}
 
-	/**
-	 * Get a CodeType object by any of its associated string IDs.
-	 * 
-	 * Will return null if none are found.
-	 * 
-	 * @param codeType
-	 * @return
-	 */
-	public CodeGenerator getGenerator(String codeType) {
-
-		// Convert to lower case
-		codeType = codeType.toLowerCase();
-
-		// Loop all known types
-		for (CodeType type : generators.keySet()) {
-
-			// Loop each defined type string
-			for (String typeString : type.getTypeStrings()) {
-
-				// Return on match
-				if (codeType.equals(typeString)) {
-
-					return getGenerator(type);
-				}
-			}
-		}
-
-		// Return no matches
-		return null;
-	}
-
 	public CodeGenerator getGenerator(CodeType codeType) {
 
 		return generators.get(codeType);
