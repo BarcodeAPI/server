@@ -39,6 +39,9 @@ public class ServerLoader {
 	// Whether static resources should be served.
 	private boolean serverStatic = true;
 
+	// Report usage statistics by default
+	private boolean telemetry = true;
+
 	// The instance of the running Jetty server and it's handlers.
 	private Server server;
 	private HandlerCollection handlers;
@@ -108,6 +111,10 @@ public class ServerLoader {
 
 			case "--no-web":
 				serverStatic = false;
+				break;
+
+			case "--no-telemetry":
+				telemetry = false;
 				break;
 
 			default:
@@ -239,7 +246,7 @@ public class ServerLoader {
 				TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES));
 
 		// print stats to log every 5 minutes
-		StatsDumpTask statsTask = new StatsDumpTask();
+		StatsDumpTask statsTask = new StatsDumpTask(telemetry);
 		timer.schedule(statsTask, 0, //
 				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
 
