@@ -1,9 +1,8 @@
 package org.barcodeapi.server.tasks;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.Log;
@@ -37,15 +36,21 @@ public class StatsDumpTask extends BackgroundTask {
 
 		try {
 
-			// upload metrics to server
-			Log.out(LOG.SERVER, "Uploading telemetry data...");
-			HttpRequest request = HttpRequest.newBuilder()//
-					.POST(HttpRequest.BodyPublishers.ofString(data))//
-					.uri(URI.create(_TELEMETRY_URL))//
-					.build();
+			// create http client
+			URL url = new URL(_TELEMETRY_URL);
+			URLConnection con = url.openConnection();
+			HttpURLConnection http = (HttpURLConnection) con;
 
-			HttpClient.newHttpClient()//
-					.send(request, HttpResponse.BodyHandlers.ofString());
+			// set request options
+			http.setDoOutput(true);
+			http.setRequestMethod("POST");
+			http.setFixedLengthStreamingMode(data.length());
+			http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+			// connect and write
+			http.connect();
+			http.getOutputStream().write(data.getBytes());
+			http.disconnect();
 
 		} catch (Exception e) {
 
