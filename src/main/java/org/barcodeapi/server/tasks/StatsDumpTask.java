@@ -23,38 +23,37 @@ public class StatsDumpTask extends BackgroundTask {
 	@Override
 	public void onRun() {
 
-		// get metric data
+		// get and print metric data
 		String data = getStats().dumpJSON().toString();
-
-		// print to the log
 		Log.out(LOG.SERVER, "STATS : " + data);
 
-		// skip if not enabled
-		if (!telemetry) {
-			return;
-		}
+		// upload metrics if enabled
+		if (telemetry) {
 
-		try {
+			Log.out(LOG.SERVER, "Uploading metrics.");
 
-			// create http client
-			URL url = new URL(_TELEMETRY_URL);
-			URLConnection con = url.openConnection();
-			HttpURLConnection http = (HttpURLConnection) con;
+			try {
 
-			// set request options
-			http.setDoOutput(true);
-			http.setRequestMethod("POST");
-			http.setFixedLengthStreamingMode(data.length());
-			http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+				// create http client
+				URL url = new URL(_TELEMETRY_URL);
+				URLConnection con = url.openConnection();
+				HttpURLConnection http = (HttpURLConnection) con;
 
-			// connect and write
-			http.connect();
-			http.getOutputStream().write(data.getBytes());
-			http.disconnect();
+				// set request options
+				http.setDoOutput(true);
+				http.setRequestMethod("POST");
+				http.setFixedLengthStreamingMode(data.length());
+				http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
-		} catch (Exception e) {
+				// connect and write
+				http.connect();
+				http.getOutputStream().write(data.getBytes());
+				http.getResponseCode();
 
-			Log.out(LOG.SERVER, "Failed to upload telemetry data: " + e.getLocalizedMessage());
+			} catch (Exception e) {
+
+				Log.out(LOG.SERVER, "Failed to upload metrics: " + e.getLocalizedMessage());
+			}
 		}
 	}
 }

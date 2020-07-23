@@ -8,16 +8,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.core.RestHandler;
 import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 
 public class StaticHandler extends RestHandler {
 
 	private ResourceHandler resources;
 
-	public StaticHandler() throws Exception {
+	public StaticHandler(Server server) throws Exception {
 		super();
 
 		resources = new ResourceHandler();
+		resources.setServer(server);
 		resources.setResourceBase("resources");
 		resources.setRedirectWelcome(true);
 		resources.setWelcomeFiles(new String[] { "index.html" });

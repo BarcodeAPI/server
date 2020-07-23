@@ -230,7 +230,7 @@ public class ServerLoader {
 		// Instantiate the static resource handler and add it to the collection
 		Log.out(LOG.SERVER, "Initializing static resource handler");
 		ContextHandler apiHandler = new ContextHandler();
-		apiHandler.setHandler(new StaticHandler());
+		apiHandler.setHandler(new StaticHandler(server));
 		apiHandler.setContextPath("/");
 		handlers.addHandler(apiHandler);
 	}
