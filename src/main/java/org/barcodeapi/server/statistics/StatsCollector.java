@@ -1,11 +1,14 @@
 package org.barcodeapi.server.statistics;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.json.JSONObject;;
 
 public class StatsCollector {
+
+	private static final String _RUNTIME_ID = UUID.randomUUID().toString();
 
 	private static StatsCollector statsCollector;
 
@@ -49,7 +52,9 @@ public class StatsCollector {
 
 	public JSONObject dumpJSON() {
 
-		JSONObject output = new JSONObject();
+		JSONObject output = new JSONObject()//
+				.put("runtimeId", _RUNTIME_ID);
+
 		for (Map.Entry<String, Double> entry : hitCounters.entrySet()) {
 			output.put(entry.getKey(), entry.getValue());
 		}
