@@ -1,3 +1,5 @@
+const sUsrAg = navigator.userAgent;
+
 /**
  * Call our method when the URL hash changes.
  */
@@ -5,27 +7,7 @@ window.onhashchange = loadHash;
 
 /**
  * Called each time we should read the hash of the URL.
- * 
- * @returns
  */
-const sUsrAg = navigator.userAgent;
-
-function checkIfFileSelected() {
-
-    var submitButton = document.getElementById("generate-bc");
-
-    document.getElementById('csvFile').addEventListener('change', function () {
-    if(this.value.length > 0) {
-        console.log("file selected");
-        submitButton.removeAttribute("disabled");
-       } else {
-            console.log("no file");
-            submitButton.addAttribute("disabled");
-        }
-     });
-}
-
-
 function loadHash() {
 
 	// Get current hash ( minus # )
@@ -181,6 +163,7 @@ async function copyImageToClipboard() {
 
 var types = getTypes();
 function getTypes() {
+
 	const url = location.origin + "/types/";
 	const t = fetch(url).then((response) => {
 		return response.json();
@@ -205,6 +188,7 @@ function getCode(code) {
 }
 
 function showCodeDescription(code) {
+
 	 console.log(getCode(code))
 }
 
@@ -212,7 +196,7 @@ async function setPattern(hash) {
 
 	const code = getCode(hash);
 	const textInput = document.getElementById("text");
-	
+
 	if(code !== null) {
 		textInput.setAttribute("pattern", code.pattern);
 	} else {
@@ -221,8 +205,9 @@ async function setPattern(hash) {
 }
 
 async function init() {
+
 	types = await getTypes();
-	 hash = location.hash.substring(1);
+	hash = location.hash.substring(1);
 	await setPattern(hash);
 
 	// hide copy image button in FF
@@ -233,8 +218,23 @@ async function init() {
 }
 
 function setType(type) {
-	
-	location.hash   =type;
+
+	location.hash =type;
 	closeMenu();
 	setPattern(type);
+}
+
+function checkIfFileSelected() {
+
+	var submitButton = document.getElementById("generate-bc");
+
+	document.getElementById('csvFile').addEventListener('change', function () {
+		if(this.value.length > 0) {
+			console.log("file selected");
+			submitButton.removeAttribute("disabled");
+		} else {
+			console.log("no file");
+			submitButton.addAttribute("disabled");
+		}
+	});
 }

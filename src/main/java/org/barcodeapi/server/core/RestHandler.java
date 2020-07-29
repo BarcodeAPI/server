@@ -97,7 +97,7 @@ public class RestHandler extends AbstractHandler {
 		// user session info
 		CachedSession session = getSession(request);
 		session.hit(baseRequest.getOriginalURI().toString());
-		response.addHeader("Set-Cookie", "session=" + session.getKey() + ";");
+		response.addCookie(session.getCookie());
 	}
 
 	protected void addCORS(HttpServletRequest request, HttpServletResponse response) {

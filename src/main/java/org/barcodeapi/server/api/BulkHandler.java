@@ -26,14 +26,14 @@ public class BulkHandler extends RestHandler {
 		super.handle(target, baseRequest, request, response);
 
 		// Setup accept multi-part
-		request.setAttribute(Request.__MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
+		request.setAttribute(Request.MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
 		if (!request.getContentType().startsWith("multipart/")) {
 			return;
 		}
 
 		// Response headers for file download
 		response.setHeader("Content-Type", "application/zip");
-		response.setHeader("Content-Disposition", "filename=bulk.zip");
+		response.setHeader("Content-Disposition", "filename=barcodes.zip");
 
 		try {
 
@@ -41,7 +41,7 @@ public class BulkHandler extends RestHandler {
 			Part part = request.getPart("csvFile");
 
 			// Pass input and output streams to bulk helper
-			BulkUtils.getZippedBarcodes(100, //
+			BulkUtils.getZippedBarcodes(250, //
 					part.getInputStream(), response.getOutputStream());
 
 		} catch (GenerationException e) {
