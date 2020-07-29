@@ -235,6 +235,10 @@ button[disabled] {
     margin-bottom: 1rem;
 }
 
+.bulk-barcodes p.small {
+    font-size: 11px;
+}
+
 .bulk-barcodes h2 img {
     position: relative;
     top: 3px;
@@ -358,7 +362,7 @@ button[disabled] {
 
 .text-file-table {
     margin-top: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
 }
 
 .text-file-table .heading-text div {
