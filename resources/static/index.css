@@ -43,6 +43,10 @@ h5 a {
 	font-weight: 600;
 }
 
+h3, h4 {
+    text-transform: uppercase;
+}
+
 .share-icon, .barcode-icon {
 	width: 36px;
 	height: 36px;
@@ -267,21 +271,30 @@ button[disabled] {
     max-width: 640px;
     margin-bottom: 4rem;
 }
+.text-link {
+    font-size: 14px;
+}
 
-.text-link img {
-    padding-left: 6px;
-    width: 14px;
-    height: 14px;
+.text-link:hover img.icon-last {
+    padding-left: 8px;
+}
+
+.text-link img.icon-last {
+    padding-left: 4px;
+    width: 12px;
+    height: 12px;
     position: relative;
     top: 2px;
+    transition: all 0.2s ease-in-out;
 }
 
 .text-link img.icon-first {
     padding-left: 0;
     padding-right: 6px;
-    height: 16px;
-    width: 16px;
+    height: 14px;
+    width: 14px;
     top: 3px;
+    position: relative;
 }
 
 .select-type {
