@@ -43,6 +43,10 @@ h5 a {
 	font-weight: 600;
 }
 
+h3, h4 {
+    text-transform: uppercase;
+}
+
 .share-icon, .barcode-icon {
 	width: 36px;
 	height: 36px;
@@ -154,7 +158,8 @@ h5 a {
 	color: #CC0000;
 }
 
-.barcode-text-input-clear {
+.barcode-text-input-clear, .button, .button-green {
+    font-family: 'IBM Plex Mono';
 	width: 100%;
 	border-radius: 1.5rem;
 	background: #222;
@@ -168,6 +173,76 @@ h5 a {
 	font-weight: 600;
 	cursor: pointer;
 	transition: background-color 0.2s ease-in-out;
+	margin-bottom: 1rem;
+}
+
+.button:hover {
+	background: #2e7bca;
+}
+
+.button-green:hover {
+	background: #27a46a;
+}
+
+button:disabled,
+button[disabled] {
+    background: #999;
+    pointer-events: none;
+}
+
+
+[type="file"] {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  white-space: nowrap;
+  width: 1px;
+}
+
+[type="file"] + label {
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'IBM Plex Mono';
+  outline: none;
+  color: #FFF;
+  width: 100%;
+  background: #222;
+  padding: 1rem;
+  border-radius: 1.5rem;
+  text-align: center;
+  background: #222;
+  font-size: 13px;
+  color: #FFF;
+  font-weight: 600;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease-in-out;
+  margin-bottom: 1rem;
+}
+
+[type="file"]:focus + label,
+[type="file"] + label:hover {
+    background: #2e7bca;
+}
+
+[type="file"]:focus + label {
+  outline: 1px dotted #2e7bca;
+}
+
+.bulk-barcodes p {
+    margin-bottom: 1rem;
+}
+
+.bulk-barcodes p.small {
+    font-size: 11px;
+}
+
+.bulk-barcodes h2 img {
+    position: relative;
+    top: 3px;
+    padding-right: 10px;
 }
 
 .barcode-text-input-clear:hover {
@@ -197,6 +272,47 @@ h5 a {
 .docs-icon img {
 	position: relative;
 	top:3px;
+}
+
+.bulk-upload {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.bulk-barcodes {
+    max-width: 640px;
+    margin-bottom: 4rem;
+}
+
+.bulk-barcodes p {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.text-link {
+    font-size: 14px;
+}
+
+.text-link:hover img.icon-last {
+    padding-left: 8px;
+}
+
+.text-link img.icon-last {
+    padding-left: 4px;
+    width: 12px;
+    height: 12px;
+    position: relative;
+    top: 2px;
+    transition: all 0.2s ease-in-out;
+}
+
+.text-link img.icon-first {
+    padding-left: 0;
+    padding-right: 6px;
+    height: 14px;
+    width: 14px;
+    top: 3px;
+    position: relative;
 }
 
 .select-type {
@@ -244,6 +360,28 @@ h5 a {
 	display: block;
 }
 
+.text-file-table {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.text-file-table .heading-text div {
+    padding: 0.25rem;
+    color: #222;
+    background: #EEE;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.text-file-table .attribute div {
+    padding: 0.25rem;
+    background: #FFF;
+    color: #222;
+    text-align: center;
+    font-size: 12px;
+}
+
 @media only screen and (max-width: 600px) {
 	.barcode-types a {
 		width: calc(50% - 30px);
@@ -262,6 +400,17 @@ h5 a {
 	.choose-barcode-type {
 		margin-bottom: 1rem;
 	}
+	.text-file-table .attribute div.optional,
+    .text-file-table .heading-text div.optional {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    .bulk-upload-form .col-xs-6 {
+        flex-basis: 100%;
+        max-width: 90%;
+    }
 }
 
 /* between sm and xs */
@@ -271,6 +420,11 @@ h5 a {
 		margin: 0;
 		padding: 1rem 0;
 	}
+    .text-file-table .attribute div.default,
+    .text-file-table .heading-text div.default {
+        flex-basis: 25%;
+        max-width: 25%;
+    }
 }
 
 /* equal to sm breakpoint */

@@ -10,6 +10,22 @@ window.onhashchange = loadHash;
  */
 const sUsrAg = navigator.userAgent;
 
+function checkIfFileSelected() {
+
+    var submitButton = document.getElementById("generate-bc");
+
+    document.getElementById('csvFile').addEventListener('change', function () {
+    if(this.value.length > 0) {
+        console.log("file selected");
+        submitButton.removeAttribute("disabled");
+       } else {
+            console.log("no file");
+            submitButton.addAttribute("disabled");
+        }
+     });
+}
+
+
 function loadHash() {
 
 	// Get current hash ( minus # )
