@@ -1,14 +1,109 @@
+
+
+
+
 <html>
 <head>
-<title>Bulk-Barcode Generation</title>
+	<title>BarcodeAPI.org Bulk Barcode Generator</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<meta name="keywords"
+		  content="barcode, barcode app, barcode generator, barcode api, qr code, qr code generator, code 128, code128, ean8, eac-8, ean13, ean-13, codabar, download barcode, barcodes, pdf, pdf 417">
+	<meta name="description"
+		  content="Generate barcodes of nearly any type, scan it in the web browser, or download the generated images for free.">
+
+	<link rel="icon" type="image/png" href="/static/favicon.png" />
+
+	<script src="/static/index.js"></script>
+
+	<link rel="stylesheet" type="text/css"
+		  href="/static/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/index.css" />
 </head>
-<body>
-	CSV Uploader
-	<br />
-	<form method="post" action="bulk/" enctype="multipart/form-data">
-		<input type="file" name="csvFile" id="csvFile" />
-		<br />
-		<input type="submit">
-	</form>
+
+<body onload="loadHash(); init();">
+<div class="wrap container-fluid">
+
+	<div class="header row middle-xs between-xs">
+		<div class="col-xs-12 col-sm-3">
+			<div class="logo">
+				<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo"
+					 aria-label="Logo">
+			</div>
+		</div>
+		<div class="header-share">
+			<div class="row end-xs middle-xs">
+				<div class="col-xs">
+					<h4>
+						GOT FEEDBACK?
+						<br />
+						<span class="feedback">feedback@barcodeapi.org</span>
+					</h4>
+				</div>
+				<div class="share-icon email">
+					<a
+							href="mailto:feedback@barcodeapi.org?body=I%20love%20the%20new%20UI%21&amp;subject=Feedback%20about%20BarcodeAPI"
+							target="_blank">
+						<img src="/img/email.svg" alt="Share via Email"
+							 aria-label="Share Icon">
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row center-xs middle-xs">
+		<div class="display-barcode col-xs-12 bulk-barcodes">
+			<div id="frame">
+				<div class="row center-xs middle-xs">
+					<div class="col-xs-12">
+						<h2><img src="/img/barcode.svg" height="20" class="icon-first"/>Bulk Barcode Generator</h2>
+						<p>Document containing barcode details should be in CSV format.</p>
+					</div>
+					<div class="col-xs-12 bulk-upload-form">
+						<form method="post" action="bulk/" enctype="multipart/form-data">
+							<div class="row center-xs middle-xs">
+								<div class="col-xs-6">
+									<input type="file" name="csvFile" class="file-input" onclick="checkIfFileSelected()" id="csvFile"> <!--Choose File</input>-->
+								</div>
+								<div class="col-xs-6">
+									<button class="button-green" type="submit" id="generate-bc" disabled>Generate Barcodes</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- footer -->
+	<div class="footer row middle-xs top-sm between-xs">
+		<div class="col-xs-12 col-sm-8">
+			<h5>
+				Free, Open Source,
+				<a href="https://git.mclarkdev.com/BarcodeAPI.org/server"
+				   target="_blank">BarcodeAPI.org</a>
+			</h5>
+			<p>Generate barcodes of nearly any type, scan it in the web
+				browser, or download the generated images for free. BarcodeAPI.org
+				is an open source barcode server capable of generating a wide range
+				of barcodes over a RESTful HTTP server. <a href="/licenses.html">licenses</a></p>
+		</div>
+		<div class="col-xs-12 col-sm-4">
+			<div class="docs-link row start-xs end-sm">
+				<a
+						href="https://git.mclarkdev.com/BarcodeAPI.org/server/src/master/README.md"
+						target="_blank" class="col-xs">
+					<span class="docs-icon"><img src="/img/docs.svg"></span> <span>Read
+							the API Docs</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 </html>
+
