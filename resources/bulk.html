@@ -9,7 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<meta name="keywords"
-		  content="barcode, barcode app, barcode generator, barcode api, qr code, qr code generator, code 128, code128, ean8, eac-8, ean13, ean-13, codabar, download barcode, barcodes, pdf, pdf 417">
+		  content="barcode, barcode app, bulk barcode generator, barcode generator, barcode api, qr code, qr code generator, code 128, code128, ean8, eac-8, ean13, ean-13, codabar, download barcode, barcodes, pdf, pdf 417">
 	<meta name="description"
 		  content="Generate barcodes of nearly any type, scan it in the web browser, or download the generated images for free.">
 
@@ -59,13 +59,28 @@
 				<div class="row center-xs middle-xs">
 					<div class="col-xs-12">
 						<h2><img src="/img/barcode.svg" height="20" class="icon-first"/>Bulk Barcode Generator</h2>
-						<p>Document containing barcode details should be in CSV format.</p>
+						<p>Document containing barcode details should be in CSV format. Column 1 is the text of the barcode, optional Column 2 is the barcode type (see below for example). Extra fields are optional. For more information <a href="https://git.mclarkdev.com/BarcodeAPI.org/server/src/master/README.md" target="_blank">click here</a>.</p>
+						<div class="text-file-table">
+							<div class="row center-xs middle-xs heading-text">
+								<div class="col-xs-6 default">Text</div>
+								<div class="col-xs-6 default">Type</div>
+								<div class="col-xs-3 optional">Size*</div>
+								<div class="col-xs-3 optional">DPI*</div>
+							</div>
+							<div class="row center-xs middle-xs attribute">
+								<div class="col-xs-6 default">01234567890</div>
+								<div class="col-xs-6 default">UPC-A</div>
+								<div class="col-xs-3 optional">1</div>
+								<div class="col-xs-3 optional">300</div>
+							</div>
+						</div>
 					</div>
 					<div class="col-xs-12 bulk-upload-form">
 						<form method="post" action="bulk/" enctype="multipart/form-data">
 							<div class="row center-xs middle-xs">
 								<div class="col-xs-6">
 									<input type="file" name="csvFile" class="file-input" onclick="checkIfFileSelected()" id="csvFile"> <!--Choose File</input>-->
+									<label for="csvFile" />Choose a file</label>
 								</div>
 								<div class="col-xs-6">
 									<button class="button-green" type="submit" id="generate-bc" disabled>Generate Barcodes</button>

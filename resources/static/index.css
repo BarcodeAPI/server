@@ -159,6 +159,7 @@ h3, h4 {
 }
 
 .barcode-text-input-clear, .button, .button-green {
+    font-family: 'IBM Plex Mono';
 	width: 100%;
 	border-radius: 1.5rem;
 	background: #222;
@@ -172,6 +173,7 @@ h3, h4 {
 	font-weight: 600;
 	cursor: pointer;
 	transition: background-color 0.2s ease-in-out;
+	margin-bottom: 1rem;
 }
 
 .button:hover {
@@ -188,43 +190,49 @@ button[disabled] {
     pointer-events: none;
 }
 
-.file-input {
-    outline: none;
-    color: #FFF;
-    width: 100%;
-    border-radius: 1.5rem;
-    margin: 0 auto;
-    padding: 0;
-    text-align: center;
-}
-.file-input::-webkit-file-upload-button {
-  visibility: hidden;
-  width: 0;
+
+[type="file"] {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  white-space: nowrap;
+  width: 1px;
 }
 
-.file-input::before {
-  content: 'Select a CSV file';
+[type="file"] + label {
+  cursor: pointer;
   display: inline-block;
-  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  font-family: 'IBM Plex Mono';
+  outline: none;
+  color: #FFF;
   width: 100%;
   background: #222;
-  padding: 1rem 0;
+  padding: 1rem;
+  border-radius: 1.5rem;
   text-align: center;
-  transition: background-color 0.2s ease-in-out;
-  outline: none;
-  white-space: nowrap;
-  -webkit-user-select: none;
-  cursor: pointer;
+  background: #222;
   font-size: 13px;
   color: #FFF;
   font-weight: 600;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease-in-out;
+  margin-bottom: 1rem;
 }
-.file-input:hover::before {
-  background: #2e7bca;
+
+[type="file"]:focus + label,
+[type="file"] + label:hover {
+    background: #2e7bca;
+}
+
+[type="file"]:focus + label {
+  outline: 1px dotted #2e7bca;
 }
 
 .bulk-barcodes p {
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
 }
 
 .bulk-barcodes h2 img {
@@ -267,10 +275,16 @@ button[disabled] {
     margin-bottom: 2rem;
 }
 
-.bulk-upload-form {
+.bulk-barcodes {
     max-width: 640px;
     margin-bottom: 4rem;
 }
+
+.bulk-barcodes p {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
 .text-link {
     font-size: 14px;
 }
@@ -342,6 +356,28 @@ button[disabled] {
 	display: block;
 }
 
+.text-file-table {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.text-file-table .heading-text div {
+    padding: 0.25rem;
+    color: #222;
+    background: #EEE;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.text-file-table .attribute div {
+    padding: 0.25rem;
+    background: #FFF;
+    color: #222;
+    text-align: center;
+    font-size: 12px;
+}
+
 @media only screen and (max-width: 600px) {
 	.barcode-types a {
 		width: calc(50% - 30px);
@@ -360,6 +396,17 @@ button[disabled] {
 	.choose-barcode-type {
 		margin-bottom: 1rem;
 	}
+	.text-file-table .attribute div.optional,
+    .text-file-table .heading-text div.optional {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    .bulk-upload-form .col-xs-6 {
+        flex-basis: 100%;
+        max-width: 90%;
+    }
 }
 
 /* between sm and xs */
@@ -369,6 +416,11 @@ button[disabled] {
 		margin: 0;
 		padding: 1rem 0;
 	}
+    .text-file-table .attribute div.default,
+    .text-file-table .heading-text div.default {
+        flex-basis: 25%;
+        max-width: 25%;
+    }
 }
 
 /* equal to sm breakpoint */
