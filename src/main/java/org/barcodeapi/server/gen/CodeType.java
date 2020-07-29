@@ -8,7 +8,8 @@ public enum CodeType {
 	UPC_E(new String[] { "e", "upc-e", "upce" }, //
 			"^(?=.*0)[0-9]{8}$", //
 			"^(?=.*0)[0-9]{7,8}$", //
-			""),
+			"01023459", //
+			"A compact version of UPC-A which removes unneeded '0's."),
 
 	/**
 	 * UPC-A type UPC code;
@@ -16,7 +17,8 @@ public enum CodeType {
 	UPC_A(new String[] { "a", "upc-a", "upca", "upc" }, //
 			"^(?=.*0)[0-9]{12}$", //
 			"^(?=.*0)[0-9]{11,12}$", //
-			""),
+			"123456789012", //
+			"Used as a product identifier in many countries, the 12 digit barcode allows information about manufacturer, product, variant, and additional store use codes."),
 
 	/**
 	 * EAN-8 type UPC code;
@@ -26,6 +28,7 @@ public enum CodeType {
 	EAN8(new String[] { "8", "ean-8", "ean8" }, //
 			"^[0-9]{8}$", //
 			"^[0-9]{7,8}$", //
+			"01023459", //
 			""),
 
 	/**
@@ -36,6 +39,7 @@ public enum CodeType {
 	EAN13(new String[] { "13", "ean-13", "ean13" }, //
 			"^[0-9]{13}$", //
 			"^[0-9]{12,13}$", //
+			"1234567890128", //
 			""),
 
 	/**
@@ -44,6 +48,7 @@ public enum CodeType {
 	CODABAR(new String[] { "codabar" }, //
 			"^[0-9:$]{4,12}$", //
 			"^[0-9-:$\\/.+]+$", //
+			"1234567890", //
 			""),
 
 	/**
@@ -54,6 +59,7 @@ public enum CodeType {
 	Code39(new String[] { "39", "code-39", "code39" }, //
 			"^[A-Z0-9 $.\\/]{1,12}$", //
 			"^[A-Z*0-9 -$%.\\/+]+$", //
+			"TRY 39 ME", //
 			""),
 
 	/**
@@ -64,6 +70,7 @@ public enum CodeType {
 	Code128(new String[] { "128", "code-128", "code128" }, //
 			"^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+$", //
+			"Try Me!", //
 			""),
 
 	/**
@@ -74,6 +81,7 @@ public enum CodeType {
 	Aztec(new String[] { "aztec" }, //
 			"^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+$", //
+			"", //
 			""),
 
 	/**
@@ -84,6 +92,7 @@ public enum CodeType {
 	QRCode(new String[] { "qr", "qr-code", "qrcode" }, //
 			"^.{1,64}$", //
 			"^.{1,65535}$", //
+			"", //
 			""),
 
 	/**
@@ -94,6 +103,7 @@ public enum CodeType {
 	DataMatrix(new String[] { "dm", "data-matrix", "datamatrix", "matrix", "data" }, //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
+			"", //
 			""),
 
 	/**
@@ -104,6 +114,7 @@ public enum CodeType {
 	PDF417(new String[] { "417", "pdf417", "pdf" }, //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
+			"", //
 			"");
 
 	/**
@@ -114,6 +125,7 @@ public enum CodeType {
 	private final String autoPattern;
 	private final String formatPattern;
 
+	private final String example;
 	private final String description;
 
 	/**
@@ -121,13 +133,15 @@ public enum CodeType {
 	 * 
 	 * @param typeStrings
 	 */
-	CodeType(String[] typeStrings, String automatchPattern, String extendedPattern, String description) {
+	CodeType(String[] typeStrings, String automatchPattern, //
+			String extendedPattern, String example, String description) {
 
 		this.types = typeStrings;
 
 		this.autoPattern = automatchPattern;
 		this.formatPattern = extendedPattern;
 
+		this.example = example;
 		this.description = description;
 	}
 
@@ -159,6 +173,16 @@ public enum CodeType {
 	public String getFormatPattern() {
 
 		return formatPattern;
+	}
+
+	/**
+	 * Get an example barcode format.
+	 * 
+	 * @return
+	 */
+	public String getExample() {
+
+		return example;
 	}
 
 	/**

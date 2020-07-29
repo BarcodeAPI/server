@@ -2,3 +2,5 @@
 target/
 cache/
 logs/
+resources/blacklist.conf
+

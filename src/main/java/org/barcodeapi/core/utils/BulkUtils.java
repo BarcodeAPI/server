@@ -29,7 +29,7 @@ public class BulkUtils {
 			String[] record;
 			while ((record = reader.readNext()) != null) {
 				if (requests.size() < max) {
-					requests.add(BarcodeRequest.fromCSV(record));
+					requests.add(buildBarcodeRequest(record));
 				} else {
 					break;
 				}
@@ -58,7 +58,31 @@ public class BulkUtils {
 		}
 	}
 
-	public static ArrayList<CachedBarcode> generateBarcodes(ArrayList<BarcodeRequest> requests)
+	private static BarcodeRequest buildBarcodeRequest(String[] record) throws GenerationException {
+
+		String params = "";
+		String type = "auto";
+		if (record.length >= 2 && !record[1].equals("")) {
+			type = record[1];
+		}
+
+		// size
+		if (record.length >= 3 && !record[2].equals("")) {
+			params += "size=" + record[2] + "&";
+		}
+
+		// dpi
+		if (record.length >= 4 && !record[3].equals("")) {
+			params += "dpi=" + record[3] + "&";
+		}
+
+		String uri = String.format(//
+				"/api/%s/%s?", type, record[0], params);
+
+		return new BarcodeRequest(uri);
+	}
+
+	private static ArrayList<CachedBarcode> generateBarcodes(ArrayList<BarcodeRequest> requests)
 			throws GenerationException {
 
 		ArrayList<CachedBarcode> barcodes = new ArrayList<>();

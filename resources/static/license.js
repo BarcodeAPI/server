@@ -1,12 +1,12 @@
-function loadLicenses() {
+function loadLicense() {
 
 	var url = "/static/license.txt";
-	loadFile(url, onloadLicenses);
+	loadFile(url, onloadLicense);
 }
 
-function onloadLicenses(data) {
+function onloadLicense(data) {
 
-	document.getElementById("licenses").innerHTML = data;
+	document.getElementById("license").innerHTML = data;
 }
 
 function loadFile(path, callback) {

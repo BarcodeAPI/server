@@ -98,15 +98,4 @@ public class BarcodeRequest {
 	public JSONObject getOptions() {
 		return options;
 	}
-
-	public static BarcodeRequest fromCSV(String[] record) throws GenerationException {
-
-		String type = "auto";
-		if (record.length > 1) {
-			type = record[1];
-		}
-
-		return new BarcodeRequest(String.format(//
-				"/api/%s/%s", type, record[0]));
-	}
 }
