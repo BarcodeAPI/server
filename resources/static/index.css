@@ -278,6 +278,13 @@ button:disabled, button[disabled] {
 	margin-bottom: 2rem;
 }
 
+@media (hover:none), (hover:on-demand), (max-width: 500px) and (-webkit-min-device-pixel-ratio: 2) {
+  /* custom css for "touch targets" */
+  .bulk-upload {
+    display: none;
+  }
+}
+
 .bulk-barcodes {
 	max-width: 640px;
 	margin-bottom: 4rem;
@@ -575,4 +582,56 @@ border-color
 
 #licenses {
 	text-align: left;
+}
+
+
+/** tooltip **/
+
+#tooltip {
+  text-align: center;
+  color: #fff;
+  background: #222;
+  position: absolute;
+  z-index: 10000;
+  padding: 10px;
+  border-radius: 0.125rem;
+  -webkit-transition: 100ms ease;
+  -moz-transition: 100ms ease;
+  -o-transition: 100ms ease;
+  -ms-transition: 100ms ease;
+  transition: 100ms ease;
+  font-family: 'IBM Plex Mono';
+  font-size: 14px;
+  line-height: 20px;
+}
+
+#tooltip:after /* triangle decoration */ {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #222;
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  margin-left: -10px;
+}
+
+#tooltip.top:after {
+  border-top-color: transparent;
+  border-bottom: 10px solid #222;
+  top: -20px;
+  bottom: auto;
+}
+
+#tooltip.left:after {
+  left: 10px;
+  margin: 0;
+}
+
+#tooltip.right:after {
+  right: 10px;
+  left: auto;
+  margin: 0;
 }
