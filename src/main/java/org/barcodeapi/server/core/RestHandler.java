@@ -72,8 +72,7 @@ public class RestHandler extends AbstractHandler {
 		}
 
 		// log the request
-		Log.out(LOG.REQUEST,
-				className + " : " + target + " : " + baseRequest.getRemoteAddr() + " : " + source + " : " + from);
+		Log.out(LOG.REQUEST, className + " : " + target + " : " + source + " : " + from);
 
 		// hit the counters
 		getStats().incrementCounter("request.count.total");
