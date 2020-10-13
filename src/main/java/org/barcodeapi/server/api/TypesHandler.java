@@ -15,6 +15,7 @@ import org.json.JSONObject;
 public class TypesHandler extends RestHandler {
 
 	public TypesHandler() {
+		super();
 	}
 
 	@Override

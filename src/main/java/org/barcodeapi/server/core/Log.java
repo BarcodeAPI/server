@@ -29,7 +29,6 @@ public class Log {
 		rollLogs();
 	}
 
-	// TODO call this at midnight
 	public static void rollLogs() {
 
 		for (LOG log : LOG.values()) {
@@ -39,9 +38,11 @@ public class Log {
 
 			try {
 
+				// close open file descriptor
 				if (logFiles.containsKey(log)) {
 					logFiles.get(log).close();
 				}
+
 				logFiles.put(log, new PrintWriter(new FileWriter(f, true), true));
 				Log.out(LOG.SERVER, "Setup log file: " + f.getPath());
 			} catch (Exception e) {
@@ -57,13 +58,23 @@ public class Log {
 		// format log line
 		String output = getTime() + " : " + type.toString() + " : " + message;
 
-		// write to log file and out
+		// write to log file
 		logFiles.get(type).println(output);
-		System.out.println(output);
 	}
 
 	public static String getTime() {
 
 		return _DFORMAT.format(Calendar.getInstance().getTime());
+	}
+
+	public static long timeTillRotate() {
+
+		Calendar midnight = Calendar.getInstance();
+		midnight.set(Calendar.HOUR_OF_DAY, 0);
+		midnight.set(Calendar.MINUTE, 0);
+		midnight.set(Calendar.SECOND, 0);
+		midnight.set(Calendar.MILLISECOND, 1);
+		midnight.set(Calendar.DAY_OF_YEAR, midnight.get(Calendar.DAY_OF_YEAR) + 1);
+		return midnight.getTimeInMillis() - System.currentTimeMillis() - 1;
 	}
 }

@@ -15,13 +15,19 @@ import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
-public class RestHandler extends AbstractHandler {
+public abstract class RestHandler extends AbstractHandler {
+
+	private final String _NAME;
 
 	private final String serverName;
 
 	private final StatsCollector stats;
 
 	public RestHandler() {
+
+		// extract class name
+		String className = getClass().getName();
+		_NAME = className.substring(className.lastIndexOf('.') + 1);
 
 		try {
 			serverName = InetAddress.getLocalHost().getHostName();
@@ -48,10 +54,6 @@ public class RestHandler extends AbstractHandler {
 		baseRequest.setHandled(true);
 		response.setStatus(HttpServletResponse.SC_OK);
 
-		// extract class name
-		String className = getClass().getName();
-		className = className.substring(className.lastIndexOf('.') + 1);
-
 		// get source of the request
 		String source;
 		String ref = request.getHeader("Referer");
@@ -72,18 +74,18 @@ public class RestHandler extends AbstractHandler {
 		}
 
 		// log the request
-		Log.out(LOG.REQUEST,
-				className + " : " + target + " : " + baseRequest.getRemoteAddr() + " : " + source + " : " + from);
+		Log.out(LOG.REQUEST, "" + //
+				_NAME + " : " + target + " : " + baseRequest.getRemoteAddr() + " : " + source + " : " + from);
 
 		// hit the counters
 		getStats().incrementCounter("request.count.total");
-		getStats().incrementCounter("request.count." + className);
+		getStats().incrementCounter("request.count." + _NAME);
 		getStats().incrementCounter("request.method." + request.getMethod());
 
 		// add CORS headers
 		addCORS(baseRequest, response);
 
-		// done if options request
+		// TODO make this end the call
 		if (request.getMethod().equals("OPTIONS")) {
 			return;
 		}

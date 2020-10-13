@@ -14,6 +14,7 @@ import org.eclipse.jetty.server.Request;
 public class CacheHandler extends RestHandler {
 
 	public CacheHandler() {
+		super();
 	}
 
 	@Override

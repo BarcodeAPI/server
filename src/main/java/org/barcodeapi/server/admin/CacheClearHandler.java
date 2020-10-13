@@ -1,4 +1,4 @@
-package org.barcodeapi.server.api;
+package org.barcodeapi.server.admin;
 
 import java.io.IOException;
 
@@ -6,12 +6,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.core.RestHandler;
+import org.barcodeapi.server.gen.CodeType;
 import org.eclipse.jetty.server.Request;
 
-public class StatsHandler extends RestHandler {
+public class CacheClearHandler extends RestHandler {
 
-	public StatsHandler() {
+	public CacheClearHandler() {
+		super();
 	}
 
 	@Override
@@ -19,6 +22,8 @@ public class StatsHandler extends RestHandler {
 			throws IOException, ServletException {
 		super.handle(target, baseRequest, request, response);
 
-		response.getOutputStream().println(getStats().dumpJSON().toString());
+		for (CodeType type : CodeType.values()) {
+			BarcodeCache.getCache(type).clearCache();
+		}
 	}
 }

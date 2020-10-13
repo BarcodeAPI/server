@@ -1,4 +1,4 @@
-package org.barcodeapi.server.api;
+package org.barcodeapi.server.admin;
 
 import java.io.IOException;
 
@@ -7,11 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.core.RestHandler;
+import org.barcodeapi.server.session.SessionCache;
 import org.eclipse.jetty.server.Request;
 
-public class SessionHandler extends RestHandler {
+public class SessionDumpHandler extends RestHandler {
 
-	public SessionHandler() {
+	public SessionDumpHandler() {
 		super();
 	}
 
@@ -20,8 +21,12 @@ public class SessionHandler extends RestHandler {
 			throws IOException, ServletException {
 		super.handle(target, baseRequest, request, response);
 
-		// print user session details
-		response.getOutputStream()//
-				.println(getSession(request).getDetails());
+		String output = "";
+		for (String key : SessionCache.getCache().getKeys()) {
+			output += key + "\n";
+		}
+
+		// write to client
+		response.getOutputStream().println(output);
 	}
 }

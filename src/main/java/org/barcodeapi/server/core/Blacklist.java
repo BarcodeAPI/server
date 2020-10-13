@@ -12,7 +12,7 @@ public class Blacklist {
 
 		try {
 
-			blacklist = Files.readAllLines(Paths.get("resources/blacklist.conf"));
+			blacklist = Files.readAllLines(Paths.get("blacklist.conf"));
 		} catch (Exception e) {
 
 			throw new RuntimeException("Failed to initialize blacklist.");

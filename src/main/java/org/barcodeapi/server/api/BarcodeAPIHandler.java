@@ -21,6 +21,7 @@ public class BarcodeAPIHandler extends RestHandler {
 	private final CachedBarcode BLK;
 
 	public BarcodeAPIHandler() {
+		super();
 
 		try {
 

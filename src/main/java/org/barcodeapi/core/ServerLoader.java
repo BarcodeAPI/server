@@ -3,16 +3,21 @@ package org.barcodeapi.core;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
+import org.barcodeapi.server.admin.CacheClearHandler;
+import org.barcodeapi.server.admin.CacheDumpHandler;
+import org.barcodeapi.server.admin.SessionClearHandler;
+import org.barcodeapi.server.admin.SessionDumpHandler;
+import org.barcodeapi.server.admin.StatsDumpHandler;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.BulkHandler;
-import org.barcodeapi.server.api.CacheHandler;
 import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.StaticHandler;
-import org.barcodeapi.server.api.StatsHandler;
 import org.barcodeapi.server.api.TypesHandler;
 import org.barcodeapi.server.core.Log;
 import org.barcodeapi.server.core.Log.LOG;
+import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.tasks.BarcodeCleanupTask;
+import org.barcodeapi.server.tasks.LogRotateTask;
 import org.barcodeapi.server.tasks.SessionCleanupTask;
 import org.barcodeapi.server.tasks.StatsDumpTask;
 import org.barcodeapi.server.tasks.WatchdogTask;
@@ -33,11 +38,8 @@ public class ServerLoader {
 	// Background task timer
 	private final Timer timer = new Timer();
 
-	// The port for the API server to bind to.
+	// The port for the servers to bind to.
 	private int serverPort = 8080;
-
-	// Whether static resources should be served.
-	private boolean serverStatic = true;
 
 	// Report usage statistics by default
 	private boolean telemetry = true;
@@ -66,21 +68,7 @@ public class ServerLoader {
 	 */
 	public void launch() throws Exception {
 
-		initJetty();
-
-		initStatsHandler();
-
-		initSessionHandler();
-
-		initCacheHandler();
-
-		initTypesHandler();
-
-		initBulkHandler();
-
-		initApiHandler();
-
-		initResourceHandler();
+		initApiServer();
 
 		initSystemTasks();
 
@@ -109,10 +97,6 @@ public class ServerLoader {
 				serverPort = Integer.parseInt(args[++x]);
 				break;
 
-			case "--no-web":
-				serverStatic = false;
-				break;
-
 			case "--no-telemetry":
 				telemetry = false;
 				break;
@@ -126,113 +110,52 @@ public class ServerLoader {
 	}
 
 	/**
-	 * Initialize the Jetty server.
+	 * Initialize the API REST server.
 	 */
-	private void initJetty() {
-
-		Log.out(LOG.SERVER, "Initializing Jetty");
-
-		// initialize handler collection
-		handlers = new HandlerCollection();
+	private void initApiServer() throws Exception {
 
 		// initialize API server
+		Log.out(LOG.SERVER, "Initializing Jetty API Server");
+		handlers = new HandlerCollection();
 		server = new Server(serverPort);
 		server.setHandler(handlers);
-	}
 
-	/**
-	 * Initialize the statistics end-point.
-	 */
-	private void initStatsHandler() {
+		// setup rest handlers
+		initHandler("/session", SessionHandler.class);
+		initHandler("/types", TypesHandler.class);
+		initHandler("/bulk", BulkHandler.class);
+		initHandler("/api", BarcodeAPIHandler.class);
 
-		// setup statistics handler
-		Log.out(LOG.SERVER, "Initializing handler: /stats");
-		ContextHandler statsHandler = new ContextHandler();
-		statsHandler.setHandler(new StatsHandler());
-		statsHandler.setContextPath("/stats");
-		handlers.addHandler(statsHandler);
-	}
-
-	/**
-	 * Initialize the session end-point.
-	 */
-	private void initSessionHandler() {
-
-		// setup statistics handler
-		Log.out(LOG.SERVER, "Initializing handler: /session");
-		ContextHandler sessionHandler = new ContextHandler();
-		sessionHandler.setHandler(new SessionHandler());
-		sessionHandler.setContextPath("/session");
-		handlers.addHandler(sessionHandler);
-	}
-
-	/**
-	 * Initialize the cache end-point.
-	 */
-	private void initCacheHandler() {
-
-		// setup statistics handler
-		Log.out(LOG.SERVER, "Initializing handler: /cache");
-		ContextHandler cacheHandler = new ContextHandler();
-		cacheHandler.setHandler(new CacheHandler());
-		cacheHandler.setContextPath("/cache");
-		handlers.addHandler(cacheHandler);
-	}
-
-	/**
-	 * Initialize the types end-point.
-	 */
-	private void initTypesHandler() {
-
-		// setup statistics handler
-		Log.out(LOG.SERVER, "Initializing handler: /types");
-		ContextHandler typesHandler = new ContextHandler();
-		typesHandler.setHandler(new TypesHandler());
-		typesHandler.setContextPath("/types");
-		handlers.addHandler(typesHandler);
-	}
-
-	/**
-	 * Initialize the bulk-download end-point.
-	 */
-	private void initBulkHandler() {
-
-		// setup statistics handler
-		Log.out(LOG.SERVER, "Initializing handler: /bulk");
-		ContextHandler bulkHandler = new ContextHandler();
-		bulkHandler.setHandler(new BulkHandler());
-		bulkHandler.setContextPath("/bulk");
-		handlers.addHandler(bulkHandler);
-	}
-
-	/**
-	 * Initialize the main API handler.
-	 */
-	private void initApiHandler() {
-
-		// setup API handler
-		Log.out(LOG.SERVER, "Initializing handler: /api");
-		ContextHandler apiHandler = new ContextHandler();
-		apiHandler.setHandler(new BarcodeAPIHandler());
-		apiHandler.setContextPath("/api");
-		handlers.addHandler(apiHandler);
-	}
-
-	/**
-	 * Initialize the resource handler.
-	 */
-	private void initResourceHandler() throws Exception {
-
-		if (!serverStatic) {
-			return;
-		}
+		// setup admin handlers
+		initHandler("/admin/stats", StatsDumpHandler.class);
+		initHandler("/admin/cache/dump", CacheDumpHandler.class);
+		initHandler("/admin/cache/clear", CacheClearHandler.class);
+		initHandler("/admin/session/dump", SessionDumpHandler.class);
+		initHandler("/admin/session/clear", SessionClearHandler.class);
 
 		// Instantiate the static resource handler and add it to the collection
 		Log.out(LOG.SERVER, "Initializing static resource handler");
-		ContextHandler apiHandler = new ContextHandler();
-		apiHandler.setHandler(new StaticHandler(server));
-		apiHandler.setContextPath("/");
-		handlers.addHandler(apiHandler);
+		ContextHandler resourceHandler = new ContextHandler();
+		resourceHandler.setHandler(new StaticHandler(server));
+		resourceHandler.setContextPath("/");
+		handlers.addHandler(resourceHandler);
+	}
+
+	/**
+	 * Initialize a new handler to be served by Jetty
+	 */
+	private void initHandler(String path, Class<? extends RestHandler> clazz) throws Exception {
+
+		Log.out(LOG.SERVER, "Initializing handler: " + path);
+
+		// Instantiate the handler
+		RestHandler handler = clazz.getConstructor().newInstance();
+
+		// Add it to the handler collection
+		ContextHandler statsHandler = new ContextHandler();
+		statsHandler.setHandler(handler);
+		statsHandler.setContextPath(path);
+		handlers.addHandler(statsHandler);
 	}
 
 	/**
@@ -259,6 +182,11 @@ public class ServerLoader {
 		BarcodeCleanupTask barcodeCleanup = new BarcodeCleanupTask();
 		timer.schedule(barcodeCleanup, 0, //
 				TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS));
+
+		// rotate logs every 24h
+		LogRotateTask logRotate = new LogRotateTask();
+		timer.schedule(logRotate, Log.timeTillRotate(), //
+				TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS));
 	}
 
 	/**

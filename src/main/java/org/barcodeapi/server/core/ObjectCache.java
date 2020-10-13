@@ -80,6 +80,13 @@ public class ObjectCache {
 		return cache.remove(key);
 	}
 
+	public void clearCache() {
+
+		double num = cache.size();
+		stats.incrementCounter("cache." + name + ".clear", num);
+		cache.clear();
+	}
+
 	public static synchronized ObjectCache getCache(String name) {
 
 		if (!caches.containsKey(name)) {

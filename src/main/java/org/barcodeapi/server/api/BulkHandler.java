@@ -18,6 +18,7 @@ public class BulkHandler extends RestHandler {
 	private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement("./");
 
 	public BulkHandler() {
+		super();
 	}
 
 	@Override
