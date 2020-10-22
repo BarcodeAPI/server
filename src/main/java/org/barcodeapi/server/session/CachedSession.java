@@ -53,15 +53,13 @@ public class CachedSession extends CachedObject {
 				" Key: " + getKey() + "\n" + //
 				" Created: " + getTimeCreated() + "\n" + //
 				" Last Seen: " + getTimeLastSeen() + "\n" + //
+				" Expiration: " + getTimeExpires() + "\n" + //
 				" Request Count: " + requestCount + "\n" + //
 				"\n  --\n\n" + requests;
 	}
 
 	public Cookie getCookie() {
 
-		Cookie cookie = new Cookie("session", getKey());
-		cookie.setSecure(true);
-
-		return cookie;
+		return new Cookie("session", getKey());
 	}
 }

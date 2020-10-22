@@ -2,7 +2,6 @@ package org.barcodeapi.server.api;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,7 +12,7 @@ import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.gen.BarcodeGenerator;
 import org.barcodeapi.server.gen.BarcodeRequest;
-import org.eclipse.jetty.server.Request;
+import org.json.JSONException;
 
 public class BarcodeAPIHandler extends RestHandler {
 
@@ -35,22 +34,22 @@ public class BarcodeAPIHandler extends RestHandler {
 	}
 
 	@Override
-	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		super.handle(target, baseRequest, request, response);
+	protected void onRequest(HttpServletRequest request, HttpServletResponse response)
+			throws JSONException, IOException {
 
 		CachedBarcode barcode;
+		String uri = request.getRequestURI();
+
 		try {
 
 			// generate user requested barcode
-			String uri = baseRequest.getOriginalURI();
 			BarcodeRequest barcodeRequest = new BarcodeRequest(uri);
 			barcode = BarcodeGenerator.requestBarcode(barcodeRequest);
 
 		} catch (GenerationException e) {
 
 			Log.out(LOG.ERROR, "" + //
-					"Failed [ " + target + " ] " + //
+					"Failed [ " + uri + " ] " + //
 					"reason [ " + e.getMessage() + " ]");
 
 			switch (e.getExceptionType()) {

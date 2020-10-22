@@ -10,6 +10,7 @@ import org.barcodeapi.server.core.RestHandler;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.json.JSONException;
 
 public class StaticHandler extends RestHandler {
 
@@ -31,11 +32,6 @@ public class StaticHandler extends RestHandler {
 			throws IOException, ServletException {
 		super.handle(target, baseRequest, request, response);
 
-		String proto = request.getHeader("X-Forwarded-Proto");
-		if (proto != null) {
-			baseRequest.getMetaData().getURI().setScheme(proto);
-		}
-
 		// call through to resources
 		baseRequest.setHandled(false);
 		resources.handle(target, baseRequest, request, response);
@@ -44,5 +40,10 @@ public class StaticHandler extends RestHandler {
 		if (!baseRequest.isHandled()) {
 			response.sendRedirect("/api/auto" + request.getPathInfo());
 		}
+	}
+
+	@Override
+	protected void onRequest(HttpServletRequest request, HttpServletResponse response)
+			throws JSONException, IOException {
 	}
 }

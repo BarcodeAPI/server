@@ -24,7 +24,7 @@ public class StatsDumpTask extends BackgroundTask {
 	public void onRun() {
 
 		// get and print metric data
-		String data = getStats().dumpJSON().toString();
+		String data = getStats().getDetails().toString();
 		Log.out(LOG.SERVER, "STATS : " + data);
 
 		// upload metrics if enabled

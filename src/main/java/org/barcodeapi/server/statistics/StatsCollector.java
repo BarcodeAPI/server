@@ -1,65 +1,113 @@
 package org.barcodeapi.server.statistics;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
+import org.barcodeapi.core.ServerRuntime;
 import org.json.JSONObject;;
 
 public class StatsCollector {
 
-	private static final String _RUNTIME_ID = UUID.randomUUID().toString();
-
 	private static StatsCollector statsCollector;
 
-	private ConcurrentHashMap<String, Double> hitCounters;
+	private final JSONObject counterCache = new JSONObject();
 
 	public StatsCollector() {
 
-		hitCounters = new ConcurrentHashMap<String, Double>();
+		counterCache.put("runtimeId", ServerRuntime.getRuntimeID());
 	}
 
-	public void incrementCounter(String counter) {
-
-		incrementCounter(counter, 1d);
+	/**
+	 * Increment the value of a single counter by one.
+	 * 
+	 * @param name
+	 */
+	public void hitCounter(String... name) {
+		hitCounter(1, name);
 	}
 
-	public void incrementCounter(String counter, Double inc) {
+	/**
+	 * Increment the value of a single counter by the specified value.
+	 * 
+	 * @param name
+	 */
+	public void hitCounter(double count, String... name) {
 
-		Double value = hitCounters.get(counter);
-		if (value == null) {
+		synchronized (counterCache) {
 
-			value = 0d;
+			JSONObject outer = counterCache;
+			for (int x = 0; x < name.length - 1; x++) {
+
+				JSONObject inner = outer.optJSONObject(name[x]);
+				if (inner == null) {
+
+					inner = new JSONObject();
+					outer.put(name[x], inner);
+				}
+				outer = inner;
+			}
+
+			String key = name[name.length - 1];
+			double current = outer.optDouble(key, 0);
+			outer.put(key, current + count);
+		}
+	}
+
+	/**
+	 * Get a single counter by name.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public double getCounter(String... name) {
+
+		JSONObject outer = counterCache;
+		for (String key : name) {
+
+			JSONObject inner = outer.optJSONObject(key);
+			if (inner == null) {
+
+				inner = new JSONObject();
+				outer.put(key, inner);
+			}
+			outer = inner;
 		}
 
-		hitCounters.put(counter, value + inc);
+		return outer.getDouble("value");
 	}
 
-	public double getCounter(String counter) {
+	/**
+	 * Set the value for a counter.
+	 * 
+	 * @param name
+	 * @param value
+	 */
+	public void setCounter(double value, String... name) {
 
-		return hitCounters.get(counter);
-	}
+		synchronized (counterCache) {
 
-	public void setCounter(String counter, Double value) {
+			JSONObject outer = counterCache;
+			for (int x = 0; x < name.length - 1; x++) {
 
-		hitCounters.put(counter, value);
-	}
+				JSONObject inner = outer.optJSONObject(name[x]);
+				if (inner == null) {
 
-	public ConcurrentHashMap<String, Double> getCounters() {
+					inner = new JSONObject();
+					outer.put(name[x], inner);
+				}
+				outer = inner;
+			}
 
-		return hitCounters;
-	}
-
-	public JSONObject dumpJSON() {
-
-		JSONObject output = new JSONObject()//
-				.put("runtimeId", _RUNTIME_ID);
-
-		for (Map.Entry<String, Double> entry : hitCounters.entrySet()) {
-			output.put(entry.getKey(), entry.getValue());
+			String key = name[name.length - 1];
+			outer.put(key, value);
 		}
+	}
 
-		return output;
+	/**
+	 * Get the details of the counter cache.
+	 * 
+	 * @return
+	 */
+	public JSONObject getDetails() {
+
+		return counterCache;
 	}
 
 	public static synchronized StatsCollector getInstance() {
@@ -70,5 +118,4 @@ public class StatsCollector {
 		}
 		return statsCollector;
 	}
-
 }

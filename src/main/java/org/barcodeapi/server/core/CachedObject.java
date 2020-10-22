@@ -28,6 +28,10 @@ public abstract class CachedObject {
 		return this.timeTouched;
 	}
 
+	public long getTimeExpires() {
+		return this.timeTouched + this.timeTimeout;
+	}
+
 	public void setTimeout(long timeoutTime, TimeUnit timeoutUnit) {
 		this.timeTimeout = TimeUnit.MILLISECONDS.convert(timeoutTime, timeoutUnit);
 	}

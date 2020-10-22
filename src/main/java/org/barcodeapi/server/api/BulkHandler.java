@@ -22,9 +22,8 @@ public class BulkHandler extends RestHandler {
 	}
 
 	@Override
-	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		super.handle(target, baseRequest, request, response);
+	protected void onRequest(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		// Setup accept multi-part
 		request.setAttribute(Request.__MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);

@@ -3,15 +3,16 @@ package org.barcodeapi.core;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
-import org.barcodeapi.server.admin.CacheClearHandler;
 import org.barcodeapi.server.admin.CacheDumpHandler;
-import org.barcodeapi.server.admin.SessionClearHandler;
-import org.barcodeapi.server.admin.SessionDumpHandler;
-import org.barcodeapi.server.admin.StatsDumpHandler;
+import org.barcodeapi.server.admin.CacheFlushHandler;
+import org.barcodeapi.server.admin.SessionFlushHandler;
+import org.barcodeapi.server.admin.SessionListHandler;
+import org.barcodeapi.server.api.AboutHandler;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.BulkHandler;
-import org.barcodeapi.server.api.SessionHandler;
+import org.barcodeapi.server.api.SessionDetailsHandler;
 import org.barcodeapi.server.api.StaticHandler;
+import org.barcodeapi.server.api.StatsHandler;
 import org.barcodeapi.server.api.TypesHandler;
 import org.barcodeapi.server.core.Log;
 import org.barcodeapi.server.core.Log.LOG;
@@ -68,6 +69,8 @@ public class ServerLoader {
 	 */
 	public void launch() throws Exception {
 
+		Log.out(LOG.SERVER, "Initializing: " + ServerRuntime.getRuntimeID());
+
 		initApiServer();
 
 		initSystemTasks();
@@ -121,17 +124,21 @@ public class ServerLoader {
 		server.setHandler(handlers);
 
 		// setup rest handlers
-		initHandler("/session", SessionHandler.class);
-		initHandler("/types", TypesHandler.class);
-		initHandler("/bulk", BulkHandler.class);
 		initHandler("/api", BarcodeAPIHandler.class);
+		initHandler("/bulk", BulkHandler.class);
+		initHandler("/types", TypesHandler.class);
+		initHandler("/session", SessionDetailsHandler.class);
+
+		// setup server handlers
+		initHandler("/server/about", AboutHandler.class);
+		initHandler("/server/stats", StatsHandler.class);
 
 		// setup admin handlers
-		initHandler("/admin/stats", StatsDumpHandler.class);
 		initHandler("/admin/cache/dump", CacheDumpHandler.class);
-		initHandler("/admin/cache/clear", CacheClearHandler.class);
-		initHandler("/admin/session/dump", SessionDumpHandler.class);
-		initHandler("/admin/session/clear", SessionClearHandler.class);
+		initHandler("/admin/cache/flush", CacheFlushHandler.class);
+
+		initHandler("/admin/session/list", SessionListHandler.class);
+		initHandler("/admin/session/flush", SessionFlushHandler.class);
 
 		// Instantiate the static resource handler and add it to the collection
 		Log.out(LOG.SERVER, "Initializing static resource handler");
@@ -166,7 +173,7 @@ public class ServerLoader {
 		// run watch-dog every 1 minute
 		WatchdogTask watchdogTask = new WatchdogTask();
 		timer.schedule(watchdogTask, 0, //
-				TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES));
+				TimeUnit.MILLISECONDS.convert(15, TimeUnit.SECONDS));
 
 		// print stats to log every 5 minutes
 		StatsDumpTask statsTask = new StatsDumpTask(telemetry);

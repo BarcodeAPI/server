@@ -23,7 +23,13 @@ public abstract class RestHandler extends AbstractHandler {
 
 	private final StatsCollector stats;
 
+	private final boolean authRequired;
+
 	public RestHandler() {
+		this(false);
+	}
+
+	public RestHandler(boolean authRequired) {
 
 		// extract class name
 		String className = getClass().getName();
@@ -36,23 +42,34 @@ public abstract class RestHandler extends AbstractHandler {
 		}
 
 		this.stats = StatsCollector.getInstance();
+		this.authRequired = authRequired;
 	}
 
 	public StatsCollector getStats() {
 		return stats;
 	}
 
+	public boolean authRequired() {
+		return authRequired;
+	}
+
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		// skip if handled
-		if (baseRequest.isHandled()) {
+		long timeStart = System.currentTimeMillis();
+
+		// skip if already handled
+		if (!baseRequest.isHandled()) {
+			baseRequest.setHandled(true);
+		} else {
 			return;
 		}
 
-		// request is handled
-		baseRequest.setHandled(true);
-		response.setStatus(HttpServletResponse.SC_OK);
+		// update scheme is via proxy
+		String proto = request.getHeader("X-Forwarded-Proto");
+		if (proto != null) {
+			baseRequest.getMetaData().getURI().setScheme(proto);
+		}
 
 		// get source of the request
 		String source;
@@ -73,23 +90,14 @@ public abstract class RestHandler extends AbstractHandler {
 			from = via;
 		}
 
+		// set response code
+		response.setStatus(HttpServletResponse.SC_OK);
+
 		// log the request
 		Log.out(LOG.REQUEST, _NAME + " : " + target + " : " + source + " : " + from);
 
-		// hit the counters
-		getStats().incrementCounter("request.count.total");
-		getStats().incrementCounter("request.count." + _NAME);
-		getStats().incrementCounter("request.method." + request.getMethod());
-
-		// add CORS headers
-		addCORS(baseRequest, response);
-
-		// TODO make this end the call
-		if (request.getMethod().equals("OPTIONS")) {
-			return;
-		}
-
 		// server details
+		addCORSHeaders(baseRequest, response);
 		response.setHeader("Server", "BarcodeAPI.org");
 		response.setHeader("Server-Node", serverName);
 		response.setHeader("Accept-Charset", "utf-8");
@@ -99,9 +107,40 @@ public abstract class RestHandler extends AbstractHandler {
 		CachedSession session = getSession(request);
 		session.hit(baseRequest.getOriginalURI().toString());
 		response.addCookie(session.getCookie());
+
+		// authenticate the user if required
+		if (authRequired() && !validateAdmin(request)) {
+
+			getStats().hitCounter("request", "authfail", request.getMethod());
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setHeader("WWW-Authenticate", "Basic realm=Welcome");
+			return;
+		}
+
+		try {
+
+			// call the implemented method
+			this.onRequest(request, response);
+		} catch (Exception e) {
+
+			// TODO handle this
+			e.printStackTrace();
+		}
+
+		long targetTime = System.currentTimeMillis() - timeStart;
+
+		// hit the counters
+		getStats().hitCounter("request", "count");
+		getStats().hitCounter(targetTime, "request", "time");
+		getStats().hitCounter("request", "method", request.getMethod());
+		getStats().hitCounter("request", "target", _NAME, "count");
+		getStats().hitCounter(targetTime, "request", "target", _NAME, "time");
+		getStats().hitCounter("request", "target", _NAME, "method", request.getMethod());
 	}
 
-	protected void addCORS(HttpServletRequest request, HttpServletResponse response) {
+	protected abstract void onRequest(HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+	protected void addCORSHeaders(HttpServletRequest request, HttpServletResponse response) {
 
 		String origin = request.getHeader("origin");
 		if (origin != null) {
@@ -114,6 +153,13 @@ public abstract class RestHandler extends AbstractHandler {
 		if (request.getMethod().equals("OPTIONS")) {
 			response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 		}
+	}
+
+	protected boolean validateAdmin(HttpServletRequest request) {
+
+		String auth = request.getHeader("Authorization");
+		System.out.println("Got: " + auth);
+		return false;
 	}
 
 	protected CachedSession getSession(HttpServletRequest request) {

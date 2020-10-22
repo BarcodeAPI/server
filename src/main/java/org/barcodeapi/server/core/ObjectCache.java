@@ -29,7 +29,7 @@ public class ObjectCache {
 
 	public void put(String key, CachedObject value) {
 
-		stats.incrementCounter("cache." + name + ".add");
+		stats.hitCounter("cache", name, "add");
 		cache.put(key, value);
 	}
 
@@ -62,9 +62,9 @@ public class ObjectCache {
 	public CachedObject get(String key) {
 
 		if (cache.containsKey(key)) {
-			stats.incrementCounter("cache." + name + ".hit");
+			stats.hitCounter("cache", name, "hit");
 		} else {
-			stats.incrementCounter("cache." + name + ".miss");
+			stats.hitCounter("cache", name, "miss");
 		}
 
 		return cache.get(key);
@@ -76,15 +76,18 @@ public class ObjectCache {
 
 	public CachedObject remove(String key) {
 
-		stats.incrementCounter("cache." + name + ".remove");
+		stats.hitCounter("cache", name, "remove");
 		return cache.remove(key);
 	}
 
 	public void clearCache() {
 
-		double num = cache.size();
-		stats.incrementCounter("cache." + name + ".clear", num);
-		cache.clear();
+		synchronized (cache) {
+
+			double num = cache.size();
+			stats.hitCounter(num, "cache", name, "clear");
+			cache.clear();
+		}
 	}
 
 	public static synchronized ObjectCache getCache(String name) {
