@@ -12,7 +12,7 @@ public class Authlist {
 
 		try {
 
-			authlist = Files.readAllLines(Paths.get("authlist.conf"));
+			authlist = Files.readAllLines(Paths.get("config/authlist.conf"));
 		} catch (Exception e) {
 
 			throw new RuntimeException("Failed to initialize authlist.");

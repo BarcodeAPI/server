@@ -11,7 +11,7 @@ public class StatsCollector {
 
 	public StatsCollector() {
 
-		counterCache.put("runtimeId", ServerRuntime.getRuntimeID());
+		setValue(ServerRuntime.getRuntimeID(), "system", "runtimeId");
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class StatsCollector {
 	 * @param name
 	 * @param value
 	 */
-	public void setCounter(double value, String... name) {
+	public void setValue(Object value, String... name) {
 
 		synchronized (counterCache) {
 
@@ -110,6 +110,11 @@ public class StatsCollector {
 		return counterCache;
 	}
 
+	/**
+	 * Get a reference to the shared statistics collector.
+	 * 
+	 * @return
+	 */
 	public static synchronized StatsCollector getInstance() {
 
 		if (statsCollector == null) {

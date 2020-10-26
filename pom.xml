@@ -5,10 +5,9 @@
 
 	<groupId>org.barcodeapi</groupId>
 	<artifactId>server</artifactId>
-	<name>server</name>
-
 	<version>0.0.1-SNAPSHOT</version>
 
+	<name>server</name>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -37,7 +36,6 @@
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
 				</configuration>
-
 				<executions>
 					<execution>
 						<id>make-assembly</id>
@@ -52,7 +50,6 @@
 	</build>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>

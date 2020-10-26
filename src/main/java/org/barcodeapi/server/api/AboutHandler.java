@@ -22,9 +22,10 @@ public class AboutHandler extends RestHandler {
 
 		response.getOutputStream().println((new JSONObject()//
 				.put("runtimeId", ServerRuntime.getRuntimeID())//
-				.put("uptime", "---")//
+				.put("uptime", ServerRuntime.getTimeRunning())//
 				.put("admin", "---")//
-				.put("hostname", "---")//
+				.put("hostname", ServerRuntime.getHostname())//
+				.put("version", ServerRuntime.getVersion())//
 		).toString(4));
 	}
 }

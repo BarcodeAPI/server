@@ -29,7 +29,7 @@ public enum CodeType {
 			"^[0-9]{8}$", //
 			"^[0-9]{7,8}$", //
 			"01023459", //
-			""),
+			"A UPC type barcode, derived from the longer EAN-13 code, for use on smaller pakages."),
 
 	/**
 	 * EAN-13 type UPC code;
@@ -40,7 +40,7 @@ public enum CodeType {
 			"^[0-9]{13}$", //
 			"^[0-9]{12,13}$", //
 			"1234567890128", //
-			""),
+			"A globally recognized product identification code."),
 
 	/**
 	 * Codabar type code;
@@ -49,7 +49,7 @@ public enum CodeType {
 			"^[0-9:$]{4,12}$", //
 			"^[0-9-:$\\/.+]+$", //
 			"1234567890", //
-			""),
+			"An early barode designed to be printer on dot-matrix printers."),
 
 	/**
 	 * Code39 type code;
@@ -60,7 +60,7 @@ public enum CodeType {
 			"^[A-Z0-9 $.\\/]{1,12}$", //
 			"^[A-Z*0-9 -$%.\\/+]+$", //
 			"TRY 39 ME", //
-			""),
+			"A basic alphanumeric barcode."),
 
 	/**
 	 * Code128 type code;
@@ -71,7 +71,7 @@ public enum CodeType {
 			"^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+$", //
 			"Try Me!", //
-			""),
+			"A high desnisty alphanumeric barcode."),
 
 	/**
 	 * Aztec type barcode.
@@ -81,8 +81,8 @@ public enum CodeType {
 	Aztec(new String[] { "aztec" }, //
 			"^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+$", //
-			"", //
-			""),
+			"Aztec Barcode", //
+			"A 2D data barcode whose timing markers radiate outward from the middle."),
 
 	/**
 	 * QR type code;
@@ -92,8 +92,8 @@ public enum CodeType {
 	QRCode(new String[] { "qr", "qr-code", "qrcode" }, //
 			"^.{1,64}$", //
 			"^.{1,65535}$", //
-			"", //
-			""),
+			"QR Barcode", //
+			"A 2D data barcode whose timing markers are aligned at the corners."),
 
 	/**
 	 * Data Matrix type code;
@@ -103,8 +103,8 @@ public enum CodeType {
 	DataMatrix(new String[] { "dm", "data-matrix", "datamatrix", "matrix", "data" }, //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
-			"", //
-			""),
+			"Data Matrix Barcode", //
+			"A 2D data barode whose timing markers are along the the edges."),
 
 	/**
 	 * PDF417
@@ -114,8 +114,8 @@ public enum CodeType {
 	PDF417(new String[] { "417", "pdf417", "pdf" }, //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
-			"", //
-			"");
+			"PDF - 417", //
+			"A stacked linear barcode most commonly found on identification cards.");
 
 	/**
 	 * Local Variables
