@@ -6,9 +6,13 @@ import java.util.List;
 
 public class Authlist {
 
-	private static final List<String> authlist;
+	private static List<String> authlist;
 
 	static {
+		reload();
+	}
+
+	public static void reload() {
 
 		try {
 

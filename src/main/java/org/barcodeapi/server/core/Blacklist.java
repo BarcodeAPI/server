@@ -6,9 +6,13 @@ import java.util.List;
 
 public class Blacklist {
 
-	private static final List<String> blacklist;
+	private static List<String> blacklist;
 
 	static {
+		reload();
+	}
+
+	public static void reload() {
 
 		try {
 

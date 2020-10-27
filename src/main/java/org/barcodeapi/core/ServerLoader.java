@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.server.admin.CacheDumpHandler;
 import org.barcodeapi.server.admin.CacheFlushHandler;
+import org.barcodeapi.server.admin.ConfigReloadHandler;
 import org.barcodeapi.server.admin.SessionFlushHandler;
 import org.barcodeapi.server.admin.SessionListHandler;
 import org.barcodeapi.server.api.AboutHandler;
@@ -139,6 +140,8 @@ public class ServerLoader {
 
 		initHandler("/admin/session/list", SessionListHandler.class);
 		initHandler("/admin/session/flush", SessionFlushHandler.class);
+
+		initHandler("/admin/server/reload", ConfigReloadHandler.class);
 
 		// Instantiate the static resource handler and add it to the collection
 		Log.out(LOG.SERVER, "Initializing static resource handler");
