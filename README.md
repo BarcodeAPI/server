@@ -82,6 +82,12 @@ Some users will want to generate a large number of barcodes with one request - a
 https://barcodeapi.org/multi.html?Barcode1&Barcode2&dm/A%20Data%20Matrix&qr/And%20QR/Automatic
 ```
 
+### Add Admin
+
+```
+java -cp server.jar org.barcodeapi.core.utils.AuthUtils username pa@ssw0rd >> config/authlist.conf
+```
+
 ## Third-Party
 
 BarcodeAPI.org is only made possible with the use of third-party software.

@@ -32,7 +32,6 @@ public class ServerRuntime {
 			_RUNTIME_HOST = InetAddress.getLocalHost().getCanonicalHostName();
 			StatsCollector.getInstance()//
 					.setValue(_RUNTIME_HOST, "system", "host");
-
 		} catch (UnknownHostException e) {
 			throw new RuntimeException(e);
 		}

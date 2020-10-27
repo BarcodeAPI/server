@@ -54,7 +54,7 @@ public class StringUtils {
 		return options;
 	}
 
-	public static String generateChecksum(byte[] in) {
+	public static String sumSHA256(byte[] in) {
 
 		try {
 

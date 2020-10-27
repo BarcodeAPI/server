@@ -2,12 +2,14 @@ package org.barcodeapi.server.core;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Base64;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.core.utils.StringUtils;
 import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.session.CachedSession;
 import org.barcodeapi.server.session.SessionCache;
@@ -57,6 +59,10 @@ public abstract class RestHandler extends AbstractHandler {
 			throws IOException, ServletException {
 
 		long timeStart = System.currentTimeMillis();
+		getStats().hitCounter("request", "count");
+		getStats().hitCounter("request", "method", request.getMethod());
+		getStats().hitCounter("request", "target", _NAME, "count");
+		getStats().hitCounter("request", "target", _NAME, "method", request.getMethod());
 
 		// skip if already handled
 		if (!baseRequest.isHandled()) {
@@ -113,7 +119,7 @@ public abstract class RestHandler extends AbstractHandler {
 
 			getStats().hitCounter("request", "authfail", request.getMethod());
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.setHeader("WWW-Authenticate", "Basic realm=Welcome");
+			response.setHeader("WWW-Authenticate", "Basic realm=BarcodeAPI.org Admin API");
 			return;
 		}
 
@@ -127,15 +133,10 @@ public abstract class RestHandler extends AbstractHandler {
 			e.printStackTrace();
 		}
 
-		long targetTime = System.currentTimeMillis() - timeStart;
-
 		// hit the counters
-		getStats().hitCounter("request", "count");
+		long targetTime = System.currentTimeMillis() - timeStart;
 		getStats().hitCounter(targetTime, "request", "time");
-		getStats().hitCounter("request", "method", request.getMethod());
-		getStats().hitCounter("request", "target", _NAME, "count");
 		getStats().hitCounter(targetTime, "request", "target", _NAME, "time");
-		getStats().hitCounter("request", "target", _NAME, "method", request.getMethod());
 	}
 
 	protected abstract void onRequest(HttpServletRequest request, HttpServletResponse response) throws Exception;
@@ -157,9 +158,20 @@ public abstract class RestHandler extends AbstractHandler {
 
 	protected boolean validateAdmin(HttpServletRequest request) {
 
+		// false if no authentication
 		String auth = request.getHeader("Authorization");
-		System.out.println("Got: " + auth);
-		return false;
+		if (auth == null || !auth.startsWith("Basic")) {
+			return false;
+		}
+
+		String authString = auth.substring(6);
+		String decode = new String(Base64.getDecoder().decode(authString));
+		String[] unpw = decode.split(":");
+
+		String passHash = StringUtils.sumSHA256(unpw[1].getBytes());
+		String userAuth = String.format("%s:%s", unpw[0], passHash);
+
+		return Authlist.getAuthlist().contains(userAuth);
 	}
 
 	protected CachedSession getSession(HttpServletRequest request) {
