@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.UUID;
 
+import org.barcodeapi.server.statistics.StatsCollector;
+
 public class ServerRuntime {
 
 	// System runtime identifier
@@ -15,11 +17,22 @@ public class ServerRuntime {
 	static {
 
 		_RUNTIME_ID = UUID.randomUUID().toString();
+		StatsCollector.getInstance()//
+				.setValue(_RUNTIME_ID, "system", "runtimeId");
+
 		_RUNTIME_TIMESTART = System.currentTimeMillis();
+		StatsCollector.getInstance()//
+				.setValue(_RUNTIME_TIMESTART, "system", "time", "start");
+
 		_RUNTIME_VERSION = "";
+		StatsCollector.getInstance()//
+				.setValue(_RUNTIME_VERSION, "system", "version");
 
 		try {
 			_RUNTIME_HOST = InetAddress.getLocalHost().getCanonicalHostName();
+			StatsCollector.getInstance()//
+					.setValue(_RUNTIME_HOST, "system", "host");
+
 		} catch (UnknownHostException e) {
 			throw new RuntimeException(e);
 		}

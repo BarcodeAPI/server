@@ -1,6 +1,5 @@
 package org.barcodeapi.server.statistics;
 
-import org.barcodeapi.core.ServerRuntime;
 import org.json.JSONObject;;
 
 public class StatsCollector {
@@ -10,8 +9,6 @@ public class StatsCollector {
 	private final JSONObject counterCache = new JSONObject();
 
 	public StatsCollector() {
-
-		setValue(ServerRuntime.getRuntimeID(), "system", "runtimeId");
 	}
 
 	/**

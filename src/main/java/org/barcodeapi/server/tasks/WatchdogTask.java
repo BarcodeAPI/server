@@ -23,8 +23,8 @@ public class WatchdogTask extends BackgroundTask {
 	public void onRun() {
 
 		// update system runtime statistics
-		getStats().setValue(System.currentTimeMillis(), "system", "time");
-		getStats().setValue(ServerRuntime.getTimeRunning(), "system", "uptime");
+		getStats().setValue(System.currentTimeMillis(), "system", "time", "now");
+		getStats().setValue(ServerRuntime.getTimeRunning(), "system", "time", "running");
 
 		// update jvm memory statistics
 		double memUsed = (double) (runtime.totalMemory() - runtime.freeMemory());
