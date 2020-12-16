@@ -1,6 +1,5 @@
 package org.barcodeapi.core;
 
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.server.admin.CacheDumpHandler;
@@ -37,8 +36,8 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
  */
 public class ServerLoader {
 
-	// Background task timer
-	private final Timer timer = new Timer();
+	// Initialize server runtime and get ID
+	private final String _ID = ServerRuntime.getRuntimeID();
 
 	// The port for the servers to bind to.
 	private int serverPort = 8080;
@@ -69,8 +68,6 @@ public class ServerLoader {
 	 * @throws Exception
 	 */
 	public void launch() throws Exception {
-
-		Log.out(LOG.SERVER, "Initializing: " + ServerRuntime.getRuntimeID());
 
 		initApiServer();
 
@@ -119,7 +116,8 @@ public class ServerLoader {
 	private void initApiServer() throws Exception {
 
 		// initialize API server
-		Log.out(LOG.SERVER, "Initializing Jetty API Server");
+		Log.out(LOG.SERVER, "Initializing: " + _ID);
+		Log.out(LOG.SERVER, "Starting Jetty API Server");
 		handlers = new HandlerCollection();
 		server = new Server(serverPort);
 		server.setHandler(handlers);
@@ -156,9 +154,8 @@ public class ServerLoader {
 	 */
 	private void initHandler(String path, Class<? extends RestHandler> clazz) throws Exception {
 
-		Log.out(LOG.SERVER, "Initializing handler: " + path);
-
 		// Instantiate the handler
+		Log.out(LOG.SERVER, "Initializing handler: " + path);
 		RestHandler handler = clazz.getConstructor().newInstance();
 
 		// Add it to the handler collection
@@ -175,27 +172,27 @@ public class ServerLoader {
 
 		// run watch-dog every 1 minute
 		WatchdogTask watchdogTask = new WatchdogTask();
-		timer.schedule(watchdogTask, 0, //
+		ServerRuntime.getSystemTimer().schedule(watchdogTask, 0, //
 				TimeUnit.MILLISECONDS.convert(15, TimeUnit.SECONDS));
 
 		// print stats to log every 5 minutes
 		StatsDumpTask statsTask = new StatsDumpTask(telemetry);
-		timer.schedule(statsTask, 0, //
+		ServerRuntime.getSystemTimer().schedule(statsTask, 0, //
 				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
 
 		// cleanup sessions every 15 minutes
 		SessionCleanupTask sessionCleanup = new SessionCleanupTask();
-		timer.schedule(sessionCleanup, 0, //
+		ServerRuntime.getSystemTimer().schedule(sessionCleanup, 0, //
 				TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES));
 
 		// cleanup barcodes every hour
 		BarcodeCleanupTask barcodeCleanup = new BarcodeCleanupTask();
-		timer.schedule(barcodeCleanup, 0, //
+		ServerRuntime.getSystemTimer().schedule(barcodeCleanup, 0, //
 				TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS));
 
 		// rotate logs every 24h
 		LogRotateTask logRotate = new LogRotateTask();
-		timer.schedule(logRotate, Log.timeTillRotate(), //
+		ServerRuntime.getSystemTimer().schedule(logRotate, Log.timeTillRotate(), //
 				TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS));
 	}
 

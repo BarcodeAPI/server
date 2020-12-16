@@ -2,17 +2,21 @@ package org.barcodeapi.core;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Timer;
 import java.util.UUID;
 
 import org.barcodeapi.server.statistics.StatsCollector;
 
 public class ServerRuntime {
 
-	// System runtime identifier
+	// System runtime information
 	private static final String _RUNTIME_ID;
 	private static final long _RUNTIME_TIMESTART;
 	private static final String _RUNTIME_VERSION;
 	private static final String _RUNTIME_HOST;
+
+	// Background task timer
+	private static final Timer _SYS_TIMER;
 
 	static {
 
@@ -35,6 +39,8 @@ public class ServerRuntime {
 		} catch (UnknownHostException e) {
 			throw new RuntimeException(e);
 		}
+
+		_SYS_TIMER = new Timer();
 	}
 
 	public static final String getRuntimeID() {
@@ -55,5 +61,9 @@ public class ServerRuntime {
 
 	public static final String getHostname() {
 		return _RUNTIME_HOST;
+	}
+
+	public static final Timer getSystemTimer() {
+		return _SYS_TIMER;
 	}
 }

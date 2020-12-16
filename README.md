@@ -34,60 +34,6 @@ curl https://barcodeapi.org/api/128/abc123
 curl https://barcodeapi.org/api/qr/abc123
 ```
 
-#### Response Headers
-
-The server will add several headers related to the barcode including the type and encoded contents.
-
-```
-$ curl --head https://barcodeapi.org/api/auto/abc123
-
-X-Barcode-Type: Code128
-X-Barcode-Content: abc123
-Content-Type: image/png;charset=utf-8
-Content-Disposition: filename=abc123.png
-```
-
-#### Control Characters
-
-Barcodes will frequently contain control characters for various reasons; as they can be difficult to enter in a text field, the API server has implemented a special mechanism for allowing users to easily generate barcodes containing these characters. Using a supported barcode, the prefix `$$` will shift any character value by -64. See the below table for examples.
-
-```
-@ -> NUL
-A -> SOH
-B -> STX
-...
-```
-
-Refer to [ascii.cl](https://ascii.cl/) for a complete table.
-
-### Server Statistics
-
-The server will keep counters for all handlers and caches, these statistics are available at the `/stats/` endpoint.
-
-### Caching
-
-The server implements a basic cache for rendered images, details about the current cache state can be found at the `/cache/` endpoint.
-
-Provided the cached object has not expired and been evicted, a request for a previously rendered barcode will will be rapidly served from memory insted of being rendered; the cache will only render requests matching a certain criteria.
-
-### Sessions
-
-A simple session cache will track all user actions; this can be used to provide the user with a list of their most used barcodes; this information is available at the `/session/` endpoint.
-
-### Multi-Barcode Generation
-
-Some users will want to generate a large number of barcodes with one request - a basic JavaScript utility is provided at `/multi.html` which will generate as many images as requested then prepare the file to be printed.
-
-```
-https://barcodeapi.org/multi.html?Barcode1&Barcode2&dm/A%20Data%20Matrix&qr/And%20QR/Automatic
-```
-
-### Add Admin
-
-```
-java -cp server.jar org.barcodeapi.core.utils.AuthUtils username pa@ssw0rd >> config/authlist.conf
-```
-
 ## Third-Party
 
 BarcodeAPI.org is only made possible with the use of third-party software.
