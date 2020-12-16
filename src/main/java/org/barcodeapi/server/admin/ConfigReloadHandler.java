@@ -9,6 +9,7 @@ import org.barcodeapi.server.core.Authlist;
 import org.barcodeapi.server.core.Blacklist;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ConfigReloadHandler extends RestHandler {
 
@@ -22,5 +23,10 @@ public class ConfigReloadHandler extends RestHandler {
 
 		Authlist.reload();
 		Blacklist.reload();
+
+		// print response to client
+		JSONObject output = new JSONObject()//
+				.put("message", "config reloaded");
+		response.getOutputStream().println(output.toString(4));
 	}
 }

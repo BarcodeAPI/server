@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.session.SessionCache;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SessionFlushHandler extends RestHandler {
 
@@ -19,6 +20,12 @@ public class SessionFlushHandler extends RestHandler {
 	protected void onRequest(HttpServletRequest request, HttpServletResponse response)
 			throws JSONException, IOException {
 
-		SessionCache.getCache().clearCache();
+		double count = SessionCache.getCache().clearCache();
+
+		// print response to client
+		JSONObject output = new JSONObject()//
+				.put("message", "sessions flushed")//
+				.put("count", count);
+		response.getOutputStream().println(output.toString(4));
 	}
 }

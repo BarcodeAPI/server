@@ -18,8 +18,7 @@ public class SessionDetailsHandler extends RestHandler {
 	protected void onRequest(HttpServletRequest request, HttpServletResponse response)
 			throws JSONException, IOException {
 
-		// print user session details
-		response.getOutputStream()//
-				.println(getSession(request).getDetails());
+		// print response to client
+		response.getOutputStream().println(getSession(request).getDetails().toString(4));
 	}
 }

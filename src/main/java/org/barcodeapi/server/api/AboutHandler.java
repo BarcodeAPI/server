@@ -20,12 +20,13 @@ public class AboutHandler extends RestHandler {
 	protected void onRequest(HttpServletRequest request, HttpServletResponse response)
 			throws JSONException, IOException {
 
-		response.getOutputStream().println((new JSONObject()//
+		// print response to client
+		JSONObject output = new JSONObject()//
 				.put("runtimeId", ServerRuntime.getRuntimeID())//
 				.put("uptime", ServerRuntime.getTimeRunning())//
 				.put("admin", "---")//
 				.put("hostname", ServerRuntime.getHostname())//
-				.put("version", ServerRuntime.getVersion())//
-		).toString(4));
+				.put("version", ServerRuntime.getVersion());
+		response.getOutputStream().println(output.toString(4));
 	}
 }

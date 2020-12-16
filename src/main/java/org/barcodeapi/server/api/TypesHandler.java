@@ -21,6 +21,7 @@ public class TypesHandler extends RestHandler {
 	protected void onRequest(HttpServletRequest request, HttpServletResponse response)
 			throws JSONException, IOException {
 
+		// loop all supported types
 		JSONArray output = new JSONArray();
 		for (CodeType type : CodeType.values()) {
 			output.put(new JSONObject()//
@@ -30,6 +31,7 @@ public class TypesHandler extends RestHandler {
 					.put("description", type.getDescription()));
 		}
 
-		response.getOutputStream().println(output.toString());
+		// print response to client
+		response.getOutputStream().println(output.toString(4));
 	}
 }

@@ -7,9 +7,11 @@ public abstract class CachedObject {
 	private final long timeCreated;
 	private long timeTimeout;
 	private long timeTouched;
+	private long accessCount;
 
 	public CachedObject() {
 
+		this.accessCount = 0;
 		this.timeCreated = System.currentTimeMillis();
 
 		this.touch();
@@ -36,7 +38,12 @@ public abstract class CachedObject {
 		this.timeTimeout = TimeUnit.MILLISECONDS.convert(timeoutTime, timeoutUnit);
 	}
 
+	public long getAccessCount() {
+		return accessCount;
+	}
+
 	protected void touch() {
+		accessCount += 1;
 		timeTouched = System.currentTimeMillis();
 	}
 

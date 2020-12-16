@@ -1,5 +1,6 @@
 package org.barcodeapi.server.session;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -7,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.Cookie;
 
 import org.barcodeapi.server.core.CachedObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class CachedSession extends CachedObject {
 
@@ -37,25 +40,25 @@ public class CachedSession extends CachedObject {
 		sessionRequests.put(data, sessionRequests.get(data) + 1);
 	}
 
-	public String getDetails() {
+	public JSONObject getDetails() {
 
-		String requests = "";
 		int requestCount = 0;
-		for (String key : sessionRequests.keySet()) {
+		JSONArray requests = new JSONArray();
+		for (Map.Entry<String, Integer> entry : sessionRequests.entrySet()) {
 
-			int count = sessionRequests.get(key);
-			requestCount += count;
-
-			requests += String.format("%4d :: %s\n", count, key);
+			requestCount += entry.getValue();
+			requests.put(new JSONObject()//
+					.put("text", entry.getKey())//
+					.put("hits", entry.getValue()));
 		}
 
-		return "\n" + //
-				" Key: " + getKey() + "\n" + //
-				" Created: " + getTimeCreated() + "\n" + //
-				" Last Seen: " + getTimeLastSeen() + "\n" + //
-				" Expiration: " + getTimeExpires() + "\n" + //
-				" Request Count: " + requestCount + "\n" + //
-				"\n  --\n\n" + requests;
+		return new JSONObject()//
+				.put("sessionKey", getKey())//
+				.put("timeCreated", getTimeCreated())//
+				.put("timeLastSeen", getTimeLastSeen())//
+				.put("timeExpires", getTimeExpires())//
+				.put("requestCount", requestCount)//
+				.put("requestList", requests);
 	}
 
 	public Cookie getCookie() {

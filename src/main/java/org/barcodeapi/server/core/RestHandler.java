@@ -100,7 +100,7 @@ public abstract class RestHandler extends AbstractHandler {
 		response.setStatus(HttpServletResponse.SC_OK);
 
 		// log the request
-		Log.out(LOG.REQUEST, _NAME + " : " + target + " : " + source + " : " + from);
+		Log.out(LOG.REQUEST, String.format("%s : %s : %s : %s", _NAME, target, source, from));
 
 		// server details
 		addCORSHeaders(baseRequest, response);
@@ -117,7 +117,8 @@ public abstract class RestHandler extends AbstractHandler {
 		// authenticate the user if required
 		if (authRequired() && !validateAdmin(request)) {
 
-			getStats().hitCounter("request", "authfail", request.getMethod());
+			getStats().hitCounter("request", "authfail");
+			getStats().hitCounter("request", "target", _NAME, "authfail");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setHeader("WWW-Authenticate", "Basic realm=BarcodeAPI.org Admin API");
 			return;

@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.session.SessionCache;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SessionListHandler extends RestHandler {
 
@@ -19,12 +21,15 @@ public class SessionListHandler extends RestHandler {
 	protected void onRequest(HttpServletRequest request, HttpServletResponse response)
 			throws JSONException, IOException {
 
-		String output = "";
-		for (String key : SessionCache.getCache().getKeys()) {
-			output += key + "\n";
+		JSONArray sessions = new JSONArray();
+		for (String key : SessionCache.getCache().getRawCache().keySet()) {
+			sessions.put(key);
 		}
 
-		// write to client
-		response.getOutputStream().println(output);
+		// print response to client
+		JSONObject output = new JSONObject()//
+				.put("sessions", sessions)//
+				.put("count", sessions.length());
+		response.getOutputStream().println(output.toString(4));
 	}
 }

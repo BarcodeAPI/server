@@ -2,7 +2,6 @@ package org.barcodeapi.server.core;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
 import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.statistics.StatsCollector;
@@ -70,8 +69,8 @@ public class ObjectCache {
 		return cache.get(key);
 	}
 
-	public KeySetView<String, CachedObject> getKeys() {
-		return cache.keySet();
+	public ConcurrentHashMap<String, CachedObject> getRawCache() {
+		return cache;
 	}
 
 	public CachedObject remove(String key) {
@@ -80,14 +79,16 @@ public class ObjectCache {
 		return cache.remove(key);
 	}
 
-	public void clearCache() {
+	public double clearCache() {
 
+		double cleared = 0;
 		synchronized (cache) {
 
-			double num = cache.size();
-			stats.hitCounter(num, "cache", name, "clear");
+			cleared = cache.size();
+			stats.hitCounter(cleared, "cache", name, "clear");
 			cache.clear();
 		}
+		return cleared;
 	}
 
 	public static synchronized ObjectCache getCache(String name) {
