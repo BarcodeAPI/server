@@ -10,6 +10,7 @@ FROM openjdk:11-jre-slim
 RUN apt update && apt install -y libfreetype-dev && rm -rf /var/lib/apt/lists/*
 COPY --from=build /home/app/target/server.jar /usr/local/lib/server.jar
 COPY config /config
+COPY resources /resources
 
 VOLUME /config
 
