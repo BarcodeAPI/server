@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -19,43 +20,38 @@ import com.opencsv.exceptions.CsvValidationException;
 
 public class BulkUtils {
 
-	public static void getZippedBarcodes(int max, InputStream in, OutputStream out)
-			throws IOException, GenerationException {
-
+	public static ArrayList<CachedBarcode> getBarcodes(InputStream in) throws IOException, GenerationException {
 		try (CSVReader reader = new CSVReader(new InputStreamReader(in))) {
 
 			ArrayList<BarcodeRequest> requests = new ArrayList<>();
 
 			String[] record;
 			while ((record = reader.readNext()) != null) {
-				if (requests.size() < max) {
-					requests.add(buildBarcodeRequest(record));
-				} else {
-					break;
-				}
+				requests.add(buildBarcodeRequest(record));
 			}
 			reader.close();
 
-			ArrayList<CachedBarcode> barcodes = generateBarcodes(requests);
-
-			ZipOutputStream zip = new ZipOutputStream(out);
-
-			for (CachedBarcode barcode : barcodes) {
-
-				String niceData = barcode.getProperties().getProperty("nice");
-				ZipEntry zipEntry = new ZipEntry(niceData + ".png");
-				zip.putNextEntry(zipEntry);
-				zip.write(barcode.getData(), 0, barcode.getDataSize());
-				zip.closeEntry();
-			}
-
-			zip.close();
-			out.close();
-
+			return generateBarcodes(requests);
 		} catch (CsvValidationException e) {
 
 			throw new GenerationException(ExceptionType.INVALID, e);
 		}
+	}
+
+	public static void zipBarcodes(List<CachedBarcode> barcodes, OutputStream out) throws IOException, GenerationException {
+		ZipOutputStream zip = new ZipOutputStream(out);
+
+		for (CachedBarcode barcode : barcodes) {
+
+			String niceData = barcode.getProperties().getProperty("nice");
+			ZipEntry zipEntry = new ZipEntry(niceData + ".png");
+			zip.putNextEntry(zipEntry);
+			zip.write(barcode.getData(), 0, barcode.getDataSize());
+			zip.closeEntry();
+		}
+
+		zip.close();
+		out.close();
 	}
 
 	private static BarcodeRequest buildBarcodeRequest(String[] record) throws GenerationException {
