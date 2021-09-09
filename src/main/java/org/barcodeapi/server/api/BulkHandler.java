@@ -25,24 +25,29 @@ public class BulkHandler extends RestHandler {
 	protected void onRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// Setup accept multi-part
-		request.setAttribute(Request.__MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
-		if (!request.getContentType().startsWith("multipart/")) {
-			return;
-		}
-
 		// Response headers for file download
 		response.setHeader("Content-Type", "application/zip");
 		response.setHeader("Content-Disposition", "filename=barcodes.zip");
 
 		try {
+			String contentType = request.getContentType();
+			if (contentType == null) {
+				contentType = "";
+			}
 
-			// Get the uploaded file
-			Part part = request.getPart("csvFile");
+			if (contentType.startsWith("multipart/")) {
+				// Setup accept multi-part
+				request.setAttribute(Request.__MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
 
-			// Pass input and output streams to bulk helper
-			BulkUtils.getZippedBarcodes(250, //
-					part.getInputStream(), response.getOutputStream());
+				// Get the uploaded file
+				Part part = request.getPart("csvFile");
+
+				// Pass input and output streams to bulk helper
+				BulkUtils.getZippedBarcodes(250, part.getInputStream(), response.getOutputStream());
+			} else {
+				BulkUtils.getZippedBarcodes(250, request.getInputStream(), response.getOutputStream());
+			}
+
 
 		} catch (GenerationException e) {
 
