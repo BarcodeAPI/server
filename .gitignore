@@ -1,5 +1,6 @@
-*
+/*
 !/config
+!/gcloud
 !/resources
 !/src
 !/.gitignore
