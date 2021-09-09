@@ -1,8 +1,9 @@
-.classpath
-.projet
-.settings/
-target/
-cache/
-logs/
-resources/blacklist.conf
+*
+!/config
+!/resources
+!/src
+!/.gitignore
+!/LICENSE.md
+!/pom.xml
+!/README.md
 
