@@ -64,7 +64,7 @@ public class BulkHandler extends RestHandler {
 				acceptHeader = "*/*"; // Accept all
 			}
 
-			if (acceptHeader.contains("*/*") || acceptHeader.contains("application/zip") || acceptHeader.contains("*/zip")) {
+			if (acceptHeader.contains("application/zip") || acceptHeader.contains("*/zip")) {
 				BulkUtils.zipBarcodes(generatedBarcodes, response.getOutputStream());
 			} else {
 				JSONObject root = new JSONObject();
