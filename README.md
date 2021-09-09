@@ -34,6 +34,33 @@ curl https://barcodeapi.org/api/128/abc123
 curl https://barcodeapi.org/api/qr/abc123
 ```
 
+### Bulk server
+Receive a json containing all the qr code images base64 encoded. Add multiple lines for multiple qr codes
+```
+curl -H "Content-Type: text/csv" --request POST --data "test,auto" https://barcodeapi.org/bulk/ -L -O -J
+```
+
+Example response:
+```json
+{
+    "barcodes": [
+        {
+            "data": "test",
+            "type": "Code128",
+            "barcode": "iVBORw0KGgoAAAANSUhEUgAAAPgAAACWAQAAAADbVHiMAAAACXBIWXMAABcSAAAXEgFnn9JSAAAAEnRFWHRTb2Z0d2FyZQBCYXJjb2RlNEryjnYuAAAAoUlEQVR4Xu3RQQrCMBCF4YDSbKS9gblClxVK3mG8huDCRc8luPYMgQrdVqTUghC7nRECQkGQN5DN/0FIGBNjPDnc+5Wr/LE18N7sg70eXNidZzN0Op1Op9PpdDqdTqfT/8JTs6xP84Eoy3pfb3MrivJyk6V8elxGiKK8uwGiKA9ZAVG02wai6PtjB1H0+4akP8u1Tf3vVedFI8p3+/ucX/sbOxWMgntIk+8AAAAASUVORK5CYII=",
+            "nice": "test"
+        }
+    ]
+}
+```
+
+You can also retrieve the images zipped in a file like so
+```
+curl -H "Accept: application/zip" -H "Content-Type: text/csv" --request POST --data "test,auto" https://barcodeapi.org/bulk/ -L -O -J
+```
+
+**NOTE:** The url needs to end with `/bulk/`, including the last slash. I don't know why, but otherwise it breaks.
+
 ## Third-Party
 
 BarcodeAPI.org is only made possible with the use of third-party software.
