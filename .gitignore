@@ -3,6 +3,7 @@
 !/resources
 !/src
 !/.gitignore
+!/Dockerfile
 !/LICENSE.md
 !/pom.xml
 !/README.md
