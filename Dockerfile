@@ -8,7 +8,6 @@ RUN ["mvn", "compile", "assembly:single"]
 # Start the project
 FROM adoptopenjdk/openjdk11:debian-slim
 WORKDIR /project
-COPY ./config ./config
 COPY ./resources ./resources
 COPY --from=BUILD /project/target/server.jar /barcode-webservice.jar
 EXPOSE 8080
