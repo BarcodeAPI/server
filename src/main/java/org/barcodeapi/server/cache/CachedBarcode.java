@@ -13,7 +13,7 @@ public class CachedBarcode extends CachedObject {
 	private Properties properties;
 
 	public CachedBarcode(byte[] data) {
-		this.setTimeout(3, TimeUnit.DAYS);
+		this.setTimeout(1, TimeUnit.HOURS);
 
 		this.cachedData = data;
 		this.checksum = CodeUtils.getMD5Sum(data);
