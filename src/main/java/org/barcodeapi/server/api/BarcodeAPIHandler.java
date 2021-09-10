@@ -16,7 +16,6 @@ import java.io.IOException;
 public class BarcodeAPIHandler extends RestHandler {
 
 	private final CachedBarcode ERR;
-	private final CachedBarcode BLK;
 
 	public BarcodeAPIHandler() {
 		super();
@@ -25,8 +24,6 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			ERR = BarcodeGenerator.requestBarcode(BarcodeRequest.fromUri(//
 					"/api/128/$$@E$$@R$$@R$$@O$$@R$$@"));
-			BLK = BarcodeGenerator.requestBarcode(BarcodeRequest.fromUri(//
-					"/api/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
 		} catch (GenerationException e) {
 			throw new RuntimeException("init failed", e);
 		}
@@ -52,11 +49,6 @@ public class BarcodeAPIHandler extends RestHandler {
 					"reason [ " + e.getMessage() + " ]");
 
 			switch (e.getExceptionType()) {
-			case BLACKLIST:
-				// serve blacklist code
-				barcode = BLK;
-				break;
-
 			case EMPTY:
 			case FAILED:
 			default:

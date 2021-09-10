@@ -5,7 +5,7 @@ public class GenerationException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public enum ExceptionType {
-		EMPTY, BLACKLIST, FAILED, INVALID;
+		EMPTY, FAILED, INVALID;
 	}
 
 	private final ExceptionType type;
