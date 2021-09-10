@@ -1,43 +1,57 @@
 # BarcodeAPI.org
 
-The BarcodeAPI.org web server was designed to provide an easy to use barcode generation API via the HTTP protocol for use in external / mobile applications where generation libraries might not exist or resources limited; the WebUI is also designed to be responsive such that users may generate barcodes to be scanned directly from their web browser or download the barcodes after testing them out.
+The BarcodeAPI.org web server was designed to provide an easy to use barcode generation API via the HTTP protocol for use in external / mobile applications
+where generation libraries might not exist or resources limited;
+the WebUI is also designed to be responsive such that users may generate barcodes to be scanned directly from their web browser or download the barcodes after testing them out.
+
+Every customer of ours has their own barcode server hosted on google cloud.
+If the base url or login credentials are missing, you can contact R&D.
 
 ## Web Server
 
-The server comes with a minimal set of static HTML and Javascript files that allow users to generate barcodes in their web browser with ease. The UI allows users to quickly download, print, or copy the images for use in other applications.
+The server comes with a minimal set of static HTML and Javascript files that allow users to generate barcodes in their web browser with ease.
+The UI allows users to quickly download, print, or copy the images for use in other applications.
 
-### API Server
+## API Server
 
-The server will generate a barcode for any content passed to the `/api` endpoint; this can be done using a web browser, fetched through a user script, or even simply with cURL.
-
-```
-curl https://barcodeapi.org/api/A_Barcode > gen.png
-```
-
-#### Automatic Code Type Detection
-
-When calling the API endpoint without specifying an eplitit code type the server will make its best judgement as to which code type will be best suited for the supplied data.
+The server will generate a barcode for any content passed to the `/api` endpoint.
+This can be done using a web browser, fetched through a user script, or even simply with cURL.
+The format of this endpoint is as follows `<baseurl>/api/<code-type>/<barcode>`;
 
 ```
-curl https://barcodeapi.org/api/abc123
-curl https://barcodeapi.org/api/auto/abc123
+curl <baseurl>/api/QRCode/A_Barcode > gen.png
 ```
 
-#### Defined Code Type
+### Supported Code Type
 
-A list of all supported barcodes types is available by calling the `/types/` endpoint; this will be a JSON Array containing details for each type including a regex format to prevalidate the date before a request.
+A list of all supported barcodes types is available by calling the `/types/` endpoint.
+This will be a JSON Array containing details for each type including a regex format to prevalidate the date before a request.
 
 Specific barcode types may be requested by adding the type string in the request URL:
 
 ```
-curl https://barcodeapi.org/api/128/abc123
-curl https://barcodeapi.org/api/qr/abc123
+curl <baseurl>/api/128/abc123
+curl <baseurl>/api/qr/abc123
 ```
 
-### Bulk server
-Receive a json containing all the qr code images base64 encoded. Add multiple lines for multiple qr codes
+### Automatic Code Type Detection
+
+When calling the API endpoint without specifying an eplitit code type the server will make its best judgement as to which code type will be best suited for the supplied data.
+
 ```
-curl -H "Content-Type: text/csv" --request POST --data "test,auto" https://barcodeapi.org/bulk/ -L -O -J
+curl <baseurl>/api/auto/abc123
+```
+
+## Bulk server
+Receive a json containing all the qr code images base64 encoded. Add multiple lines for multiple qr codes.
+The bulk server can interpret both csv and json input.
+The correct Content-Type header will need to be set.
+```
+curl -H "Content-Type: text/csv" --request POST --data "test,auto" <baseurl>/bulk/ -L -O -J
+```
+
+```
+curl -H "Content-Type: application/json" --request POST --data '[{"data": "test", type: "auto"}]' <baseurl>/bulk/ -L -O -J
 ```
 
 Example response:
@@ -54,9 +68,9 @@ Example response:
 }
 ```
 
-You can also retrieve the images zipped in a file like so
+You can also retrieve the images zipped in a file by providing the "Accept: application/zip" header.
 ```
-curl -H "Accept: application/zip" -H "Content-Type: text/csv" --request POST --data "test,auto" https://barcodeapi.org/bulk/ -L -O -J
+curl -H "Accept: application/zip" -H "Content-Type: text/csv" --request POST --data "test,auto" <baseurl>/bulk/ -L -O -J
 ```
 
 **NOTE:** The url needs to end with `/bulk/`, including the last slash. I don't know why, but otherwise it breaks.
