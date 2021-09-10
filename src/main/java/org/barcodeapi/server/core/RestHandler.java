@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 
 public abstract class RestHandler extends AbstractHandler {
 
@@ -87,9 +88,11 @@ public abstract class RestHandler extends AbstractHandler {
 			// call the implemented method
 			this.onRequest(request, response);
 		} catch (Exception e) {
-
 			// TODO handle this
 			e.printStackTrace();
+
+			response.setStatus(500);
+			response.getOutputStream().write(("Internal server error\n" + e.getMessage()).getBytes(StandardCharsets.UTF_8));
 		}
 	}
 

@@ -1,10 +1,5 @@
 package org.barcodeapi.server.api;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.Log;
@@ -13,6 +8,10 @@ import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.gen.BarcodeGenerator;
 import org.barcodeapi.server.gen.BarcodeRequest;
 import org.json.JSONException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class BarcodeAPIHandler extends RestHandler {
 
@@ -24,12 +23,12 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		try {
 
-			ERR = BarcodeGenerator.requestBarcode(new BarcodeRequest(//
-					"/128/$$@E$$@R$$@R$$@O$$@R$$@"));
-			BLK = BarcodeGenerator.requestBarcode(new BarcodeRequest(//
-					"/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
+			ERR = BarcodeGenerator.requestBarcode(BarcodeRequest.fromUri(//
+					"/api/128/$$@E$$@R$$@R$$@O$$@R$$@"));
+			BLK = BarcodeGenerator.requestBarcode(BarcodeRequest.fromUri(//
+					"/api/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
 		} catch (GenerationException e) {
-			throw new RuntimeException("init failed");
+			throw new RuntimeException("init failed", e);
 		}
 	}
 
@@ -43,7 +42,7 @@ public class BarcodeAPIHandler extends RestHandler {
 		try {
 
 			// generate user requested barcode
-			BarcodeRequest barcodeRequest = new BarcodeRequest(uri);
+			BarcodeRequest barcodeRequest = BarcodeRequest.fromUri(uri);
 			barcode = BarcodeGenerator.requestBarcode(barcodeRequest);
 
 		} catch (GenerationException e) {

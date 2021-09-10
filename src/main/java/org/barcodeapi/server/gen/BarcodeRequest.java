@@ -5,97 +5,67 @@ import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.TypeSelector;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class BarcodeRequest {
+
+	private static final Pattern uriPattern;
+
+	static {
+		Set<String> validTypes = new HashSet<>();
+		validTypes.add("auto");
+		for (CodeType codeType : CodeType.values()) {
+			validTypes.add(codeType.name());
+			validTypes.addAll(Arrays.asList(codeType.getTypeStrings()));
+		}
+
+		uriPattern = Pattern.compile("(?:/|^)(" + String.join("|", validTypes) + ")/([^?]+)(?:\\?(.*))?");
+	}
 
 	private final CodeType type;
 	private final String data;
-	private final boolean cached;
 	private final JSONObject options;
 
-	private BarcodeRequest(CodeType type, String data, boolean cached, JSONObject options) {
+	private BarcodeRequest(CodeType type, String data, JSONObject options) {
 		this.type = type;
 		this.data = data;
-		this.cached = cached;
 		this.options = options;
 	}
 
-	public BarcodeRequest(String target) throws GenerationException {
-
-		// remove [ /api ]
-		if (target.startsWith("/api")) {
-			target = target.substring(4);
+	public static BarcodeRequest fromUri(String uri) throws GenerationException {
+		Matcher uriMatcher = uriPattern.matcher(uri);
+		if (!uriMatcher.find()) {
+			throw new GenerationException(GenerationException.ExceptionType.INVALID, "Invalid uri. Should have the format /<type>/<barcode>");
 		}
 
-		// get and decode the request string
-		String[] parts = target.split("\\?");
-		String data = StringUtils.decode(parts[0].substring(1));
+		// Get the type
+		CodeType type = TypeSelector.getType(uriMatcher.group(1), uriMatcher.group(2));
+		if (type == null) {
+			throw new GenerationException(GenerationException.ExceptionType.INVALID, "Invalid type: " + uriMatcher.group(1));
+		}
 
 		// get and parse options
 		JSONObject options = new JSONObject();
-		if (parts.length == 2) {
-			options = StringUtils.parseOptions(parts[1]);
+		if (uriMatcher.groupCount() >= 4 && uriMatcher.group(3) != null) {
+			options = StringUtils.parseOptions(uriMatcher.group(3));
 		}
 
-		// use cache based on options
-		boolean cached = true;
-		if (options.length() > 0) {
-			cached = false;
-		}
-		if (data.length() > 64) {
-			cached = false;
-		}
-		if (options.optBoolean("no-cache", false)) {
-			cached = false;
-		}
-
-		// extract code type and data string
-		CodeType type;
-		int typeIndex = data.indexOf("/");
-		if (typeIndex > 0) {
-
-			// get the type string
-			String typeString = data.substring(0, typeIndex);
-
-			// type is auto
-			if (typeString.equals("auto")) {
-
-				// no type specified
-				data = data.substring(5);
-				type = TypeSelector.getTypeFromData(data);
-
-			} else {
-
-				// check if generator found for given type
-				type = TypeSelector.getTypeFromString(typeString);
-				if (type == null) {
-
-					// no type specified
-					type = TypeSelector.getTypeFromData(data);
-				} else {
-
-					// set data string to omit type
-					data = data.substring(typeIndex + 1);
-				}
-			}
-		} else {
-
-			// no type specified
-			type = TypeSelector.getTypeFromData(data);
-		}
-
-		// assign class variables
-		this.type = type;
-		this.data = data;
-		this.cached = cached;
-		this.options = options;
+		return new BarcodeRequest(type, uriMatcher.group(2), options);
 	}
 
-	public static BarcodeRequest fromJson(JSONObject json) {
+	public static BarcodeRequest fromJson(JSONObject json) throws GenerationException {
+		CodeType type = TypeSelector.getTypeFromString(json.getString("type"));
+		if (type == null) {
+			throw new GenerationException(GenerationException.ExceptionType.INVALID, "Invalid type: " + json.getString("type"));
+		}
 		JSONObject options = json.optJSONObject("options");
 		return new BarcodeRequest(
-			TypeSelector.getType(json.optString("type", null), json.getString("data")),
+			type,
 			json.getString("data"),
-			json.optBoolean("cached", false),
 			options == null ? new JSONObject() : options
 		);
 	}
@@ -109,7 +79,7 @@ public class BarcodeRequest {
 	}
 
 	public boolean useCache() {
-		return cached;
+		return this.options.optBoolean("cached", false);
 	}
 
 	public JSONObject getOptions() {
