@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -42,17 +43,32 @@ public class BulkHandler extends RestHandler {
 
 			List<CachedBarcode> generatedBarcodes;
 
-			if (contentType.startsWith("multipart/")) {
+			if (contentType.contains("multipart/")) {
 				// Setup accept multi-part
 				request.setAttribute(Request.__MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
+				generatedBarcodes = new ArrayList<>();
 
-				// Get the uploaded file
-				Part part = request.getPart("csvFile");
+				// Get the uploaded csv file
+				Part csvPart = request.getPart("csv");
+				if (csvPart != null) {
+					// Pass input and output streams to bulk helper
+					generatedBarcodes.addAll(BulkUtils.getBarcodesFromCsv(csvPart.getInputStream()));
+				}
 
-				// Pass input and output streams to bulk helper
-				generatedBarcodes = BulkUtils.getBarcodes(part.getInputStream());
+				// Get the uploaded csv file
+				Part jsonPart = request.getPart("json");
+				if (jsonPart != null) {
+					// Pass input and output streams to bulk helper
+					generatedBarcodes.addAll(BulkUtils.getBarcodesFromJson(jsonPart.getInputStream()));
+				}
+			} else if (contentType.equals("application/json")) {
+				generatedBarcodes = BulkUtils.getBarcodesFromJson(request.getInputStream());
+			} else if (contentType.contains("text/")) {
+				generatedBarcodes = BulkUtils.getBarcodesFromCsv(request.getInputStream());
 			} else {
-				generatedBarcodes = BulkUtils.getBarcodes(request.getInputStream());
+				response.setStatus(415);
+				response.getOutputStream().write("Supported content types: multipart/*, application/json & text/csv".getBytes(StandardCharsets.UTF_8));
+				return;
 			}
 
 			String acceptHeader = request.getHeader("Accept");

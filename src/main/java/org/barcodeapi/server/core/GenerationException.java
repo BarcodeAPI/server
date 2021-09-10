@@ -14,6 +14,11 @@ public class GenerationException extends Exception {
 		this(type, new Throwable(type.toString()));
 	}
 
+	public GenerationException(ExceptionType type, String message) {
+		super(message);
+		this.type = type;
+	}
+
 	public GenerationException(ExceptionType type, Throwable throwable) {
 		super(throwable);
 

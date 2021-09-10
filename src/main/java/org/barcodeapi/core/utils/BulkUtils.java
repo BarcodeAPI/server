@@ -1,26 +1,51 @@
 package org.barcodeapi.core.utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.gen.BarcodeGenerator;
 import org.barcodeapi.server.gen.BarcodeRequest;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class BulkUtils {
 
-	public static ArrayList<CachedBarcode> getBarcodes(InputStream in) throws IOException, GenerationException {
+	public static ArrayList<CachedBarcode> getBarcodesFromJson(InputStream in) throws GenerationException {
+		String input = new BufferedReader(
+			new InputStreamReader(in, StandardCharsets.UTF_8))
+			.lines()
+			.collect(Collectors.joining("\n"));
+		JSONArray json;
+		if (input.startsWith("[")) {
+			json = new JSONArray(input);
+		} else if (input.startsWith("{")) {
+			json = new JSONArray();
+			json.put(new JSONObject(input));
+		} else {
+			throw new GenerationException(ExceptionType.INVALID, "invalid json");
+		}
+
+		ArrayList<BarcodeRequest> requests = new ArrayList<>();
+		for (int i = 0; i < json.length(); i++) {
+			if (!(json.get(i) instanceof JSONObject)) {
+				throw new GenerationException(ExceptionType.INVALID, "requested item at index " + i + " is not an object");
+			}
+			requests.add(BarcodeRequest.fromJson((JSONObject) json.get(i)));
+		}
+		return generateBarcodes(requests);
+	}
+
+	public static ArrayList<CachedBarcode> getBarcodesFromCsv(InputStream in) throws IOException, GenerationException {
 		try (CSVReader reader = new CSVReader(new InputStreamReader(in))) {
 
 			ArrayList<BarcodeRequest> requests = new ArrayList<>();

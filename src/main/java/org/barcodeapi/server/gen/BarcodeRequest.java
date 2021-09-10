@@ -12,6 +12,13 @@ public class BarcodeRequest {
 	private final boolean cached;
 	private final JSONObject options;
 
+	private BarcodeRequest(CodeType type, String data, boolean cached, JSONObject options) {
+		this.type = type;
+		this.data = data;
+		this.cached = cached;
+		this.options = options;
+	}
+
 	public BarcodeRequest(String target) throws GenerationException {
 
 		// remove [ /api ]
@@ -81,6 +88,16 @@ public class BarcodeRequest {
 		this.data = data;
 		this.cached = cached;
 		this.options = options;
+	}
+
+	public static BarcodeRequest fromJson(JSONObject json) {
+		JSONObject options = json.optJSONObject("options");
+		return new BarcodeRequest(
+			TypeSelector.getType(json.optString("type", null), json.getString("data")),
+			json.getString("data"),
+			json.optBoolean("cached", false),
+			options == null ? new JSONObject() : options
+		);
 	}
 
 	public CodeType getType() {

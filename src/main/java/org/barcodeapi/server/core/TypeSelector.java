@@ -93,4 +93,17 @@ public class TypeSelector {
 		// Return null on no matches
 		return null;
 	}
+
+	public static CodeType getType(String codeType, String data) {
+		CodeType type = null;
+		if (codeType != null && !codeType.equals("auto")) {
+			type = getTypeFromString(codeType);
+		}
+
+		if (type == null) {
+			type = getTypeFromData(data);
+		}
+		return type;
+	}
+
 }
