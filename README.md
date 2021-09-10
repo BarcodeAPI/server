@@ -12,6 +12,13 @@ If the base url or login credentials are missing, you can contact R&D.
 The server comes with a minimal set of static HTML and Javascript files that allow users to generate barcodes in their web browser with ease.
 The UI allows users to quickly download, print, or copy the images for use in other applications.
 
+### Print multiple barcodes
+You can redirect a user to the multi web page.
+When passing parameters, the user will get to see all the barcodes that you have passed to it.
+All the user needs to do is press the print button.
+
+Example uri: `<baseurl>/multi.html?QRCode/myQrCode&auto/aSecondCode`
+
 ## API Server
 
 The server will generate a barcode for any content passed to the `/api` endpoint.
