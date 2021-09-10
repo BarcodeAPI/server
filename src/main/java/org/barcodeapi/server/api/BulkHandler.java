@@ -28,12 +28,7 @@ public class BulkHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		// Response headers for file download
-		response.setHeader("Content-Type", "application/zip");
-		response.setHeader("Content-Disposition", "filename=barcodes.zip");
+	protected void onRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		try {
 			String contentType = request.getContentType();
@@ -78,6 +73,9 @@ public class BulkHandler extends RestHandler {
 
 			if (acceptHeader.contains("application/zip") || acceptHeader.contains("*/zip")) {
 				BulkUtils.zipBarcodes(generatedBarcodes, response.getOutputStream());
+				// Response headers for file download
+				response.setHeader("Content-Type", "application/zip");
+				response.setHeader("Content-Disposition", "filename=barcodes.zip");
 			} else {
 				JSONObject root = new JSONObject();
 				JSONArray items = new JSONArray();
