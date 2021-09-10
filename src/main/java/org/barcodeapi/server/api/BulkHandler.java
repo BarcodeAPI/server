@@ -1,18 +1,5 @@
 package org.barcodeapi.server.api;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-
-import jdk.nashorn.internal.ir.debug.JSONWriter;
 import org.barcodeapi.core.utils.BulkUtils;
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.GenerationException;
@@ -20,7 +7,16 @@ import org.barcodeapi.server.core.RestHandler;
 import org.eclipse.jetty.server.Request;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONString;
+
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.List;
 
 public class BulkHandler extends RestHandler {
 

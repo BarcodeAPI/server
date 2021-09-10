@@ -1,14 +1,13 @@
 package org.barcodeapi.server.api;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.barcodeapi.core.ServerRuntime;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class AboutHandler extends RestHandler {
 
@@ -28,5 +27,6 @@ public class AboutHandler extends RestHandler {
 				.put("hostname", ServerRuntime.getHostname())//
 				.put("version", ServerRuntime.getVersion());
 		response.getOutputStream().println(output.toString(4));
+		response.setHeader("Content-Type", "application/json");
 	}
 }

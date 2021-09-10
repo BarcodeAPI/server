@@ -1,37 +1,24 @@
 package org.barcodeapi.server.core;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.util.Base64;
+import org.barcodeapi.server.core.Log.LOG;
+import org.barcodeapi.server.session.CachedSession;
+import org.barcodeapi.server.session.SessionCache;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.barcodeapi.core.utils.StringUtils;
-import org.barcodeapi.server.core.Log.LOG;
-import org.barcodeapi.server.session.CachedSession;
-import org.barcodeapi.server.session.SessionCache;
-import org.barcodeapi.server.statistics.StatsCollector;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
+import java.io.IOException;
+import java.net.InetAddress;
 
 public abstract class RestHandler extends AbstractHandler {
 
 	private final String _NAME;
-
 	private final String serverName;
 
-	private final StatsCollector stats;
-
-	private final boolean authRequired;
-
 	public RestHandler() {
-		this(false);
-	}
-
-	public RestHandler(boolean authRequired) {
 
 		// extract class name
 		String className = getClass().getName();
@@ -42,28 +29,9 @@ public abstract class RestHandler extends AbstractHandler {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-
-		this.stats = StatsCollector.getInstance();
-		this.authRequired = authRequired;
 	}
 
-	public StatsCollector getStats() {
-		return stats;
-	}
-
-	public boolean authRequired() {
-		return authRequired;
-	}
-
-	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-
-		long timeStart = System.currentTimeMillis();
-		getStats().hitCounter("request", "count");
-		getStats().hitCounter("request", "method", request.getMethod());
-		getStats().hitCounter("request", "target", _NAME, "count");
-		getStats().hitCounter("request", "target", _NAME, "method", request.getMethod());
-
+	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		// skip if already handled
 		if (!baseRequest.isHandled()) {
 			baseRequest.setHandled(true);
@@ -114,16 +82,6 @@ public abstract class RestHandler extends AbstractHandler {
 		session.hit(baseRequest.getOriginalURI().toString());
 		response.addCookie(session.getCookie());
 
-		// authenticate the user if required
-		if (authRequired() && !validateAdmin(request)) {
-
-			getStats().hitCounter("request", "authfail");
-			getStats().hitCounter("request", "target", _NAME, "authfail");
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.setHeader("WWW-Authenticate", "Basic realm=BarcodeAPI.org Admin API");
-			return;
-		}
-
 		try {
 
 			// call the implemented method
@@ -133,11 +91,6 @@ public abstract class RestHandler extends AbstractHandler {
 			// TODO handle this
 			e.printStackTrace();
 		}
-
-		// hit the counters
-		long targetTime = System.currentTimeMillis() - timeStart;
-		getStats().hitCounter(targetTime, "request", "time");
-		getStats().hitCounter(targetTime, "request", "target", _NAME, "time");
 	}
 
 	protected abstract void onRequest(HttpServletRequest request, HttpServletResponse response) throws Exception;
@@ -155,24 +108,6 @@ public abstract class RestHandler extends AbstractHandler {
 		if (request.getMethod().equals("OPTIONS")) {
 			response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 		}
-	}
-
-	protected boolean validateAdmin(HttpServletRequest request) {
-
-		// false if no authentication
-		String auth = request.getHeader("Authorization");
-		if (auth == null || !auth.startsWith("Basic")) {
-			return false;
-		}
-
-		String authString = auth.substring(6);
-		String decode = new String(Base64.getDecoder().decode(authString));
-		String[] unpw = decode.split(":");
-
-		String passHash = StringUtils.sumSHA256(unpw[1].getBytes());
-		String userAuth = String.format("%s:%s", unpw[0], passHash);
-
-		return Authlist.getAuthlist().contains(userAuth);
 	}
 
 	protected CachedSession getSession(HttpServletRequest request) {
