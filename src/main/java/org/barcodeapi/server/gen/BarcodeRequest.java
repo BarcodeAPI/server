@@ -58,7 +58,7 @@ public class BarcodeRequest {
 	}
 
 	public static BarcodeRequest fromJson(JSONObject json) throws GenerationException {
-		CodeType type = TypeSelector.getTypeFromString(json.getString("type"));
+		CodeType type = TypeSelector.getType(json.getString("type"), json.getString("data"));
 		if (type == null) {
 			throw new GenerationException(GenerationException.ExceptionType.INVALID, "Invalid type: " + json.getString("type"));
 		}

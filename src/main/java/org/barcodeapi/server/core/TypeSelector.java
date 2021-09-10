@@ -12,7 +12,7 @@ public class TypeSelector {
 	 * @param codeType
 	 * @return
 	 */
-	public static CodeType getTypeFromString(String codeType) {
+	private static CodeType getTypeFromString(String codeType) {
 
 		// Convert to lower case
 		codeType = codeType.toLowerCase();
@@ -41,7 +41,7 @@ public class TypeSelector {
 	 * @param data
 	 * @return
 	 */
-	public static CodeType getTypeFromData(String data) {
+	private static CodeType getTypeFromData(String data) {
 
 		// Match UPC-E format
 		if (data.matches(CodeType.UPC_E.getAutomatchPattern())) {
