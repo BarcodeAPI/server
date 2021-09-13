@@ -5,6 +5,9 @@ import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.TypeSelector;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,18 +46,24 @@ public class BarcodeRequest {
 		}
 
 		// Get the type
-		CodeType type = TypeSelector.getType(uriMatcher.group(1), uriMatcher.group(2));
-		if (type == null) {
-			throw new GenerationException(GenerationException.ExceptionType.INVALID, "Invalid type: " + uriMatcher.group(1));
-		}
+		try {
+			String urlCodeType = URLDecoder.decode(uriMatcher.group(1), StandardCharsets.UTF_8.name());
+			String urlData = URLDecoder.decode(uriMatcher.group(2), StandardCharsets.UTF_8.name());
+			CodeType type = TypeSelector.getType(urlCodeType, urlData);
+			if (type == null) {
+				throw new GenerationException(GenerationException.ExceptionType.INVALID, "Invalid type: " + urlCodeType);
+			}
 
-		// get and parse options
-		JSONObject options = new JSONObject();
-		if (uriMatcher.groupCount() >= 4 && uriMatcher.group(3) != null) {
-			options = StringUtils.parseOptions(uriMatcher.group(3));
-		}
+			// get and parse options
+			JSONObject options = new JSONObject();
+			if (uriMatcher.groupCount() >= 4 && uriMatcher.group(3) != null) {
+				options = StringUtils.parseOptions(URLDecoder.decode(uriMatcher.group(3), StandardCharsets.UTF_8.name()));
+			}
 
-		return new BarcodeRequest(type, uriMatcher.group(2), options);
+			return new BarcodeRequest(type, urlData, options);
+		} catch (UnsupportedEncodingException e) {
+			throw new GenerationException(GenerationException.ExceptionType.INVALID, e);
+		}
 	}
 
 	public static BarcodeRequest fromJson(JSONObject json) throws GenerationException {
