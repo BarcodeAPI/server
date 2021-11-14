@@ -16,47 +16,56 @@ public class Code39Generator extends CodeGenerator {
 
 	private Code39Bean generator;
 
-	private final int dpi = 150;
-
 	public Code39Generator() {
 		super(CodeType.Code39);
 
 		// Setup Code39 generator
 		generator = new Code39Bean();
-
-		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
-		generator.setModuleWidth(moduleWidth);
-
-		/**
-		 * Set quiet zone
-		 */
-		generator.doQuietZone(true);
-		generator.setQuietZone(10 * moduleWidth);
-		generator.setVerticalQuietZone(2 * moduleWidth);
-
-		generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
-
-		generator.setHeight(UnitConv.in2mm(1));
-		// barcode39Bean.setBarHeight(UnitConv.in2mm(.5));
-
-		// barcode39Bean.setFontName(name);
-		// barcode39Bean.setFontSize(size);
 	}
 
 	@Override
-	public synchronized byte[] onRender(String data, JSONObject options) throws IOException {
+	public byte[] onRender(String data, JSONObject options) throws IOException {
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		int dpi = options.optInt("dpi", 150);
+		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
 
-		BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-				out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+		int qz = options.optInt("qz", (int) (10 * moduleWidth));
+		int height = options.optInt("height", 25);
 
-		generator.generateBarcode(canvasProvider, data);
+		String text = options.optString("text", "bottom");
 
-		canvasProvider.getBufferedImage();
-		canvasProvider.finish();
-		out.close();
+		synchronized (generator) {
 
-		return out.toByteArray();
+			switch (text) {
+
+			case "bottom":
+				generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
+				break;
+
+			case "top":
+				generator.setMsgPosition(HumanReadablePlacement.HRP_TOP);
+				break;
+
+			case "none":
+			default:
+				generator.setMsgPosition(HumanReadablePlacement.HRP_NONE);
+				break;
+			}
+
+			generator.doQuietZone(true);
+			generator.setQuietZone(qz);
+			generator.setHeight(height);
+			generator.setModuleWidth(moduleWidth);
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
+					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+
+			generator.generateBarcode(canvasProvider, data);
+			canvasProvider.finish();
+			out.close();
+
+			return out.toByteArray();
+		}
 	}
 }

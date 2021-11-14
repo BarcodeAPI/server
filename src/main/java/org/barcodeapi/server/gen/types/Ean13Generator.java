@@ -10,6 +10,7 @@ import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
+import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
@@ -18,17 +19,10 @@ public class Ean13Generator extends CodeGenerator {
 
 	private EAN13Bean generator;
 
-	private final int dpi = 150;
-
 	public Ean13Generator() {
 		super(CodeType.EAN13);
 
 		generator = new EAN13Bean();
-
-		// configure barcode generator
-		generator.setModuleWidth(UnitConv.in2mm(2.5f / dpi));
-		generator.doQuietZone(true);
-		generator.setQuietZone(4);
 	}
 
 	@Override
@@ -52,19 +46,48 @@ public class Ean13Generator extends CodeGenerator {
 	}
 
 	@Override
-	public synchronized byte[] onRender(String data, JSONObject options) throws IOException {
+	public byte[] onRender(String data, JSONObject options) throws IOException {
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		int dpi = options.optInt("dpi", 150);
+		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
 
-		BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-				out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+		int qz = options.optInt("qz", 4);
+		int height = options.optInt("height", 25);
 
-		generator.generateBarcode(canvasProvider, data);
+		String text = options.optString("text", "bottom");
 
-		canvasProvider.getBufferedImage();
-		canvasProvider.finish();
-		out.close();
+		synchronized (generator) {
 
-		return out.toByteArray();
+			switch (text) {
+
+			case "bottom":
+				generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
+				break;
+
+			case "top":
+				generator.setMsgPosition(HumanReadablePlacement.HRP_TOP);
+				break;
+
+			case "none":
+			default:
+				generator.setMsgPosition(HumanReadablePlacement.HRP_NONE);
+				break;
+			}
+
+			generator.doQuietZone(true);
+			generator.setQuietZone(qz);
+			generator.setHeight(height);
+			generator.setModuleWidth(moduleWidth);
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
+					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+
+			generator.generateBarcode(canvasProvider, data);
+			canvasProvider.finish();
+			out.close();
+
+			return out.toByteArray();
+		}
 	}
 }

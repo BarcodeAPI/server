@@ -20,12 +20,12 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class QRCodeGenerator extends CodeGenerator {
 
-	private QRCodeWriter codeWriter;
+	private QRCodeWriter generator;
 
 	public QRCodeGenerator() {
 		super(CodeType.QRCode);
 
-		codeWriter = new QRCodeWriter();
+		generator = new QRCodeWriter();
 	}
 
 	@Override
@@ -35,23 +35,24 @@ public class QRCodeGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public synchronized byte[] onRender(String data, JSONObject options) throws WriterException, IOException {
+	public byte[] onRender(String data, JSONObject options) throws WriterException, IOException {
 
-		int mWidth = 300;
-		int mHeight = 300;
+		int size = options.optInt("size", 300);
 
 		Map<EncodeHintType, Object> hintsMap = new HashMap<>();
 		hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
 		hintsMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
 		hintsMap.put(EncodeHintType.MARGIN, 2);
 
-		BitMatrix bitMatrix = codeWriter.encode(//
-				data, BarcodeFormat.QR_CODE, mWidth, mHeight, hintsMap);
+		synchronized (generator) {
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+			BitMatrix bitMatrix = generator.encode(//
+					data, BarcodeFormat.QR_CODE, size, size, hintsMap);
 
-		MatrixToImageWriter.writeToStream(bitMatrix, "png", out);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			MatrixToImageWriter.writeToStream(bitMatrix, "png", out);
 
-		return out.toByteArray();
+			return out.toByteArray();
+		}
 	}
 }

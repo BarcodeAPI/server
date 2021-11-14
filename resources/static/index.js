@@ -251,10 +251,8 @@ function checkIfFileSelected() {
 
 	document.getElementById('csvFile').addEventListener('change', function () {
 		if(this.value.length > 0) {
-			console.log("file selected");
 			submitButton.removeAttribute("disabled");
 		} else {
-			console.log("no file");
 			submitButton.addAttribute("disabled");
 		}
 	});
@@ -298,7 +296,6 @@ function addTooltips() {
 
           var init_tooltip = function()
           {
-            console.log(getOffset(target));
             // set width of tooltip to half of window width
             if(window.innerWidth < tooltip.offsetWidth * 1.5)
             tooltip.style.maxWidth = window.innerWidth / 2;
@@ -307,7 +304,6 @@ function addTooltips() {
 
             var pos_left = getOffset(target).left + (target.offsetWidth / 2) - (tooltip.offsetWidth / 2),
             pos_top  = getOffset(target).top - tooltip.offsetHeight - 10;
-            console.log("top is", pos_top);
             if( pos_left < 0 )
             {
               pos_left = getOffset(target).left + target.offsetWidth / 2 - 20;

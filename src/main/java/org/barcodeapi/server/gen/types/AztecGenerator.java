@@ -18,32 +18,35 @@ import com.google.zxing.common.BitMatrix;
 
 public class AztecGenerator extends CodeGenerator {
 
-	private AztecWriter codeWriter;
+	private AztecWriter generator;
 
 	public AztecGenerator() {
 		super(CodeType.Aztec);
 
-		codeWriter = new AztecWriter();
+		generator = new AztecWriter();
 	}
 
 	@Override
-	public synchronized byte[] onRender(String data, JSONObject options) throws WriterException, IOException {
+	public byte[] onRender(String data, JSONObject options) throws WriterException, IOException {
 
-		int mWidth = 300;
-		int mHeight = 300;
+		int size = options.optInt("size", 300);
+		int correction = options.optInt("correction", 4);
+		int qz = options.optInt("qz", 2);
 
 		Map<EncodeHintType, Object> hintsMap = new HashMap<>();
 		hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
-		hintsMap.put(EncodeHintType.ERROR_CORRECTION, 10);
-		hintsMap.put(EncodeHintType.MARGIN, 2);
+		hintsMap.put(EncodeHintType.ERROR_CORRECTION, correction);
+		hintsMap.put(EncodeHintType.MARGIN, qz);
 
-		BitMatrix bitMatrix = codeWriter.encode(//
-				data, BarcodeFormat.AZTEC, mWidth, mHeight, hintsMap);
+		synchronized (generator) {
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+			BitMatrix bitMatrix = generator.encode(//
+					data, BarcodeFormat.AZTEC, size, size, hintsMap);
 
-		MatrixToImageWriter.writeToStream(bitMatrix, "png", out);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			MatrixToImageWriter.writeToStream(bitMatrix, "png", out);
 
-		return out.toByteArray();
+			return out.toByteArray();
+		}
 	}
 }

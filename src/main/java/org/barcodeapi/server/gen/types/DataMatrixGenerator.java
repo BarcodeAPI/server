@@ -23,10 +23,6 @@ public class DataMatrixGenerator extends CodeGenerator {
 		super(CodeType.DataMatrix);
 
 		generator = new DataMatrixBean();
-
-		// configure barcode generator
-		generator.doQuietZone(true);
-		generator.setShape(SymbolShapeHint.FORCE_SQUARE);
 	}
 
 	@Override
@@ -36,25 +32,36 @@ public class DataMatrixGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public synchronized byte[] onRender(String data, JSONObject options) throws IOException {
-
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+	public byte[] onRender(String data, JSONObject options) throws IOException {
 
 		int dpi = options.optInt("dpi", 200);
-		double size = options.optDouble("size", 1.5);
-		int quiet = options.optInt("qz", (int) (size * 2));
+		double scale = options.optDouble("scale", 1.5);
+		int qz = options.optInt("qz", (int) (scale * 2));
 
-		BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-				out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+		boolean square = options.optBoolean("square", true);
 
-		generator.setQuietZone(quiet);
-		generator.setModuleWidth(size);
-		generator.generateBarcode(canvasProvider, data);
+		synchronized (generator) {
 
-		canvasProvider.getBufferedImage();
-		canvasProvider.finish();
-		out.close();
+			if (square) {
+				generator.setShape(SymbolShapeHint.FORCE_SQUARE);
+			} else {
+				generator.setShape(SymbolShapeHint.FORCE_NONE);
+			}
 
-		return out.toByteArray();
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
+					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+
+			generator.doQuietZone(true);
+			generator.setQuietZone(qz);
+			generator.setModuleWidth(scale);
+
+			generator.generateBarcode(canvasProvider, data);
+			canvasProvider.finish();
+			out.close();
+
+			return out.toByteArray();
+		}
 	}
 }

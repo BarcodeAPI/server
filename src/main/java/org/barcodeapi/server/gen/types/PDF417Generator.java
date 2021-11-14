@@ -15,8 +15,6 @@ public class PDF417Generator extends CodeGenerator {
 
 	private PDF417Bean generator;
 
-	private final int dpi = 200;
-
 	/**
 	 * https://en.wikipedia.org/wiki/Data_Matrix
 	 */
@@ -24,33 +22,31 @@ public class PDF417Generator extends CodeGenerator {
 		super(CodeType.PDF417);
 
 		generator = new PDF417Bean();
-
-		// configure barcode generator
-		generator.setQuietZone(2);
-		generator.doQuietZone(true);
-		generator.setModuleWidth(UnitConv.in2mm(5.0f / dpi));
 	}
 
 	@Override
-	public String onValidateRequest(String data) {
+	public byte[] onRender(String data, JSONObject options) throws IOException {
 
-		return data;
-	}
+		int dpi = options.optInt("dpi", 150);
+		double moduleWidth = UnitConv.in2mm(5.0f / dpi);
 
-	@Override
-	public synchronized byte[] onRender(String data, JSONObject options) throws IOException {
+		int qz = options.optInt("qz", 2);
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		synchronized (generator) {
 
-		BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-				out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+			generator.doQuietZone(true);
+			generator.setQuietZone(qz);
+			generator.setModuleWidth(moduleWidth);
 
-		generator.generateBarcode(canvasProvider, data);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
+					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
 
-		canvasProvider.getBufferedImage();
-		canvasProvider.finish();
-		out.close();
+			generator.generateBarcode(canvasProvider, data);
+			canvasProvider.finish();
+			out.close();
 
-		return out.toByteArray();
+			return out.toByteArray();
+		}
 	}
 }

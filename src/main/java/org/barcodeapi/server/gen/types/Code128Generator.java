@@ -17,32 +17,11 @@ public class Code128Generator extends CodeGenerator {
 
 	private Code128Bean generator;
 
-	private final int dpi = 150;
-
 	public Code128Generator() {
 		super(CodeType.Code128);
 
 		// Setup Code128 generator
 		generator = new Code128Bean();
-
-		// barcode128Bean.setBarHeight(height);
-		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
-		generator.setModuleWidth(moduleWidth);
-
-		/**
-		 * The minimum width of the Quiet Zone to the left and right of the 128 Bar Code
-		 * is 10x, where x is the minimum width of a module. It is mandatory at the left
-		 * and right side of the barcode.
-		 * 
-		 * https://en.wikipedia.org/wiki/Code_128#Quiet_zone
-		 * 
-		 */
-		generator.doQuietZone(true);
-		generator.setQuietZone(10 * moduleWidth);
-
-		generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
-
-		generator.setHeight(UnitConv.in2mm(1));
 	}
 
 	@Override
@@ -52,20 +31,48 @@ public class Code128Generator extends CodeGenerator {
 	}
 
 	@Override
-	public synchronized byte[] onRender(String data, JSONObject options) throws IOException {
+	public byte[] onRender(String data, JSONObject options) throws IOException {
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		int dpi = options.optInt("dpi", 150);
+		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
 
-		BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-				out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+		int qz = options.optInt("qz", (int) (10 * moduleWidth));
+		int height = options.optInt("height", 25);
 
-		generator.generateBarcode(canvasProvider, data);
+		String text = options.optString("text", "bottom");
 
-		canvasProvider.getBufferedImage();
-		canvasProvider.finish();
+		synchronized (generator) {
 
-		out.close();
+			switch (text) {
 
-		return out.toByteArray();
+			case "bottom":
+				generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
+				break;
+
+			case "top":
+				generator.setMsgPosition(HumanReadablePlacement.HRP_TOP);
+				break;
+
+			case "none":
+			default:
+				generator.setMsgPosition(HumanReadablePlacement.HRP_NONE);
+				break;
+			}
+
+			generator.doQuietZone(true);
+			generator.setQuietZone(qz);
+			generator.setHeight(height);
+			generator.setModuleWidth(moduleWidth);
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
+					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+
+			generator.generateBarcode(canvasProvider, data);
+			canvasProvider.finish();
+			out.close();
+
+			return out.toByteArray();
+		}
 	}
 }

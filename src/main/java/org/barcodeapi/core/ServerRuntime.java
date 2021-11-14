@@ -28,7 +28,7 @@ public class ServerRuntime {
 		StatsCollector.getInstance()//
 				.setValue(_RUNTIME_TIMESTART, "system", "time", "start");
 
-		_RUNTIME_VERSION = "2";
+		_RUNTIME_VERSION = "3";
 		StatsCollector.getInstance()//
 				.setValue(_RUNTIME_VERSION, "system", "version");
 

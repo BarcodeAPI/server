@@ -24,33 +24,51 @@ public class UPCEGenerator extends CodeGenerator {
 
 		// Setup Code39 generator
 		generator = new UPCEBean();
-
-		generator.doQuietZone(true);
-		generator.setHeight(UnitConv.in2mm(1));
-		generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
 	}
 
 	@Override
-	public synchronized byte[] onRender(String data, JSONObject options) throws IOException {
+	public byte[] onRender(String data, JSONObject options) throws IOException {
 
 		int dpi = options.optInt("dpi", 150);
-
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-				out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
-
 		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
 
-		// set options and generate
-		generator.setModuleWidth(moduleWidth);
-		generator.setQuietZone(10 * moduleWidth);
-		generator.setVerticalQuietZone(2 * moduleWidth);
-		generator.generateBarcode(canvasProvider, data);
+		int qz = options.optInt("qz", (int) (10 * moduleWidth));
+		int height = options.optInt("height", 25);
 
-		canvasProvider.getBufferedImage();
-		canvasProvider.finish();
-		out.close();
+		String text = options.optString("text", "bottom");
 
-		return out.toByteArray();
+		synchronized (generator) {
+
+			switch (text) {
+
+			case "bottom":
+				generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
+				break;
+
+			case "top":
+				generator.setMsgPosition(HumanReadablePlacement.HRP_TOP);
+				break;
+
+			case "none":
+			default:
+				generator.setMsgPosition(HumanReadablePlacement.HRP_NONE);
+				break;
+			}
+
+			generator.doQuietZone(true);
+			generator.setQuietZone(qz);
+			generator.setHeight(height);
+			generator.setModuleWidth(moduleWidth);
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
+					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+
+			generator.generateBarcode(canvasProvider, data);
+			canvasProvider.finish();
+			out.close();
+
+			return out.toByteArray();
+		}
 	}
 }
