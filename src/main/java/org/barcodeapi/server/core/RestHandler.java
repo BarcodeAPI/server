@@ -127,7 +127,8 @@ public abstract class RestHandler extends AbstractHandler {
 		try {
 
 			// call the implemented method
-			this.onRequest(request, response);
+			String uri = baseRequest.getOriginalURI();
+			this.onRequest(uri, request, response);
 		} catch (Exception e) {
 
 			// TODO handle this
@@ -140,7 +141,8 @@ public abstract class RestHandler extends AbstractHandler {
 		getStats().hitCounter(targetTime, "request", "target", _NAME, "time");
 	}
 
-	protected abstract void onRequest(HttpServletRequest request, HttpServletResponse response) throws Exception;
+	protected abstract void onRequest(String uri, HttpServletRequest request, HttpServletResponse response)
+			throws Exception;
 
 	protected void addCORSHeaders(HttpServletRequest request, HttpServletResponse response) {
 

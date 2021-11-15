@@ -18,7 +18,7 @@ public class SessionListHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(HttpServletRequest request, HttpServletResponse response)
+	protected void onRequest(String uri, HttpServletRequest request, HttpServletResponse response)
 			throws JSONException, IOException {
 
 		JSONArray sessions = new JSONArray();
