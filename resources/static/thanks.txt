@@ -1,0 +1,4 @@
+Amazon Robotics, Amazon.com
+Eclipse Jetty
+Barcode4J
+Google ZXing

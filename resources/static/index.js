@@ -61,6 +61,17 @@ function createBarcodeTypes(types) {
     addTooltips();
 }
 
+function delayGenCode() {
+	const textInput = document.getElementById("text");
+	const textValue = textInput.value;
+
+	setTimeout(function(){
+		if(textInput.value == textValue) {
+			genCode();
+		}
+	}, 350);
+}
+
 /**
  * Called each time we should generate a new barcode.
  * 

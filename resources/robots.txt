@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 Allow: /index.html
+Allow: /license.html
+Allow: /bulk.html
+Allow: /manual.pdf
+Disallow: /admin.html
+Disallow: /multi.html
 Disallow: /api/
