@@ -26,7 +26,7 @@ public class BulkHandler extends RestHandler {
 			throws ServletException, IOException {
 
 		// Setup accept multi-part
-		request.setAttribute(Request.__MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
+		request.setAttribute(Request.MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
 		if (!request.getContentType().startsWith("multipart/")) {
 			return;
 		}
