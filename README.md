@@ -34,6 +34,14 @@ curl https://barcodeapi.org/api/128/abc123
 curl https://barcodeapi.org/api/qr/abc123
 ```
 
+#### Docker Container
+
+To build the image run:  
+`docker build -t barcodeAPIServer .`  
+
+And to run the container:  
+`docker run -p 8080:8080 -v $(pwd)/config:/config barcodeAPIServer`
+
 ## Third-Party
 
 BarcodeAPI.org is only made possible with the use of third-party software.
