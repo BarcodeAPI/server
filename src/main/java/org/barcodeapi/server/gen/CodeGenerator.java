@@ -4,7 +4,6 @@ import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.core.Log;
 import org.barcodeapi.server.core.Log.LOG;
-import org.barcodeapi.server.statistics.StatsCollector;
 import org.json.JSONObject;
 
 public abstract class CodeGenerator {
@@ -50,21 +49,11 @@ public abstract class CodeGenerator {
 
 		// any additional generator validations
 		String validated = onValidateRequest(data);
-
-		// update global and engine counters
-		StatsCollector.getInstance().hitCounter("render", "count");
-		StatsCollector.getInstance().hitCounter("render", "type", type, "count");
-
 		try {
-
 			// start timer and render
 			long timeStart = System.currentTimeMillis();
 			byte[] img = onRender(validated, options);
 			double time = System.currentTimeMillis() - timeStart;
-
-			// update global and engine counters
-			StatsCollector.getInstance().hitCounter(time, "render", "time");
-			StatsCollector.getInstance().hitCounter(time, "render", "type", type, "time");
 
 			Log.out(LOG.BARCODE, "" + //
 					"Rendered [ " + getType().toString() + " ] " + //
@@ -74,11 +63,6 @@ public abstract class CodeGenerator {
 
 			return img;
 		} catch (Exception e) {
-
-			// update global and engine counters
-			StatsCollector.getInstance().hitCounter("render", "fail");
-			StatsCollector.getInstance().hitCounter("render", "type", type, "fail");
-
 			throw new GenerationException(ExceptionType.FAILED, e);
 		}
 	}

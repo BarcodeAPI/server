@@ -1,8 +1,11 @@
-.classpath
-.projet
-.settings/
-target/
-cache/
-logs/
-resources/blacklist.conf
+/*
+!/config
+!/gcloud
+!/resources
+!/src
+!/.gitignore
+!/Dockerfile
+!/LICENSE.md
+!/pom.xml
+!/README.md
 

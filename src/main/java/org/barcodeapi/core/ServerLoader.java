@@ -1,30 +1,17 @@
 package org.barcodeapi.core;
 
-import java.util.concurrent.TimeUnit;
-
-import org.barcodeapi.server.admin.CacheDumpHandler;
-import org.barcodeapi.server.admin.CacheFlushHandler;
-import org.barcodeapi.server.admin.ConfigReloadHandler;
-import org.barcodeapi.server.admin.SessionFlushHandler;
-import org.barcodeapi.server.admin.SessionListHandler;
-import org.barcodeapi.server.api.AboutHandler;
-import org.barcodeapi.server.api.BarcodeAPIHandler;
-import org.barcodeapi.server.api.BulkHandler;
-import org.barcodeapi.server.api.SessionDetailsHandler;
-import org.barcodeapi.server.api.StaticHandler;
-import org.barcodeapi.server.api.StatsHandler;
-import org.barcodeapi.server.api.TypesHandler;
+import org.barcodeapi.server.api.*;
 import org.barcodeapi.server.core.Log;
 import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.tasks.BarcodeCleanupTask;
 import org.barcodeapi.server.tasks.LogRotateTask;
 import org.barcodeapi.server.tasks.SessionCleanupTask;
-import org.barcodeapi.server.tasks.StatsDumpTask;
-import org.barcodeapi.server.tasks.WatchdogTask;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class should handle the processing of the command line arguments passed
@@ -130,16 +117,6 @@ public class ServerLoader {
 
 		// setup server handlers
 		initHandler("/server/about", AboutHandler.class);
-		initHandler("/server/stats", StatsHandler.class);
-
-		// setup admin handlers
-		initHandler("/admin/cache/dump", CacheDumpHandler.class);
-		initHandler("/admin/cache/flush", CacheFlushHandler.class);
-
-		initHandler("/admin/session/list", SessionListHandler.class);
-		initHandler("/admin/session/flush", SessionFlushHandler.class);
-
-		initHandler("/admin/server/reload", ConfigReloadHandler.class);
 
 		// Instantiate the static resource handler and add it to the collection
 		Log.out(LOG.SERVER, "Initializing static resource handler");
@@ -169,16 +146,6 @@ public class ServerLoader {
 	 * Initialize the system tasks which run periodically in the background.
 	 */
 	private void initSystemTasks() {
-
-		// run watch-dog every 1 minute
-		WatchdogTask watchdogTask = new WatchdogTask();
-		ServerRuntime.getSystemTimer().schedule(watchdogTask, 0, //
-				TimeUnit.MILLISECONDS.convert(15, TimeUnit.SECONDS));
-
-		// print stats to log every 5 minutes
-		StatsDumpTask statsTask = new StatsDumpTask(telemetry);
-		ServerRuntime.getSystemTimer().schedule(statsTask, 0, //
-				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
 
 		// cleanup sessions every 15 minutes
 		SessionCleanupTask sessionCleanup = new SessionCleanupTask();

@@ -3,7 +3,6 @@ package org.barcodeapi.server.gen;
 import org.barcodeapi.core.utils.StringUtils;
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.cache.CachedBarcode;
-import org.barcodeapi.server.core.Blacklist;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
@@ -22,15 +21,6 @@ public class BarcodeGenerator {
 		if (data == null || data.equals("")) {
 
 			throw new GenerationException(ExceptionType.EMPTY);
-		}
-
-		// match against blacklist
-		for (String invalid : Blacklist.getBlacklist()) {
-
-			if (data.matches(invalid)) {
-
-				throw new GenerationException(ExceptionType.BLACKLIST);
-			}
 		}
 
 		// image object
