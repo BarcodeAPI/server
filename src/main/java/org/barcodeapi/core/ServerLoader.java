@@ -18,7 +18,6 @@ import org.barcodeapi.server.core.Log;
 import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.tasks.BarcodeCleanupTask;
-import org.barcodeapi.server.tasks.LogRotateTask;
 import org.barcodeapi.server.tasks.SessionCleanupTask;
 import org.barcodeapi.server.tasks.StatsDumpTask;
 import org.barcodeapi.server.tasks.WatchdogTask;
@@ -189,11 +188,6 @@ public class ServerLoader {
 		BarcodeCleanupTask barcodeCleanup = new BarcodeCleanupTask();
 		ServerRuntime.getSystemTimer().schedule(barcodeCleanup, 0, //
 				TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS));
-
-		// rotate logs every 24h
-		LogRotateTask logRotate = new LogRotateTask();
-		ServerRuntime.getSystemTimer().schedule(logRotate, Log.timeTillRotate(), //
-				TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS));
 	}
 
 	/**
