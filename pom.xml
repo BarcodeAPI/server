@@ -3,7 +3,7 @@
 
 	<groupId>org.barcodeapi</groupId>
 	<artifactId>server</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4</version>
 
 	<name>server</name>
 	<packaging>jar</packaging>
