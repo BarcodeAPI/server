@@ -25,6 +25,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 
+import com.mclarkdev.tools.libargs.LibArgs;
+
 /**
  * This class should handle the processing of the command line arguments passed
  * on startup in addition to the setup of the main Jetty API server and it's
@@ -38,13 +40,7 @@ public class ServerLoader {
 	// Initialize server runtime and get ID
 	private final String _ID = ServerRuntime.getRuntimeID();
 
-	// The port for the servers to bind to.
-	private int serverPort = 8080;
-
-	// Report usage statistics by default
-	private boolean telemetry = true;
-
-	// The instance of the running Jetty server and it's handlers.
+	// The Jetty server and it's handlers
 	private Server server;
 	private HandlerCollection handlers;
 
@@ -55,8 +51,7 @@ public class ServerLoader {
 	 * @param args
 	 */
 	public ServerLoader(String[] args) {
-
-		parseLaunchArgs(args);
+		LibArgs.instance().parse(args);
 	}
 
 	/**
@@ -76,40 +71,6 @@ public class ServerLoader {
 	}
 
 	/**
-	 * Loop and parse each provided argument.
-	 * 
-	 * @param args
-	 */
-	private void parseLaunchArgs(String[] args) {
-
-		// Do nothing if null arguments
-		if (args == null) {
-
-			return;
-		}
-
-		// Loop all arguments
-		for (int x = 0; x < args.length; x++) {
-
-			switch (args[x]) {
-
-			case "--port":
-				serverPort = Integer.parseInt(args[++x]);
-				break;
-
-			case "--no-telemetry":
-				telemetry = false;
-				break;
-
-			default:
-				System.err.println("Unknown argument [ " + args[x] + " ]");
-				System.exit(1);
-				break;
-			}
-		}
-	}
-
-	/**
 	 * Initialize the API REST server.
 	 */
 	private void initApiServer() throws Exception {
@@ -118,7 +79,7 @@ public class ServerLoader {
 		Log.out(LOG.SERVER, "Initializing: " + _ID);
 		Log.out(LOG.SERVER, "Starting Jetty API Server");
 		handlers = new HandlerCollection();
-		server = new Server(serverPort);
+		server = new Server(LibArgs.instance().getInteger("port", 8080));
 		server.setHandler(handlers);
 
 		// setup rest handlers
@@ -175,7 +136,8 @@ public class ServerLoader {
 				TimeUnit.MILLISECONDS.convert(15, TimeUnit.SECONDS));
 
 		// print stats to log every 5 minutes
-		StatsDumpTask statsTask = new StatsDumpTask(telemetry);
+		StatsDumpTask statsTask = new StatsDumpTask(//
+				LibArgs.instance().getBoolean("no-telemetry"));
 		ServerRuntime.getSystemTimer().schedule(statsTask, 0, //
 				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
 
