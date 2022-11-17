@@ -1,5 +1,7 @@
 package org.barcodeapi.server.gen;
 
+import org.json.JSONObject;
+
 public enum CodeType {
 
 	/**
@@ -9,7 +11,7 @@ public enum CodeType {
 			"^(?=.*0)[0-9]{8}$", //
 			"^(?=.*0)[0-9]{7,8}$", //
 			"01023459", //
-			"A compact version of UPC-A which removes unneeded '0's."),
+			"A compact version of UPC-A, removing unneeded '0's."),
 
 	/**
 	 * UPC-A type UPC code;
@@ -18,7 +20,7 @@ public enum CodeType {
 			"^(?=.*0)[0-9]{12}$", //
 			"^(?=.*0)[0-9]{11,12}$", //
 			"123456789012", //
-			"Used as a product identifier in many countries, the 12 digit barcode allows information about manufacturer, product, variant, and additional store use codes."),
+			"A universally recognized 12 digit barcode. Encodes manufacturer, product / variant, and store use codes."),
 
 	/**
 	 * EAN-8 type UPC code;
@@ -29,7 +31,7 @@ public enum CodeType {
 			"^[0-9]{8}$", //
 			"^[0-9]{7,8}$", //
 			"01023459", //
-			"A UPC type barcode, derived from the longer EAN-13 code, for use on smaller pakages."),
+			"Derived from the longer EAN-13 UPC code. For smaller packages."),
 
 	/**
 	 * EAN-13 type UPC code;
@@ -40,7 +42,7 @@ public enum CodeType {
 			"^[0-9]{13}$", //
 			"^[0-9]{12,13}$", //
 			"1234567890128", //
-			"A globally recognized product identification code."),
+			"A globally recognized product identification code. Encodes manufacturer, product / variant, and store use codes."),
 
 	/**
 	 * Codabar type code;
@@ -49,7 +51,7 @@ public enum CodeType {
 			"^[0-9:$]{4,12}$", //
 			"^[0-9-:$\\/.+]+$", //
 			"1234567890", //
-			"An early barode designed to be printer on dot-matrix printers."),
+			"An early barode designed to be printed on dot-matrix printers."),
 
 	/**
 	 * Code39 type code;
@@ -60,7 +62,7 @@ public enum CodeType {
 			"^[A-Z0-9 $.\\/]{1,12}$", //
 			"^[A-Z*0-9 -$%.\\/+]+$", //
 			"TRY 39 ME", //
-			"A basic alphanumeric barcode."),
+			"A basic alphanumeric barcode. Uppercase letters and numbers only."),
 
 	/**
 	 * Code128 type code;
@@ -71,7 +73,7 @@ public enum CodeType {
 			"^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+$", //
 			"Try Me!", //
-			"A high desnisty alphanumeric barcode."),
+			"A medium densisty alphanumeric barcode with a larger character set."),
 
 	/**
 	 * Aztec type barcode.
@@ -115,7 +117,25 @@ public enum CodeType {
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
 			"PDF - 417", //
-			"A stacked linear barcode most commonly found on identification cards.");
+			"A stacked linear barcode most commonly found on identification cards."),
+
+	/**
+	 * USPS Intelligent Mail
+	 */
+	USPSMail(new String[] { "usps", "intelligent-mail" }, //
+			"^[0-9]{1,32}$", //
+			"^[0-9]{1,32}$", //
+			"0123456709498765432101234567891", //
+			"USPS Intelligent Mail"),
+
+	/**
+	 * Royal Mail
+	 */
+	RoyalMail(new String[] { "royal", "royal-mail" }, //
+			"^[0-9]{1,32}$", //
+			"^[0-9]{1,32}$", //
+			"11212345612345678", //
+			"Royal Mail");
 
 	/**
 	 * Local Variables
@@ -193,5 +213,20 @@ public enum CodeType {
 	public String getDescription() {
 
 		return description;
+	}
+
+	/**
+	 * Return the the code type as a JSON object.
+	 * 
+	 * @return
+	 */
+	public JSONObject toJSON() {
+
+		return new JSONObject() //
+				.put("name", name())//
+				.put("example", getExample())//
+				.put("target", getTypeStrings()[0])//
+				.put("pattern", getFormatPattern())//
+				.put("description", getDescription());
 	}
 }

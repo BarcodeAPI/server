@@ -3,10 +3,6 @@ function loadLicense() {
 	loadFile("/static/license.txt", function(data) {
 		document.getElementById("license").innerHTML = data;
 	});
-
-	loadFile("/static/thanks.txt", function(data) {
-		document.getElementById("thanks").innerHTML = data;
-	});
 }
 
 function loadFile(path, callback) {

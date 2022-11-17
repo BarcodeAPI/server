@@ -1,15 +1,25 @@
 <html>
 <head>
 <title>Multi-Barcode Generation</title>
-<link rel="stylesheet" type="text/css" href="/static/multi.css"	media="all" />
+<link rel="stylesheet" type="text/css" href="/static/multi.css"
+	media="all" />
 <script src="/static/multi.js"></script>
 </head>
 <body onload="init();">
-	<button onclick="print();">Print</button>
-
 	<div id="wrapper">
 		<table id="bartab">
 		</table>
+	</div>
+
+	<div class="controller">
+	<table>
+		<tr>
+			<td colspan='2'><input type='text'></input></td>
+			<td><button onclick="addCode();">Add Code</button></td>
+			<td><button onclick="print();">Print</button></td>
+		</tr>
+	</table>
+		
 	</div>
 </body>
 </html>

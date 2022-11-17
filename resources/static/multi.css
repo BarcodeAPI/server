@@ -22,3 +22,8 @@ td {
 	margin-right: auto;
 	border-spacing: 10mm;
 }
+
+.controller {
+	position: fixed;
+	bottom: 0px;
+}

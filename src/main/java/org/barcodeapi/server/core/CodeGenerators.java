@@ -13,8 +13,10 @@ import org.barcodeapi.server.gen.types.Ean13Generator;
 import org.barcodeapi.server.gen.types.Ean8Generator;
 import org.barcodeapi.server.gen.types.PDF417Generator;
 import org.barcodeapi.server.gen.types.QRCodeGenerator;
+import org.barcodeapi.server.gen.types.RoyalMailGenerator;
 import org.barcodeapi.server.gen.types.UPCAGenerator;
 import org.barcodeapi.server.gen.types.UPCEGenerator;
+import org.barcodeapi.server.gen.types.USPSMailGenerator;
 
 public class CodeGenerators {
 
@@ -33,6 +35,9 @@ public class CodeGenerators {
 		generators.put(CodeType.UPC_E, new UPCEGenerator());
 
 		generators.put(CodeType.CODABAR, new CodabarGenerator());
+
+		generators.put(CodeType.USPSMail, new USPSMailGenerator());
+		generators.put(CodeType.RoyalMail, new RoyalMailGenerator());
 
 		generators.put(CodeType.Code39, new Code39Generator());
 		generators.put(CodeType.Code128, new Code128Generator());

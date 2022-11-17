@@ -15,7 +15,7 @@ function loadHash() {
 
 	// Remove the 'active' class from all topnav objects
 	var topnav = document.getElementById("topnav");
-	for ( var x in topnav.childNodes) {
+	for (var x in topnav.childNodes) {
 		var classList = topnav.childNodes[x].classList;
 		if (classList != null) {
 			classList.remove("active");
@@ -164,7 +164,9 @@ function copyBarcodeLink() {
 	/* Copy the text inside the text field */
 	document.execCommand("copy");
 
-	setTimeout(function(){ copyTextMessage.setAttribute("class", ""); }, 2500);
+	setTimeout(function(){ 
+		copyTextMessage.setAttribute("class", "");
+	}, 2500);
 }
 
 async function loadBlob(fileName) {
@@ -208,7 +210,7 @@ function getCode(code) {
 		return null;
 	}
 
-	for(let i in types){
+	for (let i in types) {
 		if(types[i].target === code) {
 			return types[i];
 		}
@@ -275,8 +277,7 @@ function addTooltips() {
       function getOffset(elem) {
         var offsetLeft = 0, offsetTop = 0;
         do {
-          if ( !isNaN( elem.offsetLeft ) )
-          {
+          if ( !isNaN( elem.offsetLeft ) ) {
             offsetLeft += elem.offsetLeft;
             offsetTop += elem.offsetTop;
           }
@@ -305,43 +306,40 @@ function addTooltips() {
           tooltip.innerHTML = tip;
           document.body.appendChild(tooltip);
 
-          var init_tooltip = function()
-          {
+          var init_tooltip = function() {
             // set width of tooltip to half of window width
-            if(window.innerWidth < tooltip.offsetWidth * 1.5)
-            tooltip.style.maxWidth = window.innerWidth / 2;
-            else
-            tooltip.style.maxWidth = 340;
+            if(window.innerWidth < tooltip.offsetWidth * 1.5) {
+              tooltip.style.maxWidth = window.innerWidth / 2;
+            } else {
+              tooltip.style.maxWidth = 340;
+            }
 
             var pos_left = getOffset(target).left + (target.offsetWidth / 2) - (tooltip.offsetWidth / 2),
             pos_top  = getOffset(target).top - tooltip.offsetHeight - 10;
-            if( pos_left < 0 )
-            {
+            if( pos_left < 0 ) {
               pos_left = getOffset(target).left + target.offsetWidth / 2 - 20;
               tooltip.classList.add("left");
+            } else {
+              tooltip.classList.remove("left");
             }
-            else
-            tooltip.classList.remove("left");
 
-            if( pos_left + tooltip.offsetWidth > window.innerWidth )
-            {
+            if( pos_left + tooltip.offsetWidth > window.innerWidth ) {
               pos_left = getOffset(target).left - tooltip.offsetWidth + target.offsetWidth / 2 + 20;
               tooltip.classList.add("right");
+            } else {
+              tooltip.classList.remove("right");
             }
-            else
-            tooltip.classList.remove("right");
 
-            if( pos_top < 0 )
-            {
+            if( pos_top < 0 ) {
               var pos_top  = getOffset(target).top + target.offsetHeight + 15;
               tooltip.classList.add("top");
+            } else {
+              tooltip.classList.remove("top");
+              // adding "px" is very important
+              tooltip.style.left = pos_left + "px";
+              tooltip.style.top = pos_top + "px";
+              tooltip.style.opacity  = 1;
             }
-            else
-            tooltip.classList.remove("top");
-            // adding "px" is very important
-            tooltip.style.left = pos_left + "px";
-            tooltip.style.top = pos_top + "px";
-            tooltip.style.opacity  = 1;
           };
 
           init_tooltip();
