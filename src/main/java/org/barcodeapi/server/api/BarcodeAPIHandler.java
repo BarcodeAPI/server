@@ -34,16 +34,15 @@ public class BarcodeAPIHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(String uri, HttpServletRequest request, HttpServletResponse response)
+	protected void onRequest(String uri, HttpServletRequest srvReq, HttpServletResponse response)
 			throws JSONException, IOException {
 
 		CachedBarcode barcode;
+		BarcodeRequest request = new BarcodeRequest(uri);
 
 		try {
-
 			// generate user requested barcode
-			BarcodeRequest barcodeRequest = new BarcodeRequest(uri);
-			barcode = BarcodeGenerator.requestBarcode(barcodeRequest);
+			barcode = BarcodeGenerator.requestBarcode(request);
 
 		} catch (GenerationException e) {
 
@@ -82,12 +81,15 @@ public class BarcodeAPIHandler extends RestHandler {
 		response.setHeader("Content-Type", "image/png");
 		response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
 
-		// file name when clicking save
-		response.setHeader("Content-Disposition", "filename=" + nice + ".png");
-
 		// barcode details
 		response.setHeader("X-Barcode-Type", type);
 		response.setHeader("X-Barcode-Content", encd);
+
+		// file save-as name / force download
+		boolean download = request.getOptions().optBoolean("download");
+		response.setHeader("Content-Disposition", //
+				((download) ? "attachment; " : "") + //
+						("filename=" + nice + ".png"));
 
 		// print image to stream
 		response.getOutputStream().write(barcode.getData());

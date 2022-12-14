@@ -5,8 +5,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 
-import org.barcodeapi.server.core.GenerationException;
-import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.json.JSONObject;
 
 public class StringUtils {
@@ -22,15 +20,15 @@ public class StringUtils {
 		}
 	}
 
-	public static String decode(String data) throws GenerationException {
+	public static String decode(String data) {
 
 		try {
 
 			return URLDecoder.decode(data, "UTF-8");
 
-		} catch (UnsupportedEncodingException | IllegalArgumentException e) {
+		} catch (UnsupportedEncodingException e) {
 
-			throw new GenerationException(ExceptionType.INVALID, e);
+			throw new IllegalArgumentException(e);
 		}
 	}
 

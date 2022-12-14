@@ -1,7 +1,6 @@
 package org.barcodeapi.server.gen;
 
 import org.barcodeapi.core.utils.StringUtils;
-import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.TypeSelector;
 import org.json.JSONObject;
 
@@ -12,7 +11,7 @@ public class BarcodeRequest {
 	private final boolean cached;
 	private final JSONObject options;
 
-	public BarcodeRequest(String target) throws GenerationException {
+	public BarcodeRequest(String target) {
 
 		// remove [ /api ]
 		if (target.startsWith("/api")) {
