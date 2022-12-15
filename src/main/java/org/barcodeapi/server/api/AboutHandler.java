@@ -27,6 +27,7 @@ public class AboutHandler extends RestHandler {
 				.put("admin", "---")//
 				.put("hostname", ServerRuntime.getHostname())//
 				.put("version", ServerRuntime.getVersion());
+		response.setHeader("Content-Type", "application/json");
 		response.getOutputStream().println(output.toString(4));
 	}
 }

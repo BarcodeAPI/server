@@ -40,33 +40,28 @@ function loadHash() {
 	genCode();
 }
 
-function closeMenu() {
-	const menu = document.getElementById("topnav");
-}
-
 function createBarcodeTypes(types) {
-    const menu = document.getElementById("topnav");
-    console.log(types[0].description)
-    for(t in types) {
-        var node = document.createElement("a");
-        node.setAttribute('id', "type-"+types[t].target);
-        node.setAttribute('rel', 'tooltip');
-        node.classList.add('top');
-        node.innerHTML = types[t].name;
-        node.setAttribute('onclick', 'setType("'+types[t].target+'")');
-        node.setAttribute('title', types[t].description);
-      //  node.setAttribute('onmouseover', 'showCodeDescription("'+types[t].target+'")');
-        menu.appendChild(node);
-    }
-    addTooltips();
+	const menu = document.getElementById("topnav");
+
+	for (t in types) {
+		var node = document.createElement("a");
+		node.setAttribute('id', "type-" + types[t].target);
+		node.setAttribute('rel', 'tooltip');
+		node.classList.add('top');
+		node.innerHTML = types[t].name;
+		node.setAttribute('onclick', 'setType("' + types[t].target + '")');
+		node.setAttribute('title', types[t].description);
+		menu.appendChild(node);
+	}
+	addTooltips();
 }
 
 function delayGenCode() {
 	const textInput = document.getElementById("text");
 	const textValue = textInput.value;
 
-	setTimeout(function(){
-		if(textInput.value == textValue) {
+	setTimeout(function() {
+		if (textInput.value == textValue) {
 			genCode();
 		}
 	}, 350);
@@ -84,16 +79,21 @@ function genCode() {
 
 	// Get the requested type
 	var type = location.hash.substring(1);
+	var codeType = getCode(type);
 
 	// Get the requested text
 	const textInput = document.getElementById("text");
 	let text = textInput.value;
 
+	// Set default text
 	if (text === "") {
-		text = "Try Me!";
+		text = (codeType == null) ? "Try Me!" : codeType.example;
 	}
 
-	const isValidCode = textInput.checkValidity()
+	// Fail if invalid.
+	if (!textInput.checkValidity()) {
+		return;
+	}
 
 	// Build URL with type
 	url = url + "/" + type;
@@ -110,9 +110,7 @@ function genCode() {
 	document.getElementById("barcode_image_link").setAttribute("value", url);
 
 	// Update IMG element source
-	if(isValidCode) {
-		document.getElementById("barcode_output").src = url;
-	}
+	document.getElementById("barcode_output").src = url;
 }
 
 function printCode() {
@@ -141,7 +139,7 @@ function toggleOpenBarcodeTypes() {
 	const menu = document.getElementById("topnav");
 	isOpen = !isOpen;
 
-	if(isOpen) {
+	if (isOpen) {
 		dropdown.setAttribute("class", "select-type open");
 		menu.setAttribute("class", "barcode-types open");
 	} else {
@@ -164,7 +162,7 @@ function copyBarcodeLink() {
 	/* Copy the text inside the text field */
 	document.execCommand("copy");
 
-	setTimeout(function(){ 
+	setTimeout(function() {
 		copyTextMessage.setAttribute("class", "");
 	}, 2500);
 }
@@ -180,12 +178,13 @@ async function copyImageToClipboard() {
 	const url = document.getElementById("barcode_image_link").getAttribute("value");
 
 	if (!sUsrAg.indexOf("Firefox") > -1) {
-		
+
 		try {
 			const blobInput = await loadBlob(url);
-			const clipboardItemInput = new ClipboardItem({'image/png': blobInput});
+			const clipboardItemInput = new ClipboardItem({ 'image/png': blobInput });
 			await navigator.clipboard.write([clipboardItemInput]);
 		} catch (e) {
+			console.log("Failed to copy image.");
 			console.log(e);
 		}
 	}
@@ -198,30 +197,23 @@ function getTypes() {
 	const t = fetch(url).then((response) => {
 		return response.json();
 	})
-	.then((data) => {
-		return data;
-	});
+		.then((data) => {
+			return data;
+		});
 	return t;
 }
 
 function getCode(code) {
 
-	if(code === 'auto') {
+	if (code === 'auto') {
 		return null;
 	}
 
 	for (let i in types) {
-		if(types[i].target === code) {
+		if (types[i].target === code) {
 			return types[i];
 		}
 	}
-}
-
-function showCodeDescription(code) {
-
-    var barcode = getCode(code)
-	 console.log(barcode)
-	 console.log(barcode.description)
 }
 
 async function setPattern(hash) {
@@ -229,7 +221,7 @@ async function setPattern(hash) {
 	const code = getCode(hash);
 	const textInput = document.getElementById("text");
 
-	if(code !== null) {
+	if (code !== null) {
 		textInput.setAttribute("pattern", code.pattern);
 	} else {
 		textInput.setAttribute("pattern", '.*');
@@ -253,7 +245,7 @@ async function init() {
 
 function setType(type) {
 
-	location.hash =type;
+	location.hash = type;
 	closeMenu();
 	setPattern(type);
 }
@@ -262,8 +254,8 @@ function checkIfFileSelected() {
 
 	var submitButton = document.getElementById("generate-bc");
 
-	document.getElementById('csvFile').addEventListener('change', function () {
-		if(this.value.length > 0) {
+	document.getElementById('csvFile').addEventListener('change', function() {
+		if (this.value.length > 0) {
 			submitButton.removeAttribute("disabled");
 		} else {
 			submitButton.addAttribute("disabled");
@@ -274,85 +266,86 @@ function checkIfFileSelected() {
 
 function addTooltips() {
 
-      function getOffset(elem) {
-        var offsetLeft = 0, offsetTop = 0;
-        do {
-          if ( !isNaN( elem.offsetLeft ) ) {
-            offsetLeft += elem.offsetLeft;
-            offsetTop += elem.offsetTop;
-          }
-        } while( elem = elem.offsetParent );
-        return {left: offsetLeft, top: offsetTop};
-      }
+	function getOffset(elem) {
+		var offsetLeft = 0, offsetTop = 0;
+		do {
+			if (!isNaN(elem.offsetLeft)) {
+				offsetLeft += elem.offsetLeft;
+				offsetTop += elem.offsetTop;
+			}
+		} while (elem = elem.offsetParent);
+		
+		return { left: offsetLeft, top: offsetTop };
+	}
 
-      var targets = document.querySelectorAll( '[rel=tooltip]' ),
-      target  = false,
-      tooltip = false,
-      title   = false,
-      tip     = false;
+	var targets = document.querySelectorAll('[rel=tooltip]'),
+		target = false,
+		tooltip = false,
+		tip = false;
 
-      for(var i = 0; i < targets.length; i++) {
-        targets[i].addEventListener("mouseenter", function() {
-          target  = this;
-          tip     = target.getAttribute("title");
-          tooltip = document.createElement("div");
-          tooltip.id = "tooltip";
+	for (var i = 0; i < targets.length; i++) {
+		targets[i].addEventListener("mouseenter", function() {
+			target = this;
+			tip = target.getAttribute("title");
+			tooltip = document.createElement("div");
+			tooltip.id = "tooltip";
 
-          if(!tip || tip == "")
-          return false;
+			if (!tip || tip == "") {
+				return false;
+			}
 
-          target.removeAttribute("title");
-          tooltip.style.opacity = 0;
-          tooltip.innerHTML = tip;
-          document.body.appendChild(tooltip);
+			target.removeAttribute("title");
+			tooltip.style.opacity = 0;
+			tooltip.innerHTML = tip;
+			document.body.appendChild(tooltip);
 
-          var init_tooltip = function() {
-            // set width of tooltip to half of window width
-            if(window.innerWidth < tooltip.offsetWidth * 1.5) {
-              tooltip.style.maxWidth = window.innerWidth / 2;
-            } else {
-              tooltip.style.maxWidth = 340;
-            }
+			var init_tooltip = function() {
+				// set width of tooltip to half of window width
+				if (window.innerWidth < tooltip.offsetWidth * 1.5) {
+					tooltip.style.maxWidth = window.innerWidth / 2;
+				} else {
+					tooltip.style.maxWidth = 340;
+				}
 
-            var pos_left = getOffset(target).left + (target.offsetWidth / 2) - (tooltip.offsetWidth / 2),
-            pos_top  = getOffset(target).top - tooltip.offsetHeight - 10;
-            if( pos_left < 0 ) {
-              pos_left = getOffset(target).left + target.offsetWidth / 2 - 20;
-              tooltip.classList.add("left");
-            } else {
-              tooltip.classList.remove("left");
-            }
+				var pos_left = getOffset(target).left + (target.offsetWidth / 2) - (tooltip.offsetWidth / 2),
+					pos_top = getOffset(target).top - tooltip.offsetHeight - 10;
+				if (pos_left < 0) {
+					pos_left = getOffset(target).left + target.offsetWidth / 2 - 20;
+					tooltip.classList.add("left");
+				} else {
+					tooltip.classList.remove("left");
+				}
 
-            if( pos_left + tooltip.offsetWidth > window.innerWidth ) {
-              pos_left = getOffset(target).left - tooltip.offsetWidth + target.offsetWidth / 2 + 20;
-              tooltip.classList.add("right");
-            } else {
-              tooltip.classList.remove("right");
-            }
+				if (pos_left + tooltip.offsetWidth > window.innerWidth) {
+					pos_left = getOffset(target).left - tooltip.offsetWidth + target.offsetWidth / 2 + 20;
+					tooltip.classList.add("right");
+				} else {
+					tooltip.classList.remove("right");
+				}
 
-            if( pos_top < 0 ) {
-              var pos_top  = getOffset(target).top + target.offsetHeight + 15;
-              tooltip.classList.add("top");
-            } else {
-              tooltip.classList.remove("top");
-              // adding "px" is very important
-              tooltip.style.left = pos_left + "px";
-              tooltip.style.top = pos_top + "px";
-              tooltip.style.opacity  = 1;
-            }
-          };
+				if (pos_top < 0) {
+					var pos_top = getOffset(target).top + target.offsetHeight + 15;
+					tooltip.classList.add("top");
+				} else {
+					tooltip.classList.remove("top");
+					// adding "px" is very important
+					tooltip.style.left = pos_left + "px";
+					tooltip.style.top = pos_top + "px";
+					tooltip.style.opacity = 1;
+				}
+			};
 
-          init_tooltip();
-          window.addEventListener("resize", init_tooltip);
+			init_tooltip();
+			window.addEventListener("resize", init_tooltip);
 
-          var remove_tooltip = function() {
-            tooltip.style.opacity  = 0;
-            document.querySelector("#tooltip") && document.body.removeChild(document.querySelector("#tooltip"));
-            target.setAttribute("title", tip );
-          };
+			var remove_tooltip = function() {
+				tooltip.style.opacity = 0;
+				document.querySelector("#tooltip") && document.body.removeChild(document.querySelector("#tooltip"));
+				target.setAttribute("title", tip);
+			};
 
-          target.addEventListener("mouseleave", remove_tooltip );
-          tooltip.addEventListener("click", remove_tooltip );
-        });
-      }
-    }
+			target.addEventListener("mouseleave", remove_tooltip);
+			tooltip.addEventListener("click", remove_tooltip);
+		});
+	}
+}
