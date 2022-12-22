@@ -69,29 +69,22 @@ public class BarcodeAPIHandler extends RestHandler {
 			response.setHeader("X-Error-Message", e.getMessage());
 		}
 
-		// additional properties
-		String type = barcode.getProperties().getProperty("type");
-		String nice = barcode.getProperties().getProperty("nice");
-		String encd = barcode.getProperties().getProperty("encd");
-
 		// add cache headers
 		response.setHeader("Cache-Control", "max-age=86400, public");
 
-		// add content headers
-		response.setHeader("Content-Type", "image/png");
-		response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
-
 		// barcode details
-		response.setHeader("X-Barcode-Type", type);
-		response.setHeader("X-Barcode-Content", encd);
+		response.setHeader("X-Barcode-Type", barcode.getType().toString());
+		response.setHeader("X-Barcode-Content", barcode.getEncoded());
 
 		// file save-as name / force download
 		boolean download = request.getOptions().optBoolean("download");
 		response.setHeader("Content-Disposition", //
 				((download) ? "attachment; " : "") + //
-						("filename=" + nice + ".png"));
+						("filename=" + barcode.getNice() + ".png"));
 
-		// print image to stream
+		// add content headers and write data to stream
+		response.setHeader("Content-Type", "image/png");
+		response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
 		response.getOutputStream().write(barcode.getData());
 	}
 }

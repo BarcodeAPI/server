@@ -1,6 +1,5 @@
 package org.barcodeapi.server.gen;
 
-import org.barcodeapi.core.utils.StringUtils;
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.Blacklist;
@@ -48,11 +47,8 @@ public class BarcodeGenerator {
 
 		// render new image and create its cached object
 		CodeGenerator generator = generators.getGenerator(request.getType());
-		barcode = new CachedBarcode(generator.getCode(data, request.getOptions()));
-		barcode.getProperties().setProperty("type", request.getType().toString());
-		barcode.getProperties().setProperty("data", data);
-		barcode.getProperties().setProperty("nice", StringUtils.stripIllegal(data));
-		barcode.getProperties().setProperty("encd", StringUtils.encode(data));
+		byte[] png = generator.getCode(data, request.getOptions());
+		barcode = new CachedBarcode(request.getType(), data, png);
 
 		// add to cache if allowed
 		if (request.useCache()) {
