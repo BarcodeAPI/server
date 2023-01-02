@@ -1,6 +1,7 @@
 package org.barcodeapi.server.api;
 
 import java.io.IOException;
+import java.util.Base64;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,15 +77,31 @@ public class BarcodeAPIHandler extends RestHandler {
 		response.setHeader("X-Barcode-Type", barcode.getType().toString());
 		response.setHeader("X-Barcode-Content", barcode.getEncoded());
 
-		// file save-as name / force download
-		boolean download = request.getOptions().optBoolean("download");
-		response.setHeader("Content-Disposition", //
-				((download) ? "attachment; " : "") + //
-						("filename=" + barcode.getNice() + ".png"));
+		// serve as base64
+		switch (request.getOptions().optString("format", "png")) {
+		case "b64":
+			String encoded = Base64.getEncoder().encodeToString(barcode.getData());
+			byte[] encodedBytes = encoded.getBytes();
+			response.setHeader("Content-Type", "image/png");
+			response.setHeader("Content-Encoding", "base64");
+			response.setHeader("Content-Length", Long.toString(encodedBytes.length));
+			response.getOutputStream().write(encodedBytes);
+			break;
 
-		// add content headers and write data to stream
-		response.setHeader("Content-Type", "image/png");
-		response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
-		response.getOutputStream().write(barcode.getData());
+		case "png":
+
+			// file save-as name / force download
+			boolean download = request.getOptions().optBoolean("download");
+			response.setHeader("Content-Disposition", //
+					((download) ? "attachment; " : "") + //
+							("filename=" + barcode.getNice() + ".png"));
+
+			// add content headers and write data to stream
+			response.setHeader("Content-Type", "image/png");
+			response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
+			response.getOutputStream().write(barcode.getData());
+			break;
+		}
+
 	}
 }
