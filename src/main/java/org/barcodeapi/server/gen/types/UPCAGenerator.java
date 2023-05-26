@@ -54,7 +54,6 @@ public class UPCAGenerator extends CodeGenerator {
 
 			generator.doQuietZone(true);
 			generator.setQuietZone(qz);
-			generator.setVerticalQuietZone(2 * moduleWidth);
 			generator.setHeight(height);
 			generator.setModuleWidth(moduleWidth);
 
