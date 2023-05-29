@@ -459,40 +459,23 @@ button:disabled, button[disabled] {
 	position: relative;
 }
 
-@
-keyframes fadeOut {
-	from {opacity: 1;
+@keyframes fadeOut {
+	from {opacity: 1;}
+	to {opacity: 0;}
 }
 
-to {
-	opacity: 0;
+@keyframes pulseBg {
+	0% {
+		border-color: #222;
+	}
+	50%{
+		border-color:#EEE;
+	}
+	100%{
+		border-color:#222;
+	}
 }
 
-}
-@
-keyframes pulseBg { 0% {
-	border-color: #222;
-}
-
-50%
-{
-border-color
-:
- 
-#EEE
-;
- 
-}
-100%
-{
-border-color
-:
- 
-#222
-;
- 
-}
-}
 #message {
 	display: none;
 	padding: 10px;
@@ -544,10 +527,12 @@ border-color
 
 #barcode_output {
 	max-width: 400px;
+	max-height: 300px;
 	width: 100%;
 	margin: 0 auto;
 	display: block;
 	padding: 1rem 0;
+	object-fit: contain;
 }
 
 #barcode_outout[src=""] {

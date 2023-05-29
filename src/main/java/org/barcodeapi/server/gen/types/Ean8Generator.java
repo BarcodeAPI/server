@@ -51,28 +51,10 @@ public class Ean8Generator extends CodeGenerator {
 		int dpi = options.optInt("dpi", 150);
 		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
 
-		int qz = options.optInt("qz", 4);
+		double qz = options.optDouble("qz", 4);
 		int height = options.optInt("height", 25);
 
-		String text = options.optString("text", "bottom");
-
 		synchronized (generator) {
-
-			switch (text) {
-
-			case "bottom":
-				generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
-				break;
-
-			case "top":
-				generator.setMsgPosition(HumanReadablePlacement.HRP_TOP);
-				break;
-
-			case "none":
-			default:
-				generator.setMsgPosition(HumanReadablePlacement.HRP_NONE);
-				break;
-			}
 
 			generator.doQuietZone(true);
 			generator.setQuietZone(qz);

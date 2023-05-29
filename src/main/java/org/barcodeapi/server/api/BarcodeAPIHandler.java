@@ -77,9 +77,8 @@ public class BarcodeAPIHandler extends RestHandler {
 		response.setHeader("X-Barcode-Type", barcode.getType().toString());
 		response.setHeader("X-Barcode-Content", barcode.getEncoded());
 
-		// serve as base64
 		switch (request.getOptions().optString("format", "png")) {
-		case "b64":
+		case "b64": // serve as base64
 			String encoded = Base64.getEncoder().encodeToString(barcode.getData());
 			byte[] encodedBytes = encoded.getBytes();
 			response.setHeader("Content-Type", "image/png");
@@ -88,7 +87,7 @@ public class BarcodeAPIHandler extends RestHandler {
 			response.getOutputStream().write(encodedBytes);
 			break;
 
-		case "png":
+		case "png": // serve as PNG
 
 			// file save-as name / force download
 			boolean download = request.getOptions().optBoolean("download");
@@ -101,7 +100,12 @@ public class BarcodeAPIHandler extends RestHandler {
 			response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
 			response.getOutputStream().write(barcode.getData());
 			break;
-		}
 
+		default:
+			// unknown output format
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setHeader("X-Error-Message", "Invalid output format.");
+			break;
+		}
 	}
 }

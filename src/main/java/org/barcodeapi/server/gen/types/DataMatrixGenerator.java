@@ -36,7 +36,7 @@ public class DataMatrixGenerator extends CodeGenerator {
 
 		int dpi = options.optInt("dpi", 200);
 		double scale = options.optDouble("scale", 1.5);
-		int qz = options.optInt("qz", (int) (scale * 2));
+		double qz = options.optDouble("qz", (scale * 2));
 
 		boolean square = options.optBoolean("square", true);
 

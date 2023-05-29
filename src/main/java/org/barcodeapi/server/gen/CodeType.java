@@ -52,6 +52,15 @@ public enum CodeType {
 			"^[0-9-:$\\/.+]+$", //
 			"1234567890", //
 			"An early barode designed to be printed on dot-matrix printers."),
+	
+	/**
+	 * ITF-14 type code;
+	 */
+	ITF14(new String[] {"14", "itf-14", "scc-14", "gtin"}, //
+		"^[0-9]{14}$",//
+		"^[0-9]{14}$", //
+		"98765432109213", //
+		"Interleaved 2 of 5, type 14."),
 
 	/**
 	 * Code39 type code;

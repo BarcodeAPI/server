@@ -4,30 +4,26 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
-import org.krysalis.barcode4j.impl.code128.Code128Bean;
+import org.krysalis.barcode4j.impl.int2of5.ITF14Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
-public class Code128Generator extends CodeGenerator {
+public class ITF14Generator extends CodeGenerator {
 
-	private Code128Bean generator;
+	private ITF14Bean generator;
 
-	public Code128Generator() {
-		super(CodeType.Code128);
+	/**
+	 * Constructor for the ITF-14 generator.
+	 */
+	public ITF14Generator() {
+		super(CodeType.ITF14);
 
-		// Setup Code128 generator
-		generator = new Code128Bean();
-	}
-
-	@Override
-	public String onValidateRequest(String data) {
-
-		return CodeUtils.parseControlChars(data);
+		// Setup ITF-14 generator
+		generator = new ITF14Bean();
 	}
 
 	@Override
@@ -40,7 +36,7 @@ public class Code128Generator extends CodeGenerator {
 		int height = options.optInt("height", 25);
 
 		String text = options.optString("text", "bottom");
-		String pattern = options.optString("pattern", null);
+		String pattern = options.optString("pattern", "_ __ _____ _____ _");
 
 		synchronized (generator) {
 

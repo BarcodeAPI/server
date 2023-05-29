@@ -11,6 +11,7 @@ import org.barcodeapi.server.gen.types.Code39Generator;
 import org.barcodeapi.server.gen.types.DataMatrixGenerator;
 import org.barcodeapi.server.gen.types.Ean13Generator;
 import org.barcodeapi.server.gen.types.Ean8Generator;
+import org.barcodeapi.server.gen.types.ITF14Generator;
 import org.barcodeapi.server.gen.types.PDF417Generator;
 import org.barcodeapi.server.gen.types.QRCodeGenerator;
 import org.barcodeapi.server.gen.types.RoyalMailGenerator;
@@ -33,6 +34,8 @@ public class CodeGenerators {
 
 		generators.put(CodeType.UPC_A, new UPCAGenerator());
 		generators.put(CodeType.UPC_E, new UPCEGenerator());
+
+		generators.put(CodeType.ITF14, new ITF14Generator());
 
 		generators.put(CodeType.CODABAR, new CodabarGenerator());
 

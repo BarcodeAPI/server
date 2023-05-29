@@ -32,10 +32,11 @@ public class UPCEGenerator extends CodeGenerator {
 		int dpi = options.optInt("dpi", 150);
 		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
 
-		int qz = options.optInt("qz", (int) (10 * moduleWidth));
+		double qz = options.optDouble("qz", (10 * moduleWidth));
 		int height = options.optInt("height", 25);
 
 		String text = options.optString("text", "bottom");
+		String pattern = options.optString("format", null);
 
 		synchronized (generator) {
 
@@ -59,6 +60,9 @@ public class UPCEGenerator extends CodeGenerator {
 			generator.setQuietZone(qz);
 			generator.setHeight(height);
 			generator.setModuleWidth(moduleWidth);
+
+			generator.setPattern(pattern);
+			generator.setFontSize(12 * moduleWidth);
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//

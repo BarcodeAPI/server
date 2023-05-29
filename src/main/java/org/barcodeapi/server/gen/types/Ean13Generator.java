@@ -51,10 +51,11 @@ public class Ean13Generator extends CodeGenerator {
 		int dpi = options.optInt("dpi", 150);
 		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
 
-		int qz = options.optInt("qz", 4);
+		double qz = options.optDouble("qz", 4);
 		int height = options.optInt("height", 25);
 
 		String text = options.optString("text", "bottom");
+		String pattern = options.optString("pattern", null);
 
 		synchronized (generator) {
 
@@ -78,6 +79,9 @@ public class Ean13Generator extends CodeGenerator {
 			generator.setQuietZone(qz);
 			generator.setHeight(height);
 			generator.setModuleWidth(moduleWidth);
+
+			generator.setPattern(pattern);
+			generator.setFontSize(12 * moduleWidth);
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
