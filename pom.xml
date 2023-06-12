@@ -95,20 +95,20 @@
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>libargs</artifactId>
-			<version>1.2</version>
+			<version>1.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>liblog</artifactId>
-			<version>1.2</version>
+			<version>1.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.mclarkdev.tools</groupId>
-			<artifactId>libloggelf</artifactId>
-			<version>1.0</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.mclarkdev.tools</groupId>-->
+<!--			<artifactId>libloggelf</artifactId>-->
+<!--			<version>1.0</version>-->
+<!--		</dependency>-->
 
 	</dependencies>
 </project>

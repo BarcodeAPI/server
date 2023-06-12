@@ -1,7 +1,7 @@
 package org.barcodeapi.server.core;
 
 import com.mclarkdev.tools.liblog.LibLog;
-import com.mclarkdev.tools.libloggelf.LibLogGELF;
+//import com.mclarkdev.tools.libloggelf.LibLogGELF;
 
 public class Log {
 
@@ -26,8 +26,8 @@ public class Log {
 		}
 
 		// write to network
-		if (gelfEnabled) {
-			LibLogGELF.write(message, null, 1, "type", type.toString());
-		}
+//		if (gelfEnabled) {
+//			LibLogGELF.write(message, null, 1, "type", type.toString());
+//		}
 	}
 }

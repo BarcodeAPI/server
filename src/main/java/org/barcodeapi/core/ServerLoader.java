@@ -44,6 +44,8 @@ public class ServerLoader {
 	private Server server;
 	private HandlerCollection handlers;
 
+	private LibArgs libArgs;
+
 	/**
 	 * Initialize the server loader by processing the command line arguments
 	 * supplied by the user.
@@ -51,7 +53,8 @@ public class ServerLoader {
 	 * @param args
 	 */
 	public ServerLoader(String[] args) {
-		LibArgs.instance().parse(args);
+		this.libArgs = new LibArgs(args);
+//		LibArgs.instance().parse(args);
 	}
 
 	/**
@@ -79,7 +82,7 @@ public class ServerLoader {
 		Log.out(LOG.SERVER, "Initializing: " + _ID);
 		Log.out(LOG.SERVER, "Starting Jetty API Server");
 		handlers = new HandlerCollection();
-		server = new Server(LibArgs.instance().getInteger("port", 8080));
+		server = new Server(libArgs.getInteger("port", 8080));
 		server.setHandler(handlers);
 
 		// setup rest handlers
@@ -129,7 +132,6 @@ public class ServerLoader {
 	 * Initialize the system tasks which run periodically in the background.
 	 */
 	private void initSystemTasks() {
-
 		// run watch-dog every 1 minute
 		WatchdogTask watchdogTask = new WatchdogTask();
 		ServerRuntime.getSystemTimer().schedule(watchdogTask, 0, //
@@ -137,7 +139,7 @@ public class ServerLoader {
 
 		// print stats to log every 5 minutes
 		StatsDumpTask statsTask = new StatsDumpTask(//
-				LibArgs.instance().getBoolean("no-telemetry"));
+				libArgs.getBoolean("no-telemetry"));
 		ServerRuntime.getSystemTimer().schedule(statsTask, 0, //
 				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
 
