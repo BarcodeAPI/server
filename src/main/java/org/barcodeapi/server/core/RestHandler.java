@@ -160,11 +160,6 @@ public abstract class RestHandler extends AbstractHandler {
 			response.setHeader("Access-Control-Allow-Credentials", "true");
 		}
 
-		String referer = request.getHeader("referer");
-		if (referer != null) {
-			response.setHeader("Content-Security-Policy", "default-src " + referer);
-		}
-
 		if (request.getMethod().equals("OPTIONS")) {
 			response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 		}

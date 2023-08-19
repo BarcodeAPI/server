@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
-			<version>9.4.41.v20210516</version>
+			<version>9.4.51.v20230217</version>
 		</dependency>
 
 		<dependency>
@@ -63,26 +63,26 @@
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
-			<version>3.3.0</version>
+			<version>3.5.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>javase</artifactId>
-			<version>3.3.0</version>
+			<version>3.5.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20160212</version>
+			<version>20230618</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>5.2</version>
+			<version>5.8</version>
 		</dependency>
 
 		<dependency>
