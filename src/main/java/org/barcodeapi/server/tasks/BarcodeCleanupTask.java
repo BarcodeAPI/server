@@ -2,10 +2,10 @@ package org.barcodeapi.server.tasks;
 
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.core.BackgroundTask;
-import org.barcodeapi.server.core.Log;
-import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.core.ObjectCache;
 import org.barcodeapi.server.gen.CodeType;
+
+import com.mclarkdev.tools.liblog.LibLog;
 
 public class BarcodeCleanupTask extends BackgroundTask {
 
@@ -25,6 +25,6 @@ public class BarcodeCleanupTask extends BackgroundTask {
 		}
 
 		System.gc();
-		Log.out(LOG.SERVER, "CACHE : Stale [ " + removed + " ] Active [ " + active + " ]");
+		LibLog.clogF_("I2201", removed, active);
 	}
 }

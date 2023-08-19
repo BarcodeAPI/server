@@ -5,8 +5,8 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.barcodeapi.server.core.BackgroundTask;
-import org.barcodeapi.server.core.Log;
-import org.barcodeapi.server.core.Log.LOG;
+
+import com.mclarkdev.tools.liblog.LibLog;
 
 public class StatsDumpTask extends BackgroundTask {
 
@@ -25,12 +25,12 @@ public class StatsDumpTask extends BackgroundTask {
 
 		// get and print metric data
 		String data = getStats().getDetails().toString();
-		Log.out(LOG.SERVER, "STATS : " + data);
+		LibLog.log("stats", data);
 
 		// upload metrics if enabled
 		if (telemetry) {
 
-			Log.out(LOG.SERVER, "Uploading metrics.");
+			LibLog.clog("I2604");
 
 			try {
 
@@ -52,7 +52,7 @@ public class StatsDumpTask extends BackgroundTask {
 
 			} catch (Exception e) {
 
-				Log.out(LOG.SERVER, "Failed to upload metrics: " + e.getLocalizedMessage());
+				LibLog.clogF_("E2609", e.getLocalizedMessage());
 			}
 		}
 	}

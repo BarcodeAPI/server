@@ -2,8 +2,9 @@ package org.barcodeapi.server.core;
 
 import java.util.TimerTask;
 
-import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.statistics.StatsCollector;
+
+import com.mclarkdev.tools.liblog.LibLog;
 
 public abstract class BackgroundTask extends TimerTask {
 
@@ -24,7 +25,7 @@ public abstract class BackgroundTask extends TimerTask {
 		// log task name
 		String taskName = getClass().getName();
 		taskName = taskName.substring(taskName.lastIndexOf('.') + 1);
-		Log.out(LOG.SERVER, "Running task : " + taskName);
+		LibLog.clogF_("I2001", taskName);
 		long timeStart = System.currentTimeMillis();
 
 		// call implemented method

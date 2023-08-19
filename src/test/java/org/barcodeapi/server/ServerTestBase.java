@@ -8,7 +8,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import org.barcodeapi.core.ServerLoader;
+import org.barcodeapi.core.ServerLauncher;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -20,7 +20,7 @@ public abstract class ServerTestBase {
 
 	protected static URI serverUri;
 
-	protected static ServerLoader apiServer;
+	protected static ServerLauncher apiServer;
 
 	private HttpURLConnection urlConnection;
 
@@ -35,7 +35,7 @@ public abstract class ServerTestBase {
 
 		try {
 
-			apiServer = new ServerLoader(new String[] { "--port", SERVER_PORT });
+			apiServer = new ServerLauncher(new String[] { "--port", SERVER_PORT });
 			apiServer.launch();
 
 			serverUri = new URI(String.format("http://%s:%s", SERVER_HOST, SERVER_PORT));

@@ -1,5 +1,7 @@
 package org.barcodeapi.core;
 
+import java.io.IOException;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.server.admin.CacheDumpHandler;
@@ -14,8 +16,6 @@ import org.barcodeapi.server.api.SessionDetailsHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.StatsHandler;
 import org.barcodeapi.server.api.TypesHandler;
-import org.barcodeapi.server.core.Log;
-import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.tasks.BarcodeCleanupTask;
 import org.barcodeapi.server.tasks.SessionCleanupTask;
@@ -26,6 +26,8 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 
 import com.mclarkdev.tools.libargs.LibArgs;
+import com.mclarkdev.tools.liblog.LibLog;
+import com.mclarkdev.tools.libloggelf.LibLogGELF;
 
 /**
  * This class should handle the processing of the command line arguments passed
@@ -35,7 +37,15 @@ import com.mclarkdev.tools.libargs.LibArgs;
  * @author Matthew R. Clark, 2020
  *
  */
-public class ServerLoader {
+public class ServerLauncher {
+
+	private static final String APP_NAME = "BarcodeAPI";
+
+	{
+		LibLog.setAppName(APP_NAME);
+		LibLog.log("Logging as: " + LibLog.getAppName());
+		LibLog.log("Network logging: " + LibLogGELF.enabled());
+	}
 
 	// Initialize server runtime and get ID
 	private final String _ID = ServerRuntime.getRuntimeID();
@@ -49,9 +59,21 @@ public class ServerLoader {
 	 * supplied by the user.
 	 * 
 	 * @param args
+	 * @throws IOException
 	 */
-	public ServerLoader(String[] args) {
+	public ServerLauncher(String[] args) throws Exception {
+
+		// Parse command line arguments
 		LibArgs.instance().parse(args);
+
+		// Get system language
+		String lang = LibArgs.instance().getString(//
+				"language", Locale.getDefault().toString());
+
+		// Load localized message codes
+		LibLog.log("Loading Language Pack: " + lang);
+		LibLog.loadStrings(ServerLauncher.class.getResourceAsStream(//
+				String.format("/strings/codes.%s.properties", lang)));
 	}
 
 	/**
@@ -63,10 +85,19 @@ public class ServerLoader {
 	 */
 	public void launch() throws Exception {
 
+		// Log Runtime ID
+		LibLog.clogF_("I0001", _ID);
+
+		// Initialize API server
+		LibLog.clog("I0002");
 		initApiServer();
 
+		// Start system tasks
+		LibLog.clog("I0003");
 		initSystemTasks();
 
+		// Start the server
+		LibLog.clog("I0004");
 		startServer();
 	}
 
@@ -75,24 +106,23 @@ public class ServerLoader {
 	 */
 	private void initApiServer() throws Exception {
 
-		// initialize API server
-		Log.out(LOG.SERVER, "Initializing: " + _ID);
-		Log.out(LOG.SERVER, "Starting Jetty API Server");
+		// Initialize API server
+		LibLog.clog("I0011");
 		handlers = new HandlerCollection();
 		server = new Server(LibArgs.instance().getInteger("port", 8080));
 		server.setHandler(handlers);
 
-		// setup rest handlers
+		// Setup rest handlers
 		initHandler("/api", BarcodeAPIHandler.class);
 		initHandler("/bulk", BulkHandler.class);
 		initHandler("/types", TypesHandler.class);
 		initHandler("/session", SessionDetailsHandler.class);
 
-		// setup server handlers
+		// Setup server handlers
 		initHandler("/server/about", AboutHandler.class);
 		initHandler("/server/stats", StatsHandler.class);
 
-		// setup admin handlers
+		// Setup admin handlers
 		initHandler("/admin/cache/dump", CacheDumpHandler.class);
 		initHandler("/admin/cache/flush", CacheFlushHandler.class);
 
@@ -102,7 +132,7 @@ public class ServerLoader {
 		initHandler("/admin/server/reload", ConfigReloadHandler.class);
 
 		// Instantiate the static resource handler and add it to the collection
-		Log.out(LOG.SERVER, "Initializing static resource handler");
+		LibLog.clog("I0012");
 		ContextHandler resourceHandler = new ContextHandler();
 		resourceHandler.setHandler(new StaticHandler(server));
 		resourceHandler.setContextPath("/");
@@ -115,7 +145,7 @@ public class ServerLoader {
 	private void initHandler(String path, Class<? extends RestHandler> clazz) throws Exception {
 
 		// Instantiate the handler
-		Log.out(LOG.SERVER, "Initializing handler: " + path);
+		LibLog.clogF_("I0021", path);
 		RestHandler handler = clazz.getConstructor().newInstance();
 
 		// Add it to the handler collection
@@ -130,22 +160,26 @@ public class ServerLoader {
 	 */
 	private void initSystemTasks() {
 
+		LibLog.clog("I0031");
 		// run watch-dog every 1 minute
 		WatchdogTask watchdogTask = new WatchdogTask();
 		ServerRuntime.getSystemTimer().schedule(watchdogTask, 0, //
 				TimeUnit.MILLISECONDS.convert(15, TimeUnit.SECONDS));
 
+		LibLog.clog("I0032");
 		// print stats to log every 5 minutes
 		StatsDumpTask statsTask = new StatsDumpTask(//
 				LibArgs.instance().getBoolean("no-telemetry"));
 		ServerRuntime.getSystemTimer().schedule(statsTask, 0, //
 				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
 
+		LibLog.clog("I0033");
 		// cleanup sessions every 15 minutes
 		SessionCleanupTask sessionCleanup = new SessionCleanupTask();
 		ServerRuntime.getSystemTimer().schedule(sessionCleanup, 0, //
 				TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES));
 
+		LibLog.clog("I0034");
 		// cleanup barcodes every hour
 		BarcodeCleanupTask barcodeCleanup = new BarcodeCleanupTask();
 		ServerRuntime.getSystemTimer().schedule(barcodeCleanup, 0, //
@@ -157,18 +191,16 @@ public class ServerLoader {
 	 * 
 	 * @throws Exception
 	 */
-	private boolean startServer() {
+	private void startServer() throws Exception {
 
 		try {
 
 			// start server
 			server.start();
-			return true;
 		} catch (Exception e) {
 
-			System.err.println("Failed to start server.");
-			e.printStackTrace(System.err);
-			return false;
+			LibLog.clog("E0008", e);
+			throw e;
 		}
 	}
 
@@ -186,8 +218,7 @@ public class ServerLoader {
 			return true;
 		} catch (Exception e) {
 
-			System.err.println("Failed to stop server.");
-			e.printStackTrace(System.err);
+			LibLog.clog("E0009", e);
 			return false;
 		}
 	}

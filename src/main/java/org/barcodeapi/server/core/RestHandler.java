@@ -10,12 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.core.utils.StringUtils;
-import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.session.CachedSession;
 import org.barcodeapi.server.session.SessionCache;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+
+import com.mclarkdev.tools.liblog.LibLog;
 
 public abstract class RestHandler extends AbstractHandler {
 
@@ -100,7 +101,7 @@ public abstract class RestHandler extends AbstractHandler {
 		response.setStatus(HttpServletResponse.SC_OK);
 
 		// log the request
-		Log.out(LOG.REQUEST, String.format("%s : %s : %s : %s", _NAME, target, source, from));
+		LibLog.clogF("request", "I4001", _NAME, target, source, from);
 
 		// server details
 		addCORSHeaders(baseRequest, response);

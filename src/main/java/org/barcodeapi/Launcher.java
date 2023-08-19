@@ -1,6 +1,6 @@
 package org.barcodeapi;
 
-import org.barcodeapi.core.ServerLoader;
+import org.barcodeapi.core.ServerLauncher;
 
 /**
  * This class should handle the master life-cycle of the Barcode API server and
@@ -12,7 +12,7 @@ import org.barcodeapi.core.ServerLoader;
 public class Launcher {
 
 	// The instance of the running application.
-	private static ServerLoader apiServer;
+	private static ServerLauncher apiServer;
 
 	/**
 	 * This method should serve as the main entry point for the application when
@@ -33,7 +33,7 @@ public class Launcher {
 		try {
 
 			// Instantiate the loader
-			apiServer = new ServerLoader(args);
+			apiServer = new ServerLauncher(args);
 
 			// Launch the system
 			apiServer.launch();

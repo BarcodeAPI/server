@@ -2,10 +2,10 @@ package org.barcodeapi.server.gen;
 
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
-import org.barcodeapi.server.core.Log;
-import org.barcodeapi.server.core.Log.LOG;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.json.JSONObject;
+
+import com.mclarkdev.tools.liblog.LibLog;
 
 public abstract class CodeGenerator {
 
@@ -66,11 +66,8 @@ public abstract class CodeGenerator {
 			StatsCollector.getInstance().hitCounter(time, "render", "time");
 			StatsCollector.getInstance().hitCounter(time, "render", "type", type, "time");
 
-			Log.out(LOG.BARCODE, "" + //
-					"Rendered [ " + getType().toString() + " ] " + //
-					"with [ " + data + " ] " + //
-					"size [ " + img.length + "B ] " + //
-					"in [ " + time + "ms ] ");
+			// log the render
+			LibLog.clogF("barcode", "I0601", getType().toString(), data, img.length, time);
 
 			return img;
 		} catch (Exception e) {
