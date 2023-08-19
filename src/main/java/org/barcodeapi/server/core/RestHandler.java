@@ -115,6 +115,11 @@ public abstract class RestHandler extends AbstractHandler {
 		session.hit(baseRequest.getOriginalURI().toString());
 		response.addCookie(session.getCookie());
 
+		// done if only options
+		if (request.getMethod().equals("OPTIONS")) {
+			return;
+		}
+
 		// authenticate the user if required
 		if (authRequired() && !validateAdmin(request)) {
 
@@ -153,6 +158,11 @@ public abstract class RestHandler extends AbstractHandler {
 			response.setHeader("Access-Control-Max-Age", "86400");
 			response.setHeader("Access-Control-Allow-Origin", origin);
 			response.setHeader("Access-Control-Allow-Credentials", "true");
+		}
+
+		String referer = request.getHeader("referer");
+		if (referer != null) {
+			response.setHeader("Content-Security-Policy", "default-src " + referer);
 		}
 
 		if (request.getMethod().equals("OPTIONS")) {
