@@ -1,33 +1,32 @@
-package org.barcodeapi.server.api;
+package org.barcodeapi.server.admin;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.core.ServerRuntime;
+import org.barcodeapi.server.core.Authlist;
+import org.barcodeapi.server.core.Blacklist;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AboutHandler extends RestHandler {
+public class ServerReloadHandler extends RestHandler {
 
-	public AboutHandler() {
-		super();
+	public ServerReloadHandler() {
+		super(true);
 	}
 
 	@Override
 	protected void onRequest(String uri, HttpServletRequest request, HttpServletResponse response)
 			throws JSONException, IOException {
 
+		Authlist.reload();
+		Blacklist.reload();
+
 		// print response to client
 		JSONObject output = new JSONObject()//
-				.put("runtimeId", ServerRuntime.getRuntimeID())//
-				.put("uptime", ServerRuntime.getTimeRunning())//
-				.put("admin", "---")//
-				.put("hostname", ServerRuntime.getHostname())//
-				.put("version", ServerRuntime.getVersion());
-		response.setHeader("Content-Type", "application/json");
+				.put("message", "config reloaded");
 		response.getOutputStream().println(output.toString(4));
 	}
 }

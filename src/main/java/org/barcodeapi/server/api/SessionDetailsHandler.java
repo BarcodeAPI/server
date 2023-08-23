@@ -11,7 +11,7 @@ import org.json.JSONException;
 public class SessionDetailsHandler extends RestHandler {
 
 	public SessionDetailsHandler() {
-		super();
+		super(false);
 	}
 
 	@Override

@@ -6,15 +6,15 @@ import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.server.admin.CacheDumpHandler;
 import org.barcodeapi.server.admin.CacheFlushHandler;
-import org.barcodeapi.server.admin.ConfigReloadHandler;
+import org.barcodeapi.server.admin.ServerReloadHandler;
 import org.barcodeapi.server.admin.SessionFlushHandler;
 import org.barcodeapi.server.admin.SessionListHandler;
-import org.barcodeapi.server.api.AboutHandler;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.BulkHandler;
+import org.barcodeapi.server.api.InfoHandler;
+import org.barcodeapi.server.api.ServerStatsHandler;
 import org.barcodeapi.server.api.SessionDetailsHandler;
 import org.barcodeapi.server.api.StaticHandler;
-import org.barcodeapi.server.api.StatsHandler;
 import org.barcodeapi.server.api.TypesHandler;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.tasks.BarcodeCleanupTask;
@@ -22,6 +22,7 @@ import org.barcodeapi.server.tasks.SessionCleanupTask;
 import org.barcodeapi.server.tasks.StatsDumpTask;
 import org.barcodeapi.server.tasks.WatchdogTask;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 
@@ -108,28 +109,32 @@ public class ServerLauncher {
 
 		// Initialize API server
 		LibLog.clog("I0011");
+		server = new Server();
 		handlers = new HandlerCollection();
-		server = new Server(LibArgs.instance().getInteger("port", 8080));
 		server.setHandler(handlers);
+
+		// Bind server port
+		int portAPI = LibArgs.instance().getInteger("port", 8080);
+		ServerConnector serverConnectorAPI = new ServerConnector(server);
+		serverConnectorAPI.setPort(portAPI);
+		server.addConnector(serverConnectorAPI);
 
 		// Setup rest handlers
 		initHandler("/api", BarcodeAPIHandler.class);
 		initHandler("/bulk", BulkHandler.class);
 		initHandler("/types", TypesHandler.class);
 		initHandler("/session", SessionDetailsHandler.class);
-
-		// Setup server handlers
-		initHandler("/server/about", AboutHandler.class);
-		initHandler("/server/stats", StatsHandler.class);
+		initHandler("/info", InfoHandler.class);
 
 		// Setup admin handlers
 		initHandler("/admin/cache/dump", CacheDumpHandler.class);
 		initHandler("/admin/cache/flush", CacheFlushHandler.class);
-
 		initHandler("/admin/session/list", SessionListHandler.class);
 		initHandler("/admin/session/flush", SessionFlushHandler.class);
+		initHandler("/admin/server/reload", ServerReloadHandler.class);
 
-		initHandler("/admin/server/reload", ConfigReloadHandler.class);
+		// Server Stats
+		initHandler("/server/stats", ServerStatsHandler.class);
 
 		// Instantiate the static resource handler and add it to the collection
 		LibLog.clog("I0012");

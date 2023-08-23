@@ -13,7 +13,7 @@ import org.json.JSONException;
 public class TypesHandler extends RestHandler {
 
 	public TypesHandler() {
-		super();
+		super(false);
 	}
 
 	@Override

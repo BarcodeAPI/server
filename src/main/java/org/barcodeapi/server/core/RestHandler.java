@@ -28,10 +28,6 @@ public abstract class RestHandler extends AbstractHandler {
 
 	private final boolean authRequired;
 
-	public RestHandler() {
-		this(false);
-	}
-
 	public RestHandler(boolean authRequired) {
 
 		// extract class name

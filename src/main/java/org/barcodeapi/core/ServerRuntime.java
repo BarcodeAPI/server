@@ -7,12 +7,14 @@ import java.util.UUID;
 
 import org.barcodeapi.server.statistics.StatsCollector;
 
+import com.mclarkdev.tools.libextras.LibExtrasStreams;
+
 public class ServerRuntime {
 
 	// System runtime information
 	private static final String _RUNTIME_ID;
 	private static final long _RUNTIME_TIMESTART;
-	private static final String _RUNTIME_VERSION;
+	private static final int _RUNTIME_VERSION;
 	private static final String _RUNTIME_HOST;
 
 	// Background task timer
@@ -21,21 +23,22 @@ public class ServerRuntime {
 	static {
 
 		_RUNTIME_ID = UUID.randomUUID().toString();
-		StatsCollector.getInstance()//
-				.setValue(_RUNTIME_ID, "system", "runtimeId");
+		StatsCollector.getInstance().setValue(_RUNTIME_ID, "system", "runtimeId");
 
 		_RUNTIME_TIMESTART = System.currentTimeMillis();
-		StatsCollector.getInstance()//
-				.setValue(_RUNTIME_TIMESTART, "system", "time", "start");
+		StatsCollector.getInstance().setValue(_RUNTIME_TIMESTART, "system", "time", "start");
 
-		_RUNTIME_VERSION = "3";
-		StatsCollector.getInstance()//
-				.setValue(_RUNTIME_VERSION, "system", "version");
+		try {
+			_RUNTIME_VERSION = Integer.parseInt(LibExtrasStreams.readStream(//
+					ServerRuntime.class.getResourceAsStream("/app.version")));
+			StatsCollector.getInstance().setValue(_RUNTIME_VERSION, "system", "version");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
 		try {
 			_RUNTIME_HOST = InetAddress.getLocalHost().getCanonicalHostName();
-			StatsCollector.getInstance()//
-					.setValue(_RUNTIME_HOST, "system", "host");
+			StatsCollector.getInstance().setValue(_RUNTIME_HOST, "system", "host");
 		} catch (UnknownHostException e) {
 			throw new RuntimeException(e);
 		}
@@ -55,7 +58,7 @@ public class ServerRuntime {
 		return System.currentTimeMillis() - getTimeStart();
 	}
 
-	public static final String getVersion() {
+	public static final int getVersion() {
 		return _RUNTIME_VERSION;
 	}
 

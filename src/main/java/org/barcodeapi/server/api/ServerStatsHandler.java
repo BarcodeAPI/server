@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
 
-public class StatsHandler extends RestHandler {
+public class ServerStatsHandler extends RestHandler {
 
-	public StatsHandler() {
-		super();
+	public ServerStatsHandler() {
+		super(true);
 	}
 
 	@Override

@@ -110,5 +110,11 @@
 			<version>1.4</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.mclarkdev.tools</groupId>
+			<artifactId>libextras</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
 	</dependencies>
 </project>
