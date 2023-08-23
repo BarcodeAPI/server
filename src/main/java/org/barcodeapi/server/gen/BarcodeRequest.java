@@ -28,17 +28,8 @@ public class BarcodeRequest {
 			options = StringUtils.parseOptions(parts[1]);
 		}
 
-		// use cache based on options
-		boolean cached = true;
-		if (options.length() > 0) {
-			cached = false;
-		}
-		if (data.length() > 64) {
-			cached = false;
-		}
-		if (options.optBoolean("no-cache", false)) {
-			cached = false;
-		}
+		// use cache based on options and data length
+		boolean cached = ((options.length() == 0) && (data.length() <= 48));
 
 		// extract code type and data string
 		CodeType type;

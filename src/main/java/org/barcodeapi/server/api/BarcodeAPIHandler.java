@@ -69,7 +69,9 @@ public class BarcodeAPIHandler extends RestHandler {
 		}
 
 		// add cache headers
-		response.setHeader("Cache-Control", "max-age=86400, public");
+		if (request.useCache()) {
+			response.setHeader("Cache-Control", "max-age=86400, public");
+		}
 
 		// barcode details
 		response.setHeader("X-Barcode-Type", barcode.getType().toString());
