@@ -4,6 +4,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.mclarkdev.tools.liblog.LibLog;
+
 public class Authlist {
 
 	private static List<String> authlist;
@@ -19,7 +21,7 @@ public class Authlist {
 			authlist = Files.readAllLines(Paths.get("config/authlist.conf"));
 		} catch (Exception e) {
 
-			throw new RuntimeException("Failed to initialize authlist.");
+			throw new RuntimeException(LibLog._clog("E0799").toString());
 		}
 	}
 

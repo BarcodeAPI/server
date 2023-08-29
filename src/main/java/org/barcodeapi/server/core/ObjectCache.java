@@ -96,7 +96,7 @@ public class ObjectCache {
 
 		if (!caches.containsKey(name)) {
 
-			LibLog.clogF_("I0101", name);
+			LibLog._clogF("I0101", name);
 			caches.put(name, new ObjectCache(name));
 		}
 

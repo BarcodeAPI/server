@@ -25,9 +25,9 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		try {
 
-			ERR = BarcodeGenerator.requestBarcode(new BarcodeRequest(//
+			ERR = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
 					"/128/$$@E$$@R$$@R$$@O$$@R$$@"));
-			BLK = BarcodeGenerator.requestBarcode(new BarcodeRequest(//
+			BLK = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
 					"/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
 		} catch (GenerationException e) {
 			throw new RuntimeException("init failed", e);
@@ -39,7 +39,7 @@ public class BarcodeAPIHandler extends RestHandler {
 			throws JSONException, IOException {
 
 		CachedBarcode barcode;
-		BarcodeRequest request = new BarcodeRequest(uri);
+		BarcodeRequest request = BarcodeRequest.fromURI(uri);
 
 		try {
 			// generate user requested barcode
@@ -47,7 +47,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		} catch (GenerationException e) {
 
-			LibLog.clogF_("E6009", uri, e.getMessage());
+			LibLog._clogF("E6009", uri, e.getMessage());
 
 			switch (e.getExceptionType()) {
 			case BLACKLIST:

@@ -9,13 +9,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.core.utils.StringUtils;
 import org.barcodeapi.server.session.CachedSession;
 import org.barcodeapi.server.session.SessionCache;
 import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
+import com.mclarkdev.tools.libextras.LibExtrasHashes;
 import com.mclarkdev.tools.liblog.LibLog;
 
 public abstract class RestHandler extends AbstractHandler {
@@ -173,7 +173,7 @@ public abstract class RestHandler extends AbstractHandler {
 		String decode = new String(Base64.getDecoder().decode(authString));
 		String[] unpw = decode.split(":");
 
-		String passHash = StringUtils.sumSHA256(unpw[1].getBytes());
+		String passHash = LibExtrasHashes.sumSHA256(unpw[1].getBytes());
 		String userAuth = String.format("%s:%s", unpw[0], passHash);
 
 		return Authlist.getAuthlist().contains(userAuth);

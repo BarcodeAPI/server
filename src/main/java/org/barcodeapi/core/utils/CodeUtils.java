@@ -1,37 +1,12 @@
 package org.barcodeapi.core.utils;
 
-import java.security.MessageDigest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
+import org.json.JSONObject;
 
 public class CodeUtils {
-
-	/**
-	 * Calculate the MD5 hash of some bytes.
-	 * 
-	 * @param bytes
-	 * @return
-	 */
-	public static String getMD5Sum(byte[] bytes) {
-
-		try {
-
-			byte[] hash = MessageDigest.getInstance("MD5").digest(bytes);
-
-			StringBuilder hexString = new StringBuilder();
-
-			for (int i = 0; i < hash.length; i++) {
-				String hex = Integer.toHexString(0xFF & hash[i]);
-				if (hex.length() == 1) {
-					hexString.append('0');
-				}
-				hexString.append(hex);
-			}
-
-			return hexString.toString();
-		} catch (Exception e) {
-
-			return null;
-		}
-	}
 
 	/**
 	 * Converts a data string into a string containing control characters; Any
@@ -64,7 +39,6 @@ public class CodeUtils {
 		return newData;
 	}
 
-	// FIXME does not work correctly
 	public static int calculateEanChecksum(String data, int count) {
 
 		int sum0 = 0;
@@ -94,5 +68,54 @@ public class CodeUtils {
 
 			return check;
 		}
+	}
+
+	public static String encode(String data) {
+
+		try {
+
+			return URLEncoder.encode(data, "UTF-8");
+		} catch (Exception e) {
+
+			return null;
+		}
+	}
+
+	public static String decode(String data) {
+
+		try {
+
+			return URLDecoder.decode(data, "UTF-8");
+
+		} catch (UnsupportedEncodingException e) {
+
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	public static String stripIllegal(String data) {
+
+		return data.replaceAll("[!@#$%^&*\\(\\)\\[\\]\\{\\};:\\',\\<\\>\\\"]", "");
+	}
+
+	/**
+	 * Returns a JSON map of options from the passed query string.
+	 * 
+	 * @param opts
+	 * @return
+	 */
+	public static JSONObject parseOptions(String opts) {
+
+		JSONObject options = new JSONObject();
+
+		String[] parts = opts.split("&");
+
+		for (String option : parts) {
+
+			String[] kv = option.split("=");
+			options.put(kv[0], kv[1]);
+		}
+
+		return options;
 	}
 }

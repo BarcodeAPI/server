@@ -4,6 +4,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.mclarkdev.tools.liblog.LibLog;
+
 public class Blacklist {
 
 	private static List<String> blacklist;
@@ -19,7 +21,7 @@ public class Blacklist {
 			blacklist = Files.readAllLines(Paths.get("config/blacklist.conf"));
 		} catch (Exception e) {
 
-			throw new RuntimeException("Failed to initialize blacklist.");
+			throw new RuntimeException(LibLog._clog("E0798").toString());
 		}
 	}
 

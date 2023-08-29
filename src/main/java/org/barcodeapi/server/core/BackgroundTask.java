@@ -25,7 +25,7 @@ public abstract class BackgroundTask extends TimerTask {
 		// log task name
 		String taskName = getClass().getName();
 		taskName = taskName.substring(taskName.lastIndexOf('.') + 1);
-		LibLog.clogF_("I2001", taskName);
+		LibLog._clogF("I2001", taskName);
 		long timeStart = System.currentTimeMillis();
 
 		// call implemented method

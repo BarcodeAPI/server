@@ -22,9 +22,9 @@ public class BulkUtils {
 	public static void getZippedBarcodes(int max, InputStream in, OutputStream out)
 			throws IOException, GenerationException {
 
-		try (CSVReader reader = new CSVReader(new InputStreamReader(in))) {
+		ArrayList<BarcodeRequest> requests = new ArrayList<>();
 
-			ArrayList<BarcodeRequest> requests = new ArrayList<>();
+		try (CSVReader reader = new CSVReader(new InputStreamReader(in))) {
 
 			String[] record;
 			while ((record = reader.readNext()) != null) {
@@ -35,26 +35,25 @@ public class BulkUtils {
 				}
 			}
 			reader.close();
-
-			ArrayList<CachedBarcode> barcodes = generateBarcodes(requests);
-
-			ZipOutputStream zip = new ZipOutputStream(out);
-
-			for (CachedBarcode barcode : barcodes) {
-
-				ZipEntry zipEntry = new ZipEntry(barcode.getNice() + ".png");
-				zip.putNextEntry(zipEntry);
-				zip.write(barcode.getData(), 0, barcode.getDataSize());
-				zip.closeEntry();
-			}
-
-			zip.close();
-			out.close();
-
 		} catch (CsvValidationException e) {
 
 			throw new GenerationException(ExceptionType.INVALID, e);
 		}
+
+		ArrayList<CachedBarcode> barcodes = generateBarcodes(requests);
+
+		ZipOutputStream zip = new ZipOutputStream(out);
+
+		for (CachedBarcode barcode : barcodes) {
+
+			ZipEntry zipEntry = new ZipEntry(barcode.getNice() + ".png");
+			zip.putNextEntry(zipEntry);
+			zip.write(barcode.getData(), 0, barcode.getDataSize());
+			zip.closeEntry();
+		}
+
+		zip.close();
+		out.close();
 	}
 
 	private static BarcodeRequest buildBarcodeRequest(String[] record) throws GenerationException {
@@ -78,7 +77,7 @@ public class BulkUtils {
 		String uri = String.format(//
 				"/api/%s/%s?", type, record[0], params);
 
-		return new BarcodeRequest(uri);
+		return BarcodeRequest.fromURI(uri);
 	}
 
 	private static ArrayList<CachedBarcode> generateBarcodes(ArrayList<BarcodeRequest> requests)

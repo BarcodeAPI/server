@@ -3,9 +3,10 @@ package org.barcodeapi.server.cache;
 import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.core.utils.CodeUtils;
-import org.barcodeapi.core.utils.StringUtils;
 import org.barcodeapi.server.core.CachedObject;
 import org.barcodeapi.server.gen.CodeType;
+
+import com.mclarkdev.tools.libextras.LibExtrasHashes;
 
 public class CachedBarcode extends CachedObject {
 
@@ -24,10 +25,10 @@ public class CachedBarcode extends CachedObject {
 		this.raw = raw;
 
 		this.data = data;
-		this.checksum = CodeUtils.getMD5Sum(data);
+		this.checksum = LibExtrasHashes.sumMD5(data);
 
-		this.nice = StringUtils.stripIllegal(raw);
-		this.encoded = StringUtils.encode(raw);
+		this.nice = CodeUtils.stripIllegal(raw);
+		this.encoded = CodeUtils.encode(raw);
 	}
 
 	public CodeType getType() {

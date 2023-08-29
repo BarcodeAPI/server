@@ -1,17 +1,20 @@
 package org.barcodeapi.server.gen;
 
-import org.barcodeapi.core.utils.StringUtils;
+import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.TypeSelector;
 import org.json.JSONObject;
 
 public class BarcodeRequest {
 
-	private final CodeType type;
-	private final String data;
-	private final boolean cached;
-	private final JSONObject options;
+	private CodeType type;
+	private String data;
+	private boolean cached;
+	private JSONObject options;
 
-	public BarcodeRequest(String target) {
+	private BarcodeRequest() {
+	}
+
+	public static BarcodeRequest fromURI(String target) {
 
 		// remove [ /api ]
 		if (target.startsWith("/api")) {
@@ -20,12 +23,12 @@ public class BarcodeRequest {
 
 		// get and decode the request string
 		String[] parts = target.split("\\?");
-		String data = StringUtils.decode(parts[0].substring(1));
+		String data = CodeUtils.decode(parts[0].substring(1));
 
 		// get and parse options
 		JSONObject options = new JSONObject();
 		if (parts.length == 2) {
-			options = StringUtils.parseOptions(parts[1]);
+			options = CodeUtils.parseOptions(parts[1]);
 		}
 
 		// use cache based on options and data length
@@ -66,25 +69,47 @@ public class BarcodeRequest {
 			type = TypeSelector.getTypeFromData(data);
 		}
 
-		// assign class variables
-		this.type = type;
-		this.data = data;
-		this.cached = cached;
-		this.options = options;
+		// create and return request object
+		BarcodeRequest r = new BarcodeRequest();
+		r.type = type;
+		r.data = data;
+		r.cached = cached;
+		r.options = options;
+		return r;
 	}
 
+	/**
+	 * Returns the requested barcode type.
+	 * 
+	 * @return
+	 */
 	public CodeType getType() {
 		return type;
 	}
 
+	/**
+	 * Returns the requested data content.
+	 * 
+	 * @return
+	 */
 	public String getData() {
 		return data;
 	}
 
+	/**
+	 * Returns true if the request should use the cache.
+	 * 
+	 * @return
+	 */
 	public boolean useCache() {
 		return cached;
 	}
 
+	/**
+	 * Returns a map of options used to generate the barcode.
+	 * 
+	 * @return
+	 */
 	public JSONObject getOptions() {
 		return options;
 	}

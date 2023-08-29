@@ -44,8 +44,8 @@ public class ServerLauncher {
 
 	{
 		LibLog.setAppName(APP_NAME);
-		LibLog.log("Logging as: " + LibLog.getAppName());
-		LibLog.log("Network logging: " + LibLogGELF.enabled());
+		LibLog._log("Logging as: " + LibLog.getAppName());
+		LibLog._log("Network logging: " + LibLogGELF.enabled());
 	}
 
 	// Initialize server runtime and get ID
@@ -72,7 +72,7 @@ public class ServerLauncher {
 				"language", Locale.getDefault().toString());
 
 		// Load localized message codes
-		LibLog.log("Loading Language Pack: " + lang);
+		LibLog._log("Loading Language Pack: " + lang);
 		LibLog.loadStrings(ServerLauncher.class.getResourceAsStream(//
 				String.format("/strings/codes.%s.properties", lang)));
 	}
@@ -87,18 +87,18 @@ public class ServerLauncher {
 	public void launch() throws Exception {
 
 		// Log Runtime ID
-		LibLog.clogF_("I0001", _ID);
+		LibLog._clogF("I0001", _ID);
 
 		// Initialize API server
-		LibLog.clog("I0002");
+		LibLog._clog("I0002");
 		initApiServer();
 
 		// Start system tasks
-		LibLog.clog("I0003");
+		LibLog._clog("I0003");
 		initSystemTasks();
 
 		// Start the server
-		LibLog.clog("I0004");
+		LibLog._clog("I0004");
 		startServer();
 	}
 
@@ -108,7 +108,7 @@ public class ServerLauncher {
 	private void initApiServer() throws Exception {
 
 		// Initialize API server
-		LibLog.clog("I0011");
+		LibLog._clog("I0011");
 		server = new Server();
 		handlers = new HandlerCollection();
 		server.setHandler(handlers);
@@ -137,7 +137,7 @@ public class ServerLauncher {
 		initHandler("/server/stats", ServerStatsHandler.class);
 
 		// Instantiate the static resource handler and add it to the collection
-		LibLog.clog("I0012");
+		LibLog._clog("I0012");
 		ContextHandler resourceHandler = new ContextHandler();
 		resourceHandler.setHandler(new StaticHandler(server));
 		resourceHandler.setContextPath("/");
@@ -150,7 +150,7 @@ public class ServerLauncher {
 	private void initHandler(String path, Class<? extends RestHandler> clazz) throws Exception {
 
 		// Instantiate the handler
-		LibLog.clogF_("I0021", path);
+		LibLog._clogF("I0021", path);
 		RestHandler handler = clazz.getConstructor().newInstance();
 
 		// Add it to the handler collection
@@ -165,26 +165,26 @@ public class ServerLauncher {
 	 */
 	private void initSystemTasks() {
 
-		LibLog.clog("I0031");
+		LibLog._clog("I0031");
 		// run watch-dog every 1 minute
 		WatchdogTask watchdogTask = new WatchdogTask();
 		ServerRuntime.getSystemTimer().schedule(watchdogTask, 0, //
 				TimeUnit.MILLISECONDS.convert(15, TimeUnit.SECONDS));
 
-		LibLog.clog("I0032");
+		LibLog._clog("I0032");
 		// print stats to log every 5 minutes
 		StatsDumpTask statsTask = new StatsDumpTask(//
 				LibArgs.instance().getBoolean("no-telemetry"));
 		ServerRuntime.getSystemTimer().schedule(statsTask, 0, //
 				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
 
-		LibLog.clog("I0033");
+		LibLog._clog("I0033");
 		// cleanup sessions every 15 minutes
 		SessionCleanupTask sessionCleanup = new SessionCleanupTask();
 		ServerRuntime.getSystemTimer().schedule(sessionCleanup, 0, //
 				TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES));
 
-		LibLog.clog("I0034");
+		LibLog._clog("I0034");
 		// cleanup barcodes every hour
 		BarcodeCleanupTask barcodeCleanup = new BarcodeCleanupTask();
 		ServerRuntime.getSystemTimer().schedule(barcodeCleanup, 0, //
@@ -204,7 +204,7 @@ public class ServerLauncher {
 			server.start();
 		} catch (Exception e) {
 
-			LibLog.clog("E0008", e);
+			LibLog._clog("E0008", e);
 			throw e;
 		}
 	}
@@ -223,7 +223,7 @@ public class ServerLauncher {
 			return true;
 		} catch (Exception e) {
 
-			LibLog.clog("E0009", e);
+			LibLog._clog("E0009", e);
 			return false;
 		}
 	}

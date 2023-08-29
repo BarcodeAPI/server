@@ -30,7 +30,7 @@ public class StatsDumpTask extends BackgroundTask {
 		// upload metrics if enabled
 		if (telemetry) {
 
-			LibLog.clog("I2604");
+			LibLog._clog("I2604");
 
 			try {
 
@@ -52,7 +52,7 @@ public class StatsDumpTask extends BackgroundTask {
 
 			} catch (Exception e) {
 
-				LibLog.clogF_("E2609", e.getLocalizedMessage());
+				LibLog._clogF("E2609", e.getLocalizedMessage());
 			}
 		}
 	}

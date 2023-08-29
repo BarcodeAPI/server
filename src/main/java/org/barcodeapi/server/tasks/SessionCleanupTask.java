@@ -20,6 +20,6 @@ public class SessionCleanupTask extends BackgroundTask {
 		int active = sessions.count();
 
 		System.gc();
-		LibLog.clogF_("I2401", removed, active);
+		LibLog._clogF("I2401", removed, active);
 	}
 }
