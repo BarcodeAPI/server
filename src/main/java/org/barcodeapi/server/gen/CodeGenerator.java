@@ -2,10 +2,10 @@ package org.barcodeapi.server.gen;
 
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
-import org.barcodeapi.server.statistics.StatsCollector;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.liblog.LibLog;
+import com.mclarkdev.tools.libmetrics.LibMetrics;
 
 public abstract class CodeGenerator {
 
@@ -38,6 +38,7 @@ public abstract class CodeGenerator {
 	 * @return
 	 */
 	public byte[] getCode(String data, JSONObject options) throws GenerationException {
+		LibMetrics.hitMethodRunCounter();
 
 		String type = getType().toString();
 
@@ -52,8 +53,8 @@ public abstract class CodeGenerator {
 		String validated = onValidateRequest(data);
 
 		// update global and engine counters
-		StatsCollector.getInstance().hitCounter("render", "count");
-		StatsCollector.getInstance().hitCounter("render", "type", type, "count");
+		LibMetrics.instance().hitCounter("render", "count");
+		LibMetrics.instance().hitCounter("render", "type", type, "count");
 
 		try {
 
@@ -63,8 +64,8 @@ public abstract class CodeGenerator {
 			double time = System.currentTimeMillis() - timeStart;
 
 			// update global and engine counters
-			StatsCollector.getInstance().hitCounter(time, "render", "time");
-			StatsCollector.getInstance().hitCounter(time, "render", "type", type, "time");
+			LibMetrics.instance().hitCounter(time, "render", "time");
+			LibMetrics.instance().hitCounter(time, "render", "type", type, "time");
 
 			// log the render
 			LibLog.clogF("barcode", "I0601", getType().toString(), data, img.length, time);
@@ -73,8 +74,8 @@ public abstract class CodeGenerator {
 		} catch (Exception e) {
 
 			// update global and engine counters
-			StatsCollector.getInstance().hitCounter("render", "fail");
-			StatsCollector.getInstance().hitCounter("render", "type", type, "fail");
+			LibMetrics.instance().hitCounter("render", "fail");
+			LibMetrics.instance().hitCounter("render", "type", type, "fail");
 
 			throw new GenerationException(ExceptionType.FAILED, e);
 		}

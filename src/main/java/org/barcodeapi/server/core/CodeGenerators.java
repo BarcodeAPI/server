@@ -19,13 +19,22 @@ import org.barcodeapi.server.gen.types.UPCAGenerator;
 import org.barcodeapi.server.gen.types.UPCEGenerator;
 import org.barcodeapi.server.gen.types.USPSMailGenerator;
 
+import com.mclarkdev.tools.libmetrics.LibMetrics;
+
 public class CodeGenerators {
 
 	private static CodeGenerators codeGenerators;
 
+	public static synchronized CodeGenerators getInstance() {
+		if (codeGenerators == null) {
+			codeGenerators = new CodeGenerators();
+		}
+		return codeGenerators;
+	}
+
 	private HashMap<CodeType, CodeGenerator> generators;
 
-	public CodeGenerators() {
+	private CodeGenerators() {
 
 		generators = new HashMap<CodeType, CodeGenerator>();
 
@@ -53,16 +62,8 @@ public class CodeGenerators {
 	}
 
 	public CodeGenerator getGenerator(CodeType codeType) {
+		LibMetrics.hitMethodRunCounter();
 
 		return generators.get(codeType);
-	}
-
-	public static synchronized CodeGenerators getInstance() {
-
-		if (codeGenerators == null) {
-
-			codeGenerators = new CodeGenerators();
-		}
-		return codeGenerators;
 	}
 }

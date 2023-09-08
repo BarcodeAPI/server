@@ -30,7 +30,8 @@ public class BarcodeAPIHandler extends RestHandler {
 			BLK = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
 					"/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
 		} catch (GenerationException e) {
-			throw new RuntimeException("init failed", e);
+
+			throw LibLog._clog("E0789", e).asException();
 		}
 	}
 

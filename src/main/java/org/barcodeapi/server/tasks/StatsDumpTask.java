@@ -52,7 +52,7 @@ public class StatsDumpTask extends BackgroundTask {
 
 			} catch (Exception e) {
 
-				LibLog._clogF("E2609", e.getLocalizedMessage());
+				LibLog._clog("E2609", e);
 			}
 		}
 	}

@@ -17,6 +17,7 @@ public class CachedSession extends CachedObject {
 	private final ConcurrentHashMap<String, Integer> sessionRequests;
 
 	public CachedSession() {
+
 		this.setTimeout(6, TimeUnit.HOURS);
 
 		this.key = UUID.randomUUID().toString();

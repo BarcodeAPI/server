@@ -40,12 +40,8 @@ import com.mclarkdev.tools.libloggelf.LibLogGELF;
  */
 public class ServerLauncher {
 
-	private static final String APP_NAME = "BarcodeAPI";
-
 	{
-		LibLog.setAppName(APP_NAME);
-		LibLog._log("Logging as: " + LibLog.getAppName());
-		LibLog._log("Network logging: " + LibLogGELF.enabled());
+		LibLog._logF("Network logging: %s", LibLogGELF.enabled());
 	}
 
 	// Initialize server runtime and get ID
@@ -72,7 +68,7 @@ public class ServerLauncher {
 				"language", Locale.getDefault().toString());
 
 		// Load localized message codes
-		LibLog._log("Loading Language Pack: " + lang);
+		LibLog._logF("Loading Language Pack: %s", lang);
 		LibLog.loadStrings(ServerLauncher.class.getResourceAsStream(//
 				String.format("/strings/codes.%s.properties", lang)));
 	}

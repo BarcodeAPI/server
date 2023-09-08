@@ -4,6 +4,8 @@ import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.TypeSelector;
 import org.json.JSONObject;
 
+import com.mclarkdev.tools.libmetrics.LibMetrics;
+
 public class BarcodeRequest {
 
 	private CodeType type;
@@ -15,6 +17,7 @@ public class BarcodeRequest {
 	}
 
 	public static BarcodeRequest fromURI(String target) {
+		LibMetrics.hitMethodRunCounter();
 
 		// remove [ /api ]
 		if (target.startsWith("/api")) {

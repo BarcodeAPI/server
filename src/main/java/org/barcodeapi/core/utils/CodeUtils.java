@@ -6,6 +6,8 @@ import java.net.URLEncoder;
 
 import org.json.JSONObject;
 
+import com.mclarkdev.tools.libmetrics.LibMetrics;
+
 public class CodeUtils {
 
 	/**
@@ -22,6 +24,7 @@ public class CodeUtils {
 	 * @return
 	 */
 	public static String parseControlChars(String data) {
+		LibMetrics.hitMethodRunCounter();
 
 		String newData = "";
 
@@ -39,7 +42,15 @@ public class CodeUtils {
 		return newData;
 	}
 
+	/**
+	 * Calculate the checksum for an EAN type barcode.
+	 * 
+	 * @param data
+	 * @param count
+	 * @return
+	 */
 	public static int calculateEanChecksum(String data, int count) {
+		LibMetrics.hitMethodRunCounter();
 
 		int sum0 = 0;
 		int sum1 = 0;
@@ -70,7 +81,14 @@ public class CodeUtils {
 		}
 	}
 
+	/**
+	 * Encode a UTF-8 string to a URL.
+	 * 
+	 * @param data
+	 * @return
+	 */
 	public static String encode(String data) {
+		LibMetrics.hitMethodRunCounter();
 
 		try {
 
@@ -81,7 +99,14 @@ public class CodeUtils {
 		}
 	}
 
+	/**
+	 * Decode a URL to a UTF-8 string.
+	 * 
+	 * @param data
+	 * @return
+	 */
 	public static String decode(String data) {
+		LibMetrics.hitMethodRunCounter();
 
 		try {
 
@@ -93,7 +118,14 @@ public class CodeUtils {
 		}
 	}
 
+	/**
+	 * Strip illegal characters for building a nice file name.
+	 * 
+	 * @param data
+	 * @return
+	 */
 	public static String stripIllegal(String data) {
+		LibMetrics.hitMethodRunCounter();
 
 		return data.replaceAll("[!@#$%^&*\\(\\)\\[\\]\\{\\};:\\',\\<\\>\\\"]", "");
 	}
@@ -105,6 +137,7 @@ public class CodeUtils {
 	 * @return
 	 */
 	public static JSONObject parseOptions(String opts) {
+		LibMetrics.hitMethodRunCounter();
 
 		JSONObject options = new JSONObject();
 

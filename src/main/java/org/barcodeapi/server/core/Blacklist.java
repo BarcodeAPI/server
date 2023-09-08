@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import com.mclarkdev.tools.liblog.LibLog;
+import com.mclarkdev.tools.libmetrics.LibMetrics;
 
 public class Blacklist {
 
@@ -15,17 +16,19 @@ public class Blacklist {
 	}
 
 	public static void reload() {
+		LibMetrics.hitMethodRunCounter();
 
 		try {
 
 			blacklist = Files.readAllLines(Paths.get("config/blacklist.conf"));
 		} catch (Exception e) {
 
-			throw new RuntimeException(LibLog._clog("E0798").toString());
+			throw LibLog._clog("E0798").asException();
 		}
 	}
 
 	public static List<String> getBlacklist() {
+		LibMetrics.hitMethodRunCounter();
 
 		return blacklist;
 	}

@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.session.CachedSession;
 import org.barcodeapi.server.session.SessionCache;
-import org.barcodeapi.server.statistics.StatsCollector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import com.mclarkdev.tools.libextras.LibExtrasHashes;
 import com.mclarkdev.tools.liblog.LibLog;
+import com.mclarkdev.tools.libmetrics.LibMetrics;
 
 public abstract class RestHandler extends AbstractHandler {
 
@@ -24,7 +24,7 @@ public abstract class RestHandler extends AbstractHandler {
 
 	private final String serverName;
 
-	private final StatsCollector stats;
+	private final LibMetrics stats;
 
 	private final boolean authRequired;
 
@@ -40,11 +40,11 @@ public abstract class RestHandler extends AbstractHandler {
 			throw new RuntimeException(e);
 		}
 
-		this.stats = StatsCollector.getInstance();
+		this.stats = LibMetrics.instance();
 		this.authRequired = authRequired;
 	}
 
-	public StatsCollector getStats() {
+	public LibMetrics getStats() {
 		return stats;
 	}
 

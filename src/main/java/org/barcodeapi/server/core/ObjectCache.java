@@ -3,22 +3,21 @@ package org.barcodeapi.server.core;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.barcodeapi.server.statistics.StatsCollector;
-
 import com.mclarkdev.tools.liblog.LibLog;
+import com.mclarkdev.tools.libmetrics.LibMetrics;
 
 public class ObjectCache {
 
 	private static ConcurrentHashMap<String, ObjectCache> caches = new ConcurrentHashMap<>();
 
 	private final String name;
-	private final StatsCollector stats;
+	private final LibMetrics stats;
 	private final ConcurrentHashMap<String, CachedObject> cache;
 
 	public ObjectCache(String name) {
 
 		this.name = name;
-		this.stats = StatsCollector.getInstance();
+		this.stats = LibMetrics.instance();
 		this.cache = new ConcurrentHashMap<>();
 	}
 
@@ -39,6 +38,7 @@ public class ObjectCache {
 	}
 
 	public int expireOldObjects() {
+		LibMetrics.hitMethodRunCounter();
 
 		int removed = 0;
 		for (Map.Entry<String, CachedObject> entry : cache.entrySet()) {

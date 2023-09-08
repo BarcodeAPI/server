@@ -5,9 +5,8 @@ import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.UUID;
 
-import org.barcodeapi.server.statistics.StatsCollector;
-
 import com.mclarkdev.tools.libextras.LibExtrasStreams;
+import com.mclarkdev.tools.libmetrics.LibMetrics;
 
 public class ServerRuntime {
 
@@ -23,22 +22,22 @@ public class ServerRuntime {
 	static {
 
 		_RUNTIME_ID = UUID.randomUUID().toString();
-		StatsCollector.getInstance().setValue(_RUNTIME_ID, "system", "runtimeId");
+		LibMetrics.instance().setValue(_RUNTIME_ID, "system", "runtimeId");
 
 		_RUNTIME_TIMESTART = System.currentTimeMillis();
-		StatsCollector.getInstance().setValue(_RUNTIME_TIMESTART, "system", "time", "start");
+		LibMetrics.instance().setValue(_RUNTIME_TIMESTART, "system", "time", "start");
 
 		try {
 			_RUNTIME_VERSION = Integer.parseInt(LibExtrasStreams.readStream(//
 					ServerRuntime.class.getResourceAsStream("/app.version")));
-			StatsCollector.getInstance().setValue(_RUNTIME_VERSION, "system", "version");
+			LibMetrics.instance().setValue(_RUNTIME_VERSION, "system", "version");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
 		try {
 			_RUNTIME_HOST = InetAddress.getLocalHost().getCanonicalHostName();
-			StatsCollector.getInstance().setValue(_RUNTIME_HOST, "system", "host");
+			LibMetrics.instance().setValue(_RUNTIME_HOST, "system", "host");
 		} catch (UnknownHostException e) {
 			throw new RuntimeException(e);
 		}

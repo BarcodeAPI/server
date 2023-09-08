@@ -2,6 +2,8 @@ package org.barcodeapi.server.core;
 
 import org.barcodeapi.server.gen.CodeType;
 
+import com.mclarkdev.tools.libmetrics.LibMetrics;
+
 public class TypeSelector {
 
 	/**
@@ -13,6 +15,7 @@ public class TypeSelector {
 	 * @return
 	 */
 	public static CodeType getTypeFromString(String codeType) {
+		LibMetrics.hitMethodRunCounter();
 
 		// Convert to lower case
 		codeType = codeType.toLowerCase();
@@ -42,6 +45,7 @@ public class TypeSelector {
 	 * @return
 	 */
 	public static CodeType getTypeFromData(String data) {
+		LibMetrics.hitMethodRunCounter();
 
 		// Match UPC-E format
 		if (data.matches(CodeType.UPC_E.getAutomatchPattern())) {

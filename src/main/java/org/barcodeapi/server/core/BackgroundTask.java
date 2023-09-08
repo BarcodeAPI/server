@@ -2,20 +2,18 @@ package org.barcodeapi.server.core;
 
 import java.util.TimerTask;
 
-import org.barcodeapi.server.statistics.StatsCollector;
-
 import com.mclarkdev.tools.liblog.LibLog;
+import com.mclarkdev.tools.libmetrics.LibMetrics;
 
 public abstract class BackgroundTask extends TimerTask {
 
-	private final StatsCollector stats;
+	private final LibMetrics stats = LibMetrics.instance();
 
 	public BackgroundTask() {
 
-		this.stats = StatsCollector.getInstance();
 	}
 
-	public StatsCollector getStats() {
+	public LibMetrics getStats() {
 		return stats;
 	}
 

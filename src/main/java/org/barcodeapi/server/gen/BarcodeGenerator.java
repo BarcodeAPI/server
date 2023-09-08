@@ -7,6 +7,8 @@ import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 
+import com.mclarkdev.tools.libmetrics.LibMetrics;
+
 public class BarcodeGenerator {
 
 	private static final CodeGenerators generators = CodeGenerators.getInstance();
@@ -15,6 +17,7 @@ public class BarcodeGenerator {
 	}
 
 	public static CachedBarcode requestBarcode(BarcodeRequest request) throws GenerationException {
+		LibMetrics.hitMethodRunCounter();
 
 		// check for valid render data
 		String data = request.getData();

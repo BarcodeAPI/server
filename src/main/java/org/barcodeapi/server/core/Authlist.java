@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import com.mclarkdev.tools.liblog.LibLog;
+import com.mclarkdev.tools.libmetrics.LibMetrics;
 
 public class Authlist {
 
@@ -15,17 +16,19 @@ public class Authlist {
 	}
 
 	public static void reload() {
+		LibMetrics.hitMethodRunCounter();
 
 		try {
 
 			authlist = Files.readAllLines(Paths.get("config/authlist.conf"));
 		} catch (Exception e) {
 
-			throw new RuntimeException(LibLog._clog("E0799").toString());
+			throw LibLog._clog("E0799").asException();
 		}
 	}
 
 	public static List<String> getAuthlist() {
+		LibMetrics.hitMethodRunCounter();
 
 		return authlist;
 	}

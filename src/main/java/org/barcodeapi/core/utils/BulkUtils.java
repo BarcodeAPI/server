@@ -14,13 +14,15 @@ import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.gen.BarcodeGenerator;
 import org.barcodeapi.server.gen.BarcodeRequest;
 
+import com.mclarkdev.tools.libmetrics.LibMetrics;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 public class BulkUtils {
 
-	public static void getZippedBarcodes(int max, InputStream in, OutputStream out)
+	public static void getZippedBarcodes(int max, InputStream in, OutputStream out)//
 			throws IOException, GenerationException {
+		LibMetrics.hitMethodRunCounter();
 
 		ArrayList<BarcodeRequest> requests = new ArrayList<>();
 
@@ -56,7 +58,9 @@ public class BulkUtils {
 		out.close();
 	}
 
-	private static BarcodeRequest buildBarcodeRequest(String[] record) throws GenerationException {
+	private static BarcodeRequest buildBarcodeRequest(String[] record) //
+			throws GenerationException {
+		LibMetrics.hitMethodRunCounter();
 
 		String params = "";
 		String type = "auto";
@@ -80,8 +84,9 @@ public class BulkUtils {
 		return BarcodeRequest.fromURI(uri);
 	}
 
-	private static ArrayList<CachedBarcode> generateBarcodes(ArrayList<BarcodeRequest> requests)
+	private static ArrayList<CachedBarcode> generateBarcodes(ArrayList<BarcodeRequest> requests)//
 			throws GenerationException {
+		LibMetrics.hitMethodRunCounter();
 
 		ArrayList<CachedBarcode> barcodes = new ArrayList<>();
 
