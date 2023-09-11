@@ -29,6 +29,7 @@ public abstract class RestHandler extends AbstractHandler {
 	private final boolean authRequired;
 
 	public RestHandler(boolean authRequired) {
+		LibMetrics.hitMethodRunCounter();
 
 		// extract class name
 		String className = getClass().getName();

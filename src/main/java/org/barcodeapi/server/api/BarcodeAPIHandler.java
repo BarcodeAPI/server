@@ -31,7 +31,7 @@ public class BarcodeAPIHandler extends RestHandler {
 					"/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
 		} catch (GenerationException e) {
 
-			throw LibLog._clog("E0789", e).asException();
+			throw LibLog._clog("E0789", e).asException(IllegalStateException.class);
 		}
 	}
 

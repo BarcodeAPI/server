@@ -40,7 +40,7 @@ import com.mclarkdev.tools.libloggelf.LibLogGELF;
  */
 public class ServerLauncher {
 
-	{
+	static {
 		LibLog._logF("Network logging: %s", LibLogGELF.enabled());
 	}
 

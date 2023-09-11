@@ -95,31 +95,31 @@
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>libargs</artifactId>
-			<version>1.2</version>
+			<version>1.5.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>libmetrics</artifactId>
-			<version>1.1.2</version>
+			<version>1.5.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>liblog</artifactId>
-			<version>1.4.2</version>
+			<version>1.5.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>libloggelf</artifactId>
-			<version>1.4.2</version>
+			<version>1.5.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>libextras</artifactId>
-			<version>1.2.3</version>
+			<version>1.5.1</version>
 		</dependency>
 
 	</dependencies>

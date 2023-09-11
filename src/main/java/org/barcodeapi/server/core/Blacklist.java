@@ -23,7 +23,7 @@ public class Blacklist {
 			blacklist = Files.readAllLines(Paths.get("config/blacklist.conf"));
 		} catch (Exception e) {
 
-			throw LibLog._clog("E0798").asException();
+			throw LibLog._clog("E0798").asException(IllegalStateException.class);
 		}
 	}
 

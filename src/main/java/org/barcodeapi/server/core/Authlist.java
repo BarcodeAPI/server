@@ -23,7 +23,7 @@ public class Authlist {
 			authlist = Files.readAllLines(Paths.get("config/authlist.conf"));
 		} catch (Exception e) {
 
-			throw LibLog._clog("E0799").asException();
+			throw LibLog._clog("E0799").asException(IllegalStateException.class);
 		}
 	}
 
