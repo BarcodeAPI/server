@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.server.admin.CacheDumpHandler;
 import org.barcodeapi.server.admin.CacheFlushHandler;
+import org.barcodeapi.server.admin.LimiterFlushHandler;
 import org.barcodeapi.server.admin.ServerReloadHandler;
 import org.barcodeapi.server.admin.SessionFlushHandler;
 import org.barcodeapi.server.admin.SessionListHandler;
@@ -125,6 +126,7 @@ public class ServerLauncher {
 		// Setup admin handlers
 		initHandler("/admin/cache/dump", CacheDumpHandler.class);
 		initHandler("/admin/cache/flush", CacheFlushHandler.class);
+		initHandler("/admin/limiter/flush", LimiterFlushHandler.class);
 		initHandler("/admin/session/list", SessionListHandler.class);
 		initHandler("/admin/session/flush", SessionFlushHandler.class);
 		initHandler("/admin/server/reload", ServerReloadHandler.class);

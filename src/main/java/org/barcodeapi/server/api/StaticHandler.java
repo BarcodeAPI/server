@@ -17,7 +17,7 @@ public class StaticHandler extends RestHandler {
 	private ResourceHandler resources;
 
 	public StaticHandler(Server server) throws Exception {
-		super(false);
+		super(false, false);
 
 		resources = new ResourceHandler();
 		resources.setServer(server);

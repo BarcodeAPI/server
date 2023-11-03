@@ -17,7 +17,7 @@ import org.json.JSONObject;
 public class CacheDumpHandler extends RestHandler {
 
 	public CacheDumpHandler() {
-		super(true);
+		super(true, false);
 	}
 
 	@Override

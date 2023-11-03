@@ -14,7 +14,7 @@ import org.json.JSONObject;
 public class SessionListHandler extends RestHandler {
 
 	public SessionListHandler() {
-		super(true);
+		super(true, false);
 	}
 
 	@Override

@@ -59,6 +59,10 @@ public class ObjectCache {
 		return removed;
 	}
 
+	public boolean has(String key) {
+		return cache.containsKey(key);
+	}
+
 	public CachedObject get(String key) {
 
 		if (cache.containsKey(key)) {
@@ -66,7 +70,6 @@ public class ObjectCache {
 		} else {
 			stats.hitCounter("cache", name, "miss");
 		}
-
 		return cache.get(key);
 	}
 

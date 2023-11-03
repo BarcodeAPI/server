@@ -2,10 +2,11 @@ package org.barcodeapi.server.gen;
 
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.cache.CachedBarcode;
-import org.barcodeapi.server.core.Blacklist;
+import org.barcodeapi.server.core.AppConfig;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
+import org.json.JSONArray;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
@@ -27,9 +28,10 @@ public class BarcodeGenerator {
 		}
 
 		// match against blacklist
-		for (String invalid : Blacklist.getBlacklist()) {
+		JSONArray blacklist = AppConfig.get().getJSONArray("blacklist");
+		for (int x = 0; x < blacklist.length(); x++) {
 
-			if (data.matches(invalid)) {
+			if (data.matches(blacklist.getString(x))) {
 
 				throw new GenerationException(ExceptionType.BLACKLIST);
 			}

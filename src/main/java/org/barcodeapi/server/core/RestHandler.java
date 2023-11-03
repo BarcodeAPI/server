@@ -9,10 +9,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.limits.ClientLimiter;
+import org.barcodeapi.server.limits.LimiterCache;
 import org.barcodeapi.server.session.CachedSession;
 import org.barcodeapi.server.session.SessionCache;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.json.JSONObject;
 
 import com.mclarkdev.tools.libextras.LibExtrasHashes;
 import com.mclarkdev.tools.liblog.LibLog;
@@ -26,9 +29,11 @@ public abstract class RestHandler extends AbstractHandler {
 
 	private final LibMetrics stats;
 
-	private final boolean authRequired;
+	private final boolean apiAuthRequired;
 
-	public RestHandler(boolean authRequired) {
+	private final boolean apiRateLimited;
+
+	public RestHandler(boolean authRequired, boolean rateLimited) {
 		LibMetrics.hitMethodRunCounter();
 
 		// extract class name
@@ -42,7 +47,8 @@ public abstract class RestHandler extends AbstractHandler {
 		}
 
 		this.stats = LibMetrics.instance();
-		this.authRequired = authRequired;
+		this.apiAuthRequired = authRequired;
+		this.apiRateLimited = rateLimited;
 	}
 
 	public LibMetrics getStats() {
@@ -50,17 +56,19 @@ public abstract class RestHandler extends AbstractHandler {
 	}
 
 	public boolean authRequired() {
-		return authRequired;
+		return apiAuthRequired;
 	}
 
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
 		long timeStart = System.currentTimeMillis();
+
+		String method = request.getMethod();
 		getStats().hitCounter("request", "count");
-		getStats().hitCounter("request", "method", request.getMethod());
+		getStats().hitCounter("request", "method", method);
 		getStats().hitCounter("request", "target", _NAME, "count");
-		getStats().hitCounter("request", "target", _NAME, "method", request.getMethod());
+		getStats().hitCounter("request", "target", _NAME, "method", method);
 
 		// skip if already handled
 		if (!baseRequest.isHandled()) {
@@ -76,23 +84,13 @@ public abstract class RestHandler extends AbstractHandler {
 		}
 
 		// get source of the request
-		String source;
 		String ref = request.getHeader("Referer");
-		if (ref != null) {
-			source = ref;
-		} else {
-			source = "API";
-		}
+		String source = (ref != null) ? ref : "API";
 
-		// get users IP
-		String from;
-		String via = request.getRemoteAddr();
-		String ip = request.getHeader("X-Forwarded-For");
-		if (ip != null) {
-			from = ip + " : " + via;
-		} else {
-			from = via;
-		}
+		// get user IP address
+		String ip = request.getRemoteAddr();
+		String fwd = request.getHeader("X-Forwarded-For");
+		String from = (fwd != null) ? (fwd + " : " + ip) : ip;
 
 		// set response code
 		response.setStatus(HttpServletResponse.SC_OK);
@@ -107,18 +105,39 @@ public abstract class RestHandler extends AbstractHandler {
 		response.setHeader("Accept-Charset", "utf-8");
 		response.setCharacterEncoding("UTF-8");
 
-		// user session info
+		// done if only options
+		if (method.equals("OPTIONS")) {
+			return;
+		}
+
+		// get limiter by API key or IP
+		String key = request.getParameter("key");
+		ClientLimiter limiter = (key != null) ? //
+				LimiterCache.getByKey(key) : LimiterCache.getByIp(from);
+		try {
+
+			// check if allowed by rate limiter
+			if (apiRateLimited && !limiter.allowRequest()) {
+				getStats().hitCounter("request", "limited");
+				getStats().hitCounter("request", "target", _NAME, "limited");
+				LibLog._clogF("E0609", limiter.getCaller());
+				response.setStatus(HttpServletResponse.SC_PAYMENT_REQUIRED);
+				return;
+			}
+		} finally {
+
+			// allow user to see their token count
+			response.setHeader("X-RateLimit-Tokens", //
+					String.format("%.2f", limiter.numTokens()));
+		}
+
+		// get user session info
 		CachedSession session = getSession(request);
 		session.hit(baseRequest.getOriginalURI().toString());
 		response.addCookie(session.getCookie());
 
-		// done if only options
-		if (request.getMethod().equals("OPTIONS")) {
-			return;
-		}
-
 		// authenticate the user if required
-		if (authRequired() && !validateAdmin(request)) {
+		if (apiAuthRequired && !validateAdmin(request)) {
 
 			getStats().hitCounter("request", "authfail");
 			getStats().hitCounter("request", "target", _NAME, "authfail");
@@ -174,10 +193,11 @@ public abstract class RestHandler extends AbstractHandler {
 		String decode = new String(Base64.getDecoder().decode(authString));
 		String[] unpw = decode.split(":");
 
+		String uName = unpw[0];
 		String passHash = LibExtrasHashes.sumSHA256(unpw[1].getBytes());
-		String userAuth = String.format("%s:%s", unpw[0], passHash);
 
-		return Authlist.getAuthlist().contains(userAuth);
+		JSONObject admins = AppConfig.get().getJSONObject("admins");
+		return admins.getString(uName).equals(passHash);
 	}
 
 	protected CachedSession getSession(HttpServletRequest request) {
