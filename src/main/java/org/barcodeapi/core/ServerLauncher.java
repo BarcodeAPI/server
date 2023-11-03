@@ -17,8 +17,10 @@ import org.barcodeapi.server.api.ServerStatsHandler;
 import org.barcodeapi.server.api.SessionDetailsHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.TypesHandler;
+import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.tasks.BarcodeCleanupTask;
+import org.barcodeapi.server.tasks.LimiterCleanupTask;
 import org.barcodeapi.server.tasks.SessionCleanupTask;
 import org.barcodeapi.server.tasks.StatsDumpTask;
 import org.barcodeapi.server.tasks.WatchdogTask;
@@ -171,22 +173,28 @@ public class ServerLauncher {
 
 		LibLog._clog("I0032");
 		// print stats to log every 5 minutes
-		StatsDumpTask statsTask = new StatsDumpTask(//
+		BackgroundTask statsTask = new StatsDumpTask(//
 				LibArgs.instance().getBoolean("no-telemetry"));
 		ServerRuntime.getSystemTimer().schedule(statsTask, 0, //
 				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
 
 		LibLog._clog("I0033");
 		// cleanup sessions every 15 minutes
-		SessionCleanupTask sessionCleanup = new SessionCleanupTask();
+		BackgroundTask sessionCleanup = new SessionCleanupTask();
 		ServerRuntime.getSystemTimer().schedule(sessionCleanup, 0, //
 				TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES));
 
 		LibLog._clog("I0034");
 		// cleanup barcodes every hour
-		BarcodeCleanupTask barcodeCleanup = new BarcodeCleanupTask();
+		BackgroundTask barcodeCleanup = new BarcodeCleanupTask();
 		ServerRuntime.getSystemTimer().schedule(barcodeCleanup, 0, //
 				TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS));
+
+		LibLog._clog("I0035");
+		// cleanup limiters every 30 minutes
+		BackgroundTask limiterCleanup = new LimiterCleanupTask();
+		ServerRuntime.getSystemTimer().schedule(limiterCleanup, 0, //
+				TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES));
 	}
 
 	/**
