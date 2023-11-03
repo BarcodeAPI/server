@@ -1,21 +1,21 @@
 <html>
+
 <head>
-<title>BarcodeAPI.org Bulk Barcode Generator</title>
+	<title>BarcodeAPI.org Bulk Barcode Generator</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="keywords"
-	content="barcode, barcode app, bulk barcode generator, barcode generator, barcode api, qr code, qr code generator, code 128, code128, ean8, eac-8, ean13, ean-13, codabar, download barcode, barcodes, pdf, pdf 417">
-<meta name="description"
-	content="Generate barcodes of nearly any type, scan it in the web browser, or download the generated images for free.">
+	<meta name="keywords"
+		content="barcode, barcode app, bulk barcode generator, barcode generator, barcode api, qr code, qr code generator, code 128, code128, ean8, eac-8, ean13, ean-13, codabar, download barcode, barcodes, pdf, pdf 417">
+	<meta name="description"
+		content="Generate barcodes of nearly any type, scan it in the web browser, or download the generated images for free.">
 
-<link rel="icon" type="image/png" href="/static/favicon.png" />
+	<link rel="icon" type="image/png" href="/static/favicon.png" />
 
-<script src="/static/index.js"></script>
+	<script src="/static/index.js"></script>
 
-<link rel="stylesheet" type="text/css"
-	href="/static/flexboxgrid.min.css" />
-<link rel="stylesheet" type="text/css" href="/static/index.css" />
+	<link rel="stylesheet" type="text/css" href="/static/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/index.css" />
 </head>
 
 <body onload="loadHash(); init();">
@@ -23,12 +23,11 @@
 
 		<div class="header row middle-xs between-xs">
 			<div class="col-xs-12 col-sm-3">
-				<div class="logo">
-					<a href="/">
-						<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo"
-							aria-label="Logo">
-					</a>
-				</div>
+				<a href="/">
+					<div class="logo">
+						<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo" aria-label="Logo">
+					</div>
+				</a>
 			</div>
 			<div class="header-share">
 				<div class="row end-xs middle-xs">
@@ -40,11 +39,9 @@
 						</h4>
 					</div>
 					<div class="share-icon email">
-						<a
-							href="mailto:feedback@barcodeapi.org?body=I%20love%20the%20new%20UI%21&amp;subject=Feedback%20about%20BarcodeAPI"
+						<a href="mailto:feedback@barcodeapi.org?body=I%20love%20the%20new%20UI%21&amp;subject=Feedback%20about%20BarcodeAPI"
 							target="_blank">
-							<img src="/img/email.svg" alt="Share via Email"
-								aria-label="Share Icon">
+							<img src="/img/email.svg" alt="Share via Email" aria-label="Share Icon">
 						</a>
 					</div>
 				</div>
@@ -93,12 +90,12 @@
 								<div class="row center-xs middle-xs">
 									<div class="col-xs-6">
 										<input type="file" name="csvFile" class="file-input"
-											onclick="checkIfFileSelected()" id="csvFile"> <label
-											for="csvFile">Choose a file</label>
+											onclick="checkIfFileSelected()" id="csvFile"> <label for="csvFile">Choose a
+											file</label>
 									</div>
 									<div class="col-xs-6">
-										<button class="button-green" type="submit" id="generate-bc"
-											disabled>Generate Barcodes</button>
+										<button class="button-green" type="submit" id="generate-bc" disabled>Generate
+											Barcodes</button>
 									</div>
 								</div>
 							</form>
@@ -113,15 +110,15 @@
 			<div class="col-xs-12 col-sm-8">
 				<h5>
 					Free, Open Source,
-					<a href="https://barcodeapi.org/"
-						target="_blank">BarcodeAPI.org</a>
+					<a href="https://barcodeapi.org/" target="_blank">BarcodeAPI.org</a>
 				</h5>
 				<p>
 					Generate barcodes of nearly any type, scan it in the web browser,
 					or download the generated images for free. BarcodeAPI.org is an
 					open source barcode server capable of generating a wide range of
 					barcodes over a RESTful HTTP server.
-					<span>(&nbsp;<a href="/about.html">about</a>&nbsp;/&nbsp;<a href="/license.html">license</a>&nbsp;)</span>
+					<span>(&nbsp;<a href="/about.html">about</a>&nbsp;/&nbsp;<a
+							href="/license.html">license</a>&nbsp;)</span>
 				</p>
 			</div>
 			<div class="col-xs-12 col-sm-4">
@@ -135,5 +132,5 @@
 		</div>
 	</div>
 </body>
-</html>
 
+</html>
