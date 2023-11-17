@@ -1,3 +1,19 @@
+//
+// BarcodeAPI.org
+// index.js
+//
+
+/**
+ * Trim options for pasting text
+ */
+const renderOptions = {
+	'trimBefore': (window.localStorage.getItem("trimBefore") != "false"),
+	'trimAfter': (window.localStorage.getItem("trimAfter") != "false")
+};
+
+/**
+ * User-Agent string
+ */
 const sUsrAg = navigator.userAgent;
 
 /**
@@ -40,6 +56,9 @@ function loadHash() {
 	genCode();
 }
 
+/**
+ * Create list of supported barcode types
+ */
 function createBarcodeTypes(types) {
 	const menu = document.getElementById("topnav");
 
@@ -56,6 +75,10 @@ function createBarcodeTypes(types) {
 	addTooltips();
 }
 
+/**
+ * Delay generation of Barcode
+ * Allows typing into text field without requesting every change.
+ */
 function delayGenCode() {
 	const textInput = document.getElementById("text");
 	const textValue = textInput.value;
@@ -65,6 +88,22 @@ function delayGenCode() {
 			genCode();
 		}
 	}, 350);
+}
+
+function setupOptions() {
+	document.getElementById("option-trim-before").checked = renderOptions.trimBefore;
+	document.getElementById("option-trim-after").checked = renderOptions.trimAfter;
+}
+
+/**
+ * Called when one of the UI options field is changed.
+ */
+function optionsChange() {
+	renderOptions.trimBefore = document.getElementById("option-trim-before").checked;
+	window.localStorage.setItem("trimBefore", (renderOptions.trimBefore) ? "true" : false);
+	renderOptions.trimAfter = document.getElementById("option-trim-after").checked;
+	window.localStorage.setItem("trimAfter", (renderOptions.trimAfter) ? "true" : false);
+	genCode();
 }
 
 /**
@@ -88,6 +127,29 @@ function genCode() {
 	// Set default text
 	if (text === "") {
 		text = (codeType == null) ? "Try Me!" : codeType.example;
+	}
+
+	// Check trimming 
+	var before = text;
+	var trimmed = false;
+
+	// Trim before
+	if (renderOptions.trimBefore) {
+		text = text.trimLeft();
+		trimmed = (text != before);
+	}
+
+	// Trim after
+	if (renderOptions.trimAfter) {
+		text = text.trimRight();
+		trimmed = (text != before);
+	}
+
+	// Rerender if trimmed
+	if (trimmed) {
+		textInput.value = text;
+		genCode();
+		return;
 	}
 
 	// Fail if invalid.
@@ -148,6 +210,12 @@ function toggleOpenBarcodeTypes() {
 	}
 }
 
+function toggleShowRenderOptions() {
+
+	const menu = document.getElementById("barcode-options-input");
+	menu.style.display = (menu.style.display != "block") ? "block" : "none";
+}
+
 function copyBarcodeLink() {
 
 	/* Get the text field */
@@ -194,10 +262,10 @@ var types = getTypes();
 function getTypes() {
 
 	const url = location.origin + "/types/";
-	const t = fetch(url).then((response) => {
-		return response.json();
-	})
-		.then((data) => {
+	const t = fetch(url)
+		.then((response) => {
+			return response.json();
+		}).then((data) => {
 			return data;
 		});
 	return t;
@@ -223,12 +291,15 @@ async function setPattern(hash) {
 
 	if (code !== null) {
 		textInput.setAttribute("pattern", code.pattern);
+		document.getElementById("select-picker").innerHTML = code.name;
 	} else {
 		textInput.setAttribute("pattern", '.*');
 	}
 }
 
 async function init() {
+
+	setupOptions();
 
 	types = await getTypes();
 	hash = location.hash.substring(1);
@@ -263,7 +334,6 @@ function checkIfFileSelected() {
 	});
 }
 
-
 function addTooltips() {
 
 	function getOffset(elem) {
@@ -274,7 +344,7 @@ function addTooltips() {
 				offsetTop += elem.offsetTop;
 			}
 		} while (elem = elem.offsetParent);
-		
+
 		return { left: offsetLeft, top: offsetTop };
 	}
 

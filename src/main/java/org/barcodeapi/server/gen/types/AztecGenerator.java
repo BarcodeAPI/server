@@ -41,7 +41,6 @@ public class AztecGenerator extends CodeGenerator {
 		double qz = options.optDouble("qz", 2);
 
 		Map<EncodeHintType, Object> hintsMap = new HashMap<>();
-		hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
 		hintsMap.put(EncodeHintType.ERROR_CORRECTION, correction);
 		hintsMap.put(EncodeHintType.MARGIN, qz);
 

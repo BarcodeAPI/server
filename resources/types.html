@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>BarcodeAPI.org Bulk Barcode Generator</title>
+	<title>About BarcodeAPI.org</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,13 +13,13 @@
 	<link rel="icon" type="image/png" href="/static/favicon.png" />
 
 	<script src="/static/index.js"></script>
-	<script src="/static/license.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="/static/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/layout.css" />
 	<link rel="stylesheet" type="text/css" href="/static/index.css" />
 </head>
 
-<body onload="loadLicense();">
+<body>
 	<div class="wrap container-fluid">
 
 		<div class="header row middle-xs between-xs">
@@ -29,20 +29,6 @@
 						<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo" aria-label="Logo">
 					</div>
 				</a>
-			</div>
-			<div class="header-share">
-				<div class="row end-xs middle-xs">
-					<div class="col-xs">
-						<h4>
-							GOT FEEDBACK? <br /> <span class="feedback">feedback@barcodeapi.org</span>
-						</h4>
-					</div>
-					<div class="share-icon email">
-						<a href="mailto:feedback@barcodeapi.org?body=I%20love%20the%20new%20UI%21&amp;subject=Feedback%20about%20BarcodeAPI"
-							target="_blank"> <img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
-						</a>
-					</div>
-				</div>
 			</div>
 		</div>
 
@@ -54,16 +40,12 @@
 							<h2>
 								<img src="/img/barcode.svg" height="20" class="icon-first" />BarcodeAPI.org
 							</h2>
-							<div>Free, easy to use, and open source.</div>
-							<br />
-							<h2>License</h2>
-							<pre id="license"></pre>
+							<div id="types"></div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 </body>
 
 </html>

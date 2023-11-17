@@ -2,11 +2,15 @@ package org.barcodeapi.server.limits;
 
 import java.util.concurrent.TimeUnit;
 
+import org.barcodeapi.server.core.AppConfig;
 import org.barcodeapi.server.core.CachedObject;
+import org.barcodeapi.server.core.RateLimitException;
+import org.json.JSONObject;
 
-public class ClientLimiter extends CachedObject {
+public class CachedLimiter extends CachedObject {
 
-	private static final long _1D = 1000 * 60 * 60 * 24;
+	private static final JSONObject conf = AppConfig.get()//
+			.getJSONObject("cache").getJSONObject("limiter");
 
 	private final String caller;
 
@@ -16,8 +20,9 @@ public class ClientLimiter extends CachedObject {
 
 	private double tokens;
 
-	public ClientLimiter(String caller, long requests) {
-		this.setTimeout(_1D, TimeUnit.MILLISECONDS);
+	public CachedLimiter(String caller, long requests) {
+		this.setTimeout(conf.getInt("life"), TimeUnit.MINUTES);
+
 		this.caller = caller;
 		this.requests = requests;
 		this.tokens = requests;
@@ -37,10 +42,14 @@ public class ClientLimiter extends CachedObject {
 	}
 
 	public boolean allowRequest() {
+		return (tokens != 0);
+	}
+
+	public void spendTokens(double count) {
 
 		// Unlimited
-		if (tokens == -1) {
-			return true;
+		if (tokens <= 0) {
+			return;
 		}
 
 		synchronized (this) {
@@ -56,11 +65,13 @@ public class ClientLimiter extends CachedObject {
 			newTokenCount = (newTokenCount > this.requests) ? this.requests : newTokenCount;
 
 			// Set new token count and touch the object
-			this.tokens = (newTokenCount > 1) ? (newTokenCount - 1) : 0;
+			this.tokens = (newTokenCount > count) ? (newTokenCount - count) : 0;
 			this.touch();
 
 			// Return if has tokens
-			return (this.tokens > 0);
+			if (this.tokens == 0) {
+				throw new RateLimitException();
+			}
 		}
 	}
 }

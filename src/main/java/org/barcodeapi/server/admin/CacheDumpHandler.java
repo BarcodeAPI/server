@@ -3,11 +3,11 @@ package org.barcodeapi.server.admin;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.core.CachedObject;
+import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONArray;
@@ -21,8 +21,7 @@ public class CacheDumpHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(String uri, HttpServletRequest request, HttpServletResponse response)
-			throws JSONException, IOException {
+	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
 
 		// loop all caches
 		JSONObject types = new JSONObject();

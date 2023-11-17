@@ -1,9 +1,13 @@
 User-agent: *
-Allow: /
 Allow: /index.html
-Allow: /license.html
+Allow: /about.html
+Allow: /contact.html
+Allow: /limits.html
 Allow: /bulk.html
+Allow: /types.html
 Allow: /manual.pdf
+Disallow: /ping
 Disallow: /admin.html
 Disallow: /multi.html
 Disallow: /api/
+Disallow: /types/

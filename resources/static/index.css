@@ -7,27 +7,21 @@
 		url(/static/IBM-Plex-Mono.ttf) format('truetype');
 }
 
-body {
-	margin: 0;
-	padding: 0;
-	font-family: 'IBM Plex Mono';
-}
 
-.wrap {
-	padding: 20px 30px;
-	max-width: 1024px;
-}
 
 @media print {
 	* {
 		display: none;
 	}
+
 	#barcode_output {
 		display: block;
 	}
 }
 
-a:visited, a:active, a:link {
+a:visited,
+a:active,
+a:link {
 	color: #222;
 	transition: all 0.2s ease-in-out;
 }
@@ -44,11 +38,13 @@ h5 a {
 	font-weight: 600;
 }
 
-h3, h4 {
+h3,
+h4 {
 	text-transform: uppercase;
 }
 
-.share-icon, .barcode-icon {
+.share-icon,
+.barcode-icon {
 	width: 36px;
 	height: 36px;
 	background: #222;
@@ -61,7 +57,8 @@ h3, h4 {
 	transition: background-color 0.2s ease-in-out;
 }
 
-.share-icon a, .barcode-icon a {
+.share-icon a,
+.barcode-icon a {
 	width: 100%;
 	height: 36px;
 	display: flex;
@@ -77,15 +74,8 @@ h3, h4 {
 	background: #ea4335;
 }
 
-.feedback {
-	font-size: 80%;
-}
-
-.header {
-	text-align: center;
-	padding-bottom: 1rem;
-	border-bottom: 2px solid #222;
-	margin-bottom: 1rem;
+.header-share a {
+	text-decoration: none;
 }
 
 .footer {
@@ -104,21 +94,8 @@ h3, h4 {
 	height: 60%;
 }
 
-.logo {
-	max-width: 120px;
-	margin: 0 auto;
-}
-
 .header-share {
 	display: none;
-}
-
-.footer-share {
-	margin-top: 1rem;
-}
-
-.footer-share h4 {
-	margin-bottom: 0.5rem;
 }
 
 .barcode-types {
@@ -135,7 +112,8 @@ h3, h4 {
 	transition: all 0.2s ease-in-out;
 }
 
-.barcode-types a:hover, .barcode-types a.active {
+.barcode-types a:hover,
+.barcode-types a.active {
 	background-color: #222;
 	color: #EEE;
 }
@@ -163,7 +141,13 @@ h3, h4 {
 	color: #CC0000;
 }
 
-.barcode-text-input-clear, .button, .button-green {
+#barcode-options-input {
+	display: none;
+}
+
+.barcode-text-input-clear,
+.button,
+.button-green {
 	font-family: 'IBM Plex Mono';
 	width: 100%;
 	border-radius: 1.5rem;
@@ -189,7 +173,8 @@ h3, h4 {
 	background: #27a46a;
 }
 
-button:disabled, button[disabled] {
+button:disabled,
+button[disabled] {
 	background: #999;
 	pointer-events: none;
 }
@@ -225,7 +210,8 @@ button:disabled, button[disabled] {
 	margin-bottom: 1rem;
 }
 
-[type="file"]:focus+label, [type="file"]+label:hover {
+[type="file"]:focus+label,
+[type="file"]+label:hover {
 	background: #2e7bca;
 }
 
@@ -282,11 +268,29 @@ button:disabled, button[disabled] {
 	margin-bottom: 2rem;
 }
 
-@media (hover:none), (hover:on-demand), (max-width: 500px) and (-webkit-min-device-pixel-ratio: 2) {
-  /* custom css for "touch targets" */
-  .bulk-upload {
-    display: none;
-  }
+@media (hover:none),
+(hover:on-demand),
+(max-width: 500px) and (-webkit-min-device-pixel-ratio: 2) {
+
+	/* custom css for "touch targets" */
+	.bulk-upload {
+		display: none;
+	}
+
+	.options,
+	.notice,
+	.footer,
+	#tooltip {
+		display: none;
+	}
+}
+
+.limits-message {
+	max-width: 800px;
+}
+
+.limits-message p {
+	text-align: left;
 }
 
 .bulk-barcodes {
@@ -399,20 +403,25 @@ button:disabled, button[disabled] {
 		margin-bottom: 0;
 		float: left;
 	}
+
 	.barcode-types {
 		display: none;
 	}
+
 	.barcode-types.open {
 		display: block;
 	}
+
 	.select-type {
 		display: block;
 	}
+
 	.choose-barcode-type {
 		margin-bottom: 1rem;
 	}
-	.text-file-table .attribute div.optional, .text-file-table .heading-text div.optional
-		{
+
+	.text-file-table .attribute div.optional,
+	.text-file-table .heading-text div.optional {
 		display: none;
 	}
 }
@@ -426,13 +435,9 @@ button:disabled, button[disabled] {
 
 /* between sm and xs */
 @media only screen and (min-width: 600px) {
-	.logo {
-		max-width: 140px;
-		margin: 0;
-		padding: 1rem 0;
-	}
-	.text-file-table .attribute div.default, .text-file-table .heading-text div.default
-		{
+
+	.text-file-table .attribute div.default,
+	.text-file-table .heading-text div.default {
 		flex-basis: 25%;
 		max-width: 25%;
 	}
@@ -440,39 +445,38 @@ button:disabled, button[disabled] {
 
 /* equal to sm breakpoint */
 @media only screen and (min-width: 768px) {
-	.logo {
-		max-width: 198px;
-		margin: 0;
-	}
+
 	.header-share {
 		display: flex;
 	}
-	.footer-share {
-		display: none;
-	}
-	.header {
-		margin-bottom: 2rem;
-	}
 }
 
-#barcode_wrapper, #frame {
+#barcode_wrapper,
+#frame {
 	position: relative;
 }
 
 @keyframes fadeOut {
-	from {opacity: 1;}
-	to {opacity: 0;}
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
 }
 
 @keyframes pulseBg {
 	0% {
 		border-color: #222;
 	}
-	50%{
-		border-color:#EEE;
+
+	50% {
+		border-color: #EEE;
 	}
-	100%{
-		border-color:#222;
+
+	100% {
+		border-color: #222;
 	}
 }
 
@@ -539,7 +543,7 @@ button:disabled, button[disabled] {
 	display: none;
 }
 
-#barcode_options {
+#barcode-more {
 	margin: 0 0 2rem 0;
 }
 
@@ -569,58 +573,56 @@ button:disabled, button[disabled] {
 	float: right;
 }
 
-#licenses {
-	text-align: left;
-}
-
-
 /** tooltip **/
 
 #tooltip {
-  text-align: center;
-  color: #fff;
-  background: #222;
-  position: absolute;
-  z-index: 10000;
-  padding: 10px;
-  border-radius: 0.125rem;
-  -webkit-transition: 100ms ease;
-  -moz-transition: 100ms ease;
-  -o-transition: 100ms ease;
-  -ms-transition: 100ms ease;
-  transition: 100ms ease;
-  font-family: 'IBM Plex Mono';
-  font-size: 14px;
-  line-height: 20px;
+	text-align: center;
+	color: #fff;
+	background: #222;
+	position: absolute;
+	z-index: 10000;
+	padding: 10px;
+	border-radius: 0.125rem;
+	-webkit-transition: 100ms ease;
+	-moz-transition: 100ms ease;
+	-o-transition: 100ms ease;
+	-ms-transition: 100ms ease;
+	transition: 100ms ease;
+	font-family: 'IBM Plex Mono';
+	font-size: 14px;
+	line-height: 20px;
 }
 
-#tooltip:after /* triangle decoration */ {
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 10px solid #222;
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -10px;
-  margin-left: -10px;
+#tooltip:after
+
+/* triangle decoration */
+	{
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #222;
+	content: '';
+	position: absolute;
+	left: 50%;
+	bottom: -10px;
+	margin-left: -10px;
 }
 
 #tooltip.top:after {
-  border-top-color: transparent;
-  border-bottom: 10px solid #222;
-  top: -20px;
-  bottom: auto;
+	border-top-color: transparent;
+	border-bottom: 10px solid #222;
+	top: -20px;
+	bottom: auto;
 }
 
 #tooltip.left:after {
-  left: 10px;
-  margin: 0;
+	left: 10px;
+	margin: 0;
 }
 
 #tooltip.right:after {
-  right: 10px;
-  left: auto;
-  margin: 0;
+	right: 10px;
+	left: auto;
+	margin: 0;
 }

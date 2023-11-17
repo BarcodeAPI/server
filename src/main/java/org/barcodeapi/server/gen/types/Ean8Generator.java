@@ -1,5 +1,6 @@
 package org.barcodeapi.server.gen.types;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.io.IOException;
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
+import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
@@ -61,8 +63,10 @@ public class Ean8Generator extends CodeGenerator {
 			generator.setModuleWidth(moduleWidth);
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+			BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
+			canvasProvider.setColors(//
+					Color.decode("0x" + options.optString("bg", "ffffff")), //
+					Color.decode("0x" + options.optString("fg", "000000")));
 
 			generator.generateBarcode(canvasProvider, data);
 			canvasProvider.finish();

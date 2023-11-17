@@ -61,7 +61,7 @@ public abstract class CodeGenerator {
 			// start timer and render
 			long timeStart = System.currentTimeMillis();
 			byte[] img = onRender(validated, options);
-			double time = System.currentTimeMillis() - timeStart;
+			int time = (int) (System.currentTimeMillis() - timeStart);
 
 			// update global and engine counters
 			LibMetrics.instance().hitCounter(time, "render", "time");

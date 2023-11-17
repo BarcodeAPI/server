@@ -2,10 +2,10 @@ package org.barcodeapi.server.admin;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.core.AppConfig;
+import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,8 +17,7 @@ public class ServerReloadHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(String uri, HttpServletRequest request, HttpServletResponse response)
-			throws JSONException, IOException {
+	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
 
 		AppConfig.reload();
 

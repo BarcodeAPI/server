@@ -5,16 +5,16 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<meta name="keywords"
-		content="barcode, barcode app, barcode generator, barcode api, qr code, qr code generator, code 128, code128, ean8, eac-8, ean13, ean-13, codabar, download barcode, barcodes, pdf, pdf 417">
+	<meta name="keywords" content="barcode, barcode app, barcode generator, barcode api, download barcode">
 	<meta name="description"
-		content="Generate barcodes of nearly any type from your web browser! Scan directly from your screen or download the generated images for free!">
+		content="Online barcode app: Generate, scan, and download barcodes for free. Get started with our easy-to-use barcode generator!">
 
 	<link rel="icon" type="image/png" href="/static/favicon.png" />
 
 	<script src="/static/index.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="/static/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/layout.css" />
 	<link rel="stylesheet" type="text/css" href="/static/index.css" />
 </head>
 
@@ -32,12 +32,14 @@
 				<div class="row end-xs middle-xs">
 					<div class="col-xs">
 						<h4>
-							GOT FEEDBACK? <br /> <span class="feedback">feedback@barcodeapi.org</span>
+							<a href="/contact.html">FEEDBACK & SUPPORT</a>
+							<br />
+							<span class="contact">support@barcodeapi.org</span>
 						</h4>
 					</div>
 					<div class="share-icon email">
-						<a href="mailto:feedback@barcodeapi.org?body=I%20love%20the%20new%20UI%21&amp;subject=Feedback%20about%20BarcodeAPI"
-							target="_blank"> <img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
+						<a href="mailto:support@barcodeapi.org">
+							<img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
 						</a>
 					</div>
 				</div>
@@ -49,16 +51,26 @@
 			<div class="choose-barcode-type col-xs-12 col-sm-6">
 				<h3>CHOOSE YOUR BARCODE TYPE</h3>
 				<div class="select-type" id="select-type">
-					<a onclick="toggleOpenBarcodeTypes()">Select Barcode</a>
+					<a id="select-picker" onclick="toggleOpenBarcodeTypes()">Select Barcode</a>
 				</div>
 				<div class="barcode-types" id="topnav">
-					<a id="type-auto" onclick="setType('auto');" onmouseover="showCodeDescription('auto')">Auto</a>
+					<a id="type-auto" onclick="setType('auto');">Auto</a>
+				</div>
+				<div class="options">
+					<a class="text-link" onclick="toggleShowRenderOptions()">Render Options<img
+							src="/img/chevron-right.svg" class="icon-last" /></a>
+					<div id="barcode-options-input">
+						Trim Whitespace<br />
+						<input type="checkbox" id="option-trim-before" onchange="optionsChange()" checked />&nbsp;Before
+						<br />
+						<input type="checkbox" id="option-trim-after" onchange="optionsChange()" checked />&nbsp;After
+					</div>
 				</div>
 				<div class="col-xs-8 bulk-upload">
 					<h4>Need more barcodes?</h4>
-					<a href="/bulk.html" class="text-link"> <img src="/img/barcode.svg" class="icon-first" />BULK
-						BARCODE
-						GENERATOR<img src="/img/chevron-right.svg" class="icon-last" />
+					<a href="/bulk.html" class="text-link">
+						<img src="/img/barcode.svg" class="icon-first" />BULK BARCODE GENERATOR<img
+							src="/img/chevron-right.svg" class="icon-last" />
 					</a>
 				</div>
 			</div>
@@ -82,7 +94,7 @@
 						<img id="barcode_output" />
 					</div>
 
-					<div id="barcode_options" class="row middle-xs center-xs">
+					<div id="barcode-more" class="row middle-xs center-xs">
 
 						<div class="barcode-icon" id="barcode_print">
 							<a id="barcode_print_button" onclick="printCode()" title="Print Barcode"> <img
@@ -113,25 +125,29 @@
 		</div>
 
 		<!-- Footer -->
+		<div class="notice row middle-xs top-sm between-xs">
+			<div class="col-xs-12 col-sm-8">
+				<p>
+					<b>Important Update!</b><br />
+					<a href="/limits.html" class="text-link">Introducing Rate Limits<img src="/img/chevron-right.svg"
+							class="icon-last" />
+					</a>
+				</p>
+			</div>
+		</div>
 		<div class="footer row middle-xs top-sm between-xs">
 			<div class="col-xs-12 col-sm-8">
-				<h5>
-					Free, Open Source, <a href="https://barcodeapi.org/" target="_blank">BarcodeAPI.org</a>
-				</h5>
-				<p>
-					Generate barcodes of nearly any type! Scan them in the web browser
-					or download the generated images for free! BarcodeAPI.org is an
-					open source barcode server capable of providing a wide range of
-					barcodes over a RESTful HTTP server.
-					<span>(&nbsp;<a href="/about.html">about</a>&nbsp;/&nbsp;<a
-							href="/license.html">license</a>&nbsp;)</span>
+				<p><span>Generate barcodes of nearly any type! Scan them in the web browser
+						or download the generated images for free! BarcodeAPI.org is an
+						open source barcode server capable of providing a wide range of
+						barcodes over a RESTful HTTP server.</span>&nbsp;
+					<span>(&nbsp;<a href="/about.html">about</a>&nbsp;)</span>
 				</p>
 			</div>
 			<div class="col-xs-12 col-sm-4">
 				<div class="docs-link row start-xs end-sm">
 					<a href="/manual.pdf" target="_blank" class="col-xs"> <span class="docs-icon"><img
-								src="/img/docs.svg"></span><span>Read
-							the Docs</span>
+								src="/img/docs.svg"></span>&nbsp;<span>Learn More</span>
 					</a>
 				</div>
 			</div>

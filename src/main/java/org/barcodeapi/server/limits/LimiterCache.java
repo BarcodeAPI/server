@@ -14,7 +14,7 @@ public class LimiterCache {
 		return ObjectCache.getCache(CACHE_IP);
 	}
 
-	public static ClientLimiter getByIp(String caller) {
+	public static CachedLimiter getByIp(String caller) {
 		LibMetrics.hitMethodRunCounter();
 
 		ObjectCache cache = ObjectCache.getCache(CACHE_IP);
@@ -22,15 +22,15 @@ public class LimiterCache {
 			cache.put(caller, newByIp(caller));
 		}
 
-		return (ClientLimiter) cache.get(caller);
+		return (CachedLimiter) cache.get(caller);
 	}
 
-	private static ClientLimiter newByIp(String caller) {
+	private static CachedLimiter newByIp(String caller) {
 		JSONObject limits = AppConfig.get().getJSONObject("limits");
 
 		// Check if rate limiter is enforced
 		if (!limits.getBoolean("enforce")) {
-			return new ClientLimiter(caller, -1);
+			return new CachedLimiter(caller, -1);
 		}
 
 		long appLimit = limits.getLong("default");
@@ -39,7 +39,7 @@ public class LimiterCache {
 
 		long usrLimit = ips.optLong(caller, appLimit);
 
-		return new ClientLimiter(caller, usrLimit);
+		return new CachedLimiter(caller, usrLimit);
 	}
 
 	private static final String CACHE_KEY = "LIMITS-KEY";
@@ -48,7 +48,7 @@ public class LimiterCache {
 		return ObjectCache.getCache(CACHE_KEY);
 	}
 
-	public static ClientLimiter getByKey(String caller) {
+	public static CachedLimiter getByKey(String caller) {
 		LibMetrics.hitMethodRunCounter();
 
 		ObjectCache cache = ObjectCache.getCache(CACHE_KEY);
@@ -56,21 +56,21 @@ public class LimiterCache {
 			cache.put(caller, newByKey(caller));
 		}
 
-		return (ClientLimiter) cache.get(caller);
+		return (CachedLimiter) cache.get(caller);
 	}
 
-	private static ClientLimiter newByKey(String caller) {
+	private static CachedLimiter newByKey(String caller) {
 		JSONObject limits = AppConfig.get().getJSONObject("limits");
 
 		// Check if rate limiter is enforced
 		if (!limits.getBoolean("enforce")) {
-			return new ClientLimiter(caller, -1);
+			return new CachedLimiter(caller, -1);
 		}
 
 		JSONObject keys = limits.getJSONObject("keys");
 
 		long usrLimit = keys.optLong(caller, 0);
 
-		return new ClientLimiter(caller, usrLimit);
+		return new CachedLimiter(caller, usrLimit);
 	}
 }

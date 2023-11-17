@@ -1,18 +1,18 @@
 package org.barcodeapi.server.gen.types;
 
-import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
+import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
 public class Ean13Generator extends CodeGenerator {
@@ -84,8 +84,10 @@ public class Ean13Generator extends CodeGenerator {
 			generator.setFontSize(12 * moduleWidth);
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+			BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
+			canvasProvider.setColors(//
+					Color.decode("0x" + options.optString("bg", "ffffff")), //
+					Color.decode("0x" + options.optString("fg", "000000")));
 
 			generator.generateBarcode(canvasProvider, data);
 			canvasProvider.finish();

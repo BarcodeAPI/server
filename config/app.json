@@ -1,19 +1,31 @@
 {
+	"cache": {
+		"barcode": {
+			"life": 259200
+		},
+		"session": {
+			"life": 86400
+		},
+		"limiter": {
+			"life": 86400
+		}
+	},
 	"blacklist": [
 		"^__tstblk2$",
 		"^_tstblk_$"
 	],
 	"admins": {
-		"admin" : "5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8"
+		"admin": "5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8"
 	},
-	"limits" : {
-		"enforce" : true,
-		"default" : 10000,
-		"ips" : {
-			"127.0.0.1" : -1
+	"limits": {
+		"enable" : false,
+		"enforce": true,
+		"default": 10000,
+		"ips": {
+			"127.0.0.1": -1
 		},
-		"keys" : {
-			"test000005" : 50
+		"keys": {
+			"test000005": 50
 		}
 	}
 }

@@ -7,18 +7,21 @@ import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.Cookie;
 
+import org.barcodeapi.server.core.AppConfig;
 import org.barcodeapi.server.core.CachedObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class CachedSession extends CachedObject {
 
+	private static final JSONObject conf = AppConfig.get()//
+			.getJSONObject("cache").getJSONObject("session");
+
 	private final String key;
 	private final ConcurrentHashMap<String, Integer> sessionRequests;
 
 	public CachedSession() {
-
-		this.setTimeout(6, TimeUnit.HOURS);
+		this.setTimeout(conf.getInt("life"), TimeUnit.MINUTES);
 
 		this.key = UUID.randomUUID().toString();
 		this.sessionRequests = new ConcurrentHashMap<String, Integer>();

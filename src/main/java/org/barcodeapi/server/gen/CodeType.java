@@ -7,7 +7,7 @@ public enum CodeType {
 	/**
 	 * UPC-E type UPC code;
 	 */
-	UPC_E(new String[] { "e", "upc-e", "upce" }, //
+	UPC_E(1, new String[] { "e", "upc-e", "upce" }, //
 			"^(?=.*0)[0-9]{8}$", //
 			"^(?=.*0)[0-9]{7,8}$", //
 			"01023459", //
@@ -16,7 +16,7 @@ public enum CodeType {
 	/**
 	 * UPC-A type UPC code;
 	 */
-	UPC_A(new String[] { "a", "upc-a", "upca", "upc" }, //
+	UPC_A(1, new String[] { "a", "upc-a", "upca", "upc" }, //
 			"^(?=.*0)[0-9]{12}$", //
 			"^(?=.*0)[0-9]{11,12}$", //
 			"123456789012", //
@@ -27,7 +27,7 @@ public enum CodeType {
 	 * 
 	 * 7 numerical digits followed by a single checksum digit.
 	 */
-	EAN8(new String[] { "8", "ean-8", "ean8" }, //
+	EAN8(1, new String[] { "8", "ean-8", "ean8" }, //
 			"^[0-9]{8}$", //
 			"^[0-9]{7,8}$", //
 			"01023459", //
@@ -38,7 +38,7 @@ public enum CodeType {
 	 * 
 	 * 12 numerical digits followed by a single checksum digit.
 	 */
-	EAN13(new String[] { "13", "ean-13", "ean13" }, //
+	EAN13(1, new String[] { "13", "ean-13", "ean13" }, //
 			"^[0-9]{13}$", //
 			"^[0-9]{12,13}$", //
 			"1234567890128", //
@@ -47,27 +47,27 @@ public enum CodeType {
 	/**
 	 * Codabar type code;
 	 */
-	CODABAR(new String[] { "codabar" }, //
+	CODABAR(1, new String[] { "codabar" }, //
 			"^[0-9:$]{4,12}$", //
 			"^[0-9-:$\\/.+]+$", //
 			"1234567890", //
 			"An early barode designed to be printed on dot-matrix printers."),
-	
+
 	/**
 	 * ITF-14 type code;
 	 */
-	ITF14(new String[] {"14", "itf-14", "scc-14", "gtin"}, //
-		"^[0-9]{14}$",//
-		"^[0-9]{14}$", //
-		"98765432109213", //
-		"Interleaved 2 of 5, type 14."),
+	ITF14(1, new String[] { "14", "itf-14", "scc-14", "gtin" }, //
+			"^[0-9]{14}$", //
+			"^[0-9]{14}$", //
+			"98765432109213", //
+			"Interleaved 2 of 5, type 14."),
 
 	/**
 	 * Code39 type code;
 	 * 
 	 * Variable length consisting of only numbers and upper-case characters.
 	 */
-	Code39(new String[] { "39", "code-39", "code39" }, //
+	Code39(2, new String[] { "39", "code-39", "code39" }, //
 			"^[A-Z0-9 $.\\/]{1,12}$", //
 			"^[A-Z*0-9 -$%.\\/+]+$", //
 			"TRY 39 ME", //
@@ -78,7 +78,7 @@ public enum CodeType {
 	 * 
 	 * Variable length consisting of numbers, letters, and symbols.
 	 */
-	Code128(new String[] { "128", "code-128", "code128" }, //
+	Code128(2, new String[] { "128", "code-128", "code128" }, //
 			"^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+$", //
 			"Try Me!", //
@@ -89,7 +89,7 @@ public enum CodeType {
 	 *
 	 * A square 2d barcode resembling a pyramid.
 	 */
-	Aztec(new String[] { "aztec" }, //
+	Aztec(3, new String[] { "aztec" }, //
 			"^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+$", //
 			"Aztec Barcode", //
@@ -100,7 +100,7 @@ public enum CodeType {
 	 * 
 	 * A high density data code with error correction.
 	 */
-	QRCode(new String[] { "qr", "qr-code", "qrcode" }, //
+	QRCode(3, new String[] { "qr", "qr-code", "qrcode" }, //
 			"^.{1,64}$", //
 			"^.{1,65535}$", //
 			"QR Barcode", //
@@ -111,7 +111,7 @@ public enum CodeType {
 	 * 
 	 * A high density data code with error correction.
 	 */
-	DataMatrix(new String[] { "dm", "data-matrix", "datamatrix", "matrix", "data" }, //
+	DataMatrix(3, new String[] { "dm", "data-matrix", "datamatrix", "matrix", "data" }, //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
 			"Data Matrix Barcode", //
@@ -122,7 +122,7 @@ public enum CodeType {
 	 * 
 	 * 
 	 */
-	PDF417(new String[] { "417", "pdf417", "pdf" }, //
+	PDF417(3, new String[] { "417", "pdf417", "pdf" }, //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
 			"^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$", //
 			"PDF - 417", //
@@ -131,7 +131,7 @@ public enum CodeType {
 	/**
 	 * USPS Intelligent Mail
 	 */
-	USPSMail(new String[] { "usps", "intelligent-mail" }, //
+	USPSMail(2, new String[] { "usps", "intelligent-mail" }, //
 			"^[0-9]{1,32}$", //
 			"^[0-9]{1,32}$", //
 			"0123456709498765432101234567891", //
@@ -140,7 +140,7 @@ public enum CodeType {
 	/**
 	 * Royal Mail
 	 */
-	RoyalMail(new String[] { "royal", "royal-mail" }, //
+	RoyalMail(2, new String[] { "royal", "royal-mail" }, //
 			"^[0-9]{1,32}$", //
 			"^[0-9]{1,32}$", //
 			"11212345612345678", //
@@ -149,6 +149,7 @@ public enum CodeType {
 	/**
 	 * Local Variables
 	 */
+	private final int cost;
 	private final String[] types;
 
 	private final String autoPattern;
@@ -162,8 +163,10 @@ public enum CodeType {
 	 * 
 	 * @param typeStrings
 	 */
-	CodeType(String[] typeStrings, String automatchPattern, //
+	CodeType(int cost, String[] typeStrings, String automatchPattern, //
 			String extendedPattern, String example, String description) {
+
+		this.cost = cost;
 
 		this.types = typeStrings;
 
@@ -172,6 +175,14 @@ public enum CodeType {
 
 		this.example = example;
 		this.description = description;
+	}
+
+	/**
+	 * Returns the token cost to render the barcode.
+	 */
+	public int getBaseCost() {
+
+		return cost;
 	}
 
 	/**

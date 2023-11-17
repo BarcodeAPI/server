@@ -3,11 +3,13 @@ package org.barcodeapi.server.api;
 import java.io.IOException;
 import java.util.Base64;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.GenerationException;
+import org.barcodeapi.server.core.GenerationException.ExceptionType;
+import org.barcodeapi.server.core.RateLimitException;
+import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.gen.BarcodeGenerator;
 import org.barcodeapi.server.gen.BarcodeRequest;
@@ -18,7 +20,9 @@ import com.mclarkdev.tools.liblog.LibLog;
 public class BarcodeAPIHandler extends RestHandler {
 
 	private final CachedBarcode ERR;
+	private final CachedBarcode EXC;
 	private final CachedBarcode BLK;
+	private final CachedBarcode RTE;
 
 	public BarcodeAPIHandler() {
 		super(false, true);
@@ -27,8 +31,12 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			ERR = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
 					"/128/$$@E$$@R$$@R$$@O$$@R$$@"));
+			EXC = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
+					"/128/$$@F$$@A$$@I$$@L$$@E$$@D$$@"));
 			BLK = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
 					"/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
+			RTE = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
+					"/128/$$@RATE$$@$$@LIMIT$$@"));
 		} catch (GenerationException e) {
 
 			throw LibLog._clog("E0789", e).asException(IllegalStateException.class);
@@ -36,37 +44,59 @@ public class BarcodeAPIHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(String uri, HttpServletRequest srvReq, HttpServletResponse response)
-			throws JSONException, IOException {
+	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
 
-		CachedBarcode barcode;
-		BarcodeRequest request = BarcodeRequest.fromURI(uri);
+		CachedBarcode barcode = null;
+		BarcodeRequest request = BarcodeRequest.fromURI(ctx.getUri());
 
 		try {
+
+			try {
+
+				// try to spend tokens
+				ctx.getLimiter().spendTokens(request.getCost());
+			} catch (RateLimitException e) {
+
+				// return rate limited barcode to user
+				throw new GenerationException(ExceptionType.LIMITED);
+			}
+
 			// generate user requested barcode
 			barcode = BarcodeGenerator.requestBarcode(request);
 
 		} catch (GenerationException e) {
 
-			LibLog._clogF("E6009", uri, e.getMessage());
+			// log barcode generation failures
+			LibLog._clogF("E6009", ctx.getUri(), e.getMessage());
+			response.setHeader("X-Error-Message", e.getMessage());
 
 			switch (e.getExceptionType()) {
+			case LIMITED:
+				// serve rate limit code
+				barcode = RTE;
+				response.setStatus(HttpServletResponse.SC_PAYMENT_REQUIRED);
+				break;
+
 			case BLACKLIST:
 				// serve blacklist code
 				barcode = BLK;
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 				break;
 
+			case INVALID:
 			case EMPTY:
-			case FAILED:
-			default:
 				// serve error code
 				barcode = ERR;
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				break;
+
+			case FAILED:
+				// serve error code
+				barcode = EXC;
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				break;
 			}
 
-			// set HTTP response code and add message to headers
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.setHeader("X-Error-Message", e.getMessage());
 		}
 
 		// add cache headers

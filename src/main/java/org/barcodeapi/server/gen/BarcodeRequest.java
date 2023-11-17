@@ -12,6 +12,7 @@ public class BarcodeRequest {
 	private String data;
 	private boolean cached;
 	private JSONObject options;
+	private int cost;
 
 	private BarcodeRequest() {
 	}
@@ -72,12 +73,16 @@ public class BarcodeRequest {
 			type = TypeSelector.getTypeFromData(data);
 		}
 
+		// calculate the request cost
+		int cost = type.getBaseCost();
+
 		// create and return request object
 		BarcodeRequest r = new BarcodeRequest();
 		r.type = type;
 		r.data = data;
 		r.cached = cached;
 		r.options = options;
+		r.cost = cost;
 		return r;
 	}
 
@@ -115,5 +120,14 @@ public class BarcodeRequest {
 	 */
 	public JSONObject getOptions() {
 		return options;
+	}
+
+	/**
+	 * Returns the token cost to render the barcode.
+	 * 
+	 * @return
+	 */
+	public int getCost() {
+		return cost;
 	}
 }

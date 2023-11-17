@@ -15,10 +15,11 @@
 	<script src="/static/index.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="/static/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/layout.css" />
 	<link rel="stylesheet" type="text/css" href="/static/index.css" />
 </head>
 
-<body onload="loadLicense();">
+<body>
 	<div class="wrap container-fluid">
 
 		<div class="header row middle-xs between-xs">
@@ -33,12 +34,14 @@
 				<div class="row end-xs middle-xs">
 					<div class="col-xs">
 						<h4>
-							GOT FEEDBACK? <br /> <span class="feedback">feedback@barcodeapi.org</span>
+							<a href="/contact.html">FEEDBACK & SUPPORT</a>
+							<br />
+							<span class="contact">support@barcodeapi.org</span>
 						</h4>
 					</div>
 					<div class="share-icon email">
-						<a href="mailto:feedback@barcodeapi.org?body=I%20love%20the%20new%20UI%21&amp;subject=Feedback%20about%20BarcodeAPI"
-							target="_blank"> <img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
+						<a href="mailto:support@barcodeapi.org">
+							<img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
 						</a>
 					</div>
 				</div>
@@ -57,39 +60,79 @@
 								<br /> Built with love by <a href="https://about.mclarkdev.com/">MClarkDev.com</a><br />
 								<br />
 								BarcodeAPI.org services provided free for all.<br />
-								<br /> Visit <a href="https://www.sysdns.org/tools/">SysDNS.org</a>
-								for more free tools.
+								<br />
+								Since 2017. <br />
 							</div>
 							<br /> <br />
 							<h2>User Manual</h2>
 							<div>
+								Find out how!<br /><br />
 								<a href="/manual.pdf" target="_blank" class="col-xs"><span>Read
 										the Docs</span></a>
 							</div>
 							<br />
-							<h2>Source Code</h2>
+							<br />
+							<h2>Rate Limits</h2>
 							<div>
-								<a href="https://github.com/BarcodeAPI/server" target="_blank"
-									class="col-xs"><span>Browse the source</span></a>
+								Free: 25,000
+								Pro: 250,000
+
 							</div>
+							<br />
 							<br />
 							<h2>Technical Support</h2>
 							<div>
 								Send us an email!<br />
 								<br />feedback@barcodeapi.org
 							</div>
-							<br /> <br />
+							<br />
+							<br />
+							<h2>Source Code</h2>
+							<div>
+								Open source and available on Github.<br /><br />
+								<a href="https://github.com/BarcodeAPI/server" target="_blank"
+									class="col-xs"><span>Browse the source</span></a>
+							</div>
+							<br />
+							<br />
+							<h2>Privacy Policy</h2>
+							<div>
+								Our service prioritizes the privacy of all users.<br />
+								We do not share your data with any third-party.
+							</div>
+							<br />
+							<br />
 							<h2>Special Thanks</h2>
-							<pre id="thanks">
-Amazon
-Walmart
+							<div>
+								<pre id="thanks">
+Walmart (ASR)
+Amazon Robotics
+								</pre>
+								<pre id="thanks">
 Java (OpenJDK)
 Eclipse / Jetty
-Barcode4J
 Google ZXing
+Barcode4J
+								</pre>
+							</div>
+							<h2>License</h2>
+							<pre id="license">
+BarcodeAPI.org
+Copyright 2017-2023
 
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 							</pre>
-							<br /> <br /> <br /> Since 2017. <br />
 						</div>
 					</div>
 				</div>
