@@ -8,7 +8,9 @@
  */
 const renderOptions = {
 	'trimBefore': (window.localStorage.getItem("trimBefore") != "false"),
-	'trimAfter': (window.localStorage.getItem("trimAfter") != "false")
+	'trimAfter': (window.localStorage.getItem("trimAfter") != "false"),
+	'colorFG': "000000",
+	'colorBG': "FFFFFF"
 };
 
 /**
@@ -99,10 +101,25 @@ function setupOptions() {
  * Called when one of the UI options field is changed.
  */
 function optionsChange() {
+
+	// parse text trimming options
 	renderOptions.trimBefore = document.getElementById("option-trim-before").checked;
 	window.localStorage.setItem("trimBefore", (renderOptions.trimBefore) ? "true" : false);
 	renderOptions.trimAfter = document.getElementById("option-trim-after").checked;
 	window.localStorage.setItem("trimAfter", (renderOptions.trimAfter) ? "true" : false);
+
+
+	var inFG = document.getElementById("option-color-fg");
+	if (inFG.checkValidity()) {
+		renderOptions.colorFG = inFG.value;
+	}
+
+	var inBG = document.getElementById("option-color-bg");
+	if (inBG.checkValidity()) {
+		renderOptions.colorBG = inBG.value;
+	}
+
+	// regenerate the barcode
 	genCode();
 }
 
@@ -163,6 +180,9 @@ function genCode() {
 	// Build URL with encoded request
 	url += "/" + encodeURIComponent(text);
 
+	// Add options
+	url += "?fg=" + renderOptions.colorFG + "&bg=" + renderOptions.colorBG;
+
 	// Update download button
 	document.getElementById("barcode_download_button").setAttribute("href", url);
 
@@ -213,7 +233,7 @@ function toggleOpenBarcodeTypes() {
 function toggleShowRenderOptions() {
 
 	const menu = document.getElementById("barcode-options-input");
-	menu.style.display = (menu.style.display != "block") ? "block" : "none";
+	menu.style.display = (menu.style.display != "grid") ? "grid" : "none";
 }
 
 function copyBarcodeLink() {

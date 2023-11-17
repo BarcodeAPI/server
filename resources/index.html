@@ -1,21 +1,23 @@
 <html>
 
 <head>
-	<title>BarcodeAPI.org</title>
+<title>BarcodeAPI.org</title>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<meta name="keywords" content="barcode, barcode app, barcode generator, barcode api, download barcode">
-	<meta name="description"
-		content="Online barcode app: Generate, scan, and download barcodes for free. Get started with our easy-to-use barcode generator!">
+<meta name="keywords"
+	content="barcode, barcode app, barcode generator, barcode api, download barcode">
+<meta name="description"
+	content="Online barcode app: Generate, scan, and download barcodes for free. Get started with our easy-to-use barcode generator!">
 
-	<link rel="icon" type="image/png" href="/static/favicon.png" />
+<link rel="icon" type="image/png" href="/static/favicon.png" />
 
-	<script src="/static/index.js"></script>
+<script src="/static/index.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="/static/flexboxgrid.min.css" />
-	<link rel="stylesheet" type="text/css" href="/static/layout.css" />
-	<link rel="stylesheet" type="text/css" href="/static/index.css" />
+<link rel="stylesheet" type="text/css"
+	href="/static/flexboxgrid.min.css" />
+<link rel="stylesheet" type="text/css" href="/static/layout.css" />
+<link rel="stylesheet" type="text/css" href="/static/index.css" />
 </head>
 
 <body onload="loadHash(); init();">
@@ -25,21 +27,22 @@
 		<div class="header row middle-xs between-xs">
 			<div class="col-xs-12 col-sm-3">
 				<div class="logo">
-					<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo" aria-label="Logo">
+					<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo"
+						aria-label="Logo">
 				</div>
 			</div>
 			<div class="header-share">
 				<div class="row end-xs middle-xs">
 					<div class="col-xs">
 						<h4>
-							<a href="/contact.html">FEEDBACK & SUPPORT</a>
-							<br />
-							<span class="contact">support@barcodeapi.org</span>
+							<a href="/contact.html">FEEDBACK & SUPPORT</a> <br /> <span
+								class="contact">support@barcodeapi.org</span>
 						</h4>
 					</div>
 					<div class="share-icon email">
-						<a href="mailto:support@barcodeapi.org">
-							<img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
+						<a href="mailto:support@barcodeapi.org"> <img
+							src="/img/email.svg" alt="Contact Support"
+							aria-label="Share Icon">
 						</a>
 					</div>
 				</div>
@@ -51,26 +54,37 @@
 			<div class="choose-barcode-type col-xs-12 col-sm-6">
 				<h3>CHOOSE YOUR BARCODE TYPE</h3>
 				<div class="select-type" id="select-type">
-					<a id="select-picker" onclick="toggleOpenBarcodeTypes()">Select Barcode</a>
+					<a id="select-picker" onclick="toggleOpenBarcodeTypes()">Select
+						Barcode</a>
 				</div>
 				<div class="barcode-types" id="topnav">
 					<a id="type-auto" onclick="setType('auto');">Auto</a>
 				</div>
 				<div class="options">
-					<a class="text-link" onclick="toggleShowRenderOptions()">Render Options<img
-							src="/img/chevron-right.svg" class="icon-last" /></a>
+					<a class="text-link" onclick="toggleShowRenderOptions()">Render
+						Options<img src="/img/chevron-right.svg" class="icon-last" />
+					</a>
 					<div id="barcode-options-input">
-						Trim Whitespace<br />
-						<input type="checkbox" id="option-trim-before" onchange="optionsChange()" checked />&nbsp;Before
-						<br />
-						<input type="checkbox" id="option-trim-after" onchange="optionsChange()" checked />&nbsp;After
+						<div class="barcode-options barcode-options-left">
+							Trim Whitespace<br /> <input type="checkbox"
+								id="option-trim-before" onchange="optionsChange()" checked />&nbsp;Before
+							<br /> <input type="checkbox" id="option-trim-after"
+								onchange="optionsChange()" checked />&nbsp;After
+						</div>
+						<div class="barcode-options barcode-options-right">
+							Colors<br />FG:&nbsp;<input type="text" id="option-color-fg"
+								value="000000" size="6" maxlength="6" onkeyup="optionsChange()"
+								pattern="[0-9A-F]{6}" /><br /> BG:&nbsp;<input type="text"
+								id="option-color-bg" value="FFFFFF" size="6" maxlength="6"
+								onkeyup="optionsChange()" pattern="[0-9A-F]{6}" />
+						</div>
 					</div>
 				</div>
 				<div class="col-xs-8 bulk-upload">
 					<h4>Need more barcodes?</h4>
-					<a href="/bulk.html" class="text-link">
-						<img src="/img/barcode.svg" class="icon-first" />BULK BARCODE GENERATOR<img
-							src="/img/chevron-right.svg" class="icon-last" />
+					<a href="/bulk.html" class="text-link"> <img
+						src="/img/barcode.svg" class="icon-first" />BULK BARCODE
+						GENERATOR<img src="/img/chevron-right.svg" class="icon-last" />
 					</a>
 				</div>
 			</div>
@@ -79,12 +93,14 @@
 					<form onsubmit="return false;">
 						<div class="row start-xs middle-xs">
 							<div class="col-xs-9">
-								<input id="text" class="barcode-text-input pulse-bg" onkeyup="delayGenCode()"
-									type="text" placeholder="TRY ME!" autocomplete="off" maxlength="200"
+								<input id="text" class="barcode-text-input pulse-bg"
+									onkeyup="delayGenCode()" type="text" placeholder="TRY ME!"
+									autocomplete="off" maxlength="200"
 									title="Enter a code for anything" />
 							</div>
 							<div class="col-xs-3">
-								<input class="barcode-text-input-clear" type="reset" value="CLEAR" title="Clear text" />
+								<input class="barcode-text-input-clear" type="reset"
+									value="CLEAR" title="Clear text" />
 							</div>
 						</div>
 					</form>
@@ -97,26 +113,31 @@
 					<div id="barcode-more" class="row middle-xs center-xs">
 
 						<div class="barcode-icon" id="barcode_print">
-							<a id="barcode_print_button" onclick="printCode()" title="Print Barcode"> <img
-									src="/img/print.svg" alt="Print barcode" aria-label="Print barcode">
+							<a id="barcode_print_button" onclick="printCode()"
+								title="Print Barcode"> <img src="/img/print.svg"
+								alt="Print barcode" aria-label="Print barcode">
 							</a>
 						</div>
 
 						<div class="barcode-icon" id="barcode_link">
-							<a id="barcode_link_button" onclick="copyBarcodeLink()" title="Get Link to Barcode"> <img
-									src="/img/chain.svg" alt="Get barcode link" aria-label="Get barcode link">
+							<a id="barcode_link_button" onclick="copyBarcodeLink()"
+								title="Get Link to Barcode"> <img src="/img/chain.svg"
+								alt="Get barcode link" aria-label="Get barcode link">
 							</a>
 						</div>
 
 						<div class="barcode-icon" id="barcode_image">
-							<a id="barcode_image_button" onclick="copyImageToClipboard()" title="Copy Barcode as Image">
-								<img src="/img/image.svg" alt="Copy barcode image" aria-label="Copy barcode image">
+							<a id="barcode_image_button" onclick="copyImageToClipboard()"
+								title="Copy Barcode as Image"> <img src="/img/image.svg"
+								alt="Copy barcode image" aria-label="Copy barcode image">
 							</a>
 						</div>
 
 						<div class="barcode-icon" id="barcode_download">
-							<a id="barcode_download_button" target="_blank" title="Download Barcode Image"> <img
-									src="/img/file_download.svg" alt="Download barcode" aria-label="Download barcode">
+							<a id="barcode_download_button" target="_blank"
+								title="Download Barcode Image"> <img
+								src="/img/file_download.svg" alt="Download barcode"
+								aria-label="Download barcode">
 							</a>
 						</div>
 					</div>
@@ -128,26 +149,29 @@
 		<div class="notice row middle-xs top-sm between-xs">
 			<div class="col-xs-12 col-sm-8">
 				<p>
-					<b>Important Update!</b><br />
-					<a href="/limits.html" class="text-link">Introducing Rate Limits<img src="/img/chevron-right.svg"
-							class="icon-last" />
+					<b>Important Update!</b><br /> <a href="/limits.html"
+						class="text-link">Introducing Rate Limits<img
+						src="/img/chevron-right.svg" class="icon-last" />
 					</a>
 				</p>
 			</div>
 		</div>
 		<div class="footer row middle-xs top-sm between-xs">
 			<div class="col-xs-12 col-sm-8">
-				<p><span>Generate barcodes of nearly any type! Scan them in the web browser
-						or download the generated images for free! BarcodeAPI.org is an
-						open source barcode server capable of providing a wide range of
-						barcodes over a RESTful HTTP server.</span>&nbsp;
-					<span>(&nbsp;<a href="/about.html">about</a>&nbsp;)</span>
+				<p>
+					<span>Generate barcodes of nearly any type! Scan them in the
+						web browser or download the generated images for free!
+						BarcodeAPI.org is an open source barcode server capable of
+						providing a wide range of barcodes over a RESTful HTTP server.</span>&nbsp;
+					<span>(&nbsp;<a href="/about.html">about</a>&nbsp;)
+					</span>
 				</p>
 			</div>
 			<div class="col-xs-12 col-sm-4">
 				<div class="docs-link row start-xs end-sm">
-					<a href="/manual.pdf" target="_blank" class="col-xs"> <span class="docs-icon"><img
-								src="/img/docs.svg"></span>&nbsp;<span>Learn More</span>
+					<a href="/manual.pdf" target="_blank" class="col-xs"> <span
+						class="docs-icon"><img src="/img/docs.svg"></span>&nbsp;<span>Learn
+							More</span>
 					</a>
 				</div>
 			</div>

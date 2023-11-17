@@ -145,6 +145,18 @@ h4 {
 	display: none;
 }
 
+.barcode-options input:invalid:focus {
+	color: #CC0000;
+}
+
+.barcode-options-left {
+	grid-area: 1/1/1/1;
+}
+
+.barcode-options-right {
+	grid-area: 1/1/1/1;
+}
+
 .barcode-text-input-clear,
 .button,
 .button-green {

@@ -146,7 +146,7 @@ public class CodeUtils {
 		for (String option : parts) {
 
 			String[] kv = option.split("=");
-			options.put(kv[0], kv[1]);
+			options.put(kv[0], (kv.length == 2) ? kv[1] : true);
 		}
 
 		return options;
