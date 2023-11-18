@@ -132,16 +132,25 @@ function optionsChange() {
 	var inHeight = document.getElementById("option-height");
 	if (inHeight.checkValidity()) {
 		renderOptions.height = inHeight.value;
+	} else {
+		renderOptions.height = defaultOptions.height;
+		inHeight.value = renderOptions.height;
 	}
 
 	var inFG = document.getElementById("option-color-fg");
 	if (inFG.checkValidity()) {
 		renderOptions.colorFG = inFG.value;
+	} else {
+		renderOptions.colorFG = defaultOptions.colorFG;
+		inFG.value = renderOptions.colorFG;
 	}
 
 	var inBG = document.getElementById("option-color-bg");
 	if (inBG.checkValidity()) {
 		renderOptions.colorBG = inBG.value;
+	} else {
+		renderOptions.colorBG = defaultOptions.colorBG;
+		inBG.value = renderOptions.colorBG;
 	}
 
 	// regenerate the barcode

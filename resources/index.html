@@ -62,16 +62,16 @@
 					</a>
 					<div id="barcode-options-input">
 						<div class="barcode-options barcode-options-left">
-							Trim Spaces<br /> <input type="checkbox" id="option-trim-before" onchange="optionsChange()"
-								checked />&nbsp;Before
+							Whitespace<br /> <input type="checkbox" id="option-trim-before" onchange="optionsChange()"
+								checked />&nbsp;Trim&nbsp;Before
 							<br /> <input type="checkbox" id="option-trim-after" onchange="optionsChange()"
-								checked />&nbsp;After
+								checked />&nbsp;Trim&nbsp;After
 						</div>
 						<div class="barcode-options barcode-options-right">
 							Custom&nbsp;Colors<br />Bars:&nbsp;<input type="text" id="option-color-fg" value="000000"
-								size="6" maxlength="6" onkeyup="optionsChange()" pattern="[0-9A-F]{6}" /><br />
+								size="6" maxlength="6" onchange="optionsChange()" pattern="[0-9A-F]{6}" /><br />
 							Back:&nbsp;<input type="text" id="option-color-bg" value="FFFFFF" size="6" maxlength="6"
-								onkeyup="optionsChange()" pattern="[0-9A-F]{6}" />
+								onchange="optionsChange()" pattern="[0-9A-F]{6}" />
 						</div>
 
 						<div class="barcode-options">
