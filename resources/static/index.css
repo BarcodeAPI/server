@@ -143,18 +143,11 @@ h4 {
 
 #barcode-options-input {
 	display: none;
+	grid-template-columns: 1fr 1fr 1fr;
 }
 
 .barcode-options input:invalid:focus {
 	color: #CC0000;
-}
-
-.barcode-options-left {
-	grid-area: 1/1/1/1;
-}
-
-.barcode-options-right {
-	grid-area: 1/1/1/1;
 }
 
 .barcode-text-input-clear,

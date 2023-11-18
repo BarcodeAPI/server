@@ -6,12 +6,24 @@
 /**
  * Trim options for pasting text
  */
-const renderOptions = {
+const userOptions = {
 	'trimBefore': (window.localStorage.getItem("trimBefore") != "false"),
-	'trimAfter': (window.localStorage.getItem("trimAfter") != "false"),
-	'colorFG': "000000",
-	'colorBG': "FFFFFF"
+	'trimAfter': (window.localStorage.getItem("trimAfter") != "false")
 };
+
+const renderOptions = {
+	'colorFG': "000000",
+	'colorBG': "FFFFFF",
+	'dpi': 150,
+	'height': 25
+}
+
+const defaultOptions = {
+	'colorFG': "000000",
+	'colorBG': "FFFFFF",
+	'dpi': 150,
+	'height': 25
+}
 
 /**
  * User-Agent string
@@ -93,8 +105,8 @@ function delayGenCode() {
 }
 
 function setupOptions() {
-	document.getElementById("option-trim-before").checked = renderOptions.trimBefore;
-	document.getElementById("option-trim-after").checked = renderOptions.trimAfter;
+	document.getElementById("option-trim-before").checked = userOptions.trimBefore;
+	document.getElementById("option-trim-after").checked = userOptions.trimAfter;
 }
 
 /**
@@ -103,11 +115,24 @@ function setupOptions() {
 function optionsChange() {
 
 	// parse text trimming options
-	renderOptions.trimBefore = document.getElementById("option-trim-before").checked;
-	window.localStorage.setItem("trimBefore", (renderOptions.trimBefore) ? "true" : false);
-	renderOptions.trimAfter = document.getElementById("option-trim-after").checked;
-	window.localStorage.setItem("trimAfter", (renderOptions.trimAfter) ? "true" : false);
+	userOptions.trimBefore = document.getElementById("option-trim-before").checked;
+	window.localStorage.setItem("trimBefore", (userOptions.trimBefore) ? "true" : false);
+	userOptions.trimAfter = document.getElementById("option-trim-after").checked;
+	window.localStorage.setItem("trimAfter", (userOptions.trimAfter) ? "true" : false);
 
+	// parse render options 
+	var inDPI = document.getElementById("option-dpi");
+	if (inDPI.checkValidity()) {
+		renderOptions.dpi = inDPI.value;
+	} else {
+		renderOptions.dpi = defaultOptions.dpi;
+		inDPI.value = renderOptions.dpi;
+	}
+
+	var inHeight = document.getElementById("option-height");
+	if (inHeight.checkValidity()) {
+		renderOptions.height = inHeight.value;
+	}
 
 	var inFG = document.getElementById("option-color-fg");
 	if (inFG.checkValidity()) {
@@ -177,11 +202,11 @@ function genCode() {
 	// Build URL with type
 	url = url + "/" + type;
 
-	// Build URL with encoded request
-	url += "/" + encodeURIComponent(text);
+	var options = buildOptionsString();
 
-	// Add options
-	url += "?fg=" + renderOptions.colorFG + "&bg=" + renderOptions.colorBG;
+	// Build URL with encoded request
+	url += "/" + encodeURIComponent(text) + options;
+
 
 	// Update download button
 	document.getElementById("barcode_download_button").setAttribute("href", url);
@@ -193,6 +218,17 @@ function genCode() {
 
 	// Update IMG element source
 	document.getElementById("barcode_output").src = url;
+}
+
+function buildOptionsString() {
+
+	var t = "";
+	t += "?fg=" + renderOptions.colorFG;
+	t += "&bg=" + renderOptions.colorBG;
+	t += "&dpi=" + renderOptions.dpi;
+	t += "&height=" + renderOptions.height;
+
+	return t;
 }
 
 function printCode() {
