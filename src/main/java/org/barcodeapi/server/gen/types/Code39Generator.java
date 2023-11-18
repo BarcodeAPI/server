@@ -1,7 +1,6 @@
 package org.barcodeapi.server.gen.types;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -11,7 +10,6 @@ import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
 public class Code39Generator extends CodeGenerator {

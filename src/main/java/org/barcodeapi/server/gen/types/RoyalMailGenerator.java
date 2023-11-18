@@ -1,7 +1,6 @@
 package org.barcodeapi.server.gen.types;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -10,7 +9,6 @@ import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.impl.fourstate.RoyalMailCBCBean;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 
 public class RoyalMailGenerator extends CodeGenerator {
 

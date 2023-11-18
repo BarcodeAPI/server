@@ -1,7 +1,6 @@
 package org.barcodeapi.server.gen.types;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -12,7 +11,6 @@ import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.impl.datamatrix.DataMatrixBean;
 import org.krysalis.barcode4j.impl.datamatrix.SymbolShapeHint;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 
 public class DataMatrixGenerator extends CodeGenerator {
 
@@ -59,7 +57,6 @@ public class DataMatrixGenerator extends CodeGenerator {
 			canvasProvider.setColors(//
 					Color.decode("0x" + options.optString("bg", "ffffff")), //
 					Color.decode("0x" + options.optString("fg", "000000")));
-
 
 			generator.generateBarcode(canvasProvider, data);
 			canvasProvider.finish();

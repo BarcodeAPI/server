@@ -3,6 +3,8 @@
 // multi.js
 //
 
+var barcodes = [];
+
 function init() {
 
 	var root = window.location.href;
@@ -27,8 +29,11 @@ function addFromInput() {
 }
 
 function addFromText(text) {
-	var img = generateImage(text);
-	document.getElementById("barcodes").appendChild(img);
+	if (text.length) {
+		var img = generateImage(text);
+		document.getElementById("barcodes").appendChild(img);
+		barcodes.push(text);
+	}
 }
 
 function onTextChanged(event) {
@@ -46,4 +51,13 @@ function generateImage(request) {
 	img.src = url;
 
 	return img;
+}
+
+function multiShare() {
+	var url = "/multi.html?";
+	for ( var x in barcodes) {
+		url += barcodes[x] + "&";
+	}
+	
+	window.location = url;
 }
