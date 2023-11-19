@@ -234,11 +234,23 @@ function genCode() {
 
 function buildOptionsString() {
 
-	var t = "";
-	t += "?fg=" + appOptions.render.colorFG;
-	t += "&bg=" + appOptions.render.colorBG;
-	t += "&dpi=" + appOptions.render.dpi;
-	t += "&height=" + appOptions.render.height;
+	var t = "?";
+
+	if (appOptions.render.colorFG != appOptions.default.colorFG) {
+		t += "&fg=" + appOptions.render.colorFG;
+	}
+
+	if (appOptions.render.colorBG != appOptions.default.colorBG) {
+		t += "&bg=" + appOptions.render.colorBG;
+	}
+
+	if (appOptions.render.dpi != appOptions.default.dpi) {
+		t += "&dpi=" + appOptions.render.dpi;
+	}
+
+	if (appOptions.render.height != appOptions.default.height) {
+		t += "&height=" + appOptions.render.height;
+	}
 
 	return t;
 }
