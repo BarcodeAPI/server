@@ -4,25 +4,25 @@
 //
 
 /**
- * Trim options for pasting text
+ * Barcode render options
  */
-const userOptions = {
-	'trimBefore': (window.localStorage.getItem("trimBefore") != "false"),
-	'trimAfter': (window.localStorage.getItem("trimAfter") != "false")
-};
-
-const renderOptions = {
-	'colorFG': "000000",
-	'colorBG': "FFFFFF",
-	'dpi': 150,
-	'height': 25
-}
-
-const defaultOptions = {
-	'colorFG': "000000",
-	'colorBG': "FFFFFF",
-	'dpi': 150,
-	'height': 25
+const appOptions = {
+	'default': {
+		'colorFG': "000000",
+		'colorBG': "FFFFFF",
+		'dpi': 150,
+		'height': 25
+	},
+	'render': {
+		'colorFG': "000000",
+		'colorBG': "FFFFFF",
+		'dpi': 150,
+		'height': 25
+	},
+	'trim': {
+		'before': (window.localStorage.getItem("trimBefore") != "false"),
+		'after': (window.localStorage.getItem("trimAfter") != "false")
+	}
 }
 
 /**
@@ -105,8 +105,8 @@ function delayGenCode() {
 }
 
 function setupOptions() {
-	document.getElementById("option-trim-before").checked = userOptions.trimBefore;
-	document.getElementById("option-trim-after").checked = userOptions.trimAfter;
+	document.getElementById("option-trim-before").checked = appOptions.trim.before;
+	document.getElementById("option-trim-after").checked = appOptions.trim.after;
 }
 
 /**
@@ -115,42 +115,45 @@ function setupOptions() {
 function optionsChange() {
 
 	// parse text trimming options
-	userOptions.trimBefore = document.getElementById("option-trim-before").checked;
-	window.localStorage.setItem("trimBefore", (userOptions.trimBefore) ? "true" : false);
-	userOptions.trimAfter = document.getElementById("option-trim-after").checked;
-	window.localStorage.setItem("trimAfter", (userOptions.trimAfter) ? "true" : false);
+	appOptions.trim.before = document.getElementById("option-trim-before").checked;
+	window.localStorage.setItem("trimBefore", (appOptions.trim.before) ? "true" : false);
+	appOptions.trim.after = document.getElementById("option-trim-after").checked;
+	window.localStorage.setItem("trimAfter", (appOptions.trim.after) ? "true" : false);
 
-	// parse render options 
+	// parse render options  (DPI)
 	var inDPI = document.getElementById("option-dpi");
 	if (inDPI.checkValidity()) {
-		renderOptions.dpi = inDPI.value;
+		appOptions.render.dpi = inDPI.value;
 	} else {
-		renderOptions.dpi = defaultOptions.dpi;
-		inDPI.value = renderOptions.dpi;
+		appOptions.render.dpi = appOptions.default.dpi;
+		inDPI.value = appOptions.render.dpi;
 	}
 
+	// parse render options (Height)
 	var inHeight = document.getElementById("option-height");
 	if (inHeight.checkValidity()) {
-		renderOptions.height = inHeight.value;
+		appOptions.render.height = inHeight.value;
 	} else {
-		renderOptions.height = defaultOptions.height;
-		inHeight.value = renderOptions.height;
+		appOptions.render.height = appOptions.default.height;
+		inHeight.value = appOptions.render.height;
 	}
 
+	// parse render options (Color FG)
 	var inFG = document.getElementById("option-color-fg");
 	if (inFG.checkValidity()) {
-		renderOptions.colorFG = inFG.value;
+		appOptions.render.colorFG = inFG.value;
 	} else {
-		renderOptions.colorFG = defaultOptions.colorFG;
-		inFG.value = renderOptions.colorFG;
+		appOptions.render.colorFG = appOptions.default.colorFG;
+		inFG.value = appOptions.render.colorFG;
 	}
 
+	// parse render options (Color BG)
 	var inBG = document.getElementById("option-color-bg");
 	if (inBG.checkValidity()) {
-		renderOptions.colorBG = inBG.value;
+		appOptions.render.colorBG = inBG.value;
 	} else {
-		renderOptions.colorBG = defaultOptions.colorBG;
-		inBG.value = renderOptions.colorBG;
+		appOptions.render.colorBG = appOptions.default.colorBG;
+		inBG.value = appOptions.render.colorBG;
 	}
 
 	// regenerate the barcode
@@ -185,13 +188,13 @@ function genCode() {
 	var trimmed = false;
 
 	// Trim before
-	if (renderOptions.trimBefore) {
+	if (appOptions.trim.before) {
 		text = text.trimLeft();
 		trimmed = (text != before);
 	}
 
 	// Trim after
-	if (renderOptions.trimAfter) {
+	if (appOptions.trim.after) {
 		text = text.trimRight();
 		trimmed = (text != before);
 	}
@@ -232,10 +235,10 @@ function genCode() {
 function buildOptionsString() {
 
 	var t = "";
-	t += "?fg=" + renderOptions.colorFG;
-	t += "&bg=" + renderOptions.colorBG;
-	t += "&dpi=" + renderOptions.dpi;
-	t += "&height=" + renderOptions.height;
+	t += "?fg=" + appOptions.render.colorFG;
+	t += "&bg=" + appOptions.render.colorBG;
+	t += "&dpi=" + appOptions.render.dpi;
+	t += "&height=" + appOptions.render.height;
 
 	return t;
 }
