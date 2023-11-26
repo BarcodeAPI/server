@@ -23,6 +23,7 @@ public class BarcodeAPIHandler extends RestHandler {
 	private final CachedBarcode EXC;
 	private final CachedBarcode BLK;
 	private final CachedBarcode RTE;
+	private final CachedBarcode BSY;
 
 	public BarcodeAPIHandler() {
 		super(false, true);
@@ -37,9 +38,12 @@ public class BarcodeAPIHandler extends RestHandler {
 					"/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
 			RTE = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
 					"/128/$$@RATE$$@$$@LIMIT$$@"));
+			BSY = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
+					"/128/$$@B$$@U$$@S$$@Y$$@"));
 		} catch (GenerationException e) {
 
-			throw LibLog._clog("E0789", e).asException(IllegalStateException.class);
+			throw LibLog._clog("E0789", e)//
+					.asException(IllegalStateException.class);
 		}
 	}
 
@@ -90,13 +94,19 @@ public class BarcodeAPIHandler extends RestHandler {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				break;
 
+			case BUSY:
+				// serve error code
+				barcode = BSY;
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				break;
+
 			case FAILED:
 				// serve error code
 				barcode = EXC;
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				break;
-			}
 
+			}
 		}
 
 		// add cache headers

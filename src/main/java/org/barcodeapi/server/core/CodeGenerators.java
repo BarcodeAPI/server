@@ -19,7 +19,10 @@ import org.barcodeapi.server.gen.types.UPCAGenerator;
 import org.barcodeapi.server.gen.types.UPCEGenerator;
 import org.barcodeapi.server.gen.types.USPSMailGenerator;
 
+import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
+import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
+import com.mclarkdev.tools.libobjectpooler.LibObjectPoolerController;
 
 public class CodeGenerators {
 
@@ -32,36 +35,58 @@ public class CodeGenerators {
 		return codeGenerators;
 	}
 
-	private HashMap<CodeType, CodeGenerator> generators;
+	private HashMap<CodeType, LibObjectPooler<CodeGenerator>> generators;
 
 	private CodeGenerators() {
 
-		generators = new HashMap<CodeType, CodeGenerator>();
+		generators = new HashMap<CodeType, LibObjectPooler<CodeGenerator>>();
 
-		generators.put(CodeType.EAN8, new Ean8Generator());
-		generators.put(CodeType.EAN13, new Ean13Generator());
+		generators.put(CodeType.EAN8, createPooler(Ean8Generator.class));
+		generators.put(CodeType.EAN13, createPooler(Ean13Generator.class));
 
-		generators.put(CodeType.UPC_A, new UPCAGenerator());
-		generators.put(CodeType.UPC_E, new UPCEGenerator());
+		generators.put(CodeType.UPC_A, createPooler(UPCAGenerator.class));
+		generators.put(CodeType.UPC_E, createPooler(UPCEGenerator.class));
 
-		generators.put(CodeType.ITF14, new ITF14Generator());
+		generators.put(CodeType.ITF14, createPooler(ITF14Generator.class));
 
-		generators.put(CodeType.CODABAR, new CodabarGenerator());
+		generators.put(CodeType.CODABAR, createPooler(CodabarGenerator.class));
 
-		generators.put(CodeType.USPSMail, new USPSMailGenerator());
-		generators.put(CodeType.RoyalMail, new RoyalMailGenerator());
+		generators.put(CodeType.USPSMail, createPooler(USPSMailGenerator.class));
+		generators.put(CodeType.RoyalMail, createPooler(RoyalMailGenerator.class));
 
-		generators.put(CodeType.Code39, new Code39Generator());
-		generators.put(CodeType.Code128, new Code128Generator());
+		generators.put(CodeType.Code39, createPooler(Code39Generator.class));
+		generators.put(CodeType.Code128, createPooler(Code128Generator.class));
 
-		generators.put(CodeType.Aztec, new AztecGenerator());
-		generators.put(CodeType.QRCode, new QRCodeGenerator());
-		generators.put(CodeType.DataMatrix, new DataMatrixGenerator());
+		generators.put(CodeType.Aztec, createPooler(AztecGenerator.class));
+		generators.put(CodeType.QRCode, createPooler(QRCodeGenerator.class));
+		generators.put(CodeType.DataMatrix, createPooler(DataMatrixGenerator.class));
 
-		generators.put(CodeType.PDF417, new PDF417Generator());
+		generators.put(CodeType.PDF417, createPooler(PDF417Generator.class));
 	}
 
-	public CodeGenerator getGenerator(CodeType codeType) {
+	private LibObjectPooler<CodeGenerator> createPooler(final Class<? extends CodeGenerator> clazz) {
+		return new LibObjectPooler<CodeGenerator>(3, //
+				new LibObjectPoolerController<CodeGenerator>() {
+
+					@Override
+					public CodeGenerator onCreate() {
+						LibLog._clogF("I0180", clazz.getName());
+						try {
+							return clazz.getConstructor().newInstance();
+						} catch (Exception | Error e) {
+							e.printStackTrace();
+							return null;
+						}
+					}
+
+					@Override
+					public void onDestroy(CodeGenerator t) {
+						LibLog._clogF("I0181", t.getClass().getName());
+					}
+				});
+	}
+
+	public LibObjectPooler<CodeGenerator> getGeneratorPool(CodeType codeType) {
 		LibMetrics.hitMethodRunCounter();
 
 		return generators.get(codeType);

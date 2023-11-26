@@ -219,7 +219,6 @@ function genCode() {
 	// Build URL with encoded request
 	url += "/" + encodeURIComponent(text) + options;
 
-
 	// Update download button
 	document.getElementById("barcode_download_button").setAttribute("href", url);
 
@@ -234,25 +233,25 @@ function genCode() {
 
 function buildOptionsString() {
 
-	var t = "?";
+	var options = "?";
 
 	if (appOptions.render.colorFG != appOptions.default.colorFG) {
-		t += "&fg=" + appOptions.render.colorFG;
+		options += "&fg=" + appOptions.render.colorFG;
 	}
 
 	if (appOptions.render.colorBG != appOptions.default.colorBG) {
-		t += "&bg=" + appOptions.render.colorBG;
+		options += "&bg=" + appOptions.render.colorBG;
 	}
 
 	if (appOptions.render.dpi != appOptions.default.dpi) {
-		t += "&dpi=" + appOptions.render.dpi;
+		options += "&dpi=" + appOptions.render.dpi;
 	}
 
 	if (appOptions.render.height != appOptions.default.height) {
-		t += "&height=" + appOptions.render.height;
+		options += "&height=" + appOptions.render.height;
 	}
 
-	return t;
+	return options;
 }
 
 function printCode() {

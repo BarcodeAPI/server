@@ -84,8 +84,8 @@ public class BulkUtils {
 		return BarcodeRequest.fromURI(uri);
 	}
 
-	private static ArrayList<CachedBarcode> generateBarcodes(ArrayList<BarcodeRequest> requests)//
-			throws GenerationException {
+	private static ArrayList<CachedBarcode> generateBarcodes(//
+			ArrayList<BarcodeRequest> requests) throws GenerationException {
 		LibMetrics.hitMethodRunCounter();
 
 		ArrayList<CachedBarcode> barcodes = new ArrayList<>();

@@ -18,6 +18,7 @@ public class ServerStatsHandler extends RestHandler {
 	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
 
 		// print response to client
+		response.setHeader("Content-Type", "application/json");
 		response.getOutputStream().println(getStats().getDetails().toString(4));
 	}
 }

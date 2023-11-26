@@ -18,6 +18,8 @@ public class RequestContext {
 
 	private final String uri;
 
+	private final String origin;
+
 	private final String source;
 
 	private final CachedLimiter limiter;
@@ -50,6 +52,9 @@ public class RequestContext {
 
 		// get the request URI
 		this.uri = request.getOriginalURI();
+
+		// get the origin
+		this.origin = request.getHeader("origin");
 
 		// get source of the request
 		String ref = request.getHeader("Referer");
@@ -90,6 +95,10 @@ public class RequestContext {
 
 	public String getUri() {
 		return this.uri;
+	}
+
+	public String getOrigin() {
+		return this.origin;
 	}
 
 	public String getSource() {

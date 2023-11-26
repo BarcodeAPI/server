@@ -26,6 +26,7 @@ public class TypesHandler extends RestHandler {
 		}
 
 		// print response to client
+		response.setHeader("Content-Type", "application/json");
 		response.getOutputStream().println(output.toString(4));
 	}
 }

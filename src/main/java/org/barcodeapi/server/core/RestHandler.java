@@ -47,8 +47,12 @@ public abstract class RestHandler extends AbstractHandler {
 		return stats;
 	}
 
-	public boolean authRequired() {
+	public boolean apiAuthRequired() {
 		return apiAuthRequired;
+	}
+
+	public boolean apiRateLimited() {
+		return apiRateLimited;
 	}
 
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
@@ -83,9 +87,6 @@ public abstract class RestHandler extends AbstractHandler {
 		response.setHeader("Accept-Charset", "utf-8");
 		response.addCookie(ctx.getSession().getCookie());
 
-		// add CORS headers
-		addCORSHeaders(baseRequest, response);
-
 		// authenticate the user if required
 		if (apiAuthRequired && (!ctx.isAdmin())) {
 
@@ -96,8 +97,15 @@ public abstract class RestHandler extends AbstractHandler {
 			return;
 		}
 
-		// done if only options request
+		// add open CORS headers
+		response.setHeader("Access-Control-Max-Age", "86400");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Origin", //
+				(ctx.getOrigin() != null) ? ctx.getOrigin() : "*");
+
+		// request complete if only options
 		if (ctx.getMethod().equals("OPTIONS")) {
+			response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 			return;
 		}
 
@@ -105,9 +113,13 @@ public abstract class RestHandler extends AbstractHandler {
 
 			// check if allowed by rate limiter
 			if (apiRateLimited && !ctx.getLimiter().allowRequest()) {
+
+				// hit rate limit counters and log
 				getStats().hitCounter("request", "limited");
 				getStats().hitCounter("request", "target", _NAME, "limited");
 				LibLog._clogF("E0609", ctx.getLimiter().getCaller());
+
+				// fail with rate limited status
 				response.setStatus(HttpServletResponse.SC_PAYMENT_REQUIRED);
 				response.setHeader("X-ClientRateLimited", "YES");
 				return;
@@ -129,29 +141,15 @@ public abstract class RestHandler extends AbstractHandler {
 			e.printStackTrace();
 		} finally {
 
-			// calculate execution time
+			// calculate total processing time
 			long runTime = System.currentTimeMillis() - ctx.getTimestamp();
 
-			// hit the counters
+			// hit the time and status counters
 			getStats().hitCounter(runTime, "request", "time");
 			getStats().hitCounter(runTime, "request", "target", _NAME, "time");
+			getStats().hitCounter("request", "target", _NAME, "result", ("_" + response.getStatus()));
 		}
 	}
 
 	protected abstract void onRequest(RequestContext ctx, HttpServletResponse response) throws Exception;
-
-	protected void addCORSHeaders(HttpServletRequest request, HttpServletResponse response) {
-
-		String origin = request.getHeader("origin");
-		if (origin != null) {
-
-			response.setHeader("Access-Control-Max-Age", "86400");
-			response.setHeader("Access-Control-Allow-Origin", origin);
-			response.setHeader("Access-Control-Allow-Credentials", "true");
-		}
-
-		if (request.getMethod().equals("OPTIONS")) {
-			response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-		}
-	}
 }

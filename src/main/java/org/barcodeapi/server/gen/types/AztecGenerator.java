@@ -23,8 +23,6 @@ public class AztecGenerator extends CodeGenerator {
 
 	public AztecGenerator() {
 		super(CodeType.Aztec);
-
-		generator = new AztecWriter();
 	}
 
 	@Override
@@ -55,4 +53,5 @@ public class AztecGenerator extends CodeGenerator {
 			return out.toByteArray();
 		}
 	}
+
 }
