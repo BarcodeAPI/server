@@ -40,29 +40,26 @@ public class DataMatrixGenerator extends CodeGenerator {
 
 		boolean square = options.optBoolean("square", true);
 
-		synchronized (generator) {
-
-			if (square) {
-				generator.setShape(SymbolShapeHint.FORCE_SQUARE);
-			} else {
-				generator.setShape(SymbolShapeHint.FORCE_NONE);
-			}
-
-			generator.doQuietZone(true);
-			generator.setQuietZone(qz);
-			generator.setModuleWidth(scale);
-
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
-			canvasProvider.setColors(//
-					Color.decode("0x" + options.optString("bg", "ffffff")), //
-					Color.decode("0x" + options.optString("fg", "000000")));
-
-			generator.generateBarcode(canvasProvider, data);
-			canvasProvider.finish();
-			out.close();
-
-			return out.toByteArray();
+		if (square) {
+			generator.setShape(SymbolShapeHint.FORCE_SQUARE);
+		} else {
+			generator.setShape(SymbolShapeHint.FORCE_NONE);
 		}
+
+		generator.doQuietZone(true);
+		generator.setQuietZone(qz);
+		generator.setModuleWidth(scale);
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
+		canvasProvider.setColors(//
+				Color.decode("0x" + options.optString("bg", "ffffff")), //
+				Color.decode("0x" + options.optString("fg", "000000")));
+
+		generator.generateBarcode(canvasProvider, data);
+		canvasProvider.finish();
+		out.close();
+
+		return out.toByteArray();
 	}
 }

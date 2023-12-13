@@ -23,6 +23,8 @@ public class AztecGenerator extends CodeGenerator {
 
 	public AztecGenerator() {
 		super(CodeType.Aztec);
+
+		generator = new AztecWriter();
 	}
 
 	@Override
@@ -42,16 +44,12 @@ public class AztecGenerator extends CodeGenerator {
 		hintsMap.put(EncodeHintType.ERROR_CORRECTION, correction);
 		hintsMap.put(EncodeHintType.MARGIN, qz);
 
-		synchronized (generator) {
+		BitMatrix bitMatrix = generator.encode(//
+				data, BarcodeFormat.AZTEC, size, size, hintsMap);
 
-			BitMatrix bitMatrix = generator.encode(//
-					data, BarcodeFormat.AZTEC, size, size, hintsMap);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		MatrixToImageWriter.writeToStream(bitMatrix, "png", out);
 
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			MatrixToImageWriter.writeToStream(bitMatrix, "png", out);
-
-			return out.toByteArray();
-		}
+		return out.toByteArray();
 	}
-
 }

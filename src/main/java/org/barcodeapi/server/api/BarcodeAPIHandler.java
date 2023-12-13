@@ -111,17 +111,26 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		// add cache headers
 		if (request.useCache()) {
-			response.setHeader("Cache-Control", "max-age=86400, public");
+			long tplus = 86400;
+			long expires = System.currentTimeMillis() + (tplus * 1000);
+			response.setDateHeader("Expires", expires);
+			response.setHeader("Cache-Control", String.format("max-age=%d, public", tplus));
 		}
 
-		// barcode details
+		// add type and barcode detail headers
 		response.setHeader("X-Barcode-Type", barcode.getType().toString());
 		response.setHeader("X-Barcode-Content", barcode.getEncoded());
 
 		switch (request.getOptions().optString("format", "png")) {
+
 		case "b64": // serve as base64
-			String encoded = Base64.getEncoder().encodeToString(barcode.getData());
+
+			// encode as string
+			String encoded = Base64.getEncoder()//
+					.encodeToString(barcode.getData());
 			byte[] encodedBytes = encoded.getBytes();
+
+			// add content headers and write data to stream
 			response.setHeader("Content-Type", "image/png");
 			response.setHeader("Content-Encoding", "base64");
 			response.setHeader("Content-Length", Long.toString(encodedBytes.length));

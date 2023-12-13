@@ -44,15 +44,12 @@ public class QRCodeGenerator extends CodeGenerator {
 		hintsMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
 		hintsMap.put(EncodeHintType.MARGIN, 2);
 
-		synchronized (generator) {
+		BitMatrix bitMatrix = generator.encode(//
+				data, BarcodeFormat.QR_CODE, size, size, hintsMap);
 
-			BitMatrix bitMatrix = generator.encode(//
-					data, BarcodeFormat.QR_CODE, size, size, hintsMap);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		MatrixToImageWriter.writeToStream(bitMatrix, "png", out);
 
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			MatrixToImageWriter.writeToStream(bitMatrix, "png", out);
-
-			return out.toByteArray();
-		}
+		return out.toByteArray();
 	}
 }

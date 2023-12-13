@@ -9,7 +9,8 @@
 <body onload="init();">
 	<div id="wrapper">
 		<div class="controller">
-			<input type="text" id="input" onkeyup="onTextChanged(event);"></input>
+			<button onclick="goHome();">Home</button><textarea id="input" onkeydown="onKeyDown(event);"
+				onkeyup="onKeyUp(event);" cols="35"></textarea>
 			<button onclick="addFromInput();">Add Code</button><button onclick="multiShare();">Share</button>
 		</div>
 		<div id="barcodes"></div>

@@ -65,7 +65,7 @@ public class CodeGenerators {
 	}
 
 	private LibObjectPooler<CodeGenerator> createPooler(final Class<? extends CodeGenerator> clazz) {
-		return new LibObjectPooler<CodeGenerator>(3, //
+		LibObjectPooler<CodeGenerator> pooler = new LibObjectPooler<CodeGenerator>(3, //
 				new LibObjectPoolerController<CodeGenerator>() {
 
 					@Override
@@ -84,6 +84,10 @@ public class CodeGenerators {
 						LibLog._clogF("I0181", t.getClass().getName());
 					}
 				});
+
+		pooler.setMaxLockTime(1000);
+
+		return pooler;
 	}
 
 	public LibObjectPooler<CodeGenerator> getGeneratorPool(CodeType codeType) {

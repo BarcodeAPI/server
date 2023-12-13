@@ -136,7 +136,7 @@ h4 {
 	width: 100%;
 }
 
-.barcode-text-input:invalid:focus {
+.barcode-text-input:invalid {
 	border-bottom: 2px solid #990000;
 	color: #CC0000;
 }
@@ -146,7 +146,7 @@ h4 {
 	grid-template-columns: 1fr 1fr 1fr;
 }
 
-.barcode-options input:invalid:focus {
+.barcode-options input:invalid {
 	color: #CC0000;
 }
 
@@ -630,4 +630,12 @@ button[disabled] {
 	right: 10px;
 	left: auto;
 	margin: 0;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
 }

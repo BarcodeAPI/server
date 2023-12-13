@@ -14,6 +14,7 @@ import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.gen.BarcodeGenerator;
 import org.barcodeapi.server.gen.BarcodeRequest;
 
+import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -58,8 +59,7 @@ public class BulkUtils {
 		out.close();
 	}
 
-	private static BarcodeRequest buildBarcodeRequest(String[] record) //
-			throws GenerationException {
+	private static BarcodeRequest buildBarcodeRequest(String[] record) {
 		LibMetrics.hitMethodRunCounter();
 
 		String params = "";
@@ -78,21 +78,28 @@ public class BulkUtils {
 			params += "dpi=" + record[3] + "&";
 		}
 
+		// extras
+		if (record.length >= 5 && !record[4].equals("")) {
+			params += record[4];
+		}
+
 		String uri = String.format(//
 				"/api/%s/%s?", type, record[0], params);
 
 		return BarcodeRequest.fromURI(uri);
 	}
 
-	private static ArrayList<CachedBarcode> generateBarcodes(//
-			ArrayList<BarcodeRequest> requests) throws GenerationException {
+	private static ArrayList<CachedBarcode> generateBarcodes(ArrayList<BarcodeRequest> requests) {
 		LibMetrics.hitMethodRunCounter();
 
 		ArrayList<CachedBarcode> barcodes = new ArrayList<>();
 
 		for (BarcodeRequest request : requests) {
-
-			barcodes.add(BarcodeGenerator.requestBarcode(request));
+			try {
+				barcodes.add(BarcodeGenerator.requestBarcode(request));
+			} catch (GenerationException e) {
+				LibLog.log("server", "Failed to generate bulk barcode.");
+			}
 		}
 
 		return barcodes;

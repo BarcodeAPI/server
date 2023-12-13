@@ -53,24 +53,21 @@ public class Ean8Generator extends CodeGenerator {
 		double qz = options.optDouble("qz", 4);
 		int height = options.optInt("height", 25);
 
-		synchronized (generator) {
+		generator.doQuietZone(true);
+		generator.setQuietZone(qz);
+		generator.setHeight(height);
+		generator.setModuleWidth(moduleWidth);
 
-			generator.doQuietZone(true);
-			generator.setQuietZone(qz);
-			generator.setHeight(height);
-			generator.setModuleWidth(moduleWidth);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
+		canvasProvider.setColors(//
+				Color.decode("0x" + options.optString("bg", "ffffff")), //
+				Color.decode("0x" + options.optString("fg", "000000")));
 
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
-			canvasProvider.setColors(//
-					Color.decode("0x" + options.optString("bg", "ffffff")), //
-					Color.decode("0x" + options.optString("fg", "000000")));
+		generator.generateBarcode(canvasProvider, data);
+		canvasProvider.finish();
+		out.close();
 
-			generator.generateBarcode(canvasProvider, data);
-			canvasProvider.finish();
-			out.close();
-
-			return out.toByteArray();
-		}
+		return out.toByteArray();
 	}
 }

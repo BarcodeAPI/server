@@ -80,12 +80,15 @@ public class BarcodeGenerator {
 			throw new GenerationException(ExceptionType.FAILED);
 		} finally {
 
-			// release the generator back to the pool
-			pool.release(generator);
+			if (generator != null) {
+
+				// release the generator back to the pool
+				pool.release(generator);
+			}
 		}
 
 		// add to cache if allowed
-		if (request.useCache()) {
+		if (request.useCache() && barcode != null) {
 
 			BarcodeCache.addBarcode(request.getType(), data, barcode);
 		}

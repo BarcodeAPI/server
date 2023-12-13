@@ -9,21 +9,32 @@ function init() {
 
 	var root = window.location.href;
 	var start = root.indexOf("?");
-	if (start <= 0) {
-		return;
+	if (start >= 0) {
+
+		// parse page arguments as barcodes to render
+		var params = root.substring(start + 1);
+		var requests = params.split("&");
+		for (var request in requests) {
+
+			addFromText(requests[request]);
+		}
 	}
 
-	var params = root.substring(start + 1);
-	var requests = params.split("&");
-	for (var request in requests) {
+	document.getElementById("input").focus();
+}
 
-		addFromText(requests[request]);
-	}
+function goHome() {
+	window.location = "/index.html";
 }
 
 function addFromInput() {
 	var input = document.getElementById("input");
-	addFromText(input.value);
+	var inStr = input.value.split("\n");
+
+	for (var x in inStr) {
+		addFromText(inStr[x]);
+	}
+
 	input.value = "";
 	input.focus();
 }
@@ -36,8 +47,16 @@ function addFromText(text) {
 	}
 }
 
-function onTextChanged(event) {
-	if (event.keyCode === 13) {
+function onKeyDown(e) {
+	if (e.keyCode === 13) {
+		addFromInput();
+		e.preventDefault();
+		return;
+	}
+}
+
+function onKeyUp(e) {
+	if (e.target.value.endsWith("\n")) {
 		addFromInput();
 	}
 }
@@ -55,9 +74,9 @@ function generateImage(request) {
 
 function multiShare() {
 	var url = "/multi.html?";
-	for ( var x in barcodes) {
+	for (var x in barcodes) {
 		url += barcodes[x] + "&";
 	}
-	
+
 	window.location = url;
 }

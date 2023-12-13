@@ -26,19 +26,16 @@ public class RoyalMailGenerator extends CodeGenerator {
 
 		int dpi = options.optInt("dpi", 150);
 
-		synchronized (generator) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
+		canvasProvider.setColors(//
+				Color.decode("0x" + options.optString("bg", "ffffff")), //
+				Color.decode("0x" + options.optString("fg", "000000")));
 
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
-			canvasProvider.setColors(//
-					Color.decode("0x" + options.optString("bg", "ffffff")), //
-					Color.decode("0x" + options.optString("fg", "000000")));
+		generator.generateBarcode(canvasProvider, data);
+		canvasProvider.finish();
+		out.close();
 
-			generator.generateBarcode(canvasProvider, data);
-			canvasProvider.finish();
-			out.close();
-
-			return out.toByteArray();
-		}
+		return out.toByteArray();
 	}
 }

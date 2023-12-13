@@ -71,7 +71,7 @@ public abstract class CodeGenerator {
 			LibLog.clogF("barcode", "I0601", getType().toString(), data, img.length, time);
 
 			return img;
-		} catch (Exception e) {
+		} catch (Exception | Error e) {
 
 			// update global and engine counters
 			LibMetrics.instance().hitCounter("render", "fail");

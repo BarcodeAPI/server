@@ -4,22 +4,27 @@
 }
 
 .multis-barcode {
-	margin-top: 8mm;
-	margin-bottom: 8mm;
+	margin-top: 3em;
+	margin-bottom: 3em;
 	max-width: 80mm;
-	margin-left: auto;
-	margin-right: auto;
+	margin-left: 3em;
+	margin-right: 3em;
 }
 
 #barcodes {
-	margin-left: auto;
-	margin-right: auto;
+	margin-top: 1.5em;
 	border-spacing: 10mm;
 }
 
 .controller {
 	position: fixed;
-	top: 0px;
+	top: 0.5em;
+	left: 0.5em;
+}
+
+#input {
+	resize: none;
+	height: 1.85em;
 }
 
 @media print {

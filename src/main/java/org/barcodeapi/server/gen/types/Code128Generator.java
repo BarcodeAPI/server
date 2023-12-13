@@ -42,43 +42,40 @@ public class Code128Generator extends CodeGenerator {
 		String text = options.optString("text", "bottom");
 		String pattern = options.optString("pattern", null);
 
-		synchronized (generator) {
+		switch (text) {
 
-			switch (text) {
+		case "bottom":
+			generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
+			break;
 
-			case "bottom":
-				generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
-				break;
+		case "top":
+			generator.setMsgPosition(HumanReadablePlacement.HRP_TOP);
+			break;
 
-			case "top":
-				generator.setMsgPosition(HumanReadablePlacement.HRP_TOP);
-				break;
-
-			case "none":
-			default:
-				generator.setMsgPosition(HumanReadablePlacement.HRP_NONE);
-				break;
-			}
-
-			generator.doQuietZone(true);
-			generator.setQuietZone(qz);
-			generator.setHeight(height);
-			generator.setModuleWidth(moduleWidth);
-
-			generator.setPattern(pattern);
-			generator.setFontSize(12 * moduleWidth);
-
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
-			canvasProvider.setColors(//
-					Color.decode("0x" + options.optString("bg", "ffffff")), //
-					Color.decode("0x" + options.optString("fg", "000000")));
-
-			generator.generateBarcode(canvasProvider, data);
-			canvasProvider.finish();
-			out.close();
-
-			return out.toByteArray();
+		case "none":
+		default:
+			generator.setMsgPosition(HumanReadablePlacement.HRP_NONE);
+			break;
 		}
+
+		generator.doQuietZone(true);
+		generator.setQuietZone(qz);
+		generator.setHeight(height);
+		generator.setModuleWidth(moduleWidth);
+
+		generator.setPattern(pattern);
+		generator.setFontSize(12 * moduleWidth);
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
+		canvasProvider.setColors(//
+				Color.decode("0x" + options.optString("bg", "ffffff")), //
+				Color.decode("0x" + options.optString("fg", "000000")));
+
+		generator.generateBarcode(canvasProvider, data);
+		canvasProvider.finish();
+		out.close();
+
+		return out.toByteArray();
 	}
 }

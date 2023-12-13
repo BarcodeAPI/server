@@ -135,10 +135,10 @@ public abstract class RestHandler extends AbstractHandler {
 
 			// call the implemented method
 			this.onRequest(ctx, response);
-		} catch (Exception e) {
+		} catch (Exception | Error e) {
 
-			// TODO handle this
-			e.printStackTrace();
+			// log the error
+			LibLog._clog("E0699", e);
 		} finally {
 
 			// calculate total processing time
@@ -147,6 +147,7 @@ public abstract class RestHandler extends AbstractHandler {
 			// hit the time and status counters
 			getStats().hitCounter(runTime, "request", "time");
 			getStats().hitCounter(runTime, "request", "target", _NAME, "time");
+			getStats().hitCounter("request", "result", ("_" + response.getStatus()));
 			getStats().hitCounter("request", "target", _NAME, "result", ("_" + response.getStatus()));
 		}
 	}
