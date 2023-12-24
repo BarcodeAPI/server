@@ -22,9 +22,13 @@ import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.tasks.BarcodeCleanupTask;
 import org.barcodeapi.server.tasks.LimiterCleanupTask;
+import org.barcodeapi.server.tasks.LimiterMintingTask;
 import org.barcodeapi.server.tasks.SessionCleanupTask;
 import org.barcodeapi.server.tasks.StatsDumpTask;
 import org.barcodeapi.server.tasks.WatchdogTask;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
@@ -113,11 +117,17 @@ public class ServerLauncher {
 		handlers = new HandlerCollection();
 		server.setHandler(handlers);
 
+		server.setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", -1);
+
+		HttpConfiguration httpConfig = new HttpConfiguration();
+		httpConfig.setRequestHeaderSize(16 * 1024);
+
 		// Bind server port
 		int portAPI = LibArgs.instance().getInteger("port", 8080);
-		ServerConnector serverConnectorAPI = new ServerConnector(server);
-		serverConnectorAPI.setPort(portAPI);
-		server.addConnector(serverConnectorAPI);
+		ServerConnector serverConnector = new ServerConnector(//
+				server, new HttpConnectionFactory(httpConfig));
+		serverConnector.setPort(portAPI);
+		server.setConnectors(new Connector[] { serverConnector });
 
 		// Setup rest handlers
 		initHandler("/api", BarcodeAPIHandler.class);
@@ -197,6 +207,12 @@ public class ServerLauncher {
 		BackgroundTask limiterCleanup = new LimiterCleanupTask();
 		ServerRuntime.getSystemTimer().schedule(limiterCleanup, 0, //
 				TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES));
+
+		LibLog._clog("I0036");
+		// mint limiter tokens every 5 minutes
+		BackgroundTask limiterMinting = new LimiterMintingTask();
+		ServerRuntime.getSystemTimer().schedule(limiterMinting, 0, //
+				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
 	}
 
 	/**

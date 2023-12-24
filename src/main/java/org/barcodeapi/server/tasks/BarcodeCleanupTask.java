@@ -24,7 +24,6 @@ public class BarcodeCleanupTask extends BackgroundTask {
 			active += cache.count();
 		}
 
-		System.gc();
 		LibLog._clogF("I2201", removed, active);
 	}
 }

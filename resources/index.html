@@ -21,7 +21,6 @@
 <body onload="loadHash(); init();">
 	<div class="wrap container-fluid">
 
-		<!-- Header -->
 		<div class="header row middle-xs between-xs">
 			<div class="col-xs-12 col-sm-3">
 				<div class="logo">
@@ -32,20 +31,20 @@
 				<div class="row end-xs middle-xs">
 					<div class="col-xs">
 						<h4>
-							<a href="/contact.html">FEEDBACK & SUPPORT</a> <br /> <span
-								class="contact">support@barcodeapi.org</span>
+							<a href="/support.html">FEEDBACK & SUPPORT</a>
+							<br />
+							<span class="contact">support@barcodeapi.org</span>
 						</h4>
 					</div>
 					<div class="share-icon email">
-						<a href="mailto:support@barcodeapi.org"> <img src="/img/email.svg" alt="Contact Support"
-								aria-label="Share Icon">
+						<a href="mailto:support@barcodeapi.org">
+							<img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
 						</a>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<!-- Page Body -->
 		<div class="row main start-xs between-xs">
 			<div class="choose-barcode-type col-xs-12 col-sm-6">
 				<h3>CHOOSE YOUR BARCODE TYPE</h3>
@@ -78,7 +77,13 @@
 							Resolution<br />DPI:&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" id="option-dpi" value="150"
 								min="50" max="500" onchange="optionsChange()" size="6" step="5" /><br />
 							Height:&nbsp;<input type="number" id="option-height" value="25" min="10" max="500"
-								onchange="optionsChange()" size="6" /></div>
+								onchange="optionsChange()" size="6" /><br />
+							Text:&nbsp;&nbsp;<select id="option-hrt" onchange="optionsChange()">
+								<option value="top">Top</option>
+								<option value="bottom" selected>Bottom</option>
+								<option value="none">None</option>
+							</select>
+						</div>
 					</div>
 				</div>
 				<div class="col-xs-8 bulk-upload">
@@ -141,7 +146,6 @@
 			</div>
 		</div>
 
-		<!-- Footer -->
 		<div class="notice row middle-xs top-sm between-xs">
 			<div class="col-xs-12 col-sm-8">
 				<p>
@@ -164,7 +168,7 @@
 			</div>
 			<div class="col-xs-12 col-sm-4">
 				<div class="docs-link row start-xs end-sm">
-					<a href="/manual.pdf" target="_blank" class="col-xs"> <span class="docs-icon"><img
+					<a href="/api.html" class="col-xs"> <span class="docs-icon"><img
 								src="/img/docs.svg"></span>&nbsp;<span>Learn
 							More</span>
 					</a>

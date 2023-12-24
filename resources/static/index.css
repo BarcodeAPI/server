@@ -144,6 +144,8 @@ h4 {
 #barcode-options-input {
 	display: none;
 	grid-template-columns: 1fr 1fr 1fr;
+	margin-bottom: -1.5em;
+	margin-top: 0.5em;
 }
 
 .barcode-options input:invalid {
@@ -269,7 +271,7 @@ button[disabled] {
 }
 
 .bulk-upload {
-	margin-top: 2rem;
+	margin-top: 2.5rem;
 	margin-bottom: 2rem;
 }
 
@@ -632,10 +634,19 @@ button[disabled] {
 	margin: 0;
 }
 
+.half {
+	width: 50%;
+}
+
 .left {
 	float: left;
 }
 
 .right {
 	float: right;
+}
+
+.center {
+	margin-left: auto;
+	margin-right: auto;
 }

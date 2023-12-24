@@ -24,7 +24,5 @@ public class LimiterCleanupTask extends BackgroundTask {
 		int removedByKey = byKey.expireOldObjects();
 		int activeByKey = byKey.count();
 		LibLog._clogF("I2601", "KEY", removedByKey, activeByKey);
-
-		System.gc();
 	}
 }

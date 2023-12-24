@@ -109,27 +109,10 @@ public abstract class RestHandler extends AbstractHandler {
 			return;
 		}
 
-		try {
-
-			// check if allowed by rate limiter
-			if (apiRateLimited && !ctx.getLimiter().allowRequest()) {
-
-				// hit rate limit counters and log
-				getStats().hitCounter("request", "limited");
-				getStats().hitCounter("request", "target", _NAME, "limited");
-				LibLog._clogF("E0609", ctx.getLimiter().getCaller());
-
-				// fail with rate limited status
-				response.setStatus(HttpServletResponse.SC_PAYMENT_REQUIRED);
-				response.setHeader("X-ClientRateLimited", "YES");
-				return;
-			}
-		} finally {
-
-			// allow user to see their token count
-			response.setHeader("X-RateLimit-Tokens", //
-					String.format("%.2f", ctx.getLimiter().numTokens()));
-		}
+		// mint tokens and send count to user
+		ctx.getLimiter().touch();
+		response.setHeader("X-RateLimit-Tokens", //
+				String.format("%.2f", ctx.getLimiter().numTokens()));
 
 		try {
 

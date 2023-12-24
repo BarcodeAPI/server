@@ -1,13 +1,13 @@
 {
 	"cache": {
 		"barcode": {
-			"life": 259200
+			"life": 4320
 		},
 		"session": {
-			"life": 86400
+			"life": 1440
 		},
 		"limiter": {
-			"life": 86400
+			"life": 1440
 		}
 	},
 	"blacklist": [
@@ -18,7 +18,7 @@
 		"admin": "5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8"
 	},
 	"limits": {
-		"enable" : false,
+		"enable": false,
 		"enforce": true,
 		"default": 10000,
 		"ips": {

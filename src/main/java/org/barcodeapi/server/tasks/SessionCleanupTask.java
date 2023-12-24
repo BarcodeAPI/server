@@ -19,7 +19,6 @@ public class SessionCleanupTask extends BackgroundTask {
 		int removed = sessions.expireOldObjects();
 		int active = sessions.count();
 
-		System.gc();
 		LibLog._clogF("I2401", removed, active);
 	}
 }

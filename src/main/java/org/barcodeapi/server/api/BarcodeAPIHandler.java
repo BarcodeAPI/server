@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
-import org.barcodeapi.server.core.RateLimitException;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.gen.BarcodeGenerator;
@@ -55,11 +54,8 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		try {
 
-			try {
-
-				// try to spend tokens
-				ctx.getLimiter().spendTokens(request.getCost());
-			} catch (RateLimitException e) {
+			// try to spend tokens
+			if (!ctx.getLimiter().spendTokens(request.getCost())) {
 
 				// return rate limited barcode to user
 				throw new GenerationException(ExceptionType.LIMITED);
@@ -76,32 +72,33 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			switch (e.getExceptionType()) {
 			case LIMITED:
-				// serve rate limit code
+				// send rate limit response code
 				barcode = RTE;
 				response.setStatus(HttpServletResponse.SC_PAYMENT_REQUIRED);
+				response.setHeader("X-ClientRateLimited", "YES");
 				break;
 
 			case BLACKLIST:
-				// serve blacklist code
+				// serve blacklist response code
 				barcode = BLK;
 				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 				break;
 
-			case INVALID:
 			case EMPTY:
-				// serve error code
+			case INVALID:
+				// send internal server response code
 				barcode = ERR;
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				break;
 
 			case BUSY:
-				// serve error code
+				// send server busy response code
 				barcode = BSY;
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				break;
 
 			case FAILED:
-				// serve error code
+				// send server error response code
 				barcode = EXC;
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				break;

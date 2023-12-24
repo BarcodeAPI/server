@@ -11,13 +11,15 @@ const appOptions = {
 		'colorFG': "000000",
 		'colorBG': "FFFFFF",
 		'dpi': 150,
-		'height': 25
+		'height': 25,
+		'hrt': 'bottom'
 	},
 	'render': {
 		'colorFG': "000000",
 		'colorBG': "FFFFFF",
 		'dpi': 150,
-		'height': 25
+		'height': 25,
+		'hrt': 'bottom'
 	},
 	'trim': {
 		'before': (window.localStorage.getItem("trimBefore") != "false"),
@@ -156,6 +158,15 @@ function optionsChange() {
 		inBG.value = appOptions.render.colorBG;
 	}
 
+	// parse render options (Text)
+	var inHRT = document.getElementById("option-hrt");
+	if (inHRT.checkValidity()) {
+		appOptions.render.hrt = inHRT.value;
+	} else {
+		appOptions.render.hrt = appOptions.default.hrt;
+		inHRT.value = appOptions.render.hrt;
+	}
+
 	// regenerate the barcode
 	genCode();
 }
@@ -249,6 +260,10 @@ function buildOptionsString() {
 
 	if (appOptions.render.height != appOptions.default.height) {
 		options += "&height=" + appOptions.render.height;
+	}
+
+	if (appOptions.render.hrt != appOptions.default.hrt) {
+		options += "&text=" + appOptions.render.hrt;
 	}
 
 	return options;
