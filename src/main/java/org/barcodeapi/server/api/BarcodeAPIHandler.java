@@ -82,6 +82,8 @@ public class BarcodeAPIHandler extends RestHandler {
 		case "b64": // serve as base64
 			String encoded = Base64.getEncoder().encodeToString(barcode.getData());
 			byte[] encodedBytes = encoded.getBytes();
+		
+			// add headers and write data to stream
 			response.setHeader("Content-Type", "image/png");
 			response.setHeader("Content-Encoding", "base64");
 			response.setHeader("Content-Length", Long.toString(encodedBytes.length));
@@ -96,7 +98,8 @@ public class BarcodeAPIHandler extends RestHandler {
 					((download) ? "attachment; " : "") + //
 							("filename=" + barcode.getNice() + ".png"));
 
-			// add content headers and write data to stream
+			// add headers and write data to stream
+			response.setCharacterEncoding(null);
 			response.setHeader("Content-Type", "image/png");
 			response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
 			response.getOutputStream().write(barcode.getData());
