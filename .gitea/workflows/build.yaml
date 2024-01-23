@@ -1,0 +1,31 @@
+name: Java Build
+
+on: [push]
+
+jobs:
+  Build-Artifacts:
+    runs-on: linux-amd64
+    steps:
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+    - name: Checkout application repository
+      uses: actions/checkout@v4
+      with:
+        repo-token: ${{ secrets.GIT_TOKEN }}     
+    - name: Build artifacts with Maven
+      run: mvn clean install
+    - name: Package the server
+      run: |
+        mkdir server/
+        cp -rv config server/
+        cp -rv resources server/
+        cp target/server.jar server/                     
+    - name: Archive job artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: |
+          server/
