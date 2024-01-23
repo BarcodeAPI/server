@@ -71,7 +71,10 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		// add cache headers
 		if (request.useCache()) {
-			response.setHeader("Cache-Control", "max-age=86400, public");
+			long tplus = 86400;
+			long expires = System.currentTimeMillis() + (tplus * 1000);
+			response.setDateHeader("Expires", expires);
+			response.setHeader("Cache-Control", String.format("max-age=%d, public", tplus));
 		}
 
 		// barcode details
