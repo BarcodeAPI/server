@@ -8,6 +8,7 @@
 	],
 	"generator": ".PDF417Generator",
 	"threads": 2,
+	"priority": 45,
 	"cost": {
 		"simple": 1,
 		"custom": 2

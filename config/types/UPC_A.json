@@ -9,6 +9,7 @@
 	],
 	"generator": ".UPCAGenerator",
 	"threads": 2,
+	"priority": 95,
 	"cost": {
 		"simple": 1,
 		"custom": 2

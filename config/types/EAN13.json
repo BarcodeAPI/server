@@ -8,6 +8,7 @@
 	],
 	"generator": ".Ean13Generator",
 	"threads": 2,
+	"priority": 85,
 	"cost": {
 		"simple": 1,
 		"custom": 2

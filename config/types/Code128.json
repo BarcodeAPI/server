@@ -8,6 +8,7 @@
 	],
 	"generator": ".Code128Generator",
 	"threads": 2,
+	"priority": 65,
 	"cost": {
 		"simple": 1,
 		"custom": 2

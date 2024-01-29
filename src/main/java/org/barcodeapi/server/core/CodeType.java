@@ -13,6 +13,7 @@ public class CodeType {
 	private final String generator;
 	private final int threads;
 
+	private final int priority;
 	private final String patternA;
 	private final String patternE;
 
@@ -33,6 +34,7 @@ public class CodeType {
 		this.threads = config.getInt("threads");
 
 		// get barcode patterns
+		this.priority = config.getInt("priority");
 		this.patternA = config.getJSONObject("pattern").getString("auto");
 		this.patternE = config.getJSONObject("pattern").getString("extended");
 
@@ -63,6 +65,10 @@ public class CodeType {
 
 	public int getNumThreads() {
 		return threads;
+	}
+
+	public int getPriority() {
+		return priority;
 	}
 
 	public String getPatternAuto() {

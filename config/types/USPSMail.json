@@ -7,6 +7,7 @@
 	],
 	"generator": ".USPSMailGenerator",
 	"threads": 2,
+	"priority": 10,
 	"cost": {
 		"simple": 1,
 		"custom": 2

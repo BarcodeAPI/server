@@ -81,11 +81,11 @@ function createBarcodeTypes(types) {
 
 	for (t in types) {
 		var node = document.createElement("a");
-		node.setAttribute('id', "type-" + types[t].target);
+		node.setAttribute('id', "type-" + types[t].targets[0]);
 		node.setAttribute('rel', 'tooltip');
 		node.classList.add('top');
 		node.innerHTML = types[t].name;
-		node.setAttribute('onclick', 'setType("' + types[t].target + '")');
+		node.setAttribute('onclick', 'setType(\'' + types[t].targets[0] + '\')');
 		node.setAttribute('title', types[t].description[appOptions.language]);
 		menu.appendChild(node);
 	}
@@ -373,13 +373,14 @@ function getCode(code) {
 	}
 
 	for (let i in types) {
-		if (types[i].target === code) {
+		if (types[i].targets[0] === code) {
 			return types[i];
 		}
 	}
 }
 
 async function setPattern(hash) {
+	console.log("here: " + hash);
 
 	const code = getCode(hash);
 	const textInput = document.getElementById("text");

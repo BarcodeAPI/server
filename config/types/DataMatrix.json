@@ -10,6 +10,7 @@
 	],
 	"generator": ".DataMatrixGenerator",
 	"threads": 2,
+	"priority": 55,
 	"cost": {
 		"simple": 1,
 		"custom": 2

@@ -9,6 +9,7 @@
 	],
 	"generator": ".ITF14Generator",
 	"threads": 2,
+	"priority": 48,
 	"cost": {
 		"simple": 1,
 		"custom": 2
