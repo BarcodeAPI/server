@@ -30,6 +30,7 @@ public class SessionListHandler extends RestHandler {
 		JSONObject output = new JSONObject()//
 				.put("sessions", sessions)//
 				.put("count", sessions.length());
+		response.setHeader("Content-Type", "application/json");
 		response.getOutputStream().println(output.toString(4));
 	}
 }

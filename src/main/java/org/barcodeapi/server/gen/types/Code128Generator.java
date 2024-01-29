@@ -7,7 +7,6 @@ import java.io.IOException;
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
@@ -18,7 +17,6 @@ public class Code128Generator extends CodeGenerator {
 	private Code128Bean generator;
 
 	public Code128Generator() {
-		super(CodeType.Code128);
 
 		// Setup Code128 generator
 		generator = new Code128Bean();

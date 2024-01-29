@@ -4,9 +4,10 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.core.CodeType;
+import org.barcodeapi.server.core.CodeTypes;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -19,10 +20,13 @@ public class TypesHandler extends RestHandler {
 	@Override
 	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
 
+		CodeTypes types = CodeTypes.inst();
+
 		// loop all supported types
 		JSONArray output = new JSONArray();
-		for (CodeType type : CodeType.values()) {
-			output.put(type.toJSON());
+		for (String type : types.getTypes()) {
+
+			output.put(CodeType.toJSON(types.getType(type)));
 		}
 
 		// print response to client

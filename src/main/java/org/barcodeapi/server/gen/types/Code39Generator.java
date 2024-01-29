@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
@@ -17,7 +16,6 @@ public class Code39Generator extends CodeGenerator {
 	private Code39Bean generator;
 
 	public Code39Generator() {
-		super(CodeType.Code39);
 
 		// Setup Code39 generator
 		generator = new Code39Bean();

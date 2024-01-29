@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.int2of5.ITF14Bean;
@@ -20,7 +19,6 @@ public class ITF14Generator extends CodeGenerator {
 	 * Constructor for the ITF-14 generator.
 	 */
 	public ITF14Generator() {
-		super(CodeType.ITF14);
 
 		// Setup ITF-14 generator
 		generator = new ITF14Bean();

@@ -7,6 +7,7 @@
  * Barcode render options
  */
 const appOptions = {
+	'language': 'en',
 	'default': {
 		'colorFG': "000000",
 		'colorBG': "FFFFFF",
@@ -85,7 +86,7 @@ function createBarcodeTypes(types) {
 		node.classList.add('top');
 		node.innerHTML = types[t].name;
 		node.setAttribute('onclick', 'setType("' + types[t].target + '")');
-		node.setAttribute('title', types[t].description);
+		node.setAttribute('title', types[t].description[appOptions.language]);
 		menu.appendChild(node);
 	}
 	addTooltips();
@@ -522,6 +523,7 @@ function displayTokenCount() {
 		})
 		.then(data => {
 
-			document.getElementById("token_count").innerHTML = data;
+			var count = (data == -1) ? "Unlimited" : data;
+			document.getElementById("token_count").innerHTML = count;
 		});
 }

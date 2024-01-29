@@ -9,8 +9,8 @@ import java.util.Set;
 import org.barcodeapi.core.ServerRuntime;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeGenerators;
+import org.barcodeapi.server.core.CodeTypes;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 
 import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
 
@@ -70,17 +70,19 @@ public class WatchdogTask extends BackgroundTask {
 		}
 
 		// loop each type of barcode generator
-		for (CodeType type : CodeType.values()) {
+		for (String type : CodeTypes.inst().getTypes()) {
+
+			// access generator pool
 			LibObjectPooler<CodeGenerator> pool = //
 					CodeGenerators.getInstance().getGeneratorPool(type);
 
-			// hit counters for generator pool
-			getStats().setValue(pool.getMaxAge(), "generators", type.name(), "pool", "maxAge");
-			getStats().setValue(pool.getMaxIdle(), "generators", type.name(), "pool", "maxIdle");
-			getStats().setValue(pool.getMaxLockCount(), "generators", type.name(), "pool", "maxLockCount");
-			getStats().setValue(pool.getMaxPoolSize(), "generators", type.name(), "pool", "maxPoolSize");
-			getStats().setValue(pool.getNumLocked(), "generators", type.name(), "pool", "numLocked");
-			getStats().setValue(pool.getPoolSize(), "generators", type.name(), "pool", "size");
+			// update counters for generator pool
+			getStats().setValue(pool.getMaxAge(), "generators", type, "pool", "maxAge");
+			getStats().setValue(pool.getMaxIdle(), "generators", type, "pool", "maxIdle");
+			getStats().setValue(pool.getMaxLockCount(), "generators", type, "pool", "maxLockCount");
+			getStats().setValue(pool.getMaxPoolSize(), "generators", type, "pool", "maxPoolSize");
+			getStats().setValue(pool.getNumLocked(), "generators", type, "pool", "numLocked");
+			getStats().setValue(pool.getPoolSize(), "generators", type, "pool", "size");
 		}
 	}
 }

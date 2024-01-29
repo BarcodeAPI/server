@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 
 import com.google.zxing.BarcodeFormat;
@@ -22,7 +21,6 @@ public class AztecGenerator extends CodeGenerator {
 	private AztecWriter generator;
 
 	public AztecGenerator() {
-		super(CodeType.Aztec);
 
 		generator = new AztecWriter();
 	}

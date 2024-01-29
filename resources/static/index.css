@@ -634,8 +634,44 @@ button[disabled] {
 	margin: 0;
 }
 
+.barcode-template {
+	margin-top: 4.5em;
+	margin-bottom: 3em;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	align-items: center;
+}
+
+.barcode-type-info {
+	grid-column: 1;
+}
+
+.barcode-type-example {
+	grid-column: 2;
+}
+
+.barcode-type-example img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin: 0 auto;
+	max-width: 300px;
+	max-height: 180px;
+}
+
+.type-name {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.type-title {
+	font-size: 24px;
+}
+
 .half {
 	width: 50%;
+	display: flex;
+	flex-direction: column;
 }
 
 .left {

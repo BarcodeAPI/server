@@ -18,13 +18,51 @@
 
 .controller {
 	position: fixed;
-	top: 0.5em;
-	left: 0.5em;
+	top: 0px;
+	left: 0px;
+	display: inline-grid;
+}
+
+.button {
+	border: none;
+	color: white;
+	padding: 10px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+}
+
+.button-home {
+	grid-column: 1;
+	background-color: rgb(0, 0, 255);
+}
+
+.button-generate {
+	grid-column: 3;
+	background-color: #04AA6D;
+}
+
+.button-share {
+	grid-column: 4;
+	background-color: rgb(255, 128, 0);
 }
 
 #input {
+	grid-column: 2;
+	width: 350px;
+	height: 36px;
 	resize: none;
-	height: 1.85em;
+
+	padding: 8px;
+	box-sizing: border-box;
+	border: 2px solid #ccc;
+	background-color: #f8f8f8;
+	font-size: 16px;
+}
+
+#input:focus {
+	outline: none;
 }
 
 @media print {

@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.Cookie;
 
-import org.barcodeapi.server.core.AppConfig;
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.core.CachedObject;
 import org.json.JSONArray;
 import org.json.JSONObject;

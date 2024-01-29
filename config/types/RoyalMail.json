@@ -1,0 +1,22 @@
+{
+	"name": "RoyalMail",
+	"display": "Royal Mail",
+	"target": [
+		"royal",
+		"royal-mail"
+	],
+	"generator": ".RoyalMailGenerator",
+	"threads": 2,
+	"cost": {
+		"simple": 1,
+		"custom": 2
+	},
+	"example": "11212345612345678",
+	"pattern": {
+		"auto": "^[0-9]{1,32}$",
+		"extended": "^[0-9]{1,32}$"
+	},
+	"description": {
+		"en": "Royal Mail"
+	}
+}

@@ -25,6 +25,7 @@ public class SessionFlushHandler extends RestHandler {
 		JSONObject output = new JSONObject()//
 				.put("message", "sessions flushed")//
 				.put("count", count);
+		response.setHeader("Content-Type", "application/json");
 		response.getOutputStream().println(output.toString(4));
 	}
 }

@@ -9,9 +9,10 @@
 <body onload="init();">
 	<div id="wrapper">
 		<div class="controller">
-			<button onclick="goHome();">Home</button><textarea id="input" onkeydown="onKeyDown(event);"
-				onkeyup="onKeyUp(event);" cols="35"></textarea>
-			<button onclick="addFromInput();">Add Code</button><button onclick="multiShare();">Share</button>
+			<button class="button button-home" onclick="goHome();">Home</button><textarea id="input"
+				onkeydown="onKeyDown(event);" onkeyup="onKeyUp(event);" cols="35"></textarea>
+			<button class="button button-generate" onclick="addFromInput();">Add Code</button><button
+				class="button button-share" onclick="multiShare();">Share</button>
 		</div>
 		<div id="barcodes"></div>
 </body>

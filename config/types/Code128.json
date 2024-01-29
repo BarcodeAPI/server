@@ -1,0 +1,23 @@
+{
+	"name": "Code128",
+	"display": "Code 128",
+	"target": [
+		"128",
+		"code-128",
+		"code128"
+	],
+	"generator": ".Code128Generator",
+	"threads": 2,
+	"cost": {
+		"simple": 1,
+		"custom": 2
+	},
+	"example": "Try Me!",
+	"pattern": {
+		"auto": "^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$",
+		"extended": "^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]+$"
+	},
+	"description": {
+		"en": "A medium densisty alphanumeric barcode with a larger character set."
+	}
+}

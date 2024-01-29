@@ -9,7 +9,6 @@ import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
@@ -20,7 +19,6 @@ public class Ean13Generator extends CodeGenerator {
 	private EAN13Bean generator;
 
 	public Ean13Generator() {
-		super(CodeType.EAN13);
 
 		generator = new EAN13Bean();
 	}

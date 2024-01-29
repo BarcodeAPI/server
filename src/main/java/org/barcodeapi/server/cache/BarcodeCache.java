@@ -2,20 +2,20 @@ package org.barcodeapi.server.cache;
 
 import org.barcodeapi.server.core.CachedObject;
 import org.barcodeapi.server.core.ObjectCache;
-import org.barcodeapi.server.gen.CodeType;
+import org.barcodeapi.server.gen.BarcodeRequest;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
 public class BarcodeCache {
 
-	public static ObjectCache getCache(CodeType type) {
-		return ObjectCache.getCache(type.toString());
+	public static ObjectCache getCache(String type) {
+		return ObjectCache.getCache(type);
 	}
 
-	public static CachedBarcode getBarcode(CodeType type, String data) {
+	public static CachedBarcode getBarcode(BarcodeRequest request) {
 		LibMetrics.hitMethodRunCounter();
 
-		CachedObject o = getCache(type).get(data);
+		CachedObject o = getCache(request.getType().getName()).get(request.getData());
 		if (o == null) {
 			return null;
 		}
@@ -23,7 +23,7 @@ public class BarcodeCache {
 		return (CachedBarcode) o;
 	}
 
-	public static void addBarcode(CodeType type, String data, CachedBarcode object) {
+	public static void addBarcode(String type, String data, CachedBarcode object) {
 		LibMetrics.hitMethodRunCounter();
 
 		getCache(type).put(data, object);

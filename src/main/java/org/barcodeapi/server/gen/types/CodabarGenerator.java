@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.codabar.CodabarBean;
@@ -20,7 +19,6 @@ public class CodabarGenerator extends CodeGenerator {
 	 * Constructor for the Codabar generator.
 	 */
 	public CodabarGenerator() {
-		super(CodeType.CODABAR);
 
 		// Setup Codabar generator
 		generator = new CodabarBean();
