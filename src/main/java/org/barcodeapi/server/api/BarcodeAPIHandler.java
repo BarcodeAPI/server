@@ -143,6 +143,7 @@ public class BarcodeAPIHandler extends RestHandler {
 							("filename=" + barcode.getNice() + ".png"));
 
 			// add content headers and write data to stream
+			response.setCharacterEncoding(null);
 			response.setHeader("Content-Type", "image/png");
 			response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
 			response.getOutputStream().write(barcode.getData());
