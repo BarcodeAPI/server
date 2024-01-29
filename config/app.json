@@ -40,7 +40,6 @@
 		"QRCode",
 		"DataMatrix",
 		"PDF417",
-		"USPSMail",
-		"RoyalMail"
+		"USPSMail"
 	]
 }

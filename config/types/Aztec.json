@@ -6,6 +6,7 @@
 	],
 	"generator": ".AztecGenerator",
 	"threads": 2,
+	"priority": 52,
 	"cost": {
 		"simple": 1,
 		"custom": 2

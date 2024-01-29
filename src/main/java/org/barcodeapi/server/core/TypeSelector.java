@@ -45,14 +45,20 @@ public class TypeSelector {
 	public static CodeType getTypeFromData(String data) {
 		LibMetrics.hitMethodRunCounter();
 
+		int priority = 0;
+		CodeType type = null;
 		CodeTypes types = CodeTypes.inst();
+
 		for (String name : types.getTypes()) {
-			CodeType type = types.getType(name);
-			if (data.matches(type.getPatternAuto())) {
-				return type;
+			CodeType target = types.getType(name);
+			if (data.matches(target.getPatternAuto())) {
+				if (target.getPriority() > priority) {
+					priority = target.getPriority();
+					type = target;
+				}
 			}
 		}
 
-		return null;
+		return type;
 	}
 }

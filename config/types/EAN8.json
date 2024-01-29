@@ -8,6 +8,7 @@
 	],
 	"generator": ".Ean8Generator",
 	"threads": 2,
+	"priority": 88,
 	"cost": {
 		"simple": 1,
 		"custom": 2
