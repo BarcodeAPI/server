@@ -1,0 +1,86 @@
+<html>
+
+<head>
+	<title>BarcodeAPI.org - API Docs</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<meta name="keywords" content="barcode, barcode app, barcode generator, barcode api, download barcode">
+	<meta name="description"
+		content="Online barcode app: Generate, scan, and download barcodes for free. Get started with our easy-to-use barcode generator!">
+
+	<link rel="icon" type="image/png" href="/static/favicon.png" />
+
+	<script src="/static/api.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="/static/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/layout.css" />
+	<link rel="stylesheet" type="text/css" href="/static/index.css" />
+</head>
+
+<body onload="init('single');">
+	<div class="wrap container-fluid">
+
+		<div class="header row middle-xs between-xs">
+			<div class="col-xs-12 col-sm-3">
+				<a href="/">
+					<div class="logo">
+						<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo" aria-label="Logo">
+					</div>
+				</a>
+			</div>
+			<div class="header-share">
+				<div class="row end-xs middle-xs">
+					<div class="col-xs">
+						<h4>
+							<a href="/support.html">FEEDBACK & SUPPORT</a>
+							<br />
+							<span class="contact">support@barcodeapi.org</span>
+						</h4>
+					</div>
+					<div class="share-icon email">
+						<a href="mailto:support@barcodeapi.org">
+							<img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row center-xs middle-xs">
+
+			<div class="col-xs-12">
+				<div id="barcode-types">
+					<div class="row barcode-template" id="barcode-template">
+						<div class="barcode-type-info">
+							<span class="type-name type-title">-</span>
+							<hr />
+							<br />
+							Cost
+							<br />
+							Basic: <span class="type-cost-basic">-</span>
+							<br />
+							Custom: <span class="type-cost-custom">-</span>
+							<br />
+							Target:&nbsp;<span class="type-target">-</span>
+							<br />
+							Format:&nbsp;<span class="type-format">-</span>
+							<br />
+							<br />
+							<span class="type-description">-</span>
+							<br />
+							<br />
+							Parameters:&nbsp;<span class="type-params">-</span>
+							<br />
+						</div>
+						<div class="barcode-type-example">
+							<img class="type-example" src="" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

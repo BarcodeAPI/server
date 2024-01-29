@@ -1,0 +1,22 @@
+{
+	"name": "USPSMail",
+	"display": "USPS Mail",
+	"target": [
+		"usps",
+		"intelligent-mail"
+	],
+	"generator": ".USPSMailGenerator",
+	"threads": 2,
+	"cost": {
+		"simple": 1,
+		"custom": 2
+	},
+	"example": "0123456709498765432101234567891",
+	"pattern": {
+		"auto": "^[0-9]{1,32}$",
+		"extended": "^[0-9]{1,32}$"
+	},
+	"description": {
+		"en": "USPS Intelligent Mail"
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"name": "QRCode",
+	"display": "QR Code",
+	"target": [
+		"qr",
+		"qr-code",
+		"qrcode"
+	],
+	"generator": ".QRCodeGenerator",
+	"threads": 2,
+	"cost": {
+		"simple": 1,
+		"custom": 2
+	},
+	"example": "QR Barcode",
+	"pattern": {
+		"auto": "^.{1,64}$",
+		"extended": "^.{1,65535}$"
+	},
+	"description": {
+		"en": "A 2D data barcode whose timing markers are aligned at the corners."
+	}
+}

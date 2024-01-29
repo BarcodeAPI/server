@@ -2,10 +2,10 @@ package org.barcodeapi.server.cache;
 
 import java.util.concurrent.TimeUnit;
 
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.core.utils.CodeUtils;
-import org.barcodeapi.server.core.AppConfig;
 import org.barcodeapi.server.core.CachedObject;
-import org.barcodeapi.server.gen.CodeType;
+import org.barcodeapi.server.core.CodeType;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.libextras.LibExtrasHashes;

@@ -1,0 +1,23 @@
+{
+	"name": "PDF417",
+	"display": "PDF-417",
+	"target": [
+		"417",
+		"pdf417",
+		"pdf"
+	],
+	"generator": ".PDF417Generator",
+	"threads": 2,
+	"cost": {
+		"simple": 1,
+		"custom": 2
+	},
+	"example": "PDF - 417",
+	"pattern": {
+		"auto": "^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$",
+		"extended": "^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$"
+	},
+	"description": {
+		"en": "A stacked linear barcode most commonly found on identification cards."
+	}
+}

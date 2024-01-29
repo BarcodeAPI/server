@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.impl.fourstate.USPSIntelligentMailBean;
 
@@ -15,7 +14,6 @@ public class USPSMailGenerator extends CodeGenerator {
 	private USPSIntelligentMailBean generator;
 
 	public USPSMailGenerator() {
-		super(CodeType.USPSMail);
 
 		// Setup Code39 generator
 		generator = new USPSIntelligentMailBean();

@@ -1,0 +1,50 @@
+{
+	"name": "UPC_E",
+	"display": "UPC E",
+	"target": [
+		"e",
+		"upc-e",
+		"upce"
+	],
+	"generator": ".Ean8Generator",
+	"threads": 2,
+	"cost": {
+		"simple": 1,
+		"custom": 2
+	},
+	"example": "01023459",
+	"pattern": {
+		"auto": "^(?=.*0)[0-9]{8}$",
+		"extended": "^(?=.*0)[0-9]{7,8}$"
+	},
+	"description": {
+		"en": "A compact version of UPC-A, removing unneeded '0's."
+	},
+	"options": [
+		{
+			"name": "dpi",
+			"default": 150,
+			"values": "50..300"
+		},
+		{
+			"name": "qz",
+			"default": 4,
+			"values": "0..10"
+		},
+		{
+			"name": "height",
+			"default": 25,
+			"values": "5..150"
+		},
+		{
+			"name": "text",
+			"default": "bottom",
+			"values": "(bottom|top|none)"
+		},
+		{
+			"name": "pattern",
+			"default": "_",
+			"values": "_"
+		}
+	]
+}

@@ -19,6 +19,7 @@ import org.barcodeapi.server.api.SessionDetailsHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.TypesHandler;
 import org.barcodeapi.server.core.BackgroundTask;
+import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.tasks.BarcodeCleanupTask;
 import org.barcodeapi.server.tasks.LimiterCleanupTask;
@@ -110,6 +111,7 @@ public class ServerLauncher {
 	 * Initialize the API REST server.
 	 */
 	private void initApiServer() throws Exception {
+		CodeGenerators.getInstance();
 
 		// Initialize API server
 		LibLog._clog("I0011");
@@ -154,6 +156,7 @@ public class ServerLauncher {
 		resourceHandler.setHandler(new StaticHandler(server));
 		resourceHandler.setContextPath("/");
 		handlers.addHandler(resourceHandler);
+
 	}
 
 	/**

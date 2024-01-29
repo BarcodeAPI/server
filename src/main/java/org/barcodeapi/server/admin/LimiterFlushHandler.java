@@ -26,6 +26,7 @@ public class LimiterFlushHandler extends RestHandler {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			JSONObject output = new JSONObject()//
 					.put("message", "limiter not set");
+			response.setHeader("Content-Type", "application/json");
 			response.getOutputStream().println(output.toString(4));
 			return;
 		}
@@ -46,6 +47,7 @@ public class LimiterFlushHandler extends RestHandler {
 		JSONObject output = new JSONObject()//
 				.put("message", "limiter flushed")//
 				.put("flushed", flushed);
+		response.setHeader("Content-Type", "application/json");
 		response.getOutputStream().println(output.toString(4));
 	}
 }

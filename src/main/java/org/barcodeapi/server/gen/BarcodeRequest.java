@@ -1,6 +1,7 @@
 package org.barcodeapi.server.gen;
 
 import org.barcodeapi.core.utils.CodeUtils;
+import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.core.TypeSelector;
 import org.json.JSONObject;
 
@@ -73,16 +74,13 @@ public class BarcodeRequest {
 			type = TypeSelector.getTypeFromData(data);
 		}
 
-		// calculate the request cost
-		int cost = type.getBaseCost();
-
 		// create and return request object
 		BarcodeRequest r = new BarcodeRequest();
 		r.type = type;
 		r.data = data;
 		r.cached = cached;
 		r.options = options;
-		r.cost = cost;
+		r.cost = (cached ? type.getCostBasic() : type.getCostCustom());
 		return r;
 	}
 
@@ -122,12 +120,8 @@ public class BarcodeRequest {
 		return options;
 	}
 
-	/**
-	 * Returns the token cost to render the barcode.
-	 * 
-	 * @return
-	 */
 	public int getCost() {
+
 		return cost;
 	}
 }

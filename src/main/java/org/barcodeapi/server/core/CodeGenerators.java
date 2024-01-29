@@ -1,23 +1,11 @@
 package org.barcodeapi.server.core;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
-import org.barcodeapi.server.gen.types.AztecGenerator;
-import org.barcodeapi.server.gen.types.CodabarGenerator;
-import org.barcodeapi.server.gen.types.Code128Generator;
-import org.barcodeapi.server.gen.types.Code39Generator;
-import org.barcodeapi.server.gen.types.DataMatrixGenerator;
-import org.barcodeapi.server.gen.types.Ean13Generator;
-import org.barcodeapi.server.gen.types.Ean8Generator;
-import org.barcodeapi.server.gen.types.ITF14Generator;
-import org.barcodeapi.server.gen.types.PDF417Generator;
-import org.barcodeapi.server.gen.types.QRCodeGenerator;
-import org.barcodeapi.server.gen.types.RoyalMailGenerator;
-import org.barcodeapi.server.gen.types.UPCAGenerator;
-import org.barcodeapi.server.gen.types.UPCEGenerator;
-import org.barcodeapi.server.gen.types.USPSMailGenerator;
+import org.json.JSONArray;
 
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
@@ -35,36 +23,41 @@ public class CodeGenerators {
 		return codeGenerators;
 	}
 
-	private HashMap<CodeType, LibObjectPooler<CodeGenerator>> generators;
+	private HashMap<String, LibObjectPooler<CodeGenerator>> generators = new HashMap<>();
 
 	private CodeGenerators() {
 
-		generators = new HashMap<CodeType, LibObjectPooler<CodeGenerator>>();
+		JSONArray enabled = AppConfig.get().getJSONArray("types");
 
-		generators.put(CodeType.EAN8, createPooler(Ean8Generator.class));
-		generators.put(CodeType.EAN13, createPooler(Ean13Generator.class));
+		// loop all enabled types
+		for (int x = 0; x < enabled.length(); x++) {
 
-		generators.put(CodeType.UPC_A, createPooler(UPCAGenerator.class));
-		generators.put(CodeType.UPC_E, createPooler(UPCEGenerator.class));
+			String type = enabled.getString(x);
 
-		generators.put(CodeType.ITF14, createPooler(ITF14Generator.class));
+			// load code type from config
+			CodeType config = CodeTypes.inst().loadType(type);
 
-		generators.put(CodeType.CODABAR, createPooler(CodabarGenerator.class));
-
-		generators.put(CodeType.USPSMail, createPooler(USPSMailGenerator.class));
-		generators.put(CodeType.RoyalMail, createPooler(RoyalMailGenerator.class));
-
-		generators.put(CodeType.Code39, createPooler(Code39Generator.class));
-		generators.put(CodeType.Code128, createPooler(Code128Generator.class));
-
-		generators.put(CodeType.Aztec, createPooler(AztecGenerator.class));
-		generators.put(CodeType.QRCode, createPooler(QRCodeGenerator.class));
-		generators.put(CodeType.DataMatrix, createPooler(DataMatrixGenerator.class));
-
-		generators.put(CodeType.PDF417, createPooler(PDF417Generator.class));
+			// setup a pooler for code type
+			generators.put(type, setupBarcodePooler(config));
+		}
 	}
 
-	private LibObjectPooler<CodeGenerator> createPooler(final Class<? extends CodeGenerator> clazz) {
+	@SuppressWarnings("unchecked")
+	private LibObjectPooler<CodeGenerator> setupBarcodePooler(CodeType codeType) {
+
+		final Class<? extends CodeGenerator> clazz;
+		final Constructor<? extends CodeGenerator> constructor;
+
+		try {
+
+			String genClass = codeType.getGeneratorClass();
+			clazz = (Class<? extends CodeGenerator>) Class.forName(genClass);
+			constructor = clazz.getDeclaredConstructor();
+
+		} catch (Exception e) {
+			throw LibLog._log("Failed setting up generator.", e).asException();
+		}
+
 		LibObjectPooler<CodeGenerator> pooler = new LibObjectPooler<CodeGenerator>(3, //
 				new LibObjectPoolerController<CodeGenerator>() {
 
@@ -72,7 +65,7 @@ public class CodeGenerators {
 					public CodeGenerator onCreate() {
 						LibLog._clogF("I0180", clazz.getName());
 						try {
-							return clazz.getConstructor().newInstance();
+							return constructor.newInstance();
 						} catch (Exception | Error e) {
 							e.printStackTrace();
 							return null;
@@ -86,13 +79,15 @@ public class CodeGenerators {
 				});
 
 		pooler.setMaxLockTime(1000);
+		pooler.setMaxIdleTime(15 * 60 * 1000);
+		pooler.setMaxPoolSize(codeType.getNumThreads());
 
 		return pooler;
 	}
 
-	public LibObjectPooler<CodeGenerator> getGeneratorPool(CodeType codeType) {
+	public LibObjectPooler<CodeGenerator> getGeneratorPool(String type) {
 		LibMetrics.hitMethodRunCounter();
 
-		return generators.get(codeType);
+		return generators.get(type);
 	}
 }

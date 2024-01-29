@@ -1,6 +1,6 @@
 package org.barcodeapi.server.limits;
 
-import org.barcodeapi.server.core.AppConfig;
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.core.ObjectCache;
 import org.json.JSONObject;
 
@@ -26,20 +26,8 @@ public class LimiterCache {
 	}
 
 	private static CachedLimiter newByIp(String caller) {
-		JSONObject limits = AppConfig.get().getJSONObject("limits");
 
-		// Check if rate limiter is enforced
-		if (!limits.getBoolean("enforce")) {
-			return new CachedLimiter(caller, -1);
-		}
-
-		long appLimit = limits.getLong("default");
-
-		JSONObject ips = limits.getJSONObject("ips");
-
-		long usrLimit = ips.optLong(caller, appLimit);
-
-		return new CachedLimiter(caller, usrLimit);
+		return newLimiter("ips", caller);
 	}
 
 	private static final String CACHE_KEY = "LIMITS-KEY";
@@ -60,16 +48,19 @@ public class LimiterCache {
 	}
 
 	private static CachedLimiter newByKey(String caller) {
+
+		return newLimiter("keys", caller);
+	}
+
+	private static CachedLimiter newLimiter(String index, String caller) {
+
 		JSONObject limits = AppConfig.get().getJSONObject("limits");
 
-		// Check if rate limiter is enforced
-		if (!limits.getBoolean("enforce")) {
-			return new CachedLimiter(caller, -1);
-		}
+		long appLimit = limits.getLong("default");
 
-		JSONObject keys = limits.getJSONObject("keys");
+		JSONObject idx = limits.getJSONObject(index);
 
-		long usrLimit = keys.optLong(caller, 0);
+		long usrLimit = idx.optLong(caller, appLimit);
 
 		return new CachedLimiter(caller, usrLimit);
 	}

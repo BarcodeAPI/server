@@ -9,7 +9,6 @@ import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
 import org.krysalis.barcode4j.tools.UnitConv;
@@ -19,7 +18,6 @@ public class Ean8Generator extends CodeGenerator {
 	private EAN8Bean generator;
 
 	public Ean8Generator() {
-		super(CodeType.EAN8);
 
 		generator = new EAN8Bean();
 	}

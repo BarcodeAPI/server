@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.upcean.UPCEBean;
@@ -16,11 +15,7 @@ public class UPCEGenerator extends CodeGenerator {
 
 	private UPCEBean generator;
 
-	/**
-	 * 
-	 */
 	public UPCEGenerator() {
-		super(CodeType.UPC_E);
 
 		// Setup Code39 generator
 		generator = new UPCEBean();
@@ -74,4 +69,5 @@ public class UPCEGenerator extends CodeGenerator {
 
 		return out.toByteArray();
 	}
+
 }

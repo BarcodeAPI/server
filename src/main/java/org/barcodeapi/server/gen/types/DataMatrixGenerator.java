@@ -7,7 +7,6 @@ import java.io.IOException;
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.impl.datamatrix.DataMatrixBean;
 import org.krysalis.barcode4j.impl.datamatrix.SymbolShapeHint;
@@ -20,7 +19,6 @@ public class DataMatrixGenerator extends CodeGenerator {
 	 * https://en.wikipedia.org/wiki/Data_Matrix
 	 */
 	public DataMatrixGenerator() {
-		super(CodeType.DataMatrix);
 
 		generator = new DataMatrixBean();
 	}

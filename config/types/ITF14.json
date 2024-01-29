@@ -1,0 +1,24 @@
+{
+	"name": "ITF14",
+	"display": "ITF14",
+	"target": [
+		"14",
+		"itf-14",
+		"scc-14",
+		"gtin"
+	],
+	"generator": ".ITF14Generator",
+	"threads": 2,
+	"cost": {
+		"simple": 1,
+		"custom": 2
+	},
+	"example": "98765432109213",
+	"pattern": {
+		"auto": "",
+		"extended": "^[0-9]{14}$"
+	},
+	"description": {
+		"en": "Interleaved 2 of 5, type 14."
+	}
+}

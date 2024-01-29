@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 
 import com.google.zxing.BarcodeFormat;
@@ -23,7 +22,6 @@ public class QRCodeGenerator extends CodeGenerator {
 	private QRCodeWriter generator;
 
 	public QRCodeGenerator() {
-		super(CodeType.QRCode);
 
 		generator = new QRCodeWriter();
 	}

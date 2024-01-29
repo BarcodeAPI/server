@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.pdf417.PDF417Bean;
@@ -20,7 +19,6 @@ public class PDF417Generator extends CodeGenerator {
 	 * https://en.wikipedia.org/wiki/Data_Matrix
 	 */
 	public PDF417Generator() {
-		super(CodeType.PDF417);
 
 		generator = new PDF417Bean();
 	}

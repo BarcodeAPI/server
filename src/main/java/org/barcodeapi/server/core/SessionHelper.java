@@ -4,6 +4,7 @@ import java.util.Base64;
 
 import javax.servlet.http.Cookie;
 
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.session.CachedSession;
 import org.barcodeapi.server.session.SessionCache;
 import org.eclipse.jetty.server.Request;

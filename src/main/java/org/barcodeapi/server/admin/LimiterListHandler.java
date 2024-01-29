@@ -38,6 +38,7 @@ public class LimiterListHandler extends RestHandler {
 		JSONObject output = new JSONObject()//
 				.put("ips", byIp)//
 				.put("keys", byKey);
+		response.setHeader("Content-Type", "application/json");
 		response.getOutputStream().println(output.toString(4));
 	}
 }

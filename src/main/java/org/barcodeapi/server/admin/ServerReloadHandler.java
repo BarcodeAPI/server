@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.server.core.AppConfig;
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
@@ -24,6 +24,7 @@ public class ServerReloadHandler extends RestHandler {
 		// print response to client
 		JSONObject output = new JSONObject()//
 				.put("message", "config reloaded");
+		response.setHeader("Content-Type", "application/json");
 		response.getOutputStream().println(output.toString(4));
 	}
 }
