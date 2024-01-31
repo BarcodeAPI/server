@@ -115,7 +115,7 @@ public class BarcodeAPIHandler extends RestHandler {
 		}
 
 		// add type and barcode detail headers
-		response.setHeader("X-Barcode-Type", barcode.getType().toString());
+		response.setHeader("X-Barcode-Type", barcode.getType().getName());
 		response.setHeader("X-Barcode-Content", barcode.getEncoded());
 
 		switch (request.getOptions().optString("format", "png")) {
