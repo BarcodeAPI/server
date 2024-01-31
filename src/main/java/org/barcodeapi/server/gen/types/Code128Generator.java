@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
@@ -20,12 +19,6 @@ public class Code128Generator extends CodeGenerator {
 
 		// Setup Code128 generator
 		generator = new Code128Bean();
-	}
-
-	@Override
-	public String onValidateRequest(String data) {
-
-		return CodeUtils.parseControlChars(data);
 	}
 
 	@Override

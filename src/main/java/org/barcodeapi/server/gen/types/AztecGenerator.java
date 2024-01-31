@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
 
@@ -23,12 +22,6 @@ public class AztecGenerator extends CodeGenerator {
 	public AztecGenerator() {
 
 		generator = new AztecWriter();
-	}
-
-	@Override
-	public String onValidateRequest(String data) {
-
-		return CodeUtils.parseControlChars(data);
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
@@ -21,12 +20,6 @@ public class DataMatrixGenerator extends CodeGenerator {
 	public DataMatrixGenerator() {
 
 		generator = new DataMatrixBean();
-	}
-
-	@Override
-	public String onValidateRequest(String data) {
-
-		return CodeUtils.parseControlChars(data);
 	}
 
 	@Override

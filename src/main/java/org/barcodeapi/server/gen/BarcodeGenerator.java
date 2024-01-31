@@ -1,9 +1,11 @@
 package org.barcodeapi.server.gen;
 
 import org.barcodeapi.core.AppConfig;
+import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.CodeGenerators;
+import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.json.JSONArray;
@@ -24,7 +26,8 @@ public class BarcodeGenerator {
 		LibMetrics.hitMethodRunCounter();
 
 		// name of renderer
-		String name = request.getType().getName();
+		CodeType type = request.getType();
+		String name = type.getName();
 
 		// check for valid render data
 		String data = request.getData();
@@ -44,7 +47,7 @@ public class BarcodeGenerator {
 		}
 
 		// validate code format
-		if (!data.matches(request.getType().getPatternExtended())) {
+		if (!data.matches(type.getPatternExtended())) {
 
 			throw new GenerationException(ExceptionType.INVALID, //
 					new Throwable("Invalid data for selected code type"));
@@ -65,7 +68,7 @@ public class BarcodeGenerator {
 
 		// get the generator pool
 		LibObjectPooler<CodeGenerator> pool = //
-				generators.getGeneratorPool(request.getType().getName());
+				generators.getGeneratorPool(type.getName());
 
 		CodeGenerator generator = null;
 
@@ -81,19 +84,24 @@ public class BarcodeGenerator {
 			LibMetrics.instance().hitCounter("render", "count");
 			LibMetrics.instance().hitCounter("render", "type", name, "count");
 
+			// encode control characters
+			String encoded = data;
+			if (type.getAllowNonprinting()) {
+				encoded = CodeUtils.parseControlChars(data);
+			}
+
 			// any additional generator validations
-			String validated = generator.onValidateRequest(data);
+			String validated = generator.onValidateRequest(encoded);
 
 			// render new image and get the bytes
 			byte[] png = generator.onRender(validated, request.getOptions());
 
+			// calculate run time and log generation
 			int time = (int) (System.currentTimeMillis() - timeStart);
-
-			// log the render
 			LibLog.clogF("barcode", "I0601", name, data, png.length, time);
 
 			// create the object to be cached
-			barcode = new CachedBarcode(request.getType(), data, png);
+			barcode = new CachedBarcode(type, data, png);
 
 		} catch (LibObjectPoolerException e) {
 
@@ -138,7 +146,7 @@ public class BarcodeGenerator {
 		// add to cache if allowed
 		if (request.useCache() && barcode != null) {
 
-			BarcodeCache.addBarcode(request.getType().getName(), data, barcode);
+			BarcodeCache.addBarcode(type.getName(), data, barcode);
 		}
 
 		return barcode;

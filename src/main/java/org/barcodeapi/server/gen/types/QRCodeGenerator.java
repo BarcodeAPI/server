@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
 
@@ -24,12 +23,6 @@ public class QRCodeGenerator extends CodeGenerator {
 	public QRCodeGenerator() {
 
 		generator = new QRCodeWriter();
-	}
-
-	@Override
-	public String onValidateRequest(String data) {
-
-		return CodeUtils.parseControlChars(data);
 	}
 
 	@Override
