@@ -13,6 +13,7 @@
 		"simple": 1,
 		"custom": 2
 	},
+	"nonprinting": false,
 	"example": "01023459",
 	"pattern": {
 		"auto": "^[0-9]{8}$",

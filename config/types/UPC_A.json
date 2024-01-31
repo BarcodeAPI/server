@@ -14,6 +14,7 @@
 		"simple": 1,
 		"custom": 2
 	},
+	"nonprinting": false,
 	"example": "123456789012",
 	"pattern": {
 		"auto": "^(?=.*0)[0-9]{12}$",

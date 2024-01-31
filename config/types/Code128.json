@@ -13,6 +13,7 @@
 		"simple": 1,
 		"custom": 2
 	},
+	"nonprinting": true,
 	"example": "Try Me!",
 	"pattern": {
 		"auto": "^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$",

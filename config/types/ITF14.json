@@ -14,6 +14,7 @@
 		"simple": 1,
 		"custom": 2
 	},
+	"nonprinting": false,
 	"example": "98765432109213",
 	"pattern": {
 		"auto": "",

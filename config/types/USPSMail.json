@@ -12,12 +12,13 @@
 		"simple": 1,
 		"custom": 2
 	},
+	"nonprinting": false,
 	"example": "0123456709498765432101234567891",
 	"pattern": {
 		"auto": "^[0-9]{1,32}$",
 		"extended": "^[0-9]{1,32}$"
 	},
 	"description": {
-		"en": "USPS Intelligent Mail"
+		"en": "Used by the United States Postal Service for Intelligent Mail sorting."
 	}
 }

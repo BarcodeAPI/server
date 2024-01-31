@@ -15,6 +15,7 @@
 		"simple": 1,
 		"custom": 2
 	},
+	"nonprinting": true,
 	"example": "Data Matrix Barcode",
 	"pattern": {
 		"auto": "^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$",

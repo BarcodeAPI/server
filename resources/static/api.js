@@ -33,15 +33,17 @@ function addType(mode, type) {
 	var link = ("/api/" + type.targets[0] + "/" + type.example);
 	info.querySelector(".type-example").src = link;
 
-	info.querySelector(".type-name").innerHTML = type.name.replace("_", "-");
+	info.querySelector(".type-name").innerHTML = type.display;
 	info.querySelector(".type-target").innerHTML = type.targets[0];
 	info.querySelector(".type-cost-basic").innerHTML = type.cost;
 
 	switch (mode) {
 		case "single":
-			//info.querySelector(".type-format").innerHTML = type.pattern;
+			info.querySelector(".type-format").innerHTML = type.pattern;
 			info.querySelector(".type-description").innerHTML = type.description[language];
-			//info.querySelector(".type-cost-custom").innerHTML = type.cost;
+			info.querySelector(".type-cost-basic").innerHTML = type.costBasic;
+			info.querySelector(".type-cost-custom").innerHTML = type.costCustom;
+			info.querySelector(".type-nonprinting").innerHTML = type.nonprinting;
 			//		info.querySelector(".type-parameters").innerHTML = type.parameters;
 			break;
 		case "all":

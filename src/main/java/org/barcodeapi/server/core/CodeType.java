@@ -10,6 +10,8 @@ public class CodeType {
 	private final JSONObject config;
 
 	private final String name;
+	private final String display;
+
 	private final String generator;
 	private final int threads;
 
@@ -18,6 +20,8 @@ public class CodeType {
 	private final String patternE;
 
 	private final String[] targets;
+
+	private final boolean nonprinting;
 
 	private final String example;
 
@@ -28,6 +32,7 @@ public class CodeType {
 
 		// generator name
 		this.name = config.getString("name");
+		this.display = config.getString("display");
 
 		// generator config
 		this.generator = (GEN_ROOT + config.getString("generator"));
@@ -45,6 +50,8 @@ public class CodeType {
 			this.targets[x] = target.getString(x);
 		}
 
+		this.nonprinting = config.getBoolean("nonprinting");
+
 		this.example = config.getString("example");
 
 		this.description = config.getJSONObject("description");
@@ -57,6 +64,10 @@ public class CodeType {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getDisplayNme() {
+		return display;
 	}
 
 	public String getGeneratorClass() {
@@ -91,7 +102,11 @@ public class CodeType {
 		return 20;
 	}
 
-	private String getExample() {
+	public boolean getAllowNonprinting() {
+		return nonprinting;
+	}
+
+	public String getExample() {
 		return example;
 	}
 
@@ -107,10 +122,13 @@ public class CodeType {
 	public static JSONObject toJSON(CodeType type) {
 		return new JSONObject()//
 				.put("name", type.getName())//
+				.put("display", type.getDisplayNme())//
 				.put("pattern", type.getPatternExtended())//
 				.put("example", type.getExample())//
+				.put("nonprinting", type.getAllowNonprinting())//
+				.put("costBasic", type.getCostBasic())//
+				.put("costCustom", type.getCostCustom())//
 				.put("targets", new JSONArray(type.getTargets()))//
 				.put("description", type.getDescription());
 	}
-
 }

@@ -12,6 +12,7 @@
 		"simple": 1,
 		"custom": 2
 	},
+	"nonprinting": false,
 	"example": "11212345612345678",
 	"pattern": {
 		"auto": "^[0-9]{1,32}$",

@@ -13,6 +13,7 @@
 		"simple": 1,
 		"custom": 2
 	},
+	"nonprinting": false,
 	"example": "TRY 39 ME",
 	"pattern": {
 		"auto": "^[A-Z0-9 $.\\/]{1,12}$",
