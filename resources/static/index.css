@@ -7,8 +7,6 @@
 		url(/static/IBM-Plex-Mono.ttf) format('truetype');
 }
 
-
-
 @media print {
 	* {
 		display: none;
@@ -275,11 +273,8 @@ button[disabled] {
 	margin-bottom: 2rem;
 }
 
-@media (hover:none),
-(hover:on-demand),
-(max-width: 500px) and (-webkit-min-device-pixel-ratio: 2) {
+@media (max-width: 768px) {
 
-	/* custom css for "touch targets" */
 	.bulk-upload {
 		display: none;
 	}
