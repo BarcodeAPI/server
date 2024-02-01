@@ -10,8 +10,8 @@
 	"threads": 2,
 	"priority": 58,
 	"cost": {
-		"simple": 1,
-		"custom": 2
+		"basic": 3,
+		"custom": 5
 	},
 	"nonprinting": true,
 	"example": "QR Barcode",

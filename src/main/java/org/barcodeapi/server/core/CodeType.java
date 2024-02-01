@@ -19,12 +19,14 @@ public class CodeType {
 	private final String patternA;
 	private final String patternE;
 
-	private final String[] targets;
-
 	private final boolean nonprinting;
 
-	private final String example;
+	private final String[] targets;
 
+	private final int costBasic;
+	private final int costCustom;
+
+	private final String example;
 	private final JSONObject description;
 
 	private CodeType(JSONObject config) {
@@ -43,6 +45,9 @@ public class CodeType {
 		this.patternA = config.getJSONObject("pattern").getString("auto");
 		this.patternE = config.getJSONObject("pattern").getString("extended");
 
+		// has nonprinting support
+		this.nonprinting = config.getBoolean("nonprinting");
+
 		// setup list of targets
 		JSONArray target = config.getJSONArray("target");
 		this.targets = new String[target.length()];
@@ -50,10 +55,13 @@ public class CodeType {
 			this.targets[x] = target.getString(x);
 		}
 
-		this.nonprinting = config.getBoolean("nonprinting");
+		// get barcode costs
+		JSONObject costs = config.getJSONObject("cost");
+		this.costBasic = costs.getInt("basic");
+		this.costCustom = costs.getInt("custom");
 
+		// get example and description
 		this.example = config.getString("example");
-
 		this.description = config.getJSONObject("description");
 	}
 
@@ -90,20 +98,20 @@ public class CodeType {
 		return patternE;
 	}
 
+	public boolean getAllowNonprinting() {
+		return nonprinting;
+	}
+
 	public String[] getTargets() {
 		return targets;
 	}
 
 	public int getCostBasic() {
-		return 1;
+		return costBasic;
 	}
 
 	public int getCostCustom() {
-		return 20;
-	}
-
-	public boolean getAllowNonprinting() {
-		return nonprinting;
+		return costCustom;
 	}
 
 	public String getExample() {

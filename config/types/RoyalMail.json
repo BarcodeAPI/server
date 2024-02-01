@@ -9,8 +9,8 @@
 	"threads": 2,
 	"priority": 8,
 	"cost": {
-		"simple": 1,
-		"custom": 2
+		"basic": 1,
+		"custom": 1
 	},
 	"nonprinting": false,
 	"example": "11212345612345678",

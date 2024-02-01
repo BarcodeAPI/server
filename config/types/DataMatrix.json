@@ -12,8 +12,8 @@
 	"threads": 2,
 	"priority": 55,
 	"cost": {
-		"simple": 1,
-		"custom": 2
+		"basic": 3,
+		"custom": 5
 	},
 	"nonprinting": true,
 	"example": "Data Matrix Barcode",

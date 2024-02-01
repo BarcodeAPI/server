@@ -380,7 +380,6 @@ function getCode(code) {
 }
 
 async function setPattern(hash) {
-	console.log("here: " + hash);
 
 	const code = getCode(hash);
 	const textInput = document.getElementById("text");
