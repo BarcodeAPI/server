@@ -84,7 +84,7 @@ function createBarcodeTypes(types) {
 		node.setAttribute('id', "type-" + types[t].targets[0]);
 		node.setAttribute('rel', 'tooltip');
 		node.classList.add('top');
-		node.innerHTML = types[t].name;
+		node.innerHTML = types[t].display;
 		node.setAttribute('onclick', 'setType(\'' + types[t].targets[0] + '\')');
 		node.setAttribute('title', types[t].description[appOptions.language]);
 		menu.appendChild(node);
@@ -387,7 +387,7 @@ async function setPattern(hash) {
 
 	if (code !== null) {
 		textInput.setAttribute("pattern", code.pattern);
-		document.getElementById("select-picker").innerHTML = code.name;
+		document.getElementById("select-picker").innerHTML = code.display;
 	} else {
 		textInput.setAttribute("pattern", '.*');
 	}

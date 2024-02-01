@@ -1,4 +1,51 @@
 {
+	"types": [
+		"UPC_E",
+		"UPC_A",
+		"EAN8",
+		"EAN13",
+		"CODABAR",
+		"ITF14",
+		"Code39",
+		"Code128",
+		"Aztec",
+		"QRCode",
+		"DataMatrix",
+		"PDF417",
+		"USPSMail"
+	],
+	"tasks" : [
+		{
+			"name" : "Watchdog",
+			"impl" : ".WatchdogTask",
+			"interval" : 15
+		},
+		{
+			"name" : "Stats",
+			"impl" : ".StatsDumpTask",
+			"interval" : 300
+		},
+		{
+			"name" : "Session Cleanup",
+			"impl" : ".SessionCleanupTask",
+			"interval" : 1800
+		},
+		{
+			"name" : "Barcode Cleanup",
+			"impl" : ".BarcodeCleanupTask",
+			"interval" : 3600
+		},
+		{
+			"name" : "Limiter Cleanup",
+			"impl" : ".LimiterCleanupTask",
+			"interval" : 3600
+		},
+		{
+			"name" : "Limiter Minting",
+			"impl": ".LimiterMintingTask",
+			"interval" : 300
+		}
+	],
 	"cache": {
 		"barcode": {
 			"life": 4320
@@ -26,20 +73,5 @@
 		"keys": {
 			"test000005": 50
 		}
-	},
-	"types": [
-		"UPC_E",
-		"UPC_A",
-		"EAN8",
-		"EAN13",
-		"CODABAR",
-		"ITF14",
-		"Code39",
-		"Code128",
-		"Aztec",
-		"QRCode",
-		"DataMatrix",
-		"PDF417",
-		"USPSMail"
-	]
+	}
 }

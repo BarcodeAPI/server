@@ -40,7 +40,7 @@ public class CodeTypes {
 
 		} catch (IOException e) {
 
-			throw LibLog._log("Failed loading type config.", e).asException();
+			throw LibLog._clog("E0049", e).asException();
 		}
 	}
 

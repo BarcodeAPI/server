@@ -55,7 +55,7 @@ public class CodeGenerators {
 			constructor = clazz.getDeclaredConstructor();
 
 		} catch (Exception e) {
-			throw LibLog._log("Failed setting up generator.", e).asException();
+			throw LibLog._clog("E0059", e).asException();
 		}
 
 		LibObjectPooler<CodeGenerator> pooler = new LibObjectPooler<CodeGenerator>(3, //
