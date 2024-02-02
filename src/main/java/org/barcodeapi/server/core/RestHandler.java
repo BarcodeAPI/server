@@ -109,7 +109,7 @@ public abstract class RestHandler extends AbstractHandler {
 			return;
 		}
 
-		// mint tokens and send count to user
+		// send token count to user
 		ctx.getLimiter().touch();
 		response.setHeader("X-RateLimit-Tokens", //
 				String.format("%.2f", ctx.getLimiter().numTokens()));

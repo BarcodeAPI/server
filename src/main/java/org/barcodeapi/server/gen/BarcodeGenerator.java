@@ -25,7 +25,10 @@ public class BarcodeGenerator {
 	public static CachedBarcode requestBarcode(BarcodeRequest request) throws GenerationException {
 		LibMetrics.hitMethodRunCounter();
 
-		// name of renderer
+		// start request processing timer
+		long timeStart = System.currentTimeMillis();
+
+		// get the type of renderer
 		CodeType type = request.getType();
 		String name = type.getName();
 
@@ -33,27 +36,29 @@ public class BarcodeGenerator {
 		String data = request.getData();
 		if (data == null || data.equals("")) {
 
+			// fail on empty requests
 			throw new GenerationException(ExceptionType.EMPTY);
 		}
 
-		// match against blacklist
+		// match against blacklist entries
 		JSONArray blacklist = AppConfig.get().getJSONArray("blacklist");
 		for (int x = 0; x < blacklist.length(); x++) {
 
+			// fail if request matches blacklist entry
 			if (data.matches(blacklist.getString(x))) {
-
 				throw new GenerationException(ExceptionType.BLACKLIST);
 			}
 		}
 
-		// validate code format
+		// validate barcode pattern
 		if (!data.matches(type.getPatternExtended())) {
 
+			// fail if request does not match pattern
 			throw new GenerationException(ExceptionType.INVALID, //
-					new Throwable("Invalid data for selected code type"));
+					new Throwable("Invalid data for selected code type."));
 		}
 
-		// image object
+		// the barcode image object
 		CachedBarcode barcode = null;
 
 		// is cache allowed
@@ -72,9 +77,6 @@ public class BarcodeGenerator {
 
 		CodeGenerator generator = null;
 
-		// start timer and render
-		long timeStart = System.currentTimeMillis();
-
 		try {
 
 			// get a generator from the pool
@@ -90,7 +92,7 @@ public class BarcodeGenerator {
 				encoded = CodeUtils.parseControlChars(data);
 			}
 
-			// any additional generator validations
+			// run implementation specific validations
 			String validated = generator.onValidateRequest(encoded);
 
 			// render new image and get the bytes
@@ -103,14 +105,10 @@ public class BarcodeGenerator {
 			// create the object to be cached
 			barcode = new CachedBarcode(type, data, png);
 
-		} catch (LibObjectPoolerException e) {
-
-			// update global and engine counters
-			LibMetrics.instance().hitCounter("render", "busy");
-			LibMetrics.instance().hitCounter("render", "type", name, "busy");
-
-			// failed if unable to get object from pool
-			throw new GenerationException(ExceptionType.BUSY);
+			// add to cache if allowed
+			if (request.useCache()) {
+				BarcodeCache.addBarcode(type.getName(), data, barcode);
+			}
 
 		} catch (GenerationException e) {
 
@@ -120,6 +118,15 @@ public class BarcodeGenerator {
 
 			// pass it up
 			throw e;
+
+		} catch (LibObjectPoolerException e) {
+
+			// update global and engine counters
+			LibMetrics.instance().hitCounter("render", "busy");
+			LibMetrics.instance().hitCounter("render", "type", name, "busy");
+
+			// failed if unable to get object from pool
+			throw new GenerationException(ExceptionType.BUSY);
 
 		} catch (Exception | Error e) {
 
@@ -136,17 +143,10 @@ public class BarcodeGenerator {
 			LibMetrics.instance().hitCounter(time, "render", "time");
 			LibMetrics.instance().hitCounter(time, "render", "type", name, "time");
 
+			// release the generator back to the pool
 			if (generator != null) {
-
-				// release the generator back to the pool
 				pool.release(generator);
 			}
-		}
-
-		// add to cache if allowed
-		if (request.useCache() && barcode != null) {
-
-			BarcodeCache.addBarcode(type.getName(), data, barcode);
 		}
 
 		return barcode;

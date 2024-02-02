@@ -13,7 +13,6 @@ public class BarcodeRequest {
 	private String data;
 	private boolean cached;
 	private JSONObject options;
-	private int cost;
 
 	private BarcodeRequest() {
 	}
@@ -80,7 +79,6 @@ public class BarcodeRequest {
 		r.data = data;
 		r.cached = cached;
 		r.options = options;
-		r.cost = (cached ? type.getCostBasic() : type.getCostCustom());
 		return r;
 	}
 
@@ -118,10 +116,5 @@ public class BarcodeRequest {
 	 */
 	public JSONObject getOptions() {
 		return options;
-	}
-
-	public int getCost() {
-
-		return cost;
 	}
 }

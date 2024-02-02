@@ -29,16 +29,16 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		try {
 
-			ERR = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
-					"/128/$$@E$$@R$$@R$$@O$$@R$$@"));
-			EXC = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
-					"/128/$$@F$$@A$$@I$$@L$$@E$$@D$$@"));
-			BLK = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
-					"/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
-			RTE = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
-					"/128/$$@RATE$$@$$@LIMIT$$@"));
-			BSY = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
-					"/128/$$@B$$@U$$@S$$@Y$$@"));
+			ERR = BarcodeGenerator.requestBarcode(//
+					BarcodeRequest.fromURI("/128/$$@E$$@R$$@R$$@O$$@R$$@"));
+			EXC = BarcodeGenerator.requestBarcode(//
+					BarcodeRequest.fromURI("/128/$$@F$$@A$$@I$$@L$$@E$$@D$$@"));
+			BLK = BarcodeGenerator.requestBarcode(//
+					BarcodeRequest.fromURI("/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
+			RTE = BarcodeGenerator.requestBarcode(//
+					BarcodeRequest.fromURI("/128/$$@RATE$$@$$@LIMIT$$@"));
+			BSY = BarcodeGenerator.requestBarcode(//
+					BarcodeRequest.fromURI("/128/$$@B$$@U$$@S$$@Y$$@"));
 		} catch (GenerationException e) {
 
 			throw LibLog._clog("E0789", e)//
@@ -54,8 +54,15 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		try {
 
+			// calculate token cost
+			int cost = (request.useCache()) ? //
+					request.getType().getCostBasic() : request.getType().getCostCustom();
+
+			// send token cost to user
+			response.setHeader("X-RateLimit-Cost", Integer.toString(cost));
+
 			// try to spend tokens
-			if (!ctx.getLimiter().spendTokens(request.getCost())) {
+			if (!ctx.getLimiter().spendTokens(cost)) {
 
 				// return rate limited barcode to user
 				throw new GenerationException(ExceptionType.LIMITED);
@@ -63,6 +70,9 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// generate user requested barcode
 			barcode = BarcodeGenerator.requestBarcode(request);
+
+			// set response code okay
+			response.setStatus(HttpServletResponse.SC_OK);
 
 		} catch (GenerationException e) {
 
@@ -102,7 +112,6 @@ public class BarcodeAPIHandler extends RestHandler {
 				barcode = EXC;
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				break;
-
 			}
 		}
 
