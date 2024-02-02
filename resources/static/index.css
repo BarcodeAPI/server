@@ -273,12 +273,21 @@ button[disabled] {
 	margin-bottom: 2rem;
 }
 
+.tokens {
+	margin-top: 1.25em;
+}
+
+.options {
+	margin-top: -0.75em;
+}
+
 @media (max-width: 768px) {
 
 	.bulk-upload {
 		display: none;
 	}
 
+	.tokens,
 	.options,
 	.notice,
 	.footer,
