@@ -13,7 +13,7 @@
 
 	<script src="/static/index.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="/static/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/inc/flexboxgrid.min.css" />
 	<link rel="stylesheet" type="text/css" href="/static/layout.css" />
 	<link rel="stylesheet" type="text/css" href="/static/index.css" />
 </head>
@@ -55,6 +55,10 @@
 				<div class="barcode-types" id="topnav">
 					<a id="type-auto" onclick="setType('auto');">Auto</a>
 				</div>
+				<div class="text-link">
+					Tokens Remaining: <span id="barcode_tokens"></span>
+				</div>
+				<br />
 				<div class="options">
 					<a class="text-link" onclick="toggleShowRenderOptions()">Render
 						Options<img src="/img/chevron-right.svg" class="icon-last" />
@@ -72,7 +76,6 @@
 							Back:&nbsp;<input type="text" id="option-color-bg" value="FFFFFF" size="6" maxlength="6"
 								onchange="optionsChange()" pattern="[0-9A-F]{6}" />
 						</div>
-
 						<div class="barcode-options">
 							Resolution<br />DPI:&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" id="option-dpi" value="150"
 								min="50" max="500" onchange="optionsChange()" size="6" step="5" /><br />

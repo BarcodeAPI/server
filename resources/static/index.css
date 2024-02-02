@@ -4,7 +4,7 @@
 	font-weight: 400;
 	font-display: swap;
 	src: local('IBM Plex Mono'), local('IBMPlexMono'),
-		url(/static/IBM-Plex-Mono.ttf) format('truetype');
+		url(/inc/IBM-Plex-Mono.ttf) format('truetype');
 }
 
 @media print {

@@ -177,6 +177,7 @@ function optionsChange() {
  * 
  * @returns
  */
+var a = null;
 function genCode() {
 
 	// The API target
@@ -239,8 +240,19 @@ function genCode() {
 	}
 	document.getElementById("barcode_image_link").setAttribute("value", url);
 
-	// Update IMG element source
-	document.getElementById("barcode_output").src = url;
+	// Request the image
+	fetch(url)
+		.then(response => {
+
+			// Get the response headers
+			var tokens = response.headers.get('x-ratelimit-tokens');
+			document.getElementById("barcode_tokens").innerHTML = tokens;
+
+			// Update the image blob
+			response.blob().then(blob => {
+				document.getElementById('barcode_output').src = URL.createObjectURL(blob);
+			});
+		});
 }
 
 function buildOptionsString() {
@@ -353,7 +365,6 @@ async function copyImageToClipboard() {
 	}
 }
 
-var types = getTypes();
 function getTypes() {
 
 	const url = location.origin + "/types/";
@@ -392,6 +403,7 @@ async function setPattern(hash) {
 	}
 }
 
+var types = {};
 async function init() {
 
 	setupOptions();
@@ -414,19 +426,6 @@ function setType(type) {
 	location.hash = type;
 	closeMenu();
 	setPattern(type);
-}
-
-function checkIfFileSelected() {
-
-	var submitButton = document.getElementById("generate-bc");
-
-	document.getElementById('csvFile').addEventListener('change', function() {
-		if (this.value.length > 0) {
-			submitButton.removeAttribute("disabled");
-		} else {
-			submitButton.addAttribute("disabled");
-		}
-	});
 }
 
 function addTooltips() {
@@ -513,17 +512,4 @@ function addTooltips() {
 			tooltip.addEventListener("click", remove_tooltip);
 		});
 	}
-}
-
-function displayTokenCount() {
-	fetch('/session/')
-		.then(response => {
-
-			return response.headers.get("x-ratelimit-tokens");
-		})
-		.then(data => {
-
-			var count = (data == -1) ? "Unlimited" : data;
-			document.getElementById("token_count").innerHTML = count;
-		});
 }
