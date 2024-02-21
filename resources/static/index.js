@@ -242,10 +242,8 @@ function genCode() {
 	document.getElementById("barcode_image_link").setAttribute("value", url);
 
 	// Request the image
-	fetch(url)
+	fetch(url, { cache: "no-store" })
 		.then(response => {
-
-			console.log(response);
 
 			// Get the response index
 			var index = response.headers.get("x-ratelimit-index");
