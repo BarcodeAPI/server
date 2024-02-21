@@ -8,6 +8,7 @@
  */
 const appOptions = {
 	'language': 'en',
+	'index': 0,
 	'default': {
 		'colorFG': "000000",
 		'colorBG': "FFFFFF",
@@ -244,9 +245,19 @@ function genCode() {
 	fetch(url)
 		.then(response => {
 
-			// Get the response headers
-			var tokens = response.headers.get('x-ratelimit-tokens');
-			document.getElementById("barcode_tokens").innerHTML = tokens;
+			console.log(response);
+
+			// Get the response index
+			var index = response.headers.get("x-ratelimit-index");
+
+			// Check if cached, or new
+			if (index > appOptions.index) {
+				appOptions.index = index;
+
+				// Upate token count if not cached
+				var tokens = response.headers.get('x-ratelimit-tokens');
+				document.getElementById("barcode_tokens").innerHTML = tokens;
+			}
 
 			// Update the image blob
 			response.blob().then(blob => {
