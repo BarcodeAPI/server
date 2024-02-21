@@ -113,8 +113,6 @@ public abstract class RestHandler extends AbstractHandler {
 		ctx.getLimiter().touch();
 		response.setHeader("X-RateLimit-Tokens", //
 				String.format("%.2f", ctx.getLimiter().numTokens()));
-		response.setHeader("X-RateLimit-Index", //
-				String.format("%d", ctx.getLimiter().getAccessCount()));
 
 		try {
 
