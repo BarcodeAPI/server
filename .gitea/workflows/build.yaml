@@ -26,6 +26,6 @@ jobs:
     - name: Archive job artifact
       uses: actions/upload-artifact@v3
       with:
-        name: artifacts
+        name: server-${{ github.run_id }}
         path: |
           server/
