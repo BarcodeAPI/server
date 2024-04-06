@@ -11,10 +11,10 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '11'
-    - name: Checkout application repository
-      uses: actions/checkout@v4
-      with:
-        repo-token: ${{ secrets.GIT_TOKEN }}     
+    - name: Clone Repository
+      run: |
+        repo="ssh://git@git.mclarkdev.com:2222/${{ gitea.repository }}"
+        echo "Cloning $repo" && git clone --recurse-submodules $repo .
     - name: Build artifacts with Maven
       run: mvn clean install
     - name: Package the server
@@ -26,6 +26,6 @@ jobs:
     - name: Archive job artifact
       uses: actions/upload-artifact@v3
       with:
-        name: artifacts
+        name: server-${{ github.run_id }}
         path: |
           server/
