@@ -26,17 +26,17 @@
 		{
 			"name": "dpi",
 			"default": 150,
-			"values": "50..300"
+			"values": "50 -> 300"
 		},
 		{
 			"name": "qz",
 			"default": 4,
-			"values": "0..10"
+			"values": "0 -> 10"
 		},
 		{
 			"name": "height",
 			"default": 25,
-			"values": "5..150"
+			"values": "5 -> 150"
 		},
 		{
 			"name": "text",
@@ -47,6 +47,16 @@
 			"name": "pattern",
 			"default": "_",
 			"values": "_"
+		},
+		{
+			"name": "bg",
+			"default": "ffffff",
+			"values": "000000 -> ffffff"
+		},
+		{
+			"name": "fg",
+			"default": "000000",
+			"values": "000000 -> ffffff"
 		}
 	]
 }

@@ -195,6 +195,19 @@ button[disabled] {
 	width: 1px;
 }
 
+.code-head {
+	text-align: left;
+	font-weight: bold;
+}
+
+.code {
+	text-align: left;
+}
+
+.help-text {
+	text-align: left;
+}
+
 [type="file"]+label {
 	cursor: pointer;
 	display: inline-block;

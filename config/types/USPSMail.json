@@ -20,5 +20,22 @@
 	},
 	"description": {
 		"en": "Used by the United States Postal Service for Intelligent Mail sorting."
-	}
+	},
+	"options": [
+		{
+			"name": "dpi",
+			"default": 150,
+			"values": "50 -> 300"
+		},
+		{
+			"name": "bg",
+			"default": "ffffff",
+			"values": "000000 -> ffffff"
+		},
+		{
+			"name": "fg",
+			"default": "000000",
+			"values": "000000 -> ffffff"
+		}
+	]
 }
