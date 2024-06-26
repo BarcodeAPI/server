@@ -12,6 +12,11 @@ import org.json.JSONObject;
 
 import com.mclarkdev.tools.libextras.LibExtrasHashes;
 
+/**
+ * SessionHelper.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class SessionHelper {
 
 	public static CachedSession getSession(Request request) {

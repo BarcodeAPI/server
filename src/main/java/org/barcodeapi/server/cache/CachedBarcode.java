@@ -10,6 +10,11 @@ import org.json.JSONObject;
 
 import com.mclarkdev.tools.libextras.LibExtrasHashes;
 
+/**
+ * CachedBarcode.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CachedBarcode extends CachedObject {
 
 	private static final JSONObject conf = AppConfig.get()//

@@ -10,6 +10,11 @@ import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * ServerReloadHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class ServerReloadHandler extends RestHandler {
 
 	public ServerReloadHandler() {

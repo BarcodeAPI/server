@@ -7,6 +7,11 @@ import org.barcodeapi.server.core.ObjectCache;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
+/**
+ * BarcodeCleanupTask.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class BarcodeCleanupTask extends BackgroundTask {
 
 	public BarcodeCleanupTask() {

@@ -11,6 +11,11 @@ import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+/**
+ * TypesHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class TypesHandler extends RestHandler {
 
 	public TypesHandler() {

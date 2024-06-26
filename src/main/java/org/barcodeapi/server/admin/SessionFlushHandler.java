@@ -10,6 +10,11 @@ import org.barcodeapi.server.session.SessionCache;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * SessionFlushHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class SessionFlushHandler extends RestHandler {
 
 	public SessionFlushHandler() {

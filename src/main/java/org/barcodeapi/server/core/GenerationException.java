@@ -1,5 +1,10 @@
 package org.barcodeapi.server.core;
 
+/**
+ * GenerationException.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class GenerationException extends Exception {
 
 	private static final long serialVersionUID = 1L;

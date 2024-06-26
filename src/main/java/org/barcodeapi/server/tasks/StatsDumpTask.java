@@ -9,6 +9,11 @@ import org.barcodeapi.server.core.BackgroundTask;
 import com.mclarkdev.tools.libargs.LibArgs;
 import com.mclarkdev.tools.liblog.LibLog;
 
+/**
+ * StatsDumpTask.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class StatsDumpTask extends BackgroundTask {
 
 	private static final String _TELEM_TARGET = "https://barcodeapi.org/stats/upload";

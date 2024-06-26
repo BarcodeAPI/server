@@ -14,6 +14,11 @@ import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.tools.UnitConv;
 
+/**
+ * Ean13Generator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class Ean13Generator extends CodeGenerator {
 
 	private EAN13Bean generator;

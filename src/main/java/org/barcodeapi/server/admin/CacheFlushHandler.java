@@ -11,6 +11,11 @@ import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * CacheFlushHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CacheFlushHandler extends RestHandler {
 
 	public CacheFlushHandler() {

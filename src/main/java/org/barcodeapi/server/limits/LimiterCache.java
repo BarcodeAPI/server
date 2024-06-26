@@ -6,6 +6,11 @@ import org.json.JSONObject;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
+/**
+ * LimiterCache.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class LimiterCache {
 
 	private static final String CACHE_IP = "LIMITS-IP";

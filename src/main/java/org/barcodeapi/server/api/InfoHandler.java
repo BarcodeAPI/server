@@ -10,6 +10,11 @@ import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * InfoHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class InfoHandler extends RestHandler {
 
 	public InfoHandler() {

@@ -11,6 +11,11 @@ import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.codabar.CodabarBean;
 import org.krysalis.barcode4j.tools.UnitConv;
 
+/**
+ * CodabarGenerator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CodabarGenerator extends CodeGenerator {
 
 	private CodabarBean generator;

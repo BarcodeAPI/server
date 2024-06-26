@@ -14,6 +14,11 @@ import org.barcodeapi.server.gen.CodeGenerator;
 
 import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
 
+/**
+ * WatchdogTask.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class WatchdogTask extends BackgroundTask {
 
 	private final Runtime runtime;

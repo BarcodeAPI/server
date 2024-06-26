@@ -6,6 +6,11 @@ import org.barcodeapi.server.limits.LimiterCache;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
+/**
+ * LimiterCleanupTask.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class LimiterCleanupTask extends BackgroundTask {
 
 	public LimiterCleanupTask() {

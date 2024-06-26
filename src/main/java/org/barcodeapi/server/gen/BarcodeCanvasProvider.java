@@ -14,6 +14,11 @@ import org.krysalis.barcode4j.output.bitmap.BitmapBuilder;
 import org.krysalis.barcode4j.output.bitmap.BitmapEncoderRegistry;
 import org.krysalis.barcode4j.output.java2d.Java2DCanvasProvider;
 
+/**
+ * BarcodeCanvasProvider.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class BarcodeCanvasProvider extends AbstractCanvasProvider {
 
 	private static final String _MIME = "image/x-png";

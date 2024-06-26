@@ -13,6 +13,11 @@ import org.barcodeapi.server.limits.LimiterCache;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * LimiterListHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class LimiterListHandler extends RestHandler {
 
 	public LimiterListHandler() {

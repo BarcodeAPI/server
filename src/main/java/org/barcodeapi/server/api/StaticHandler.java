@@ -12,6 +12,11 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 
+/**
+ * StaticHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class StaticHandler extends RestHandler {
 
 	private ResourceHandler resources;

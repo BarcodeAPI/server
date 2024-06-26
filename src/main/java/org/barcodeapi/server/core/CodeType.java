@@ -3,6 +3,11 @@ package org.barcodeapi.server.core;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * CodeType.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CodeType {
 
 	private final String GEN_ROOT = "org.barcodeapi.server.gen.types";

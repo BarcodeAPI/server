@@ -13,6 +13,11 @@ import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.eclipse.jetty.server.Request;
 
+/**
+ * BulkHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class BulkHandler extends RestHandler {
 
 	private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement("./");

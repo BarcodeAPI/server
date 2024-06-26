@@ -8,6 +8,11 @@ import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
 
+/**
+ * SessionDetailsHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class SessionDetailsHandler extends RestHandler {
 
 	public SessionDetailsHandler() {

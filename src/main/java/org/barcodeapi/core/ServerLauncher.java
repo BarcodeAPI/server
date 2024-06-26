@@ -36,12 +36,13 @@ import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libloggelf.LibLogGELF;
 
 /**
+ * ServerLauncher.java
+ * 
  * This class should handle the processing of the command line arguments passed
  * on startup in addition to the setup of the main Jetty API server and it's
  * associated handlers.
  * 
- * @author Matthew R. Clark, 2020
- *
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class ServerLauncher {
 

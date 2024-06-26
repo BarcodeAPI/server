@@ -6,6 +6,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
+/**
+ * ObjectCache.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class ObjectCache {
 
 	private static ConcurrentHashMap<String, ObjectCache> caches = new ConcurrentHashMap<>();

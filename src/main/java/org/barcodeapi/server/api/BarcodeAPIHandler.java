@@ -16,6 +16,11 @@ import org.json.JSONException;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
+/**
+ * BarcodeAPIHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class BarcodeAPIHandler extends RestHandler {
 
 	private final CachedBarcode ERR;

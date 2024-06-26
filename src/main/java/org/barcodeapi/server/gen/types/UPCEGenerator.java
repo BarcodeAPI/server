@@ -11,6 +11,11 @@ import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.upcean.UPCEBean;
 import org.krysalis.barcode4j.tools.UnitConv;
 
+/**
+ * UPCEGenerator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class UPCEGenerator extends CodeGenerator {
 
 	private UPCEBean generator;

@@ -6,6 +6,11 @@ import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.core.CachedObject;
 import org.json.JSONObject;
 
+/**
+ * CachedLimiter.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CachedLimiter extends CachedObject {
 
 	private static final JSONObject conf = AppConfig.get()//

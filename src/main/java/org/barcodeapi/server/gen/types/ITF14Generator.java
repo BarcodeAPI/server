@@ -11,6 +11,11 @@ import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.int2of5.ITF14Bean;
 import org.krysalis.barcode4j.tools.UnitConv;
 
+/**
+ * ITF14Generator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class ITF14Generator extends CodeGenerator {
 
 	private ITF14Bean generator;

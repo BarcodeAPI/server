@@ -11,6 +11,11 @@ import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
 import org.krysalis.barcode4j.tools.UnitConv;
 
+/**
+ * Code128Generator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class Code128Generator extends CodeGenerator {
 
 	private Code128Bean generator;

@@ -15,6 +15,11 @@ import com.google.zxing.aztec.AztecWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
+/**
+ * AztecGenerator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class AztecGenerator extends CodeGenerator {
 
 	private AztecWriter generator;

@@ -7,6 +7,11 @@ import org.json.JSONObject;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
+/**
+ * BarcodeRequest.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class BarcodeRequest {
 
 	private CodeType type;

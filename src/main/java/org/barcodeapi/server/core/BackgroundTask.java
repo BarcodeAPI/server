@@ -5,6 +5,11 @@ import java.util.TimerTask;
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
+/**
+ * BackgroundTask.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public abstract class BackgroundTask extends TimerTask {
 
 	private final LibMetrics stats = LibMetrics.instance();

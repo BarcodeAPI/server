@@ -3,6 +3,11 @@ package org.barcodeapi.server.gen;
 import org.barcodeapi.server.core.GenerationException;
 import org.json.JSONObject;
 
+/**
+ * CodeGenerator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public abstract class CodeGenerator {
 
 	/**

@@ -14,6 +14,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * CacheDumpHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CacheDumpHandler extends RestHandler {
 
 	public CacheDumpHandler() {

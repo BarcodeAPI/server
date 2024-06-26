@@ -9,6 +9,11 @@ import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.impl.fourstate.USPSIntelligentMailBean;
 
+/**
+ * USPSMailGenerator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class USPSMailGenerator extends CodeGenerator {
 
 	private USPSIntelligentMailBean generator;

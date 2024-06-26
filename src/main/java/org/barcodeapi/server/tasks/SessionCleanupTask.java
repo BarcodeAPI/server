@@ -6,6 +6,11 @@ import org.barcodeapi.server.session.SessionCache;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
+/**
+ * SessionCleanupTask.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class SessionCleanupTask extends BackgroundTask {
 
 	public SessionCleanupTask() {

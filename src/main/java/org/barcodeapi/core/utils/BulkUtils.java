@@ -19,6 +19,11 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
+/**
+ * BulkUtils.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class BulkUtils {
 
 	public static void getZippedBarcodes(int max, InputStream in, OutputStream out)//

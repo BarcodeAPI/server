@@ -9,6 +9,11 @@ import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.impl.fourstate.RoyalMailCBCBean;
 
+/**
+ * RoyalMailGenerator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class RoyalMailGenerator extends CodeGenerator {
 
 	private RoyalMailCBCBean generator;

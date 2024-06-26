@@ -8,6 +8,11 @@ import org.json.JSONObject;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
+/**
+ * CodeUtils.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CodeUtils {
 
 	/**

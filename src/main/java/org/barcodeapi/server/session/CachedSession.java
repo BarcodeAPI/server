@@ -12,6 +12,11 @@ import org.barcodeapi.server.core.CachedObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * CachedSession.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CachedSession extends CachedObject {
 
 	private static final JSONObject conf = AppConfig.get()//

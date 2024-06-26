@@ -8,6 +8,11 @@ import org.json.JSONObject;
 import com.mclarkdev.tools.libextras.LibExtrasStreams;
 import com.mclarkdev.tools.liblog.LibLog;
 
+/**
+ * AppConfig.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class AppConfig {
 
 	private static JSONObject appConfig;

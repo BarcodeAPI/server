@@ -15,6 +15,11 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
 import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
 import com.mclarkdev.tools.libobjectpooler.LibObjectPoolerException;
 
+/**
+ * BarcodeGenerator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class BarcodeGenerator {
 
 	private static final CodeGenerators generators = CodeGenerators.getInstance();

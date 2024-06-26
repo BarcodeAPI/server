@@ -13,6 +13,11 @@ import org.json.JSONObject;
 import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
 import org.krysalis.barcode4j.tools.UnitConv;
 
+/**
+ * Ean8Generator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class Ean8Generator extends CodeGenerator {
 
 	private EAN8Bean generator;

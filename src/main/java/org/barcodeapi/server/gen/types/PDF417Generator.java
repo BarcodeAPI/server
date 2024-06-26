@@ -11,6 +11,11 @@ import org.krysalis.barcode4j.impl.pdf417.PDF417Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
+/**
+ * PDF417Generator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class PDF417Generator extends CodeGenerator {
 
 	private PDF417Bean generator;

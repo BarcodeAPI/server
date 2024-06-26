@@ -5,6 +5,11 @@ import org.barcodeapi.server.limits.LimiterCache;
 import org.barcodeapi.server.session.CachedSession;
 import org.eclipse.jetty.server.Request;
 
+/**
+ * RequestContext.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class RequestContext {
 
 	private final Request request;

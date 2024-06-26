@@ -13,6 +13,11 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
+/**
+ * RestHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public abstract class RestHandler extends AbstractHandler {
 
 	private final String _NAME;
