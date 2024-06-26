@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
@@ -23,6 +24,11 @@ public class PDF417Generator extends CodeGenerator {
 		super(CodeType.PDF417);
 
 		generator = new PDF417Bean();
+	}
+
+	@Override
+	public String onValidateRequest(String data) {
+		return CodeUtils.parseControlChars(data);
 	}
 
 	@Override
