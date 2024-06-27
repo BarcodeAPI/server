@@ -13,6 +13,7 @@
 		"basic": 2,
 		"custom": 3
 	},
+	"checksum": false,
 	"nonprinting": true,
 	"example": "Try Me!",
 	"pattern": {

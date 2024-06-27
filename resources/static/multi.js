@@ -80,3 +80,7 @@ function multiShare() {
 
 	window.location = url;
 }
+
+function printPage() {
+	window.print();
+}

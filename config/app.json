@@ -14,36 +14,36 @@
 		"PDF417",
 		"USPSMail"
 	],
-	"tasks" : [
+	"tasks": [
 		{
-			"name" : "Watchdog",
-			"impl" : ".WatchdogTask",
-			"interval" : 15
+			"name": "Watchdog",
+			"impl": ".WatchdogTask",
+			"interval": 15
 		},
 		{
-			"name" : "Stats",
-			"impl" : ".StatsDumpTask",
-			"interval" : 300
+			"name": "Stats",
+			"impl": ".StatsDumpTask",
+			"interval": 300
 		},
 		{
-			"name" : "Session Cleanup",
-			"impl" : ".SessionCleanupTask",
-			"interval" : 1800
+			"name": "Session Cleanup",
+			"impl": ".SessionCleanupTask",
+			"interval": 1800
 		},
 		{
-			"name" : "Barcode Cleanup",
-			"impl" : ".BarcodeCleanupTask",
-			"interval" : 3600
+			"name": "Barcode Cleanup",
+			"impl": ".BarcodeCleanupTask",
+			"interval": 3600
 		},
 		{
-			"name" : "Limiter Cleanup",
-			"impl" : ".LimiterCleanupTask",
-			"interval" : 3600
+			"name": "Limiter Cleanup",
+			"impl": ".LimiterCleanupTask",
+			"interval": 3600
 		},
 		{
-			"name" : "Limiter Minting",
+			"name": "Limiter Minting",
 			"impl": ".LimiterMintingTask",
-			"interval" : 300
+			"interval": 300
 		}
 	],
 	"cache": {
@@ -66,11 +66,12 @@
 	},
 	"limits": {
 		"enable": true,
-		"default": 10000,
 		"ips": {
+			"__default": 10000,
 			"127.0.0.1": -1
 		},
 		"keys": {
+			"__default": 0,
 			"test000005": 50
 		}
 	}

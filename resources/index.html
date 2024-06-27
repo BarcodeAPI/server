@@ -76,12 +76,14 @@
 								checked />&nbsp;Trim&nbsp;Before
 							<br /> <input type="checkbox" id="option-trim-after" onchange="optionsChange()"
 								checked />&nbsp;Trim&nbsp;After
+							<br /><span>Key</span>&nbsp;<input type="password" id="option-api-key" size="10"
+								maxlength="12" onchange="optionsChange()" />
 						</div>
 						<div class="barcode-options barcode-options-right">
 							Custom&nbsp;Colors<br />Bars:&nbsp;<input type="text" id="option-color-fg" value="000000"
 								size="6" maxlength="6" onchange="optionsChange()" pattern="[0-9A-F]{6}" /><br />
 							Back:&nbsp;<input type="text" id="option-color-bg" value="FFFFFF" size="6" maxlength="6"
-								onchange="optionsChange()" pattern="[0-9A-F]{6}" />
+								onchange="optionsChange()" pattern="[0-9A-F]{6}" /><br />
 						</div>
 						<div class="barcode-options">
 							Resolution<br />DPI:&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" id="option-dpi" value="150"
@@ -99,11 +101,19 @@
 				<div class="col-xs-8 bulk-upload">
 					<h4>Need more barcodes?</h4>
 					<a href="/multi.html" class="text-link"> <img src="/img/barcode.svg" class="icon-first" />MULTIS
-						GENERATOR<img src="/img/chevron-right.svg" class="icon-last" /><br />
+						GENERATOR<img src="/img/chevron-right.svg" class="icon-last" />
 					</a>
+					<br />
 					<a href="/bulk.html" class="text-link"> <img src="/img/barcode.svg" class="icon-first" />BULK
-						BARCODE GENERATOR<img src="/img/chevron-right.svg" class="icon-last" /><br />
+						BARCODE GENERATOR<img src="/img/chevron-right.svg" class="icon-last" />
 					</a>
+					<br />
+					<br />
+					<div>
+						<a id="link-learn-more" class="text-link">More about this barcode!<img
+								src="/img/chevron-right.svg" class="icon-last" />
+						</a>
+					</div>
 				</div>
 			</div>
 			<div class="display-barcode col-xs-12 col-sm-6">

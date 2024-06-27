@@ -12,6 +12,7 @@
 		"basic": 1,
 		"custom": 2
 	},
+	"checksum": false,
 	"nonprinting": false,
 	"example": "0123456709498765432101234567891",
 	"pattern": {

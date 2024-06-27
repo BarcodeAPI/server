@@ -66,9 +66,15 @@ public class RequestContext {
 		this.source = (ref != null) ? ref : "API";
 
 		// get limiter by API key or IP
-		String key = request.getParameter("key");
-		this.limiter = (key != null) ? //
-				LimiterCache.getByKey(key) : LimiterCache.getByIp(ip);
+		CachedLimiter limiter = null;
+		String apiKey = request.getParameter("key");
+		if (apiKey != null) {
+			limiter = LimiterCache.getByKey(apiKey);
+		}
+		if (limiter == null) {
+			limiter = LimiterCache.getByIp(ip);
+		}
+		this.limiter = limiter;
 
 		// get user session info
 		this.session = SessionHelper.getSession(request);

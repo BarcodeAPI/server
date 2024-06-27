@@ -35,7 +35,7 @@ function addType(mode, type) {
 
 	info.querySelector(".type-name").innerHTML = type.display;
 	info.querySelector(".type-target").innerHTML = type.targets[0];
-	info.querySelector(".type-cost-basic").innerHTML = type.cost;
+	info.querySelector(".type-cost-basic").innerHTML = type.costBasic;
 
 	switch (mode) {
 		case "single":
@@ -43,6 +43,7 @@ function addType(mode, type) {
 			info.querySelector(".type-description").innerHTML = type.description[language];
 			info.querySelector(".type-cost-basic").innerHTML = type.costBasic;
 			info.querySelector(".type-cost-custom").innerHTML = type.costCustom;
+			info.querySelector(".type-checksum").innerHTML = type.checksum;
 			info.querySelector(".type-nonprinting").innerHTML = type.nonprinting;
 			//		info.querySelector(".type-parameters").innerHTML = type.parameters;
 			break;

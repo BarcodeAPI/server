@@ -61,9 +61,9 @@ public class LimiterCache {
 
 		JSONObject limits = AppConfig.get().getJSONObject("limits");
 
-		long appLimit = limits.getLong("default");
-
 		JSONObject idx = limits.getJSONObject(index);
+
+		long appLimit = idx.getLong("__default");
 
 		long usrLimit = idx.optLong(caller, appLimit);
 

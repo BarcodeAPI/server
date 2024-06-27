@@ -54,6 +54,7 @@
 		<div class="row center-xs middle-xs">
 			<div class="display-barcode col-xs-12">
 				<div id="frame">
+
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
 							<h2>Barcode Generation</h2>
@@ -64,6 +65,7 @@
 							</p>
 						</div>
 					</div>
+
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
 							<a name="types"></a>
@@ -78,6 +80,26 @@
 							</p>
 						</div>
 					</div>
+
+					<div class="row center-xs middle-xs">
+						<div class="col-xs-12">
+							<a name="types"></a>
+							<h2>Tokens and Rate Limits</h2>
+							<p class="help-text">
+								Each user of the service is granted a limited number of request tokens to ensure fair
+								use among all users.
+								<br />
+								<br />
+								Visit <a href="/limits.html" class="text-link">Rate Limits<img
+										src="/img/chevron-right.svg" class="icon-last" /></a>
+								<br />
+								<br />
+								To upgrade your account, please visit <a href="/contracts.html" class="text-link">Usage
+									Contracts<img src="/img/chevron-right.svg" class="icon-last" /></a>
+							</p>
+						</div>
+					</div>
+
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
 							<a name="usage"></a>
@@ -86,49 +108,35 @@
 								The server will generate a barcode for nearly any content passed to the API
 								endpoint.
 								<br />
-								This can be done using a web browser, on the command line, or any number of
-								other methods.
+								<br />
+								Based on a RESTful HTTP server, requests can be made using a web browser, on the command
+								line, or a number of other methods depending on the needs of your application.
 							</p>
 						</div>
-					</div>
-					<br />
-					<div class="row center-xs middle-xs">
-						<div class="col-xs-12">
-							<div class="right half">
-								<div>
-									<span class="code-head">curl</span>
-									<pre class="code">
-curl https://barcodeapi.org/api/A_Barcode &gt; test.png
-									</pre>
-								</div>
-								<div>
-									<span class="code-head">wget</span>
-									<pre class="code">
-wget -o test.png https://barcodeapi.org/api/A_Barcode
-									</pre>
-								</div>
-								<div>
-									<span class="code-head">PowerShell</span>
-									<pre class="code">
-Invoke-WebRequest https://barcodeapi.org/api/auto/test -OutFile test.png
-									</pre>
-								</div>
-							</div>
-							<div class="left half">
-								<div>
-									<span class="code-head">HTML / JS</span>
-									<pre class="code">
-&lt;img id="barcode" /&gt;
 
-&lt;script&gt;
-  let base = "https://barcodeapi.org/api/auto/";
-  document.getElementById("barcode").src = (base + "Try Me!");
-&lt;/script&gt;
+						<div>
+							<div class="col-xs-12">
+								<div class="right half">
+									<div>
+										<span class="code-head">JavaScript</span>
+										<pre class="code">
+fetch(url, { cache: "no-store" })
+	.then(response => {
+
+		var tokens = response.headers.get('x-ratelimit-tokens');
+		document.getElementById("token_count").innerHTML = tokens;
+
+		response.blob().then(blob => {
+			var imgBlob = URL.createObjectURL(blob);
+			document.getElementById('barcode_image').src = imgBlob;
+		});
+	});
 									</pre>
-								</div>
-								<div>
-									<span class="code-head">Python</span>
-									<pre class="code">
+									</div>
+
+									<div>
+										<span class="code-head">Python</span>
+										<pre class="code">
 import shutil
 import requests
 
@@ -137,10 +145,40 @@ response = requests.get(url, stream=True)
 with open('test.png', 'wb') as out_file:
     shutil.copyfileobj(response.raw, out_file)
 									</pre>
+									</div>
+								</div>
+
+								<div class="left half">
+									<div>
+										<span class="code-head">HTML</span>
+										<pre class="code">
+&lt;img src="https://barcodeapi.org/api/auto/test" /&gt;
+									</pre>
+									</div>
+									<div>
+										<span class="code-head">curl</span>
+										<pre class="code">
+curl https://barcodeapi.org/api/A_Barcode &gt; test.png
+									</pre>
+									</div>
+									<div>
+										<span class="code-head">wget</span>
+										<pre class="code">
+wget -o test.png https://barcodeapi.org/api/A_Barcode
+									</pre>
+									</div>
+									<div>
+										<span class="code-head">PowerShell</span>
+										<pre class="code">
+Invoke-WebRequest `
+  https://barcodeapi.org/api/auto/test -OutFile test.png
+									</pre>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
 							<a name="types"></a>
@@ -153,6 +191,7 @@ with open('test.png', 'wb') as out_file:
 							</p>
 						</div>
 					</div>
+
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
 
@@ -181,24 +220,46 @@ https://barcodeapi.org/api/qr/abc123
 							</div>
 						</div>
 					</div>
+
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
-							<h2>Multi-Barcode Generation</h2>
-							<div class="half right">
-								<p class="help-text">
-									&nbsp;&nbsp;Some users will want to generate a large number of barcodes with one
-									request - a basic JavaScript utility is provided at /multi.html which will generate
-									as many images as requested then prepare the file to be printed.
-								</p>
+							<h2>Bulk Barcode Generation</h2>
+							<div>
+								<div class="half right">
+									<p class="help-text">
+									<h3>Multi</h3>
+									Some users may wish to generate a large number of barcodes with one
+									request - a basic JavaScript utility is provided at /multi.html which will
+									generate as many images as requested then prepare the file to be printed.
+									<pre>
+https://barcodeapi.org/multi.html?Barcode1&Barcode2&dm/A%20Data%20Matrix&qr/And%20QR
+									</pre>
+									</p>
+								</div>
+								<div class="half left">
+									<p class="help-text">
+									<h3>Bulk</h3>
+									&nbsp;&nbsp;Bulk Barcode Generation
+									</p>
+								</div>
 							</div>
-							<div class="half left">
-								&nbsp;&nbsp;Bulk Barcode Generation
+							<div>
 							</div>
 						</div>
 					</div>
+
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
-							<pre>https://barcodeapi.org/multi.html?Barcode1&Barcode2&dm/A%20Data%20Matrix&qr/And%20QR</pre>
+							<a name="types"></a>
+							<h2>Control Characters</h2>
+							<p class="help-text">
+								Control characters.
+							</p>
+						</div>
+					</div>
+
+					<div class="row center-xs middle-xs">
+						<div class="col-xs-12">
 							<h2>Forced Redirect</h2>
 							<p class="help-text">
 								&nbsp;&nbsp;The server provides a set of static resources served from the root url of
@@ -213,6 +274,7 @@ https://barcodeapi.org/api/qr/abc123
 							</pre>
 						</div>
 					</div>
+
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
 
@@ -242,6 +304,32 @@ https://barcodeapi.org/api/qr/abc123
 							<pre class="code">
 								X-Error-Message: (exception.toString())
 							</pre>
+						</div>
+					</div>
+
+					<div class="row center-xs middle-xs">
+						<div class="col-xs-12">
+							<h2>User Session</h2>
+							<p class="help-text">
+								User session.
+							</p>
+						</div>
+					</div>
+
+					<div class="row center-xs middle-xs">
+						<div class="col-xs-12">
+							<h2>Technical Support</h2>
+							<p class="help-text">
+								Did we miss something?
+								<br />
+								<br />
+								Please send us an email, we will respond as soon as possible.
+								<br />
+								<br />
+								<a href="mailto:support@barcodeapi.org" class="text-link">support@barcodeapi.org<img
+										src="/img/chevron-right.svg" class="icon-last" /></a>
+
+							</p>
 						</div>
 					</div>
 				</div>

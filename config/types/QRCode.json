@@ -13,6 +13,7 @@
 		"basic": 3,
 		"custom": 5
 	},
+	"checksum": false,
 	"nonprinting": true,
 	"example": "QR Barcode",
 	"pattern": {

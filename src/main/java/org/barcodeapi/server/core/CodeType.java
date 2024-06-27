@@ -24,6 +24,7 @@ public class CodeType {
 	private final String patternA;
 	private final String patternE;
 
+	private final boolean checksum;
 	private final boolean nonprinting;
 
 	private final String[] targets;
@@ -49,6 +50,9 @@ public class CodeType {
 		this.priority = config.getInt("priority");
 		this.patternA = config.getJSONObject("pattern").getString("auto");
 		this.patternE = config.getJSONObject("pattern").getString("extended");
+
+		// supports checksums
+		this.checksum = config.getBoolean("checksum");
 
 		// has nonprinting support
 		this.nonprinting = config.getBoolean("nonprinting");
@@ -103,6 +107,10 @@ public class CodeType {
 		return patternE;
 	}
 
+	public boolean enforceChecksum() {
+		return checksum;
+	}
+
 	public boolean getAllowNonprinting() {
 		return nonprinting;
 	}
@@ -138,6 +146,7 @@ public class CodeType {
 				.put("display", type.getDisplayNme())//
 				.put("pattern", type.getPatternExtended())//
 				.put("example", type.getExample())//
+				.put("checksum", type.enforceChecksum())//
 				.put("nonprinting", type.getAllowNonprinting())//
 				.put("costBasic", type.getCostBasic())//
 				.put("costCustom", type.getCostCustom())//

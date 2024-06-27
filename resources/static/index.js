@@ -8,6 +8,7 @@
  */
 const appOptions = {
 	'language': 'en',
+	'apiKey': window.localStorage.getItem("apiKey"),
 	'default': {
 		'colorFG': "000000",
 		'colorBG': "FFFFFF",
@@ -108,6 +109,7 @@ function delayGenCode() {
 }
 
 function setupOptions() {
+	document.getElementById("option-api-key").value = appOptions.apiKey;
 	document.getElementById("option-trim-before").checked = appOptions.trim.before;
 	document.getElementById("option-trim-after").checked = appOptions.trim.after;
 }
@@ -117,13 +119,17 @@ function setupOptions() {
  */
 function optionsChange() {
 
+	// update user api key
+	appOptions.apiKey = document.getElementById("option-api-key").value;
+	window.localStorage.setItem("apiKey", appOptions.apiKey);
+
 	// parse text trimming options
 	appOptions.trim.before = document.getElementById("option-trim-before").checked;
 	window.localStorage.setItem("trimBefore", (appOptions.trim.before) ? "true" : false);
 	appOptions.trim.after = document.getElementById("option-trim-after").checked;
 	window.localStorage.setItem("trimAfter", (appOptions.trim.after) ? "true" : false);
 
-	// parse render options  (DPI)
+	// parse render options (DPI)
 	var inDPI = document.getElementById("option-dpi");
 	if (inDPI.checkValidity()) {
 		appOptions.render.dpi = inDPI.value;
@@ -246,7 +252,12 @@ function genCode() {
 
 			// Upate token count if not cached
 			var tokens = response.headers.get('x-ratelimit-tokens');
+			tokens = (tokens == -1) ? "Unlimited" : tokens;
 			document.getElementById("barcode_tokens").innerHTML = tokens;
+
+			// Update learn more link
+			var codeType = response.headers.get('x-barcode-type');
+			document.getElementById("link-learn-more").href = "/type.html#" + codeType;
 
 			// Update the image blob
 			response.blob().then(blob => {
@@ -257,7 +268,11 @@ function genCode() {
 
 function buildOptionsString() {
 
-	var options = "?";
+	var options = "?webapp=1";
+
+	if (appOptions.apiKey) {
+		options += "&key=" + appOptions.apiKey;
+	}
 
 	if (appOptions.render.colorFG != appOptions.default.colorFG) {
 		options += "&fg=" + appOptions.render.colorFG;

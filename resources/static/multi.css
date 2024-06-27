@@ -34,18 +34,27 @@
 }
 
 .button-home {
+	width: 100px;
 	grid-column: 1;
 	background-color: rgb(0, 0, 255);
 }
 
 .button-generate {
+	width: 140px;
 	grid-column: 3;
 	background-color: #04AA6D;
 }
 
 .button-share {
+	width: 100px;
 	grid-column: 4;
 	background-color: rgb(255, 128, 0);
+}
+
+.button-print {
+	width: 100px;
+	grid-column: 5;
+	background-color: rgb(127, 0, 255);
 }
 
 #input {
