@@ -257,7 +257,9 @@ function genCode() {
 
 			// Update learn more link
 			var codeType = response.headers.get('x-barcode-type');
-			document.getElementById("link-learn-more").href = "/type.html#" + codeType;
+			document.getElementById("link-more").href = "/type.html#" + codeType;
+			document.getElementById("link-more-text").innerHTML = //
+				"Learn more about " + codeType + "!";
 
 			// Update the image blob
 			response.blob().then(blob => {
