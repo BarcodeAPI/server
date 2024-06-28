@@ -27,22 +27,26 @@ function init(mode) {
 
 function addType(mode, type) {
 
+	var target = type.targets[0];
+	
 	var info = document.getElementById("barcode-template").cloneNode(true);
-	info.setAttribute("id", "barcode-type-" + type.targets[0]);
+	info.setAttribute("id", "barcode-type-" + target);
 
-	var link = ("/api/" + type.targets[0] + "/" + type.example);
+	var link = ("/api/" + target + "/" + type.example);
 	info.querySelector(".type-example").src = link;
+	info.querySelector(".type-example-link").href = "index.html#" + target;
 
 	info.querySelector(".type-name").innerHTML = type.display;
-	info.querySelector(".type-target").innerHTML = type.targets[0];
+	info.querySelector(".type-target").innerHTML = ('/' + target + '/');
 	info.querySelector(".type-cost-basic").innerHTML = type.costBasic;
+	info.querySelector(".type-cost-custom").innerHTML = type.costCustom;
 
 	switch (mode) {
 		case "single":
+			document.title = document.title.replace("$TYPE$", type.display);
 			info.querySelector(".type-format").innerHTML = type.pattern;
 			info.querySelector(".type-description").innerHTML = type.description[language];
 			info.querySelector(".type-cost-basic").innerHTML = type.costBasic;
-			info.querySelector(".type-cost-custom").innerHTML = type.costCustom;
 			info.querySelector(".type-checksum").innerHTML = type.checksum;
 			info.querySelector(".type-nonprinting").innerHTML = type.nonprinting;
 			//		info.querySelector(".type-parameters").innerHTML = type.parameters;

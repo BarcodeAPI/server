@@ -6,7 +6,7 @@
  -->
 
 <head>
-	<title>BarcodeAPI.org - API Docs</title>
+	<title>BarcodeAPI.org - API Docs ($TYPE$)</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -53,12 +53,13 @@
 			</div>
 		</div>
 
+		<div class="type-header">
+			<a class="text-link" href="/types.html"><span>&lt; All Types</span></a>
+		</div>
+
 		<div class="row center-xs middle-xs">
-
-			<a href="/types.html"><span>&lt; All Types</span></a>
-
 			<div class="col-xs-12">
-				<div id="barcode-types">
+				<div id="barcode-types" class="barcode-type">
 					<div class="row barcode-template" id="barcode-template">
 						<div class="barcode-type-info">
 							<span class="type-name type-title">-</span>
@@ -70,9 +71,12 @@
 							<br />
 							Custom: <span class="type-cost-custom">-</span>
 							<br />
+							<br />
 							Target:&nbsp;<span class="type-target">-</span>
 							<br />
+							<br />
 							Format:&nbsp;<span class="type-format">-</span>
+							<br />
 							<br />
 							Checksums Enforced:&nbsp;<span class="type-checksum">-</span>
 							<br />
@@ -82,11 +86,15 @@
 							<span class="type-description">-</span>
 							<br />
 							<br />
-							Parameters:&nbsp;<span class="type-params">-</span>
+							Parameters
+							<br />
+							<div class="type-params">-</div>
 							<br />
 						</div>
 						<div class="barcode-type-example">
-							<img class="type-example" src="" />
+							<a class="type-example-link">
+								<img class="type-example" src="" />
+							</a>
 						</div>
 					</div>
 				</div>

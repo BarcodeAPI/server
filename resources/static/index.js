@@ -108,6 +108,9 @@ function delayGenCode() {
 	}, 350);
 }
 
+/**
+ * Set the UI state to match the appOptions state.
+ */
 function setupOptions() {
 	document.getElementById("option-api-key").value = appOptions.apiKey;
 	document.getElementById("option-trim-before").checked = appOptions.trim.before;
@@ -268,9 +271,14 @@ function genCode() {
 		});
 }
 
+/**
+ * Build the URL options string for requesting a barcode from the API server.
+ * Adds a webapp parameter for tracking purposes.
+ * Optionally adds parameters if they are non-default.
+ */
 function buildOptionsString() {
 
-	var options = "?webapp=1";
+	var options = "?";
 
 	if (appOptions.apiKey) {
 		options += "&key=" + appOptions.apiKey;
