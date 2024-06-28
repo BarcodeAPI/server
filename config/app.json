@@ -66,6 +66,7 @@
 	},
 	"limits": {
 		"enable": true,
+		"enforce": true,
 		"ips": {
 			"__default": 10000,
 			"127.0.0.1": -1

@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.core.CachedObject;
-import org.json.JSONObject;
 
 /**
  * CachedLimiter.java
@@ -13,12 +12,14 @@ import org.json.JSONObject;
  */
 public class CachedLimiter extends CachedObject {
 
-	private static final JSONObject conf = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("limiter");
+	private static final int LIMITER_LIFE = AppConfig.get()//
+			.getJSONObject("cache").getJSONObject("limiter").getInt("life");
 
 	private final String caller;
 
 	private final long requests;
+
+	private final boolean enforce;
 
 	private final double tpms;
 
@@ -26,9 +27,10 @@ public class CachedLimiter extends CachedObject {
 
 	private long minted = 0;
 
-	public CachedLimiter(String caller, long requests) {
-		this.setTimeout(conf.getInt("life"), TimeUnit.MINUTES);
+	public CachedLimiter(String caller, long requests, boolean enforce) {
+		this.setTimeout(LIMITER_LIFE, TimeUnit.MINUTES);
 
+		this.enforce = enforce;
 		this.caller = caller;
 		this.requests = requests;
 		this.tokens = (requests == -1) ? -1 : (requests * 0.5);
@@ -36,14 +38,41 @@ public class CachedLimiter extends CachedObject {
 		this.tpms = (requests > 0) ? ((double) requests / (double) getTimeout()) : 0;
 	}
 
+	/**
+	 * Returns the caller associated with the limiter.
+	 * 
+	 * @return caller
+	 */
 	public String getCaller() {
 		return caller;
 	}
 
+	/**
+	 * Returns the limit of the limiter.
+	 * 
+	 * @return rate limit
+	 */
 	public long getLimit() {
 		return requests;
 	}
 
+	/**
+	 * Returns true if the limiter should be enforced.
+	 * 
+	 * @return limiter enforced
+	 */
+	public final boolean isEnforced() {
+		return enforce;
+	}
+
+	/**
+	 * Mints new tokens for the limiter.
+	 * 
+	 * Minted count is based on the limiter's request limit and the time since the
+	 * previous minting.
+	 * 
+	 * @return number of tokens minter
+	 */
 	public double mintTokens() {
 
 		// Unlimited
@@ -75,14 +104,30 @@ public class CachedLimiter extends CachedObject {
 		}
 	}
 
+	/**
+	 * Returns the time at which tokens were last minted.
+	 * 
+	 * @return time tokens last minted
+	 */
 	public long getTimeLastMinted() {
 		return minted;
 	}
 
+	/**
+	 * Returns the current number of tokens the caller has.
+	 * 
+	 * @return
+	 */
 	public double numTokens() {
 		return tokens;
 	}
 
+	/**
+	 * Spend a number of tokens.
+	 * 
+	 * @param count number of tokens to spend
+	 * @return token spend successful
+	 */
 	public boolean spendTokens(double count) {
 
 		// Unlimited

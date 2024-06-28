@@ -28,13 +28,13 @@ function init(mode) {
 function addType(mode, type) {
 
 	var target = type.targets[0];
-	
+
 	var info = document.getElementById("barcode-template").cloneNode(true);
 	info.setAttribute("id", "barcode-type-" + target);
 
 	var link = ("/api/" + target + "/" + type.example);
 	info.querySelector(".type-example").src = link;
-	info.querySelector(".type-example-link").href = "index.html#" + target;
+
 
 	info.querySelector(".type-name").innerHTML = type.display;
 	info.querySelector(".type-target").innerHTML = ('/' + target + '/');
@@ -43,6 +43,7 @@ function addType(mode, type) {
 
 	switch (mode) {
 		case "single":
+			info.querySelector(".type-example-link").href = "index.html#" + target;
 			document.title = document.title.replace("$TYPE$", type.display);
 			info.querySelector(".type-format").innerHTML = type.pattern;
 			info.querySelector(".type-description").innerHTML = type.description[language];
@@ -52,7 +53,9 @@ function addType(mode, type) {
 			//		info.querySelector(".type-parameters").innerHTML = type.parameters;
 			break;
 		case "all":
-			info.querySelector(".type-more").href = "type.html#" + type.name;
+			var moreLink = ("type.html#" + type.name);
+			info.querySelector(".type-example-link").href = moreLink;
+			info.querySelector(".type-more").href = moreLink;
 			break;
 	}
 

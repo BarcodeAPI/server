@@ -444,6 +444,8 @@ async function init() {
 		var imageCopyButton = document.getElementById("barcode_image");
 		imageCopyButton.style.display = "none";
 	}
+	
+	loadHash();
 }
 
 function setType(type) {

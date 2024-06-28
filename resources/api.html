@@ -57,37 +57,27 @@
 
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
-							<h2>Barcode Generation</h2>
+							<a name="server" href="#server">
+								<h2>Barcode Generation</h2>
+							</a>
 							<p class="help-text">
 								The core function of our server is to generate barcode images through a RESTful
 								endpoint.
 								<br />
 								<br />
 								Our server is built to accommodate a diverse range of barcode types and
-								provides extensive configuration options for customization.
+								provides extensive configuration options for customization. Please note that we apply
+								<a class="text-link" href="/limits.html">Rate Limits</a> which are based on the
+								complexity of the request.
 							</p>
 						</div>
 					</div>
 
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
-							<a name="types"></a>
-							<h2>Barcode Types</h2>
-							<p class="help-text">
-								A detailed list of barcode formats which can be rendered by this server is available at
-								the <a href="/types.html">Barcode Types</a> page.
-								<br />
-								<br />
-								Each barcode type will provide it's token cost for both basic and custom barcodes
-								generated in the given format.
-							</p>
-						</div>
-					</div>
-
-					<div class="row center-xs middle-xs">
-						<div class="col-xs-12">
-							<a name="types"></a>
-							<h2>Tokens and Rate Limits</h2>
+							<a name="tokens" href="#tokens">
+								<h2>Tokens and Rate Limits</h2>
+							</a>
 							<p class="help-text">
 								Each user of the service is granted a limited number of request tokens to ensure fair
 								use among all users.
@@ -105,8 +95,9 @@
 
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
-							<a name="usage"></a>
-							<h2>Basic API Usage</h2>
+							<a name="usage" href="#usage">
+								<h2>Basic API Usage</h2>
+							</a>
 							<p class="help-text">
 								The server will generate a barcode for nearly any content passed to the API
 								endpoint.
@@ -184,8 +175,22 @@ Invoke-WebRequest `
 
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
-							<a name="types"></a>
-							<h2>Type Selection</h2>
+							<a name="formats" href="#formats">
+								<h2>Barcode Formats</h2>
+							</a>
+							<p class="help-text">
+								A detailed list of barcode formats available to be rendered by this server can
+								be viewed at the <a class="text-link" href="/types.html">Barcode Types</a> page. This
+								page is a graphical representation of the [/types] API endpoint.
+								<br />
+								<br />
+								Each barcode type will provide it's token cost for both basic and custom barcodes
+								generated in the given format.
+							</p>
+						</div>
+
+						<div class="col-xs-12">
+							<h3>Type Selection</h3>
 							<p class="help-text">
 								&nbsp;&nbsp;The API offers two types of barcode type selection, automatic or manual;
 								users of the web-based interface might prefer the barcode type be selected based on what
@@ -193,9 +198,7 @@ Invoke-WebRequest `
 								format they will receive back from the server.
 							</p>
 						</div>
-					</div>
 
-					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
 
 							<div class="right half">
@@ -226,7 +229,32 @@ https://barcodeapi.org/api/qr/abc123
 
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
-							<h2>Bulk Barcode Generation</h2>
+							<a name="custom" href="#custom">
+								<h2>Barcode Customization</h2>
+							</a>
+							<div>
+								<div class="half right">
+									<p class="help-text">
+									<h3>Control Characters</h3>
+									Visit <a href="/nonprinting.html" class="text-link">NonPrinting<img
+											src="/img/chevron-right.svg" class="icon-last" /></a>
+									</p>
+								</div>
+								<div class="half left">
+									<p class="help-text">
+									<h3>Test</h3>
+									Test.
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="row center-xs middle-xs">
+						<div class="col-xs-12">
+							<a name="bulk" href="#bulk">
+								<h2>Bulk Barcode Generation</h2>
+							</a>
 							<div>
 								<div class="half right">
 									<p class="help-text">
@@ -259,67 +287,73 @@ https://barcodeapi.org/multi.html?Barcode1&Barcode2&dm/A%20Data%20Matrix&qr/And%
 
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
-							<a name="types"></a>
-							<h2>Control Characters</h2>
-							<p class="help-text">
-								Visit <a href="/nonprinting.html" class="text-link">NonPrinting<img
-										src="/img/chevron-right.svg" class="icon-last" /></a>
-							</p>
+							<a name="headers" href="#headers">
+								<h2>Server Headers</h2>
+							</a>
+							<div>
+								<h3>Forced Redirect</h3>
+								<p class="help-text">
+									The server provides a set of static resources served from the root url of
+									the server, in the event a request is made which is not targeted directly at the API
+									nor
+									references a known resources, a 403 redirect will be provided to send the send
+									request
+									to the API handler.
+								</p>
+								<pre class="code">
+$ curl --head https://barcodeapi.org/abc123
+...
+Location: https://barcodeapi.org/api/auto/abc123
+								</pre>
+							</div>
+
+							<div>
+								<h3>Response Headers</h3>
+								<p class="help-text">
+									The server will add several headers related to the barcode including the
+									type and encoded contents.
+								</p>
+								<pre class="code">
+$ curl --head https://barcodeapi.org/api/auto/abc123
+...
+X-Barcode-Type: Code128
+BarcodeAPI.org Technical User Manual, v.PRERELEASE 4 / 14 ↑
+X-Barcode-Content: abc123
+Content-Type: image/png;charset=utf-8
+Content-Disposition: filename=abc123.png
+								</pre>
+							</div>
+
+							<div>
+								<h3>Cache Control</h3>
+								<p class="help-text">
+									In an attempt to minimize the number of requests, barcodes requested outside of the
+									webapp
+									will have a cache expiration time set.
+								</p>
+								<pre class="code">
+Cache-Control: max-age=86400, public
+								</pre>
+							</div>
+
+							<div>
+								<h3>Error Headers</h3>
+								<p class="help-text">
+									In the event of a render error, an additional header will be available containing
+									details about the exception.
+								</p>
+								<pre class="code">
+X-Error-Message: (exception.toString())
+								</pre>
+							</div>
 						</div>
 					</div>
 
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
-							<h2>Forced Redirect</h2>
-							<p class="help-text">
-								&nbsp;&nbsp;The server provides a set of static resources served from the root url of
-								the server, in the event a request is made which is not targeted directly at the API nor
-								references a known resources, a 403 redirect will be provided to send the send request
-								to the API handler.
-							</p>
-							<pre class="code">
-								$ curl --head https://barcodeapi.org/abc123
-								...
-								Location: https://barcodeapi.org/api/auto/abc123
-							</pre>
-						</div>
-					</div>
-
-					<div class="row center-xs middle-xs">
-						<div class="col-xs-12">
-
-							<h3>Response Headers</h3>
-							<p class="help-text">
-								&nbsp;&nbsp;The server will add several headers related to the barcode including the
-								type and encoded contents.
-							</p>
-							<pre class="code">
-								$ curl --head https://barcodeapi.org/api/auto/abc123
-								...
-								X-Barcode-Type: Code128
-								BarcodeAPI.org Technical User Manual, v.PRERELEASE 4 / 14 ↑
-								X-Barcode-Content: abc123
-								Content-Type: image/png;charset=utf-8
-								Content-Disposition: filename=abc123.png
-							</pre>
-							Cache Control
-
-							In an attempt to minimize the number of requests
-							<pre class="code">
-								Cache-Control: max-age=86400, public
-							</pre>
-							Error Headers
-							In the event of a render error, an additional header will be available containing
-							details about the exception.
-							<pre class="code">
-								X-Error-Message: (exception.toString())
-							</pre>
-						</div>
-					</div>
-
-					<div class="row center-xs middle-xs">
-						<div class="col-xs-12">
-							<h2>User Session</h2>
+							<a name="session" href="#session">
+								<h2>User Session</h2>
+							</a>
 							<p class="help-text">
 								User session.
 							</p>
@@ -328,7 +362,9 @@ https://barcodeapi.org/multi.html?Barcode1&Barcode2&dm/A%20Data%20Matrix&qr/And%
 
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-12">
-							<h2>Technical Support</h2>
+							<a name="support" href="#support">
+								<h2>Technical Support</h2>
+							</a>
 							<p class="help-text">
 								Did we miss something?
 								<br />
