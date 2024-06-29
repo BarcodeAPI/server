@@ -22,5 +22,8 @@
 	},
 	"description": {
 		"en": "A globally recognized product identification code. Encodes manufacturer, product / variant, and store use codes."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/International_Article_Number"
 	}
 }

@@ -22,5 +22,8 @@
 	},
 	"description": {
 		"en": "A stacked linear barcode most commonly found on identification cards."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/PDF417"
 	}
 }

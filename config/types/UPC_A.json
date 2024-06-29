@@ -23,5 +23,8 @@
 	},
 	"description": {
 		"en": "A universally recognized 12 digit barcode. Encodes manufacturer, product / variant, and store use codes."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Universal_Product_Code"
 	}
 }

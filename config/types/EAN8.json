@@ -22,5 +22,8 @@
 	},
 	"description": {
 		"en": "Derived from the longer EAN-13 UPC code. For smaller packages."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/EAN-8"
 	}
 }

@@ -22,5 +22,8 @@
 	},
 	"description": {
 		"en": "A 2D data barcode whose timing markers are aligned at the corners."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/QR_code"
 	}
 }

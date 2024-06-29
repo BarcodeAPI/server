@@ -22,5 +22,8 @@
 	},
 	"description": {
 		"en": "A medium densisty alphanumeric barcode with a larger character set."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Code_128"
 	}
 }

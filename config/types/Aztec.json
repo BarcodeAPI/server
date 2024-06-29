@@ -20,5 +20,8 @@
 	},
 	"description": {
 		"en": "A 2D data barcode whose timing markers radiate outward from the middle."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Aztec_Code"
 	}
 }

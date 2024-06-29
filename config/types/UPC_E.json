@@ -23,6 +23,9 @@
 	"description": {
 		"en": "A compact version of UPC-A, removing unneeded '0's."
 	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Universal_Product_Code"
+	},
 	"options": [
 		{
 			"name": "dpi",

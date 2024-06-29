@@ -22,6 +22,9 @@
 	"description": {
 		"en": "Used by the United States Postal Service for Intelligent Mail sorting."
 	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Intelligent_Mail_barcode"
+	},
 	"options": [
 		{
 			"name": "dpi",

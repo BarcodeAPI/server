@@ -23,5 +23,8 @@
 	},
 	"description": {
 		"en": "Interleaved 2 of 5, type 14."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Interleaved_2_of_5"
 	}
 }

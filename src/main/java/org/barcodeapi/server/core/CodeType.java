@@ -34,6 +34,7 @@ public class CodeType {
 
 	private final String example;
 	private final JSONObject description;
+	private final JSONObject wiki;
 
 	private CodeType(JSONObject config) {
 		this.config = config;
@@ -72,6 +73,7 @@ public class CodeType {
 		// get example and description
 		this.example = config.getString("example");
 		this.description = config.getJSONObject("description");
+		this.wiki = config.getJSONObject("wiki");
 	}
 
 	public JSONObject getConfig() {
@@ -135,6 +137,10 @@ public class CodeType {
 		return description;
 	}
 
+	public JSONObject getWiki() {
+		return wiki;
+	}
+
 	public static CodeType fromJSON(JSONObject conf) {
 
 		return new CodeType(conf);
@@ -151,6 +157,7 @@ public class CodeType {
 				.put("costBasic", type.getCostBasic())//
 				.put("costCustom", type.getCostCustom())//
 				.put("targets", new JSONArray(type.getTargets()))//
-				.put("description", type.getDescription());
+				.put("description", type.getDescription())//
+				.put("wiki", type.getWiki());
 	}
 }

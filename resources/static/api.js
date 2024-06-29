@@ -43,11 +43,11 @@ function addType(mode, type) {
 
 	switch (mode) {
 		case "single":
-			info.querySelector(".type-example-link").href = "index.html#" + target;
 			document.title = document.title.replace("$TYPE$", type.display);
+			info.querySelector(".type-example-link").href = "index.html#" + target;
 			info.querySelector(".type-format").innerHTML = type.pattern;
 			info.querySelector(".type-description").innerHTML = type.description[language];
-			info.querySelector(".type-cost-basic").innerHTML = type.costBasic;
+			info.querySelector(".type-wiki").href = type.wiki[language];
 			info.querySelector(".type-checksum").innerHTML = type.checksum;
 			info.querySelector(".type-nonprinting").innerHTML = type.nonprinting;
 			//		info.querySelector(".type-parameters").innerHTML = type.parameters;

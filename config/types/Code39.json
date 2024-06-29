@@ -22,5 +22,8 @@
 	},
 	"description": {
 		"en": "A basic alphanumeric barcode. Uppercase letters and numbers only."
+	},
+	"wiki" : {
+		"en" : "https://en.wikipedia.org/wiki/Code_39"
 	}
 }

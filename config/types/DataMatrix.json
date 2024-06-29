@@ -24,5 +24,8 @@
 	},
 	"description": {
 		"en": "A 2D data barode whose timing markers are along the the edges."
+	},
+	"wiki" : {
+		"en" : "https://en.wikipedia.org/wiki/Data_Matrix"
 	}
 }

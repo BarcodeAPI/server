@@ -20,5 +20,8 @@
 	},
 	"description": {
 		"en": "An early barode designed to be printed on dot-matrix printers."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Codabar"
 	}
 }
