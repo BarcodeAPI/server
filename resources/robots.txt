@@ -1,14 +1,14 @@
 User-agent: *
-Allow: /index.html
 Allow: /about.html
 Allow: /api.html
 Allow: /bulk.html
+Allow: /contracts.html
 Allow: /history.html
+Allow: /index.html
 Allow: /limits.html
 Allow: /nonprinting.html
 Allow: /support.html
 Allow: /types.html
-Allow: /manual.pdf
 Disallow: /multi.html
 Disallow: /type.html
 Disallow: /api/

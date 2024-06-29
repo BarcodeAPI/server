@@ -18,6 +18,22 @@ import org.json.JSONException;
  */
 public class TypesHandler extends RestHandler {
 
+	private static final String TYPES;
+
+	static {
+
+		// loop all supported types
+		CodeTypes types = CodeTypes.inst();
+		JSONArray output = new JSONArray();
+		for (String type : types.getTypes()) {
+
+			output.put(CodeType.toJSON(types.getType(type)));
+		}
+
+		// convert to string and cache
+		TYPES = output.toString(4);
+	}
+
 	public TypesHandler() {
 		super(false, false);
 	}
@@ -25,17 +41,8 @@ public class TypesHandler extends RestHandler {
 	@Override
 	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
 
-		CodeTypes types = CodeTypes.inst();
-
-		// loop all supported types
-		JSONArray output = new JSONArray();
-		for (String type : types.getTypes()) {
-
-			output.put(CodeType.toJSON(types.getType(type)));
-		}
-
-		// print response to client
+		// print types string to client
 		response.setHeader("Content-Type", "application/json");
-		response.getOutputStream().println(output.toString(4));
+		response.getOutputStream().println(TYPES);
 	}
 }
