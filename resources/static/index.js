@@ -9,6 +9,9 @@
 const appOptions = {
 	'language': 'en',
 	'apiKey': window.localStorage.getItem("apiKey"),
+	'browser': {
+		'firefox': (navigator.userAgent.indexOf("Firefox") > -1)
+	},
 	'default': {
 		'colorFG': "000000",
 		'colorBG': "FFFFFF",
@@ -26,13 +29,9 @@ const appOptions = {
 	'trim': {
 		'before': (window.localStorage.getItem("trimBefore") != "false"),
 		'after': (window.localStorage.getItem("trimAfter") != "false")
-	}
+	},
+	'types': {}
 }
-
-/**
- * User-Agent string
- */
-const sUsrAg = navigator.userAgent;
 
 /**
  * Call our method when the URL hash changes.
@@ -45,7 +44,10 @@ window.onhashchange = loadHash;
 function loadHash() {
 
 	// Get current hash ( minus # )
-	var hash = location.hash.substring(1);
+	var hash = 'auto';
+	if (location.hash.length > 1) {
+		hash = location.hash.substring(1);
+	}
 
 	// Remove the 'active' class from all topnav objects
 	var topnav = document.getElementById("topnav");
@@ -77,19 +79,20 @@ function loadHash() {
 /**
  * Create list of supported barcode types
  */
-function createBarcodeTypes(types) {
+function createBarcodeTypes() {
 	const menu = document.getElementById("topnav");
 
-	for (t in types) {
+	for (t in appOptions.types) {
 		var node = document.createElement("a");
-		node.setAttribute('id', "type-" + types[t].targets[0]);
+		node.setAttribute('id', "type-" + appOptions.types[t].targets[0]);
 		node.setAttribute('rel', 'tooltip');
 		node.classList.add('top');
-		node.innerHTML = types[t].display;
-		node.setAttribute('onclick', 'setType(\'' + types[t].targets[0] + '\')');
-		node.setAttribute('title', types[t].description[appOptions.language]);
+		node.innerHTML = appOptions.types[t].display;
+		node.setAttribute('onclick', 'setType(\'' + appOptions.types[t].targets[0] + '\')');
+		node.setAttribute('title', appOptions.types[t].description[appOptions.language]);
 		menu.appendChild(node);
 	}
+
 	addTooltips();
 }
 
@@ -244,7 +247,7 @@ function genCode() {
 	// Update download button
 	document.getElementById("barcode_download_button").setAttribute("href", url);
 
-	if (sUsrAg.indexOf("Firefox") === -1) {
+	if (!appOptions.browser.firefox) {
 		document.getElementById("barcode_download_button").setAttribute("download", url);
 	}
 	document.getElementById("barcode_image_link").setAttribute("value", url);
@@ -377,7 +380,7 @@ async function copyImageToClipboard() {
 
 	const url = document.getElementById("barcode_image_link").getAttribute("value");
 
-	if (!sUsrAg.indexOf("Firefox") > -1) {
+	if (!appOptions.browser.firefox) {
 
 		try {
 			const blobInput = await loadBlob(url);
@@ -408,9 +411,9 @@ function getCode(code) {
 		return null;
 	}
 
-	for (let i in types) {
-		if (types[i].targets[0] === code) {
-			return types[i];
+	for (let i in appOptions.types) {
+		if (appOptions.types[i].targets[0] === code) {
+			return appOptions.types[i];
 		}
 	}
 }
@@ -428,23 +431,27 @@ async function setPattern(hash) {
 	}
 }
 
-var types = {};
 async function init() {
+
+	if (location.hash.length <= 1) {
+		location.hash = 'auto';
+		return;
+	}
 
 	setupOptions();
 
-	types = await getTypes();
-	hash = location.hash.substring(1);
-	await setPattern(hash);
+	appOptions.types = await getTypes();
 
-	createBarcodeTypes(types);
+	createBarcodeTypes();
+
+	await setPattern(location.hash);
 
 	// hide copy image button in FF
-	if (sUsrAg.indexOf("Firefox") > -1) {
+	if (appOptions.browser.firefox) {
 		var imageCopyButton = document.getElementById("barcode_image");
 		imageCopyButton.style.display = "none";
 	}
-	
+
 	loadHash();
 }
 

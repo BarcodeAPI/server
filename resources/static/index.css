@@ -96,12 +96,6 @@ h4 {
 	display: none;
 }
 
-.tokens-help-link {}
-
-.barcode-type {
-	margin-top: -2em;
-}
-
 .barcode-types {
 	margin-bottom: 1rem;
 }
@@ -401,10 +395,6 @@ button[disabled] {
 	padding: 0.5rem 1rem;
 }
 
-.barcode-types {
-	display: block;
-}
-
 .text-file-table {
 	margin-top: 1rem;
 	margin-bottom: 0.5rem;
@@ -655,22 +645,6 @@ button[disabled] {
 	right: 10px;
 	left: auto;
 	margin: 0;
-}
-
-.barcode-template {
-	margin-top: 4.5em;
-	margin-bottom: 3em;
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	align-items: center;
-}
-
-.barcode-type-info {
-	grid-column: 1;
-}
-
-.barcode-type-example {
-	grid-column: 2;
 }
 
 .barcode-type-example img {
