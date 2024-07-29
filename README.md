@@ -1,4 +1,4 @@
-[![_logo_](resources/img/barcodeapi-logo.svg)](https://barcodeapi.org/)
+[![_logo_](resources/ext/logo.svg)](https://barcodeapi.org/)
 
 # BarcodeAPI.org
 
