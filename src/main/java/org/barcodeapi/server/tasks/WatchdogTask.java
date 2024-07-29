@@ -8,7 +8,17 @@ import java.util.Set;
 
 import org.barcodeapi.core.ServerRuntime;
 import org.barcodeapi.server.core.BackgroundTask;
+import org.barcodeapi.server.core.CodeGenerators;
+import org.barcodeapi.server.core.CodeTypes;
+import org.barcodeapi.server.gen.CodeGenerator;
 
+import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
+
+/**
+ * WatchdogTask.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class WatchdogTask extends BackgroundTask {
 
 	private final Runtime runtime;
@@ -62,6 +72,22 @@ public class WatchdogTask extends BackgroundTask {
 		// update thread state counters
 		for (State state : threadStates.keySet()) {
 			getStats().setValue(threadStates.get(state), "system", "jvm", "threads", "state", state.toString());
+		}
+
+		// loop each type of barcode generator
+		for (String type : CodeTypes.inst().getTypes()) {
+
+			// access generator pool
+			LibObjectPooler<CodeGenerator> pool = //
+					CodeGenerators.getInstance().getGeneratorPool(type);
+
+			// update counters for generator pool
+			getStats().setValue(pool.getMaxAge(), "generators", type, "pool", "maxAge");
+			getStats().setValue(pool.getMaxIdle(), "generators", type, "pool", "maxIdle");
+			getStats().setValue(pool.getMaxLockCount(), "generators", type, "pool", "maxLockCount");
+			getStats().setValue(pool.getMaxPoolSize(), "generators", type, "pool", "maxPoolSize");
+			getStats().setValue(pool.getNumLocked(), "generators", type, "pool", "numLocked");
+			getStats().setValue(pool.getPoolSize(), "generators", type, "pool", "size");
 		}
 	}
 }

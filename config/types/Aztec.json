@@ -1,0 +1,27 @@
+{
+	"name": "Aztec",
+	"display": "Aztec",
+	"target": [
+		"aztec"
+	],
+	"generator": ".AztecGenerator",
+	"threads": 2,
+	"priority": 52,
+	"cost": {
+		"basic": 3,
+		"custom": 3
+	},
+	"checksum": false,
+	"nonprinting": true,
+	"example": "Aztec Barcode",
+	"pattern": {
+		"auto": "^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$",
+		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]+$"
+	},
+	"description": {
+		"en": "A 2D data barcode whose timing markers radiate outward from the middle."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Aztec_Code"
+	}
+}

@@ -2,13 +2,23 @@ package org.barcodeapi.server.cache;
 
 import java.util.concurrent.TimeUnit;
 
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.CachedObject;
-import org.barcodeapi.server.gen.CodeType;
+import org.barcodeapi.server.core.CodeType;
+import org.json.JSONObject;
 
 import com.mclarkdev.tools.libextras.LibExtrasHashes;
 
+/**
+ * CachedBarcode.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CachedBarcode extends CachedObject {
+
+	private static final JSONObject conf = AppConfig.get()//
+			.getJSONObject("cache").getJSONObject("barcode");
 
 	private final CodeType type;
 	private final String raw;
@@ -19,7 +29,7 @@ public class CachedBarcode extends CachedObject {
 	private final String checksum;
 
 	public CachedBarcode(CodeType type, String raw, byte[] data) {
-		this.setTimeout(3, TimeUnit.DAYS);
+		this.setTimeout(conf.getInt("life"), TimeUnit.MINUTES);
 
 		this.type = type;
 		this.raw = raw;

@@ -1,26 +1,22 @@
 package org.barcodeapi.server.core;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
-import org.barcodeapi.server.gen.types.AztecGenerator;
-import org.barcodeapi.server.gen.types.CodabarGenerator;
-import org.barcodeapi.server.gen.types.Code128Generator;
-import org.barcodeapi.server.gen.types.Code39Generator;
-import org.barcodeapi.server.gen.types.DataMatrixGenerator;
-import org.barcodeapi.server.gen.types.Ean13Generator;
-import org.barcodeapi.server.gen.types.Ean8Generator;
-import org.barcodeapi.server.gen.types.ITF14Generator;
-import org.barcodeapi.server.gen.types.PDF417Generator;
-import org.barcodeapi.server.gen.types.QRCodeGenerator;
-import org.barcodeapi.server.gen.types.RoyalMailGenerator;
-import org.barcodeapi.server.gen.types.UPCAGenerator;
-import org.barcodeapi.server.gen.types.UPCEGenerator;
-import org.barcodeapi.server.gen.types.USPSMailGenerator;
+import org.json.JSONArray;
 
+import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
+import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
+import com.mclarkdev.tools.libobjectpooler.LibObjectPoolerController;
 
+/**
+ * CodeGenerators.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CodeGenerators {
 
 	private static CodeGenerators codeGenerators;
@@ -32,38 +28,71 @@ public class CodeGenerators {
 		return codeGenerators;
 	}
 
-	private HashMap<CodeType, CodeGenerator> generators;
+	private HashMap<String, LibObjectPooler<CodeGenerator>> generators = new HashMap<>();
 
 	private CodeGenerators() {
 
-		generators = new HashMap<CodeType, CodeGenerator>();
+		JSONArray enabled = AppConfig.get().getJSONArray("types");
 
-		generators.put(CodeType.EAN8, new Ean8Generator());
-		generators.put(CodeType.EAN13, new Ean13Generator());
+		// loop all enabled types
+		for (int x = 0; x < enabled.length(); x++) {
 
-		generators.put(CodeType.UPC_A, new UPCAGenerator());
-		generators.put(CodeType.UPC_E, new UPCEGenerator());
+			String type = enabled.getString(x);
 
-		generators.put(CodeType.ITF14, new ITF14Generator());
+			// load code type from config
+			CodeType config = CodeTypes.inst().loadType(type);
 
-		generators.put(CodeType.CODABAR, new CodabarGenerator());
-
-		generators.put(CodeType.USPSMail, new USPSMailGenerator());
-		generators.put(CodeType.RoyalMail, new RoyalMailGenerator());
-
-		generators.put(CodeType.Code39, new Code39Generator());
-		generators.put(CodeType.Code128, new Code128Generator());
-
-		generators.put(CodeType.Aztec, new AztecGenerator());
-		generators.put(CodeType.QRCode, new QRCodeGenerator());
-		generators.put(CodeType.DataMatrix, new DataMatrixGenerator());
-
-		generators.put(CodeType.PDF417, new PDF417Generator());
+			// setup a pooler for code type
+			generators.put(type, setupBarcodePooler(config));
+		}
 	}
 
-	public CodeGenerator getGenerator(CodeType codeType) {
+	@SuppressWarnings("unchecked")
+	private LibObjectPooler<CodeGenerator> setupBarcodePooler(CodeType codeType) {
+
+		final Class<? extends CodeGenerator> clazz;
+		final Constructor<? extends CodeGenerator> constructor;
+
+		try {
+
+			String genClass = codeType.getGeneratorClass();
+			clazz = (Class<? extends CodeGenerator>) Class.forName(genClass);
+			constructor = clazz.getDeclaredConstructor();
+
+		} catch (Exception e) {
+			throw LibLog._clog("E0059", e).asException();
+		}
+
+		LibObjectPooler<CodeGenerator> pooler = new LibObjectPooler<CodeGenerator>(3, //
+				new LibObjectPoolerController<CodeGenerator>() {
+
+					@Override
+					public CodeGenerator onCreate() {
+						LibLog._clogF("I0180", clazz.getName());
+						try {
+							return constructor.newInstance();
+						} catch (Exception | Error e) {
+							e.printStackTrace();
+							return null;
+						}
+					}
+
+					@Override
+					public void onDestroy(CodeGenerator t) {
+						LibLog._clogF("I0181", t.getClass().getName());
+					}
+				});
+
+		pooler.setMaxLockTime(1000);
+		pooler.setMaxIdleTime(15 * 60 * 1000);
+		pooler.setMaxPoolSize(codeType.getNumThreads());
+
+		return pooler;
+	}
+
+	public LibObjectPooler<CodeGenerator> getGeneratorPool(String type) {
 		LibMetrics.hitMethodRunCounter();
 
-		return generators.get(codeType);
+		return generators.get(type);
 	}
 }

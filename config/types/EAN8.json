@@ -1,0 +1,29 @@
+{
+	"name": "EAN8",
+	"display": "EAN 8",
+	"target": [
+		"8",
+		"ean-8",
+		"ean8"
+	],
+	"generator": ".Ean8Generator",
+	"threads": 2,
+	"priority": 88,
+	"cost": {
+		"basic": 1,
+		"custom": 2
+	},
+	"checksum": true,
+	"nonprinting": false,
+	"example": "01023459",
+	"pattern": {
+		"auto": "^[0-9]{8}$",
+		"extended": "^[0-9]{7,8}$"
+	},
+	"description": {
+		"en": "Derived from the longer EAN-13 UPC code. For smaller packages."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/EAN-8"
+	}
+}

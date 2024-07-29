@@ -1,0 +1,27 @@
+{
+	"name": "CODABAR",
+	"display": "CODABAR",
+	"target": [
+		"codabar"
+	],
+	"generator": ".CodabarGenerator",
+	"threads": 2,
+	"priority": 78,
+	"cost": {
+		"basic": 1,
+		"custom": 3
+	},
+	"checksum": false,
+	"nonprinting": false,
+	"example": "1234567890",
+	"pattern": {
+		"auto": "^[0-9:$]{4,12}$",
+		"extended": "^[0-9\\-:$\\/.+]+$"
+	},
+	"description": {
+		"en": "An early barode designed to be printed on dot-matrix printers."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Codabar"
+	}
+}

@@ -5,34 +5,48 @@ import java.util.TimerTask;
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
+/**
+ * BackgroundTask.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public abstract class BackgroundTask extends TimerTask {
 
 	private final LibMetrics stats = LibMetrics.instance();
 
+	private final String name;
+
 	public BackgroundTask() {
 
+		String clazz = getClass().getName();
+		name = clazz.substring(clazz.lastIndexOf('.') + 1);
 	}
 
 	public LibMetrics getStats() {
 		return stats;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	@Override
 	public void run() {
 
-		// log task name
-		String taskName = getClass().getName();
-		taskName = taskName.substring(taskName.lastIndexOf('.') + 1);
-		LibLog._clogF("I2001", taskName);
+		// log task name`
+		LibLog._clogF("I2001", getName());
 		long timeStart = System.currentTimeMillis();
 
 		// call implemented method
 		onRun();
 
 		// hit the counter
-		getStats().hitCounter("task", taskName, "count");
+		getStats().hitCounter("task", getName(), "count");
 		long timeTask = System.currentTimeMillis() - timeStart;
-		getStats().hitCounter(timeTask, "task", taskName, "time");
+		getStats().hitCounter(timeTask, "task", getName(), "time");
+
+		// clean garbage
+		System.gc();
 	}
 
 	public abstract void onRun();

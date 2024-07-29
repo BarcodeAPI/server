@@ -2,25 +2,22 @@ package org.barcodeapi.server.core;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Base64;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.server.limits.ClientLimiter;
-import org.barcodeapi.server.limits.LimiterCache;
-import org.barcodeapi.server.session.CachedSession;
-import org.barcodeapi.server.session.SessionCache;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.json.JSONObject;
 
-import com.mclarkdev.tools.libextras.LibExtrasHashes;
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
+/**
+ * RestHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public abstract class RestHandler extends AbstractHandler {
 
 	private final String _NAME;
@@ -55,20 +52,25 @@ public abstract class RestHandler extends AbstractHandler {
 		return stats;
 	}
 
-	public boolean authRequired() {
+	public boolean apiAuthRequired() {
 		return apiAuthRequired;
+	}
+
+	public boolean apiRateLimited() {
+		return apiRateLimited;
 	}
 
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		long timeStart = System.currentTimeMillis();
+		// build the request context
+		RequestContext ctx = new RequestContext(baseRequest);
 
-		String method = request.getMethod();
+		// hit the counters
 		getStats().hitCounter("request", "count");
-		getStats().hitCounter("request", "method", method);
+		getStats().hitCounter("request", "method", ctx.getMethod());
 		getStats().hitCounter("request", "target", _NAME, "count");
-		getStats().hitCounter("request", "target", _NAME, "method", method);
+		getStats().hitCounter("request", "target", _NAME, "method", ctx.getMethod());
 
 		// skip if already handled
 		if (!baseRequest.isHandled()) {
@@ -77,67 +79,21 @@ public abstract class RestHandler extends AbstractHandler {
 			return;
 		}
 
-		// update scheme is via proxy
-		String proto = request.getHeader("X-Forwarded-Proto");
-		if (proto != null) {
-			baseRequest.getMetaData().getURI().setScheme(proto);
-		}
-
-		// get source of the request
-		String ref = request.getHeader("Referer");
-		String source = (ref != null) ? ref : "API";
-
-		// get user IP address
-		String ip = request.getRemoteAddr();
-		String fwd = request.getHeader("X-Forwarded-For");
-		String from = (fwd != null) ? (fwd + " : " + ip) : ip;
-
-		// set response code
-		response.setStatus(HttpServletResponse.SC_OK);
-
 		// log the request
-		LibLog.clogF("request", "I4001", _NAME, target, source, from);
+		LibLog.clogF("request", //
+				((ctx.getProxy() == null) ? "I4001" : "I4002"), //
+				_NAME, target, ctx.getSource(), ctx.getIP(), ctx.getProxy());
 
-		// server details
-		addCORSHeaders(baseRequest, response);
+		// setup default response headers
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.setCharacterEncoding("UTF-8");
 		response.setHeader("Server", "BarcodeAPI.org");
 		response.setHeader("Server-Node", serverName);
 		response.setHeader("Accept-Charset", "utf-8");
-		response.setCharacterEncoding("UTF-8");
-
-		// done if only options
-		if (method.equals("OPTIONS")) {
-			return;
-		}
-
-		// get limiter by API key or IP
-		String key = request.getParameter("key");
-		ClientLimiter limiter = (key != null) ? //
-				LimiterCache.getByKey(key) : LimiterCache.getByIp(from);
-		try {
-
-			// check if allowed by rate limiter
-			if (apiRateLimited && !limiter.allowRequest()) {
-				getStats().hitCounter("request", "limited");
-				getStats().hitCounter("request", "target", _NAME, "limited");
-				LibLog._clogF("E0609", limiter.getCaller());
-				response.setStatus(HttpServletResponse.SC_PAYMENT_REQUIRED);
-				return;
-			}
-		} finally {
-
-			// allow user to see their token count
-			response.setHeader("X-RateLimit-Tokens", //
-					String.format("%.2f", limiter.numTokens()));
-		}
-
-		// get user session info
-		CachedSession session = getSession(request);
-		session.hit(baseRequest.getOriginalURI().toString());
-		response.addCookie(session.getCookie());
+		response.addCookie(ctx.getSession().getCookie());
 
 		// authenticate the user if required
-		if (apiAuthRequired && !validateAdmin(request)) {
+		if (apiAuthRequired && (!ctx.isAdmin())) {
 
 			getStats().hitCounter("request", "authfail");
 			getStats().hitCounter("request", "target", _NAME, "authfail");
@@ -146,77 +102,43 @@ public abstract class RestHandler extends AbstractHandler {
 			return;
 		}
 
+		// add open CORS headers
+		response.setHeader("Access-Control-Max-Age", "86400");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Origin", //
+				(ctx.getOrigin() != null) ? ctx.getOrigin() : "*");
+
+		// request complete if only options
+		if (ctx.getMethod().equals("OPTIONS")) {
+			response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+			return;
+		}
+
+		// send token count to user
+		ctx.getLimiter().touch();
+		response.setHeader("X-RateLimit-Tokens", //
+				String.format("%.2f", ctx.getLimiter().numTokens()));
+
 		try {
 
 			// call the implemented method
-			String uri = baseRequest.getOriginalURI();
-			this.onRequest(uri, request, response);
-		} catch (Exception e) {
+			this.onRequest(ctx, response);
+		} catch (Exception | Error e) {
 
-			// TODO handle this
-			e.printStackTrace();
-		}
+			// log the error
+			LibLog._clog("E0699", e);
+		} finally {
 
-		// hit the counters
-		long targetTime = System.currentTimeMillis() - timeStart;
-		getStats().hitCounter(targetTime, "request", "time");
-		getStats().hitCounter(targetTime, "request", "target", _NAME, "time");
-	}
+			// calculate total processing time
+			long runTime = System.currentTimeMillis() - ctx.getTimestamp();
 
-	protected abstract void onRequest(String uri, HttpServletRequest request, HttpServletResponse response)
-			throws Exception;
-
-	protected void addCORSHeaders(HttpServletRequest request, HttpServletResponse response) {
-
-		String origin = request.getHeader("origin");
-		if (origin != null) {
-
-			response.setHeader("Access-Control-Max-Age", "86400");
-			response.setHeader("Access-Control-Allow-Origin", origin);
-			response.setHeader("Access-Control-Allow-Credentials", "true");
-		}
-
-		if (request.getMethod().equals("OPTIONS")) {
-			response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+			// hit the time and status counters
+			getStats().hitCounter(runTime, "request", "time");
+			getStats().hitCounter(runTime, "request", "target", _NAME, "time");
+			getStats().hitCounter("request", "result", ("_" + response.getStatus()));
+			getStats().hitCounter("request", "target", _NAME, "result", ("_" + response.getStatus()));
 		}
 	}
 
-	protected boolean validateAdmin(HttpServletRequest request) {
-
-		// false if no authentication
-		String auth = request.getHeader("Authorization");
-		if (auth == null || !auth.startsWith("Basic")) {
-			return false;
-		}
-
-		String authString = auth.substring(6);
-		String decode = new String(Base64.getDecoder().decode(authString));
-		String[] unpw = decode.split(":");
-
-		String uName = unpw[0];
-		String passHash = LibExtrasHashes.sumSHA256(unpw[1].getBytes());
-
-		JSONObject admins = AppConfig.get().getJSONObject("admins");
-		return admins.getString(uName).equals(passHash);
-	}
-
-	protected CachedSession getSession(HttpServletRequest request) {
-
-		// get existing user session
-		CachedSession session = null;
-		if (request.getCookies() != null) {
-			for (Cookie cookie : request.getCookies()) {
-				if (cookie.getName().equals("session")) {
-					session = SessionCache.getSession(cookie.getValue());
-				}
-			}
-		}
-
-		// new session if none existing
-		if (session == null) {
-			session = SessionCache.createNewSession();
-		}
-
-		return session;
-	}
+	protected abstract void onRequest(RequestContext ctx, HttpServletResponse response) throws Exception;
 }

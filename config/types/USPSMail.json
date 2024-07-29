@@ -1,0 +1,45 @@
+{
+	"name": "USPSMail",
+	"display": "USPS Mail",
+	"target": [
+		"usps",
+		"intelligent-mail"
+	],
+	"generator": ".USPSMailGenerator",
+	"threads": 2,
+	"priority": 10,
+	"cost": {
+		"basic": 1,
+		"custom": 2
+	},
+	"checksum": false,
+	"nonprinting": false,
+	"example": "0123456709498765432101234567891",
+	"pattern": {
+		"auto": "^[0-9]{1,32}$",
+		"extended": "^[0-9]{1,32}$"
+	},
+	"description": {
+		"en": "Used by the United States Postal Service for Intelligent Mail sorting."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Intelligent_Mail_barcode"
+	},
+	"options": [
+		{
+			"name": "dpi",
+			"default": 150,
+			"values": "50 -> 300"
+		},
+		{
+			"name": "bg",
+			"default": "ffffff",
+			"values": "000000 -> ffffff"
+		},
+		{
+			"name": "fg",
+			"default": "000000",
+			"values": "000000 -> ffffff"
+		}
+	]
+}

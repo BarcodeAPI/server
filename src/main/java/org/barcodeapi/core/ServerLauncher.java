@@ -1,55 +1,55 @@
 package org.barcodeapi.core;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.server.admin.CacheDumpHandler;
 import org.barcodeapi.server.admin.CacheFlushHandler;
 import org.barcodeapi.server.admin.LimiterFlushHandler;
 import org.barcodeapi.server.admin.LimiterListHandler;
 import org.barcodeapi.server.admin.ServerReloadHandler;
+import org.barcodeapi.server.admin.ServerStatsHandler;
 import org.barcodeapi.server.admin.SessionFlushHandler;
 import org.barcodeapi.server.admin.SessionListHandler;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.BulkHandler;
 import org.barcodeapi.server.api.InfoHandler;
-import org.barcodeapi.server.api.ServerStatsHandler;
 import org.barcodeapi.server.api.SessionDetailsHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.TypesHandler;
 import org.barcodeapi.server.core.BackgroundTask;
+import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.RestHandler;
-import org.barcodeapi.server.tasks.BarcodeCleanupTask;
-import org.barcodeapi.server.tasks.LimiterCleanupTask;
-import org.barcodeapi.server.tasks.SessionCleanupTask;
-import org.barcodeapi.server.tasks.StatsDumpTask;
-import org.barcodeapi.server.tasks.WatchdogTask;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.mclarkdev.tools.libargs.LibArgs;
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libloggelf.LibLogGELF;
 
 /**
+ * ServerLauncher.java
+ * 
  * This class should handle the processing of the command line arguments passed
  * on startup in addition to the setup of the main Jetty API server and it's
  * associated handlers.
  * 
- * @author Matthew R. Clark, 2020
- *
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class ServerLauncher {
 
 	static {
-		LibLog._logF("Network logging: %s", LibLogGELF.enabled());
+		LibLog._logF("Runtime ID: %s", ServerRuntime.getRuntimeID());
+		LibLog._logF("Network Logging: %s", LibLogGELF.enabled());
 	}
-
-	// Initialize server runtime and get ID
-	private final String _ID = ServerRuntime.getRuntimeID();
 
 	// The Jetty server and it's handlers
 	private Server server;
@@ -86,9 +86,6 @@ public class ServerLauncher {
 	 */
 	public void launch() throws Exception {
 
-		// Log Runtime ID
-		LibLog._clogF("I0001", _ID);
-
 		// Initialize API server
 		LibLog._clog("I0002");
 		initApiServer();
@@ -106,6 +103,7 @@ public class ServerLauncher {
 	 * Initialize the API REST server.
 	 */
 	private void initApiServer() throws Exception {
+		CodeGenerators.getInstance();
 
 		// Initialize API server
 		LibLog._clog("I0011");
@@ -113,11 +111,17 @@ public class ServerLauncher {
 		handlers = new HandlerCollection();
 		server.setHandler(handlers);
 
+		// Set max request size
+		HttpConfiguration httpConfig = new HttpConfiguration();
+		httpConfig.setRequestHeaderSize(16 * 1024);
+		server.setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", -1);
+
 		// Bind server port
 		int portAPI = LibArgs.instance().getInteger("port", 8080);
-		ServerConnector serverConnectorAPI = new ServerConnector(server);
-		serverConnectorAPI.setPort(portAPI);
-		server.addConnector(serverConnectorAPI);
+		ServerConnector serverConnector = new ServerConnector(//
+				server, new HttpConnectionFactory(httpConfig));
+		serverConnector.setPort(portAPI);
+		server.setConnectors(new Connector[] { serverConnector });
 
 		// Setup rest handlers
 		initHandler("/api", BarcodeAPIHandler.class);
@@ -144,6 +148,7 @@ public class ServerLauncher {
 		resourceHandler.setHandler(new StaticHandler(server));
 		resourceHandler.setContextPath("/");
 		handlers.addHandler(resourceHandler);
+
 	}
 
 	/**
@@ -167,36 +172,34 @@ public class ServerLauncher {
 	 */
 	private void initSystemTasks() {
 
-		LibLog._clog("I0031");
-		// run watch-dog every 1 minute
-		WatchdogTask watchdogTask = new WatchdogTask();
-		ServerRuntime.getSystemTimer().schedule(watchdogTask, 0, //
-				TimeUnit.MILLISECONDS.convert(15, TimeUnit.SECONDS));
+		final String TASK_ROOT = "org.barcodeapi.server.tasks";
 
-		LibLog._clog("I0032");
-		// print stats to log every 5 minutes
-		BackgroundTask statsTask = new StatsDumpTask(//
-				LibArgs.instance().getBoolean("no-telemetry"));
-		ServerRuntime.getSystemTimer().schedule(statsTask, 0, //
-				TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES));
+		JSONArray taskList = AppConfig.get().getJSONArray("tasks");
 
-		LibLog._clog("I0033");
-		// cleanup sessions every 15 minutes
-		BackgroundTask sessionCleanup = new SessionCleanupTask();
-		ServerRuntime.getSystemTimer().schedule(sessionCleanup, 0, //
-				TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES));
+		for (int x = 0; x < taskList.length(); x++) {
+			JSONObject taskDef = taskList.getJSONObject(x);
 
-		LibLog._clog("I0034");
-		// cleanup barcodes every hour
-		BackgroundTask barcodeCleanup = new BarcodeCleanupTask();
-		ServerRuntime.getSystemTimer().schedule(barcodeCleanup, 0, //
-				TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS));
+			try {
 
-		LibLog._clog("I0035");
-		// cleanup limiters every 30 minutes
-		BackgroundTask limiterCleanup = new LimiterCleanupTask();
-		ServerRuntime.getSystemTimer().schedule(limiterCleanup, 0, //
-				TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES));
+				// Get task details
+				String taskName = taskDef.getString("name");
+				String taskClass = (TASK_ROOT + taskDef.getString("impl"));
+				long taskTime = taskDef.getInt("interval");
+
+				// Get task constructor
+				@SuppressWarnings("unchecked")
+				Constructor<? extends BackgroundTask> constructor = //
+						((Class<? extends BackgroundTask>) Class.forName(taskClass)).getDeclaredConstructor();
+
+				// Create and schedule the task
+				LibLog._clogF("I0036", taskName);
+				ServerRuntime.getSystemTimer().schedule(//
+						constructor.newInstance(), 0, (taskTime * 1000));
+			} catch (Exception | Error e) {
+
+				LibLog._clog("E0039", e);
+			}
+		}
 	}
 
 	/**
@@ -208,7 +211,7 @@ public class ServerLauncher {
 
 		try {
 
-			// start server
+			// Start server
 			server.start();
 		} catch (Exception e) {
 
@@ -226,7 +229,7 @@ public class ServerLauncher {
 
 		try {
 
-			// stop server
+			// Stop server
 			server.stop();
 			return true;
 		} catch (Exception e) {

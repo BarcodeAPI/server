@@ -3,6 +3,11 @@ package org.barcodeapi.server.session;
 import org.barcodeapi.server.core.CachedObject;
 import org.barcodeapi.server.core.ObjectCache;
 
+/**
+ * SessionCache.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class SessionCache {
 
 	public static ObjectCache getCache() {

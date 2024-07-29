@@ -3,11 +3,12 @@ package org.barcodeapi.server.api;
 import java.io.IOException;
 import java.util.Base64;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.GenerationException;
+import org.barcodeapi.server.core.GenerationException.ExceptionType;
+import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.gen.BarcodeGenerator;
 import org.barcodeapi.server.gen.BarcodeRequest;
@@ -15,58 +16,108 @@ import org.json.JSONException;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
+/**
+ * BarcodeAPIHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class BarcodeAPIHandler extends RestHandler {
 
 	private final CachedBarcode ERR;
+	private final CachedBarcode EXC;
 	private final CachedBarcode BLK;
+	private final CachedBarcode RTE;
+	private final CachedBarcode BSY;
 
 	public BarcodeAPIHandler() {
 		super(false, true);
 
 		try {
 
-			ERR = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
-					"/128/$$@E$$@R$$@R$$@O$$@R$$@"));
-			BLK = BarcodeGenerator.requestBarcode(BarcodeRequest.fromURI(//
-					"/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
+			ERR = BarcodeGenerator.requestBarcode(//
+					BarcodeRequest.fromURI("/128/$$@E$$@R$$@R$$@O$$@R$$@"));
+			EXC = BarcodeGenerator.requestBarcode(//
+					BarcodeRequest.fromURI("/128/$$@F$$@A$$@I$$@L$$@E$$@D$$@"));
+			BLK = BarcodeGenerator.requestBarcode(//
+					BarcodeRequest.fromURI("/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
+			RTE = BarcodeGenerator.requestBarcode(//
+					BarcodeRequest.fromURI("/128/$$@RATE$$@$$@LIMIT$$@"));
+			BSY = BarcodeGenerator.requestBarcode(//
+					BarcodeRequest.fromURI("/128/$$@B$$@U$$@S$$@Y$$@"));
 		} catch (GenerationException e) {
 
-			throw LibLog._clog("E0789", e).asException(IllegalStateException.class);
+			throw LibLog._clog("E0789", e)//
+					.asException(IllegalStateException.class);
 		}
 	}
 
 	@Override
-	protected void onRequest(String uri, HttpServletRequest srvReq, HttpServletResponse response)
-			throws JSONException, IOException {
+	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
 
-		CachedBarcode barcode;
-		BarcodeRequest request = BarcodeRequest.fromURI(uri);
+		CachedBarcode barcode = null;
+		BarcodeRequest request = BarcodeRequest.fromURI(ctx.getUri());
 
 		try {
+
+			// calculate token cost
+			int cost = (request.useCache()) ? //
+					request.getType().getCostBasic() : request.getType().getCostCustom();
+
+			// send token cost to user
+			response.setHeader("X-RateLimit-Cost", Integer.toString(cost));
+
+			// try to spend tokens
+			if (!ctx.getLimiter().spendTokens(cost)) {
+
+				// return rate limited barcode to user
+				throw new GenerationException(ExceptionType.LIMITED);
+			}
+
 			// generate user requested barcode
 			barcode = BarcodeGenerator.requestBarcode(request);
 
+			// set response code okay
+			response.setStatus(HttpServletResponse.SC_OK);
+
 		} catch (GenerationException e) {
 
-			LibLog._clogF("E6009", uri, e.getMessage());
+			// log barcode generation failures
+			LibLog._clogF("E6009", ctx.getUri(), e.getMessage());
+			response.setHeader("X-Error-Message", e.getMessage());
 
 			switch (e.getExceptionType()) {
+			case LIMITED:
+				// send rate limit response code
+				barcode = RTE;
+				response.setStatus(HttpServletResponse.SC_PAYMENT_REQUIRED);
+				response.setHeader("X-ClientRateLimited", "YES");
+				break;
+
 			case BLACKLIST:
-				// serve blacklist code
+				// serve blacklist response code
 				barcode = BLK;
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 				break;
 
 			case EMPTY:
-			case FAILED:
-			default:
-				// serve error code
+			case INVALID:
+				// send internal server response code
 				barcode = ERR;
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				break;
+
+			case BUSY:
+				// send server busy response code
+				barcode = BSY;
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				break;
+
+			case FAILED:
+				// send server error response code
+				barcode = EXC;
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				break;
 			}
-
-			// set HTTP response code and add message to headers
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.setHeader("X-Error-Message", e.getMessage());
 		}
 
 		// add cache headers
@@ -77,23 +128,29 @@ public class BarcodeAPIHandler extends RestHandler {
 			response.setHeader("Cache-Control", String.format("max-age=%d, public", tplus));
 		}
 
-		// barcode details
-		response.setHeader("X-Barcode-Type", barcode.getType().toString());
+		// add type and barcode detail headers
+		response.setHeader("X-Barcode-Type", barcode.getType().getName());
 		response.setHeader("X-Barcode-Content", barcode.getEncoded());
 
 		switch (request.getOptions().optString("format", "png")) {
-		case "b64": // serve as base64
-			String encoded = Base64.getEncoder().encodeToString(barcode.getData());
+
+		// serve as base64
+		case "b64":
+
+			// encode as string
+			String encoded = Base64.getEncoder()//
+					.encodeToString(barcode.getData());
 			byte[] encodedBytes = encoded.getBytes();
-		
-			// add headers and write data to stream
+
+			// add content headers and write data to stream
 			response.setHeader("Content-Type", "image/png");
 			response.setHeader("Content-Encoding", "base64");
 			response.setHeader("Content-Length", Long.toString(encodedBytes.length));
 			response.getOutputStream().write(encodedBytes);
 			break;
 
-		case "png": // serve as PNG
+		// serve as PNG
+		case "png":
 
 			// file save-as name / force download
 			boolean download = request.getOptions().optBoolean("download");
@@ -101,12 +158,15 @@ public class BarcodeAPIHandler extends RestHandler {
 					((download) ? "attachment; " : "") + //
 							("filename=" + barcode.getNice() + ".png"));
 
-			// add headers and write data to stream
+			// add content headers and write data to stream
 			response.setCharacterEncoding(null);
 			response.setHeader("Content-Type", "image/png");
 			response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
 			response.getOutputStream().write(barcode.getData());
 			break;
+
+		// serve as JSON
+		case "json":
 
 		default:
 			// unknown output format

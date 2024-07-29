@@ -2,14 +2,19 @@ package org.barcodeapi.server.admin;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.session.SessionCache;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * SessionFlushHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class SessionFlushHandler extends RestHandler {
 
 	public SessionFlushHandler() {
@@ -17,8 +22,7 @@ public class SessionFlushHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(String uri, HttpServletRequest request, HttpServletResponse response)
-			throws JSONException, IOException {
+	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
 
 		double count = SessionCache.getCache().clearCache();
 
@@ -26,6 +30,7 @@ public class SessionFlushHandler extends RestHandler {
 		JSONObject output = new JSONObject()//
 				.put("message", "sessions flushed")//
 				.put("count", count);
+		response.setHeader("Content-Type", "application/json");
 		response.getOutputStream().println(output.toString(4));
 	}
 }

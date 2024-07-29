@@ -1,0 +1,81 @@
+@page {
+	size: auto;
+	margin: 0;
+}
+
+.multis-barcode {
+	margin-top: 3em;
+	margin-bottom: 3em;
+	max-width: 80mm;
+	margin-left: 3em;
+	margin-right: 3em;
+}
+
+#barcodes {
+	margin-top: 1.5em;
+	border-spacing: 10mm;
+}
+
+.controller {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	display: inline-grid;
+}
+
+.button {
+	border: none;
+	color: white;
+	padding: 10px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+}
+
+.button-home {
+	width: 100px;
+	grid-column: 1;
+	background-color: rgb(0, 0, 255);
+}
+
+.button-generate {
+	width: 140px;
+	grid-column: 3;
+	background-color: #04AA6D;
+}
+
+.button-share {
+	width: 100px;
+	grid-column: 4;
+	background-color: rgb(255, 128, 0);
+}
+
+.button-print {
+	width: 100px;
+	grid-column: 5;
+	background-color: rgb(127, 0, 255);
+}
+
+#input {
+	grid-column: 2;
+	width: 350px;
+	height: 36px;
+	resize: none;
+
+	padding: 8px;
+	box-sizing: border-box;
+	border: 2px solid #ccc;
+	background-color: #f8f8f8;
+	font-size: 16px;
+}
+
+#input:focus {
+	outline: none;
+}
+
+@media print {
+	.controller {
+		display: none;
+	}
+}

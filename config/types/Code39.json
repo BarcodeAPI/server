@@ -1,0 +1,29 @@
+{
+	"name": "Code39",
+	"display": "Code 39",
+	"target": [
+		"39",
+		"code-39",
+		"code39"
+	],
+	"generator": ".Code39Generator",
+	"threads": 2,
+	"priority": 68,
+	"cost": {
+		"basic": 2,
+		"custom": 3
+	},
+	"checksum": false,
+	"nonprinting": false,
+	"example": "TRY 39 ME",
+	"pattern": {
+		"auto": "^[A-Z0-9 $.\\/]{1,12}$",
+		"extended": "^[A-Z*0-9 \\-$%.\\/+]+$"
+	},
+	"description": {
+		"en": "A basic alphanumeric barcode. Uppercase letters and numbers only."
+	},
+	"wiki" : {
+		"en" : "https://en.wikipedia.org/wiki/Code_39"
+	}
+}

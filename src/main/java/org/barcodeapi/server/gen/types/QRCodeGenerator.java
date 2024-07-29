@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 
 import com.google.zxing.BarcodeFormat;
@@ -18,41 +16,37 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+/**
+ * QRCodeGenerator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class QRCodeGenerator extends CodeGenerator {
 
 	private QRCodeWriter generator;
 
 	public QRCodeGenerator() {
-		super(CodeType.QRCode);
 
 		generator = new QRCodeWriter();
 	}
 
 	@Override
-	public String onValidateRequest(String data) {
-
-		return CodeUtils.parseControlChars(data);
-	}
-
-	@Override
 	public byte[] onRender(String data, JSONObject options) throws WriterException, IOException {
 
-		int size = options.optInt("size", 300);
+		int size = options.optInt("size", 280);
+		int qz = options.optInt("qz", 2);
 
 		Map<EncodeHintType, Object> hintsMap = new HashMap<>();
 		hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
 		hintsMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
-		hintsMap.put(EncodeHintType.MARGIN, 2);
+		hintsMap.put(EncodeHintType.MARGIN, qz);
 
-		synchronized (generator) {
+		BitMatrix bitMatrix = generator.encode(//
+				data, BarcodeFormat.QR_CODE, size, size, hintsMap);
 
-			BitMatrix bitMatrix = generator.encode(//
-					data, BarcodeFormat.QR_CODE, size, size, hintsMap);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		MatrixToImageWriter.writeToStream(bitMatrix, "png", out);
 
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			MatrixToImageWriter.writeToStream(bitMatrix, "png", out);
-
-			return out.toByteArray();
-		}
+		return out.toByteArray();
 	}
 }

@@ -1,0 +1,29 @@
+{
+	"name": "QRCode",
+	"display": "QR Code",
+	"target": [
+		"qr",
+		"qr-code",
+		"qrcode"
+	],
+	"generator": ".QRCodeGenerator",
+	"threads": 2,
+	"priority": 58,
+	"cost": {
+		"basic": 3,
+		"custom": 3
+	},
+	"checksum": false,
+	"nonprinting": true,
+	"example": "QR Barcode",
+	"pattern": {
+		"auto": "^.{1,64}$",
+		"extended": "^.{1,65535}$"
+	},
+	"description": {
+		"en": "A 2D data barcode whose timing markers are aligned at the corners."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/QR_code"
+	}
+}

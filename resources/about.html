@@ -1,100 +1,154 @@
 <html>
 
+<!--
+	about.html
+	BarcodeAPI.org, 2017-2024
+ -->
+
 <head>
-	<title>About BarcodeAPI.org</title>
+	<title>BarcodeAPI.org - About</title>
+
+	<meta name="keywords"
+		content="barcode, barcode api, barcode app, barcode generator, download barcode, free barcodes, custom barcodes">
+	<meta name="description"
+		content="Free online barcode generator! Scan barcodes in the web browser or download the images for free!">
+
+	<link rel="icon" type="image/png" href="/ext/favicon.png" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<meta name="keywords"
-		content="barcode, barcode app, bulk barcode generator, barcode generator, barcode api, qr code, qr code generator, code 128, code128, ean8, eac-8, ean13, ean-13, codabar, download barcode, barcodes, pdf, pdf 417">
-	<meta name="description"
-		content="Generate barcodes of nearly any type, scan it in the web browser, or download the generated images for free.">
-
-	<link rel="icon" type="image/png" href="/static/favicon.png" />
-
-	<script src="/static/index.js"></script>
-
-	<link rel="stylesheet" type="text/css" href="/static/flexboxgrid.min.css" />
-	<link rel="stylesheet" type="text/css" href="/static/index.css" />
+	<link rel="stylesheet" type="text/css" href="/ext/3p/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/ext/css/layout.css" />
 </head>
 
-<body onload="loadLicense();">
-	<div class="wrap container-fluid">
+<body>
+	<div class="wrapper container-fluid">
 
-		<div class="header row middle-xs between-xs">
-			<div class="col-xs-12 col-sm-3">
-				<a href="/">
-					<div class="logo">
-						<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo" aria-label="Logo">
-					</div>
-				</a>
-			</div>
-			<div class="header-share">
-				<div class="row end-xs middle-xs">
-					<div class="col-xs">
-						<h4>
-							GOT FEEDBACK? <br /> <span class="feedback">feedback@barcodeapi.org</span>
-						</h4>
-					</div>
-					<div class="share-icon email">
-						<a href="mailto:feedback@barcodeapi.org?body=I%20love%20the%20new%20UI%21&amp;subject=Feedback%20about%20BarcodeAPI"
-							target="_blank"> <img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
-						</a>
-					</div>
-				</div>
+		<div class="header row between-sm start-sm center-xs">
+			<div class="header-logo start-sm center-xs col-xs-12 col-sm-5"></div>
+			<div class="header-contact col-sm-5 middle-xs end-xs">
+				<h4>
+					FEEDBACK &amp; SUPPORT<br />
+					<span class="header-email">support@barcodeapi.org</span>
+				</h4>
+				<div class="action-icon action-email icon-email"></div>
 			</div>
 		</div>
 
 		<div class="row center-xs middle-xs">
-			<div class="display-barcode col-xs-12 bulk-barcodes">
-				<div id="frame">
-					<div class="row center-xs middle-xs">
-						<div class="col-xs-12">
-							<h2>
-								<img src="/img/barcode.svg" height="20" class="icon-first" />BarcodeAPI.org
-							</h2>
-							<div>
-								<br /> Built with love by <a href="https://about.mclarkdev.com/">MClarkDev.com</a><br />
-								<br />
-								BarcodeAPI.org services provided free for all.<br />
-								<br /> Visit <a href="https://www.sysdns.org/tools/">SysDNS.org</a>
-								for more free tools.
-							</div>
-							<br /> <br />
-							<h2>User Manual</h2>
-							<div>
-								<a href="/manual.pdf" target="_blank" class="col-xs"><span>Read
-										the Docs</span></a>
-							</div>
-							<br />
-							<h2>Source Code</h2>
-							<div>
-								<a href="https://github.com/BarcodeAPI/server" target="_blank"
-									class="col-xs"><span>Browse the source</span></a>
-							</div>
-							<br />
-							<h2>Technical Support</h2>
-							<div>
-								Send us an email!<br />
-								<br />feedback@barcodeapi.org
-							</div>
-							<br /> <br />
-							<h2>Special Thanks</h2>
-							<pre id="thanks">
-Amazon
-Walmart
-Java (OpenJDK)
-Eclipse / Jetty
-Barcode4J
-Google ZXing
-
-							</pre>
-							<br /> <br /> <br /> Since 2017. <br />
-						</div>
-					</div>
+			<div class="col-xs-12">
+				<h2>
+					<span>BarcodeAPI.org</span>
+				</h2>
+				<br />
+				<div>
+					Over 1 billion barcodes served!
+					<br />
+					<br />
+					<a href="/history.html" class="text-link">From 2017 to 1 Billion</a>
 				</div>
 			</div>
 		</div>
+		<div class="row center-xs middle-xs">
+			<div class="col-xs-12">
+				<h2>User Manual</h2>
+				<div>
+					Building something cool using our API?
+					<br />
+					<br />
+					Browse the documentation for more details.
+					<br />
+					<br />
+					Visit <a href="/api.html" class="text-link">API Docs</a>
+				</div>
+			</div>
+		</div>
+		<div class="row center-xs middle-xs">
+			<div class="col-xs-12">
+				<h2>Rate Limits</h2>
+				<div>
+					Generating a lot of barcodes?
+					<br />
+					<br />
+					Rate limits ensure fair use of our service.
+					<br />
+					<br />
+					Visit <a href="/limits.html" class="text-link">Rate Limits</a>
+				</div>
+			</div>
+		</div>
+		<div class="row center-xs middle-xs">
+			<div class="col-xs-12">
+				<h2>Technical Support</h2>
+				<div>
+					Questions related to the service?
+					<br />
+					<br />
+					Visit <a href="/support.html" class="text-link">Feedback &amp; Support</a>
+				</div>
+			</div>
+		</div>
+		<div class="row center-xs middle-xs">
+			<div class="col-xs-12">
+				<h2>Privacy Policy</h2>
+				<div>
+					Our service prioritizes the privacy of all users.
+					<br />
+					<br />
+					We do not share your data with any third-party.
+					<br />
+					<br />
+					We will never serve you ads. ♥
+				</div>
+			</div>
+		</div>
+		<div class="row center-xs middle-xs">
+			<div class="col-xs-12">
+				<h2>Source Code</h2>
+				<div>
+					Looking to run your own instance?
+					<br />
+					<br />
+					Open source and available on Github.
+					<br />
+					<br />
+					<a href="https://github.com/BarcodeAPI/server" target="_blank" class="text-link"><span>Browse the
+							source</span></a>
+					<br />
+					<br />
+					<a class="text-link" href="/license.html">License</a>
+				</div>
+			</div>
+		</div>
+		<div class="row center-xs middle-xs">
+			<div class="col-xs-12">
+				<h2>Special Thanks</h2>
+				<div>
+					<pre id="thanks">
+Walmart (ASR)
+Amazon Robotics
+					</pre>
+					<pre id="thanks">
+Java (OpenJDK)
+Eclipse / Jetty
+Google ZXing
+Barcode4J
+					</pre>
+				</div>
+			</div>
+		</div>
+		<div class="row center-xs middle-xs">
+			<div class="col-xs-12">
+				<a class="text-link" href="https://barcodeapi.org/">BarcodeAPI.org</a>
+				<br />
+				<a class="text-link" href="https://about.mclarkdev.com/">MClarkDev.com</a>
+				<br />
+				Since 2017
+				<br />
+				<br />
+			</div>
+		</div>
+	</div>
 	</div>
 </body>
 

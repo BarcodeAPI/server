@@ -122,5 +122,10 @@
 			<version>1.5.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.mclarkdev.tools</groupId>
+			<artifactId>libobjectpooler</artifactId>
+			<version>1.5.4</version>
+		</dependency>
 	</dependencies>
 </project>

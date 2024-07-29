@@ -3,11 +3,12 @@ package org.barcodeapi;
 import org.barcodeapi.core.ServerLauncher;
 
 /**
- * This class should handle the master life-cycle of the Barcode API server and
- * sub components thereof.
+ * Launcher.java
  * 
- * @author Matthew R. Clark, 2019
- *
+ * This class should handle the master life-cycle of the BarcodeAPI.org
+ * application, web server, and sub components there-in.
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class Launcher {
 
@@ -20,8 +21,7 @@ public class Launcher {
 	 * exceptions which might arise at any time in the applications life before it
 	 * is properly terminated.
 	 * 
-	 * @param args
-	 *            Any arguments passed to the application from the command line.
+	 * @param args Any arguments passed to the application from the command line.
 	 */
 	public static void main(String[] args) {
 
@@ -58,8 +58,7 @@ public class Launcher {
 	 * This method may be called by any class, at any time, to request that the
 	 * application be terminated with the given exit code.
 	 * 
-	 * @param exitCode
-	 *            The exit code to be returned to the operating system.
+	 * @param exitCode The exit code to be returned to the operating system.
 	 */
 	public static void invokeSystemShutdown(final int exitCode) {
 

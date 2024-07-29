@@ -1,0 +1,28 @@
+{
+	"name": "RoyalMail",
+	"display": "Royal Mail",
+	"target": [
+		"royal",
+		"royal-mail"
+	],
+	"generator": ".RoyalMailGenerator",
+	"threads": 2,
+	"priority": 8,
+	"cost": {
+		"basic": 1,
+		"custom": 1
+	},
+	"checksum": false,
+	"nonprinting": false,
+	"example": "11212345612345678",
+	"pattern": {
+		"auto": "^[0-9]{1,32}$",
+		"extended": "^[0-9]{1,32}$"
+	},
+	"description": {
+		"en": "Royal Mail"
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/PostBar"
+	}
+}

@@ -1,139 +1,148 @@
 <html>
 
+<!--
+	index.html
+	BarcodeAPI.org, 2017-2024
+ -->
+
 <head>
 	<title>BarcodeAPI.org</title>
 
+	<meta name="keywords"
+		content="barcode, barcode api, barcode app, barcode generator, download barcode, free barcodes, custom barcodes">
+	<meta name="description"
+		content="Free online barcode generator! Scan barcodes in the web browser or download the images for free!">
+
+	<link rel="icon" type="image/png" href="/ext/favicon.png" />
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<meta name="keywords"
-		content="barcode, barcode app, barcode generator, barcode api, qr code, qr code generator, code 128, code128, ean8, eac-8, ean13, ean-13, codabar, download barcode, barcodes, pdf, pdf 417">
-	<meta name="description"
-		content="Generate barcodes of nearly any type from your web browser! Scan directly from your screen or download the generated images for free!">
+	<link rel="stylesheet" type="text/css" href="/ext/3p/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/ext/css/layout.css" />
 
-	<link rel="icon" type="image/png" href="/static/favicon.png" />
-
-	<script src="/static/index.js"></script>
-
-	<link rel="stylesheet" type="text/css" href="/static/flexboxgrid.min.css" />
-	<link rel="stylesheet" type="text/css" href="/static/index.css" />
+	<script src="/ext/js/actions.js"></script>
+	<script src="/ext/js/index.js"></script>
 </head>
 
-<body onload="loadHash(); init();">
-	<div class="wrap container-fluid">
+<body onload="init();">
+	<div class="wrapper container-fluid">
 
-		<!-- Header -->
-		<div class="header row middle-xs between-xs">
-			<div class="col-xs-12 col-sm-3">
-				<div class="logo">
-					<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo" aria-label="Logo">
-				</div>
-			</div>
-			<div class="header-share">
-				<div class="row end-xs middle-xs">
-					<div class="col-xs">
-						<h4>
-							GOT FEEDBACK? <br /> <span class="feedback">feedback@barcodeapi.org</span>
-						</h4>
-					</div>
-					<div class="share-icon email">
-						<a href="mailto:feedback@barcodeapi.org?body=I%20love%20the%20new%20UI%21&amp;subject=Feedback%20about%20BarcodeAPI"
-							target="_blank"> <img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
-						</a>
-					</div>
-				</div>
+		<div class="header row between-sm start-sm center-xs">
+			<div class="header-logo start-sm center-xs col-xs-12 col-sm-5"></div>
+			<div class="header-contact col-sm-5 middle-xs end-xs">
+				<h4>
+					FEEDBACK &amp; SUPPORT<br />
+					<span class="header-email">support@barcodeapi.org</span>
+				</h4>
+				<div class="action-icon action-email icon-email"></div>
 			</div>
 		</div>
 
-		<!-- Page Body -->
-		<div class="row main start-xs between-xs">
-			<div class="choose-barcode-type col-xs-12 col-sm-6">
-				<h3>CHOOSE YOUR BARCODE TYPE</h3>
-				<div class="select-type" id="select-type">
-					<a onclick="toggleOpenBarcodeTypes()">Select Barcode</a>
+		<div class="app row top-xs start-xs">
+			<div class="app-setup col-xs-12 col-sm-6">
+
+				<div class="app-setup-title col-xs-12 center-xs start-sm">
+					<h3>SELECT BARCODE TYPE</h3>
 				</div>
-				<div class="barcode-types" id="topnav">
-					<a id="type-auto" onclick="setType('auto');" onmouseover="showCodeDescription('auto')">Auto</a>
+
+				<div class="app-setup-type col-xs-12">
+					<a id="app-setup-type-picker">Select Barcode</a>
 				</div>
-				<div class="col-xs-8 bulk-upload">
+
+				<div class="app-setup-types col-xs-12">
+					<a id="type-auto" onclick="setType('auto');">Auto</a>
+				</div>
+
+				<div class="app-setup-options col-xs-12">
+					<span class="app-options-link text-link">Render Options</span>
+					<div class="app-barcode-options">
+						<div>
+							Whitespace<br /> <input type="checkbox" id="option-trim-before" onchange="optionsChange()"
+								checked />&nbsp;Trim&nbsp;Before
+							<br /> <input type="checkbox" id="option-trim-after" onchange="optionsChange()"
+								checked />&nbsp;Trim&nbsp;After
+							<br /><span>Key</span>&nbsp;<input type="password" id="option-api-key" size="10"
+								maxlength="12" onchange="optionsChange()" />
+						</div>
+
+						<div>
+							Custom&nbsp;Colors<br />Bars:&nbsp;<input type="text" id="option-color-fg" value="000000"
+								size="6" maxlength="6" onchange="optionsChange()" pattern="[0-9A-F]{6}" /><br />
+							Back:&nbsp;<input type="text" id="option-color-bg" value="FFFFFF" size="6" maxlength="6"
+								onchange="optionsChange()" pattern="[0-9A-F]{6}" /><br />
+						</div>
+
+						<div>
+							Resolution<br />DPI:&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" id="option-dpi" value="150"
+								min="50" max="500" onchange="optionsChange()" size="6" step="5" /><br />
+							Height:&nbsp;<input type="number" id="option-height" value="25" min="10" max="500"
+								onchange="optionsChange()" size="6" /><br />
+							Text:&nbsp;&nbsp;<select id="option-hrt" onchange="optionsChange()">
+								<option value="top">Top</option>
+								<option value="bottom" selected>Bottom</option>
+								<option value="none">None</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="app-setup-bulk col-xs-12">
 					<h4>Need more barcodes?</h4>
-					<a href="/bulk.html" class="text-link"> <img src="/img/barcode.svg" class="icon-first" />BULK
-						BARCODE
-						GENERATOR<img src="/img/chevron-right.svg" class="icon-last" />
-					</a>
+					<a href="/multi.html" class="text-link bulk-link anim">MULTIS GENERATOR</a><br />
+					<a href="/bulk.html" class="text-link bulk-link anim">BULK BARCODE GENERATOR</a>
 				</div>
 			</div>
-			<div class="display-barcode col-xs-12 col-sm-6">
-				<div id="frame">
-					<form onsubmit="return false;">
-						<div class="row start-xs middle-xs">
-							<div class="col-xs-9">
-								<input id="text" class="barcode-text-input pulse-bg" onkeyup="delayGenCode()"
-									type="text" placeholder="TRY ME!" autocomplete="off" maxlength="200"
-									title="Enter a code for anything" />
-							</div>
-							<div class="col-xs-3">
-								<input class="barcode-text-input-clear" type="reset" value="CLEAR" title="Clear text" />
-							</div>
-						</div>
-					</form>
+
+			<div class="app-render col-xs-12 col-sm-6">
+				<div class="row barcode-input">
+					<div class="col-xs-10">
+						<input id="text" class="barcode-text-input pulse-bg" type="text" placeholder="TRY ME!"
+							autocomplete="off" maxlength="200" />
+					</div>
+					<div class="col-xs-2 middle-xs center-xs">
+						<div class="action-icon action-clear icon-clear"></div>
+					</div>
+				</div>
+
+				<div class="row barcode-image middle-xs center-xs">
+					<div class="barcode_wrapper"><img id="barcode_output" /></div>
 					<input aria-hidden="true" id="barcode_image_link" />
 					<div id="message">Barcode link copied to clipboard.</div>
-					<div id="barcode_wrapper">
-						<img id="barcode_output" />
-					</div>
+				</div>
 
-					<div id="barcode_options" class="row middle-xs center-xs">
-
-						<div class="barcode-icon" id="barcode_print">
-							<a id="barcode_print_button" onclick="printCode()" title="Print Barcode"> <img
-									src="/img/print.svg" alt="Print barcode" aria-label="Print barcode">
-							</a>
-						</div>
-
-						<div class="barcode-icon" id="barcode_link">
-							<a id="barcode_link_button" onclick="copyBarcodeLink()" title="Get Link to Barcode"> <img
-									src="/img/chain.svg" alt="Get barcode link" aria-label="Get barcode link">
-							</a>
-						</div>
-
-						<div class="barcode-icon" id="barcode_image">
-							<a id="barcode_image_button" onclick="copyImageToClipboard()" title="Copy Barcode as Image">
-								<img src="/img/image.svg" alt="Copy barcode image" aria-label="Copy barcode image">
-							</a>
-						</div>
-
-						<div class="barcode-icon" id="barcode_download">
-							<a id="barcode_download_button" target="_blank" title="Download Barcode Image"> <img
-									src="/img/file_download.svg" alt="Download barcode" aria-label="Download barcode">
-							</a>
-						</div>
-					</div>
+				<div class="row barcode-links middle-xs center-xs">
+					<div class="action-icon action-print icon-print"></div>
+					<div class="action-icon action-url icon-url"></div>
+					<div class="action-icon action-copy icon-copy"></div>
+					<div class="action-icon action-download icon-download"></div>
 				</div>
 			</div>
 		</div>
 
-		<!-- Footer -->
-		<div class="footer row middle-xs top-sm between-xs">
-			<div class="col-xs-12 col-sm-8">
-				<h5>
-					Free, Open Source, <a href="https://barcodeapi.org/" target="_blank">BarcodeAPI.org</a>
-				</h5>
-				<p>
-					Generate barcodes of nearly any type! Scan them in the web browser
-					or download the generated images for free! BarcodeAPI.org is an
-					open source barcode server capable of providing a wide range of
-					barcodes over a RESTful HTTP server.
-					<span>(&nbsp;<a href="/about.html">about</a>&nbsp;/&nbsp;<a
-							href="/license.html">license</a>&nbsp;)</span>
-				</p>
+		<div class="notice row start-xs between-xs middle-xs bottom-sm">
+			<div class="notice-limits col-xs-12">
+				<b>Important Update!</b><br />
+				<a href="/limits.html" class="text-link anim">Introducing Rate Limits</a>
 			</div>
-			<div class="col-xs-12 col-sm-4">
-				<div class="docs-link row start-xs end-sm">
-					<a href="/manual.pdf" target="_blank" class="col-xs"> <span class="docs-icon"><img
-								src="/img/docs.svg"></span><span>Read
-							the Docs</span>
-					</a>
-				</div>
+
+			<div class="notice-tokens col-xs-6">
+				Tokens Remaining:&nbsp;<span id="barcode_tokens"></span>
+			</div>
+
+			<div class="notice-type col-xs-6 end-xs">
+				<a class="text-link link-more"></a>
+			</div>
+		</div>
+
+		<div class="footer row middle-xs start-sm center-xs">
+			<div class="footer-about col-xs-12 col-sm-8">
+				Generate barcodes of nearly any type! Scan them in the web browser or download the images for free!
+				BarcodeAPI.org is an open source barcode server capable of providing a wide range of barcode formats
+				through a RESTful API.
+				<span class="footer-link">(&nbsp;<a href="/about.html">about</a>&nbsp;)</span>
+			</div>
+			<div class="footer-docs col-xs-12 col-sm-4 center-xs end-sm">
+				<span class="footer-docs-link">User Manual</span>
 			</div>
 		</div>
 	</div>

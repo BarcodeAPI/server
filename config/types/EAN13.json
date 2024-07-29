@@ -1,0 +1,29 @@
+{
+	"name": "EAN13",
+	"display": "EAN 13",
+	"target": [
+		"13",
+		"ean-13",
+		"ean13"
+	],
+	"generator": ".Ean13Generator",
+	"threads": 2,
+	"priority": 85,
+	"cost": {
+		"basic": 1,
+		"custom": 2
+	},
+	"checksum": true,
+	"nonprinting": false,
+	"example": "1234567890128",
+	"pattern": {
+		"auto": "^[0-9]{13}$",
+		"extended": "^[0-9]{12,13}$"
+	},
+	"description": {
+		"en": "A globally recognized product identification code. Encodes manufacturer, product / variant, and store use codes."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/International_Article_Number"
+	}
+}

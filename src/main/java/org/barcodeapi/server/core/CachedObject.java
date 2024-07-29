@@ -2,6 +2,11 @@ package org.barcodeapi.server.core;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * CachedObject.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public abstract class CachedObject {
 
 	private final long timeCreated;

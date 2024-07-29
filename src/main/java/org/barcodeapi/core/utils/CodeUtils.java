@@ -8,6 +8,11 @@ import org.json.JSONObject;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
+/**
+ * CodeUtils.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CodeUtils {
 
 	/**
@@ -146,7 +151,7 @@ public class CodeUtils {
 		for (String option : parts) {
 
 			String[] kv = option.split("=");
-			options.put(kv[0], kv[1]);
+			options.put(kv[0], (kv.length == 2) ? kv[1] : true);
 		}
 
 		return options;

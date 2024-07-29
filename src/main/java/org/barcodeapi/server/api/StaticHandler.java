@@ -6,15 +6,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.json.JSONException;
 
+/**
+ * StaticHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class StaticHandler extends RestHandler {
 
-	private ResourceHandler resources;
+	private ResourceHandler resources = new ResourceHandler() {
+	};
 
 	public StaticHandler(Server server) throws Exception {
 		super(false, false);
@@ -24,6 +30,7 @@ public class StaticHandler extends RestHandler {
 		resources.setResourceBase("resources");
 		resources.setRedirectWelcome(true);
 		resources.setWelcomeFiles(new String[] { "index.html" });
+		resources.setCacheControl("max-age=604800");
 		resources.start();
 	}
 
@@ -35,6 +42,8 @@ public class StaticHandler extends RestHandler {
 		// call through to resources
 		baseRequest.setHandled(false);
 		resources.handle(target, baseRequest, request, response);
+		long expires = System.currentTimeMillis() + 604800;
+		response.setDateHeader("expires", expires);
 
 		// send non resources to api
 		if (!baseRequest.isHandled()) {
@@ -43,7 +52,6 @@ public class StaticHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(String uri, HttpServletRequest request, HttpServletResponse response)
-			throws JSONException, IOException {
+	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws Exception {
 	}
 }

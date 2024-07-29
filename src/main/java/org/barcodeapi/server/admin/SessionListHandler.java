@@ -2,15 +2,20 @@ package org.barcodeapi.server.admin;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.session.SessionCache;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * SessionListHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class SessionListHandler extends RestHandler {
 
 	public SessionListHandler() {
@@ -18,7 +23,7 @@ public class SessionListHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(String uri, HttpServletRequest request, HttpServletResponse response)
+	protected void onRequest(RequestContext ctx, HttpServletResponse response)
 			throws JSONException, IOException {
 
 		JSONArray sessions = new JSONArray();
@@ -30,6 +35,7 @@ public class SessionListHandler extends RestHandler {
 		JSONObject output = new JSONObject()//
 				.put("sessions", sessions)//
 				.put("count", sessions.length());
+		response.setHeader("Content-Type", "application/json");
 		response.getOutputStream().println(output.toString(4));
 	}
 }

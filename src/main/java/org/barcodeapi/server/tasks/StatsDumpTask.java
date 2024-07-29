@@ -6,18 +6,21 @@ import java.net.URLConnection;
 
 import org.barcodeapi.server.core.BackgroundTask;
 
+import com.mclarkdev.tools.libargs.LibArgs;
 import com.mclarkdev.tools.liblog.LibLog;
 
+/**
+ * StatsDumpTask.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class StatsDumpTask extends BackgroundTask {
 
-	private static final String _TELEMETRY_URL = "https://barcodeapi.org/stats/upload";
+	private static final String _TELEM_TARGET = "https://barcodeapi.org/stats/upload";
+	private static final boolean _TELEM_ENABLED = (!LibArgs.instance().getBoolean("no-telemetry"));
 
-	private final boolean telemetry;
-
-	public StatsDumpTask(boolean telemetry) {
+	public StatsDumpTask() {
 		super();
-
-		this.telemetry = telemetry;
 	}
 
 	@Override
@@ -28,14 +31,14 @@ public class StatsDumpTask extends BackgroundTask {
 		LibLog.log("stats", data);
 
 		// upload metrics if enabled
-		if (telemetry) {
+		if (_TELEM_ENABLED) {
 
 			LibLog._clog("I2604");
 
 			try {
 
 				// create http client
-				URL url = new URL(_TELEMETRY_URL);
+				URL url = new URL(_TELEM_TARGET);
 				URLConnection con = url.openConnection();
 				HttpURLConnection http = (HttpURLConnection) con;
 

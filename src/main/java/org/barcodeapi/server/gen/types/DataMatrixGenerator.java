@@ -1,17 +1,20 @@
 package org.barcodeapi.server.gen.types;
 
-import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.barcodeapi.core.utils.CodeUtils;
+import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.impl.datamatrix.DataMatrixBean;
 import org.krysalis.barcode4j.impl.datamatrix.SymbolShapeHint;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 
+/**
+ * DataMatrixGenerator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class DataMatrixGenerator extends CodeGenerator {
 
 	private DataMatrixBean generator;
@@ -20,15 +23,8 @@ public class DataMatrixGenerator extends CodeGenerator {
 	 * https://en.wikipedia.org/wiki/Data_Matrix
 	 */
 	public DataMatrixGenerator() {
-		super(CodeType.DataMatrix);
 
 		generator = new DataMatrixBean();
-	}
-
-	@Override
-	public String onValidateRequest(String data) {
-
-		return CodeUtils.parseControlChars(data);
 	}
 
 	@Override
@@ -40,28 +36,26 @@ public class DataMatrixGenerator extends CodeGenerator {
 
 		boolean square = options.optBoolean("square", true);
 
-		synchronized (generator) {
-
-			if (square) {
-				generator.setShape(SymbolShapeHint.FORCE_SQUARE);
-			} else {
-				generator.setShape(SymbolShapeHint.FORCE_NONE);
-			}
-
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
-
-			generator.doQuietZone(true);
-			generator.setQuietZone(qz);
-			generator.setModuleWidth(scale);
-
-			generator.generateBarcode(canvasProvider, data);
-			canvasProvider.finish();
-			out.close();
-
-			return out.toByteArray();
+		if (square) {
+			generator.setShape(SymbolShapeHint.FORCE_SQUARE);
+		} else {
+			generator.setShape(SymbolShapeHint.FORCE_NONE);
 		}
+
+		generator.doQuietZone(true);
+		generator.setQuietZone(qz);
+		generator.setModuleWidth(scale);
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
+		canvasProvider.setColors(//
+				Color.decode("0x" + options.optString("bg", "ffffff")), //
+				Color.decode("0x" + options.optString("fg", "000000")));
+
+		generator.generateBarcode(canvasProvider, data);
+		canvasProvider.finish();
+		out.close();
+
+		return out.toByteArray();
 	}
 }

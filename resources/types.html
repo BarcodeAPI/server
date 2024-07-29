@@ -1,0 +1,78 @@
+<html>
+
+<!--
+	types.html
+	BarcodeAPI.org, 2017-2024
+ -->
+
+<head>
+	<title>BarcodeAPI.org - API Docs</title>
+
+	<meta name="keywords"
+		content="barcode, barcode api, barcode app, barcode generator, download barcode, free barcodes, custom barcodes">
+	<meta name="description"
+		content="Free online barcode generator! Scan barcodes in the web browser or download the images for free!">
+
+	<link rel="icon" type="image/png" href="/ext/favicon.png" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="/ext/3p/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/ext/css/layout.css" />
+
+	<script src="/ext/js/types.js"></script>
+</head>
+
+<body onload="mode='all'; init();">
+	<div class="wrapper container-fluid">
+
+		<div class="header row between-sm start-sm center-xs">
+			<div class="header-logo start-sm center-xs col-xs-12 col-sm-5"></div>
+			<div class="header-contact col-sm-5 middle-xs end-xs">
+				<h4>
+					FEEDBACK &amp; SUPPORT<br />
+					<span class="header-email">support@barcodeapi.org</span>
+				</h4>
+				<div class="action-icon action-email icon-email"></div>
+			</div>
+		</div>
+
+		<div class="row center-xs middle-xs">
+			<div class="col-xs-12">
+				<h2>Barcode Types</h2>
+				<br />
+				The following barcode types are supported by the server.
+				<br />
+				<br />
+				Click each barcode format to learn more.
+				<br />
+				<br />
+				View our <a href="/api.html" class="text-link">User Manual</a> for additional information.
+			</div>
+		</div>
+
+		<div id="barcode-types">
+			<div class="row center-xs middle-xs barcode-template" id="barcode-template">
+				<div class="col-xs-6 center-sm start-xs barcode-type-info">
+					<span class="type-name">-</span>
+					<br />
+					<br />
+					Cost:&nbsp;<span class="type-cost-basic">!</span>-<span class="type-cost-custom">!</span>
+					<br />
+					Target:&nbsp;<span class="type-target">-</span>
+					<br />
+					<br />
+					<a class="text-link type-more">More Details</a>
+				</div>
+
+				<div class="col-xs-6 barcode-type-example">
+					<a class="type-example-link">
+						<img class="type-example" src="" />
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

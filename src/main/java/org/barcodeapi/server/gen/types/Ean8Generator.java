@@ -1,25 +1,28 @@
 package org.barcodeapi.server.gen.types;
 
-import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
+import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
-import org.barcodeapi.server.gen.CodeType;
 import org.json.JSONObject;
 import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
+/**
+ * Ean8Generator.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class Ean8Generator extends CodeGenerator {
 
 	private EAN8Bean generator;
 
 	public Ean8Generator() {
-		super(CodeType.EAN8);
 
 		generator = new EAN8Bean();
 	}
@@ -53,22 +56,21 @@ public class Ean8Generator extends CodeGenerator {
 		double qz = options.optDouble("qz", 4);
 		int height = options.optInt("height", 25);
 
-		synchronized (generator) {
+		generator.doQuietZone(true);
+		generator.setQuietZone(qz);
+		generator.setHeight(height);
+		generator.setModuleWidth(moduleWidth);
 
-			generator.doQuietZone(true);
-			generator.setQuietZone(qz);
-			generator.setHeight(height);
-			generator.setModuleWidth(moduleWidth);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
+		canvasProvider.setColors(//
+				Color.decode("0x" + options.optString("bg", "ffffff")), //
+				Color.decode("0x" + options.optString("fg", "000000")));
 
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			BitmapCanvasProvider canvasProvider = new BitmapCanvasProvider(//
-					out, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+		generator.generateBarcode(canvasProvider, data);
+		canvasProvider.finish();
+		out.close();
 
-			generator.generateBarcode(canvasProvider, data);
-			canvasProvider.finish();
-			out.close();
-
-			return out.toByteArray();
-		}
+		return out.toByteArray();
 	}
 }
