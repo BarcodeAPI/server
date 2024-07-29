@@ -141,7 +141,7 @@ public class CachedLimiter extends CachedObject {
 			this.tokens = (tokens > count) ? (tokens - count) : 0;
 
 			// Return if has tokens based on enforcement
-			return (this.tokens > 0);
+			return (this.tokens > 0) || !isEnforced();
 		}
 	}
 }
