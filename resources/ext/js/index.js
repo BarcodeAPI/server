@@ -11,7 +11,7 @@ const appOptions = {
 	'display': {
 		'about': false,
 		'tokenCount': false,
-		'bulkPages': false,
+		'bulkPages': true,
 		'limitsNotice': false,
 		'renderOptions': false,
 		'helpType': false,
@@ -60,14 +60,14 @@ async function init() {
 	// Load supported types
 	loadBarcodeTypes();
 
+	initUI();
+
 	// Hide UI elements based on config
 	uiShowHide("app-setup-options", appOptions.display.renderOptions);
 	uiShowHide("app-setup-bulk", appOptions.display.bulkPages);
 	uiShowHide("notice-limits", appOptions.display.limitsNotice);
 	uiShowHide("notice-tokens", appOptions.display.tokenCount);
 	uiShowHide("notice-type", appOptions.display.helpType);
-	uiShowHide("footer-link", appOptions.display.about);
-	uiShowHide("footer-docs", appOptions.display.helpManual);
 
 	// Hide UI elements based on browser support
 	uiShowHide("action-copy", appOptions.browser.copyImage);
@@ -84,12 +84,9 @@ async function init() {
 	document.getElementById("option-trim-after").checked = appOptions.trim.after;
 
 	// Setup event handlers
-	document.getElementsByClassName("header-logo")[0].addEventListener('click', actionGoHome);
-	document.getElementsByClassName("action-email")[0].addEventListener('click', actionContactUs);
 	document.getElementsByClassName("app-setup-type")[0].addEventListener('click', toggleOpenBarcodeTypes);
 	document.getElementsByClassName("app-options-link")[0].addEventListener('click', toggleShowRenderOptions);
 	document.getElementsByClassName("barcode-text-input")[0].addEventListener('keyup', delayUpdateBarcode);
-	document.getElementsByClassName("footer-docs-link")[0].addEventListener('click', actionShowDocs);
 
 	// Setup barcode action handler
 	document.getElementsByClassName("action-clear")[0].addEventListener('click', actionClearInput);
@@ -475,20 +472,6 @@ function toggleShowRenderOptions() {
 }
 
 /**
- * Called when a user should be sent home page.
- */
-function actionGoHome() {
-	window.location = "/index.html";
-}
-
-/**
- * Called when a user should be sent to support page.
- */
-function actionContactUs() {
-	window.location.href = "mailto:support@barcodeapi.org";
-}
-
-/**
  * Called when the barcode tet input should be cleared.
  */
 function actionClearInput() {
@@ -567,13 +550,6 @@ function actionDownloadImage() {
 }
 
 /**
- * Called when the user should be shown the guide.
- */
-function actionShowDocs() {
-	window.location = '/api.html';
-}
-
-/**
  * Get a barcode type object from a target..
  */
 function getType(code) {
@@ -602,13 +578,6 @@ function setType(type) {
 
 	location.hash = type;
 	showTypesMenu(false);
-}
-
-/**
- * Show or Hide UI elements based on configured options.
- */
-function uiShowHide(elem, show) {
-	document.getElementsByClassName(elem)[0].style.display = ((show) ? '' : 'none');
 }
 
 /**

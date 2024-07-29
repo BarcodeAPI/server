@@ -31,6 +31,7 @@ body {
 	background-position: 0px center;
 	background-image: url('/ext/logo.svg');
 	margin-left: 1em;
+	cursor: pointer;
 }
 
 .header-contact {
@@ -47,12 +48,16 @@ body {
 	font-size: 80%;
 }
 
+.app {
+	min-height: calc(50vh);
+}
+
 .app-render {
 	padding: 1.25em;
 }
 
 .barcode-image {
-	min-height: calc(35vh);
+	min-height: calc(28vh);
 }
 
 .app h3 {
@@ -342,8 +347,8 @@ body {
 		margin-left: 0px;
 	}
 
-	.barcode-image {
-		min-height: calc(30vh);
+	.app {
+		min-height: calc(40vh);
 	}
 
 	.barcode-type-example img {
@@ -734,7 +739,6 @@ a:hover {
 /* \/ Bulk Page Specific \/ */
 
 .bulk-barcodes {
-	max-width: 640px;
 	margin-bottom: 4rem;
 }
 
@@ -751,6 +755,10 @@ a:hover {
 	position: relative;
 	top: 3px;
 	padding-right: 10px;
+}
+
+.bulk-info {
+	margin-top: 1.25em;
 }
 
 .text-file-table {
