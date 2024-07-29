@@ -150,7 +150,7 @@ function loadSelectedType() {
 
 	// Set to 'auto' if not set
 	if (location.hash.length <= 1) {
-		location.hash = 'auto';
+		location.replace('#auto');
 		return;
 	}
 
@@ -576,7 +576,7 @@ function getType(code) {
  */
 function setType(type) {
 
-	location.hash = type;
+	location.replace('#' + type);
 	showTypesMenu(false);
 }
 
