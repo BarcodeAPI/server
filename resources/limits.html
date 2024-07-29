@@ -8,62 +8,46 @@
 <head>
 	<title>BarcodeAPI.org - Rate Limits</title>
 
+	<meta name="keywords"
+		content="barcode, barcode api, barcode app, barcode generator, download barcode, free barcodes, custom barcodes">
+	<meta name="description"
+		content="Free online barcode generator! Scan barcodes in the web browser or download the images for free!">
+
+	<link rel="icon" type="image/png" href="/ext/favicon.png" />
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<meta name="keywords" content="barcode, barcode app, barcode generator, barcode api, download barcode">
-	<meta name="description"
-		content="Online barcode app: Generate, scan, and download barcodes for free. Get started with our easy-to-use barcode generator!">
+	<link rel="stylesheet" type="text/css" href="/ext/3p/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/ext/css/layout.css" />
 
-	<link rel="icon" type="image/png" href="/static/favicon.png" />
-
-	<script src="/static/limits.js"></script>
-
-	<link rel="stylesheet" type="text/css" href="/inc/flexboxgrid.min.css" />
-
-	<link rel="stylesheet" type="text/css" href="/static/layout.css" />
-	<link rel="stylesheet" type="text/css" href="/static/index.css" />
+	<script src="/ext/js/limits.js"></script>
 </head>
 
 <body onload="displayTokenCount()">
-	<div class="wrap container-fluid">
+	<div class="wrapper container-fluid">
 
-		<div class="header row middle-xs between-xs">
-			<div class="col-xs-12 col-sm-3">
-				<a href="/">
-					<div class="logo">
-						<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo" aria-label="Logo">
-					</div>
-				</a>
-			</div>
-			<div class="header-share">
-				<div class="row end-xs middle-xs">
-					<div class="col-xs">
-						<h4>
-							<a href="/support.html">FEEDBACK & SUPPORT</a>
-							<br />
-							<span class="contact">support@barcodeapi.org</span>
-						</h4>
-					</div>
-					<div class="share-icon email">
-						<a href="mailto:support@barcodeapi.org">
-							<img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
-						</a>
-					</div>
-				</div>
+		<div class="header row between-sm start-sm center-xs">
+			<div class="header-logo start-sm center-xs col-xs-12 col-sm-5"></div>
+			<div class="header-contact col-sm-5 middle-xs end-xs">
+				<h4>
+					FEEDBACK &amp; SUPPORT<br />
+					<span class="header-email">support@barcodeapi.org</span>
+				</h4>
+				<div class="action-icon action-email icon-email"></div>
 			</div>
 		</div>
 
 		<div class="row center-xs middle-xs">
-			<div class="col-xs-12">
+			<div class="tokens col-xs-12">
 				<h2>Rate Limits</h2>
-				<div class="center-xs">
+				<div>
 					<b>Tokens Remaining</b>:&nbsp;<span id="token_count"></span>
 				</div>
 			</div>
 		</div>
 
 		<div class="row center-xs middle-xs">
-			<div class="col-xs-12">
+			<div class="plan-overview col-xs-12">
 				Unlock the full potential of BarcodeAPI.org with our new pricing plans!
 				<br />
 				<br />
@@ -72,10 +56,10 @@
 				<br />
 				Power users of the API may require additional tokens or support.
 			</div>
-		</div>a
+		</div>
 
 		<div class="row center-xs middle-xs">
-			<div class="col-xs-6">
+			<div class="plan-free col-sm-6 col-xs-12">
 				<h2>Free Tier</h2>
 				<div>
 					<b>ALWAYS FREE</b>
@@ -87,7 +71,8 @@
 					Limited user support
 				</div>
 			</div>
-			<div class="col-xs-6">
+
+			<div class="plan-pro col-sm-6 col-xs-12">
 				<h2>Pro Tier</h2>
 				<div>
 					<b>$15/mo</b>
@@ -104,7 +89,7 @@
 		</div>
 
 		<div class="row center-xs middle-xs">
-			<div class="col-xs-6">
+			<div class="plan-expert col-sm-6 col-xs-12">
 				<h2>Enterprise</h2>
 				<div>
 					<b>$75/mo</b>
@@ -121,13 +106,13 @@
 		</div>
 
 		<div class="row center-xs middle-xs">
-			<div class="col-xs-12">
+			<div class="plan-links col-xs-12">
 				For information about tokens, check out the <a href="/api.html" class="text-link">API
-					Docs</a>.
+					Docs</a>
 				<br />
 				<br />
 				To upgrade your account, please visit <a href="/contracts.html" class="text-link">Usage
-					Contracts<img src="/img/chevron-right.svg" class="icon-last" /></a>
+					Contracts</a>
 			</div>
 		</div>
 	</div>

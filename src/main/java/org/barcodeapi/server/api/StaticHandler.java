@@ -19,7 +19,8 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
  */
 public class StaticHandler extends RestHandler {
 
-	private ResourceHandler resources;
+	private ResourceHandler resources = new ResourceHandler() {
+	};
 
 	public StaticHandler(Server server) throws Exception {
 		super(false, false);
@@ -29,6 +30,7 @@ public class StaticHandler extends RestHandler {
 		resources.setResourceBase("resources");
 		resources.setRedirectWelcome(true);
 		resources.setWelcomeFiles(new String[] { "index.html" });
+		resources.setCacheControl("max-age=604800");
 		resources.start();
 	}
 
@@ -40,6 +42,8 @@ public class StaticHandler extends RestHandler {
 		// call through to resources
 		baseRequest.setHandled(false);
 		resources.handle(target, baseRequest, request, response);
+		long expires = System.currentTimeMillis() + 604800;
+		response.setDateHeader("expires", expires);
 
 		// send non resources to api
 		if (!baseRequest.isHandled()) {

@@ -11,7 +11,7 @@
 	"priority": 58,
 	"cost": {
 		"basic": 3,
-		"custom": 5
+		"custom": 3
 	},
 	"checksum": false,
 	"nonprinting": true,

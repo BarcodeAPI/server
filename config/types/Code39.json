@@ -18,7 +18,7 @@
 	"example": "TRY 39 ME",
 	"pattern": {
 		"auto": "^[A-Z0-9 $.\\/]{1,12}$",
-		"extended": "^[A-Z*0-9 -$%.\\/+]+$"
+		"extended": "^[A-Z*0-9 \\-$%.\\/+]+$"
 	},
 	"description": {
 		"en": "A basic alphanumeric barcode. Uppercase letters and numbers only."

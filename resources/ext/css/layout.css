@@ -1,0 +1,820 @@
+@font-face {
+	font-family: 'IBM Plex Mono';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local('IBM Plex Mono'), local('IBMPlexMono'),
+		url('/ext/3p/IBM-Plex-Mono.ttf') format('truetype');
+}
+
+body {
+	font-family: 'IBM Plex Mono';
+}
+
+.wrapper {
+	padding: 20px 30px;
+	max-width: 1080px;
+}
+
+.header {
+	text-align: center;
+	padding-bottom: 1rem;
+	border-bottom: 2px solid #222;
+	margin-bottom: 1rem;
+}
+
+.header-logo {
+	min-width: 196px;
+	min-height: 55px;
+	background-size: 196px 55px;
+	background-repeat: no-repeat;
+	background-position: 0px center;
+	background-image: url('/ext/logo.svg');
+	margin-left: 1em;
+}
+
+.header-contact {
+	display: flex;
+	text-align: center;
+}
+
+.header-contact h4 {
+	margin-right: 0.65em;
+	text-transform: uppercase;
+}
+
+.header-email {
+	font-size: 80%;
+}
+
+.app-render {
+	padding: 1.25em;
+}
+
+.barcode-image {
+	min-height: calc(35vh);
+}
+
+.app h3 {
+	text-transform: uppercase;
+}
+
+
+.app-setup-options {
+	margin-top: 1.25em;
+	margin-left: 0.35em;
+}
+
+.app-options-link:after {
+	padding-left: 0.65em;
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+
+.app-options-link.open:after {
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+}
+
+.app-barcode-options {
+	display: none;
+	grid-template-columns: 1fr 1fr 1fr;
+	margin-bottom: -1.5em;
+	margin-top: 0.5em;
+	padding: 0.25em;
+}
+
+.app-barcode-options.open {
+	display: grid;
+}
+
+.app-setup-bulk {
+	margin-top: 2.5rem;
+	margin-bottom: 2rem;
+}
+
+.notice {
+	padding: 1em 0;
+}
+
+.notice-limits {
+	margin: 1em 0;
+}
+
+.notice-type {}
+
+.notice-tokens {
+	font-size: 13px;
+}
+
+.barcode-text-input {
+	font-size: 24px;
+	font-weight: 400;
+	font-family: 'IBM Plex Mono';
+	border: 0;
+	outline: none;
+	padding: 0.5rem 1rem;
+	border-bottom: 2px solid #222;
+	text-align: left;
+	width: 100%;
+}
+
+.barcode-text-input:invalid {
+	border-bottom: 2px solid #b00000;
+}
+
+.action-clear:hover {
+	background-color: #ea4335;
+}
+
+.barcode-image {}
+
+.barcode_wrapper {
+	position: relative;
+}
+
+#barcode_output {
+	max-width: 400px;
+	max-height: 300px;
+	width: 100%;
+	margin: 0 auto;
+	display: block;
+	padding: 1rem 0;
+	object-fit: contain;
+}
+
+#barcode_outout[src=""] {
+	display: none;
+}
+
+.barcode-links {
+	margin: 0 0 2rem 0;
+}
+
+
+.icon-arrow,
+.app-setup-type:after {
+	background-size: 10px 10px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%20768%20768%22%3E%3Cpath%20fill%3D%22%23000%22%20d%3D%22M223.5%20319.5h321l-160.5%20160.5z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.icon-email {
+	background-size: 15px 12px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%2015.168%2012.176%22%3E%3Cpath%20d%3D%22M15.689%2C7.047V5.515L9.6%2C9.325%2C3.511%2C5.515V7.047L9.6%2C10.821Zm0-3.063a1.411%2C1.411%2C0%2C0%2C1%2C1.051.463%2C1.5%2C1.5%2C0%2C0%2C1%2C.445%2C1.068V14.63a1.5%2C1.5%2C0%2C0%2C1-.445%2C1.068%2C1.411%2C1.411%2C0%2C0%2C1-1.051.463H3.512A1.411%2C1.411%2C0%2C0%2C1%2C2.461%2C15.7a1.5%2C1.5%2C0%2C0%2C1-.445-1.068V5.515a1.5%2C1.5%2C0%2C0%2C1%2C.445-1.068%2C1.411%2C1.411%2C0%2C0%2C1%2C1.051-.463H15.689Z%22%20transform%3D%22translate%28-2.016%20-3.984%29%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.icon-print {
+	background-size: 19px 18px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%2019.5%2018%22%3E%3Cpath%20fill%3D%22%23fff%22%20transform%3D%22translate%280%20-2%29%22%20d%3D%22M4.5%2C18.5H15v-3H4.5Zm0-7.5H15V6.5H13.125A1.125%2C1.125%2C0%2C0%2C1%2C12%2C5.375V3.5H4.5Zm13.5.75a.75.75%2C0%2C1%2C0-.75.75A.755.755%2C0%2C0%2C0%2C18%2C11.75Zm1.5%2C0v4.875a.385.385%2C0%2C0%2C1-.375.375H16.5v1.875A1.125%2C1.125%2C0%2C0%2C1%2C15.375%2C20H4.125A1.125%2C1.125%2C0%2C0%2C1%2C3%2C18.875V17H.375A.385.385%2C0%2C0%2C1%2C0%2C16.625V11.75A2.265%2C2.265%2C0%2C0%2C1%2C2.25%2C9.5H3V3.125A1.125%2C1.125%2C0%2C0%2C1%2C4.125%2C2H12a3.1%2C3.1%2C0%2C0%2C1%2C1.922.8L15.7%2C4.578A3.1%2C3.1%2C0%2C0%2C1%2C16.5%2C6.5v3h.75a2.265%2C2.265%2C0%2C0%2C1%2C2.25%2C2.25Z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.icon-url {
+	background-size: 16px 16px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20fill%3D%22%23fff%22%20transform%3D%22translate%28-0.25%20-0.25%29%22%20d%3D%22M14.368%2C12.015a.931.931%2C0%2C0%2C0-.275-.666L12.054%2C9.309a.951.951%2C0%2C0%2C0-.666-.275.931.931%2C0%2C0%2C0-.706.314c.324.324.706.6.706%2C1.1a.942.942%2C0%2C0%2C1-.941.941c-.5%2C0-.774-.382-1.1-.706A.95.95%2C0%2C0%2C0%2C9.3%2C12.064l2.02%2C2.029a.942.942%2C0%2C0%2C0%2C.666.265.978.978%2C0%2C0%2C0%2C.666-.255l1.441-1.431A.928.928%2C0%2C0%2C0%2C14.368%2C12.015ZM7.476%2C5.1A.948.948%2C0%2C0%2C0%2C7.2%2C4.436L5.181%2C2.407a.951.951%2C0%2C0%2C0-.666-.275.984.984%2C0%2C0%2C0-.666.265L2.407%2C3.828a.934.934%2C0%2C0%2C0%2C0%2C1.323L4.446%2C7.191a.942.942%2C0%2C0%2C0%2C.666.265.922.922%2C0%2C0%2C0%2C.706-.3c-.324-.324-.706-.6-.706-1.1a.942.942%2C0%2C0%2C1%2C.941-.941c.5%2C0%2C.774.382%2C1.1.706A.946.946%2C0%2C0%2C0%2C7.476%2C5.1Zm8.774%2C6.912A2.8%2C2.8%2C0%2C0%2C1%2C15.417%2C14l-1.441%2C1.431a2.828%2C2.828%2C0%2C0%2C1-3.99-.019l-2.02-2.029a2.8%2C2.8%2C0%2C0%2C1-.814-1.99%2C2.872%2C2.872%2C0%2C0%2C1%2C.863-2.049l-.863-.863a2.84%2C2.84%2C0%2C0%2C1-4.039.039L1.074%2C6.485A2.816%2C2.816%2C0%2C0%2C1%2C1.083%2C2.5L2.525%2C1.064a2.828%2C2.828%2C0%2C0%2C1%2C3.99.019l2.02%2C2.029A2.8%2C2.8%2C0%2C0%2C1%2C9.348%2C5.1a2.872%2C2.872%2C0%2C0%2C1-.863%2C2.049l.863.863a2.84%2C2.84%2C0%2C0%2C1%2C4.039-.039l2.039%2C2.039a2.794%2C2.794%2C0%2C0%2C1%2C.824%2C2Z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.icon-copy {
+	background-size: 18px 16px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%2017.643%2015.438%22%20transform%3D%22translate%280%20-32%29%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M16.538%2C33.1l0%2C0V46.333l0%2C0H1.1l0%2C0V33.1l0%2C0Zm0-1.1H1.1A1.106%2C1.106%2C0%2C0%2C0%2C0%2C33.1V46.335a1.106%2C1.106%2C0%2C0%2C0%2C1.1%2C1.1H16.54a1.106%2C1.106%2C0%2C0%2C0%2C1.1-1.1V33.1a1.106%2C1.106%2C0%2C0%2C0-1.1-1.1Z%22%2F%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M323.308%2C97.654A1.654%2C1.654%2C0%2C1%2C1%2C321.654%2C96%2C1.654%2C1.654%2C0%2C0%2C1%2C323.308%2C97.654Z%22%20transform%3D%22translate%28-308.973%20-61.795%29%22%2F%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M77.232%2C168.821H64v-2.205L67.859%2C160l4.411%2C5.513h1.1l3.859-3.308Z%22%20transform%3D%22translate%28-61.795%20-123.589%29%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.icon-download {
+	background-size: 13px 16px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%2013.038%2015.881%22%3E%3Cpath%20fill%3D%22%23fff%22%20transform%3D%22translate%28-5.016%20-3%29%22%20d%3D%22M5.016%2C17H18.054v1.882H5.016V17ZM18.053%2C8.6l-6.518%2C6.518L5.016%2C8.6H8.734V3h5.6V8.6Z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.icon-docs,
+.footer-docs:after {
+	background-size: 17px 20px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%2017.176%2020.038%22%3E%3Cpath%20transform%3D%22translate%280%200%29%22%20d%3D%22M16.415%2C4.249a3%2C3%2C0%2C0%2C1%2C.76%2C1.834V18.965A1.074%2C1.074%2C0%2C0%2C1%2C16.1%2C20.038H1.073A1.074%2C1.074%2C0%2C0%2C1%2C0%2C18.965V1.073A1.074%2C1.074%2C0%2C0%2C1%2C1.073%2C0H11.093a3%2C3%2C0%2C0%2C1%2C1.834.76ZM11.451%2C1.521v4.2h4.2a1.425%2C1.425%2C0%2C0%2C0-.246-.458l-3.5-3.5A1.425%2C1.425%2C0%2C0%2C0%2C11.451%2C1.521Zm4.294%2C17.086V7.157H11.093a1.074%2C1.074%2C0%2C0%2C1-1.073-1.073V1.431H1.431V18.607ZM4.294%2C8.946a.353.353%2C0%2C0%2C1%2C.358-.358h7.872a.353.353%2C0%2C0%2C1%2C.358.358v.716a.353.353%2C0%2C0%2C1-.358.358H4.652a.353.353%2C0%2C0%2C1-.358-.358Zm8.23%2C2.5a.353.353%2C0%2C0%2C1%2C.358.358v.716a.353.353%2C0%2C0%2C1-.358.358H4.652a.353.353%2C0%2C0%2C1-.358-.358v-.716a.353.353%2C0%2C0%2C1%2C.358-.358Zm0%2C2.863a.353.353%2C0%2C0%2C1%2C.358.358v.716a.353.353%2C0%2C0%2C1-.358.358H4.652a.353.353%2C0%2C0%2C1-.358-.358v-.716a.353.353%2C0%2C0%2C1%2C.358-.358Z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.icon-barcode,
+.bulk-link:before {
+	background-size: 10px 10px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20448%22%3E%3Cpath%20d%3D%22M15.75%20384h-15.75v-352h15.75v352zM31.5%20383.75h-8v-351.75h8v351.75zM55%20383.75h-7.75v-351.75h7.75v351.75zM94.25%20383.75h-7.75v-351.75h7.75v351.75zM133.5%20383.75h-15.5v-351.75h15.5v351.75zM165%20383.75h-7.75v-351.75h7.75v351.75zM180.75%20383.75h-7.75v-351.75h7.75v351.75zM196.5%20383.75h-7.75v-351.75h7.75v351.75zM235.75%20383.75h-15.75v-351.75h15.75v351.75zM275%20383.75h-15.75v-351.75h15.75v351.75zM306.5%20383.75h-15.75v-351.75h15.75v351.75zM338%20383.75h-15.75v-351.75h15.75v351.75zM361.5%20383.75h-15.75v-351.75h15.75v351.75zM408.75%20383.75h-23.5v-351.75h23.5v351.75zM424.5%20383.75h-8v-351.75h8v351.75zM448%20384h-15.75v-352h15.75v352z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.icon-upload {
+	background-size: 10px 10px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20d%3D%22M0%20448h512v32h-512zM512%20384v32h-512v-32l64-128h128v64h128v-64h128zM112%20160l144-144%20144%20144h-112v128h-64v-128z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.icon-clear {
+	background-size: 36px 36px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%2076%2076%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20fill-opacity%3D%221%22%20stroke-width%3D%220.2%22%20stroke-linejoin%3D%22round%22%20d%3D%22M%2047.5282%2C42.9497L%2042.5784%2C38L%2047.5282%2C33.0502L%2044.9497%2C30.4718L%2040%2C35.4216L%2035.0502%2C30.4718L%2032.4718%2C33.0502L%2037.4216%2C38L%2032.4718%2C42.9497L%2035.0502%2C45.5282L%2040%2C40.5784L%2044.9497%2C45.5282L%2047.5282%2C42.9497%20Z%20M%2018.0147%2C41.5355L%2026.9646%2C50.4854C%2028.0683%2C51.589%2029%2C52%2031%2C52L%2052%2C52C%2054.7614%2C52%2057%2C49.7614%2057%2C47L%2057%2C29C%2057%2C26.2386%2054.7614%2C24%2052%2C24L%2031%2C24C%2029%2C24%2028.0683%2C24.4113%2026.9646%2C25.5149L%2018.0147%2C34.4645C%2016.0621%2C36.4171%2016.0621%2C39.5829%2018.0147%2C41.5355%20Z%20M%2031%2C49C%2030%2C49%2029.6048%2C48.8828%2029.086%2C48.3641L%2020.1361%2C39.4142C%2019.355%2C38.6332%2019.355%2C37.3669%2020.1361%2C36.5858L%2029.086%2C27.6362C%2029.6048%2C27.1175%2030%2C27%2031%2C27.0001L%2052%2C27.0001C%2053.1046%2C27.0001%2054%2C27.8955%2054%2C29.0001L%2054%2C47.0001C%2054%2C48.1046%2053.1046%2C49.0001%2052%2C49.0001L%2031%2C49%20Z%20%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.icon-chevron,
+.text-link:after {
+	background-size: 12px 12px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%20304%20448%22%3E%3Cpath%20fill%3D%22%23000%22%20d%3D%22M276.75%20219.25l-185.5%20185.5c-6.25%206.25-16.25%206.25-22.5%200l-41.5-41.5c-6.25-6.25-6.25-16.25%200-22.5l132.75-132.75-132.75-132.75c-6.25-6.25-6.25-16.25%200-22.5l41.5-41.5c6.25-6.25%2016.25-6.25%2022.5%200l185.5%20185.5c6.25%206.25%206.25%2016.25%200%2022.5z%22%2F%3E%3C%2Fsvg%3E');
+}
+
+#barcode_image_link {
+	position: absolute;
+	left: -1999em;
+}
+
+.footer {
+	padding-top: 1em;
+	border-top: 2px solid #222;
+}
+
+.footer-about {
+	font-size: 12px;
+	font-weight: 400;
+	color: #999;
+	line-height: 1.5;
+}
+
+.footer-link {}
+
+.footer-docs {
+	padding-right: 0.5rem;
+	display: inline-block;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.footer-docs:after {
+	width: 12px;
+	height: 14px;
+	background-size: 12px 14px;
+	background-repeat: no-repeat;
+	background-position: center;
+	position: relative;
+
+	display: inline-block;
+	content: "";
+	pointer-events: none;
+}
+
+.footer-docs-link {
+	cursor: pointer;
+}
+
+.input:invalid {
+	color: #CC0000;
+}
+
+.anim:hover:after {
+	padding-left: 0.85em;
+}
+
+/* Added above 600px */
+@media only screen and (min-width: 600px) {
+
+	body {
+		margin: 0;
+	}
+
+	.app-setup-type {
+		display: none;
+	}
+}
+
+/* Added above 768px */
+@media only screen and (min-width: 768px) {
+
+	.barcode-type-example img {
+		max-width: 240px;
+	}
+}
+
+/* Added below 450px */
+@media only screen and (max-width: 450px) {
+
+	.bulk-upload-form .col-xs-6 {
+		flex-basis: 100%;
+		max-width: 90%;
+	}
+}
+
+/* Added below 600px (xs) */
+@media only screen and (max-width: 600px) {
+
+	.wrapper {
+		padding: 20px;
+	}
+
+	.app-render {
+		padding: 0.65em;
+	}
+
+	.app-setup-types a {
+		width: calc(50% - 30px);
+		margin-bottom: 0;
+		float: left;
+	}
+
+	.app-setup-types.open {
+		display: block;
+	}
+
+	.app-setup-type {
+		margin-bottom: 1rem;
+	}
+
+	.app-setup-types,
+	.footer-about,
+	.text-file-table .attribute div.optional,
+	.text-file-table .heading-text div.optional {
+		display: none;
+	}
+
+	.action-docs {
+		margin-top: 1.0em;
+	}
+}
+
+/* Added below 768px (sm) */
+@media only screen and (max-width: 768px) {
+
+	.header-logo {
+		background-position: center;
+		margin-left: 0px;
+	}
+
+	.barcode-image {
+		min-height: calc(30vh);
+	}
+
+	.barcode-type-example img {
+		max-width: 100%;
+	}
+
+	.header-contact,
+	.app-setup-tokens,
+	.app-setup-options,
+	.app-setup-bulk,
+	.notice,
+	#tooltip {
+		display: none;
+	}
+}
+
+/* Added when Printing */
+@media print {
+	@page {
+		margin: 0;
+	}
+
+	* {
+		display: none;
+	}
+
+	#barcode_output {
+		display: block;
+	}
+}
+
+/* \/ Text Field Focus Animation \/ */
+
+.pulse-bg {
+	animation-name: pulseBg;
+	animation-duration: 1.5s;
+	animation-iteration-count: infinite;
+}
+
+.pulse-bg:focus {
+	animation-play-state: paused;
+	animation: 0
+}
+
+/* /\ Text Field Focus Animation /\ */
+
+/* \/ Barcode Tooltips \/ */
+
+#tooltip {
+	text-align: center;
+	color: #fff;
+	background: #222;
+	position: absolute;
+	z-index: 10000;
+	padding: 10px;
+	border-radius: 0.125rem;
+	-webkit-transition: 100ms ease;
+	-moz-transition: 100ms ease;
+	-o-transition: 100ms ease;
+	-ms-transition: 100ms ease;
+	transition: 100ms ease;
+	font-family: 'IBM Plex Mono';
+	font-size: 14px;
+	line-height: 20px;
+	max-width: 340px;
+	opacity: 1;
+}
+
+#tooltip:after {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #222;
+	content: '';
+	position: absolute;
+	left: 50%;
+	bottom: -10px;
+	margin-left: -10px;
+}
+
+#tooltip.left:after {
+	left: 10px;
+	margin: 0;
+}
+
+#tooltip.right:after {
+	right: 10px;
+	left: auto;
+	margin: 0;
+}
+
+/* /\ Barcode Tooltips /\ */
+
+/* \/ Barcode Types Available \/ */
+
+.app-setup-types {
+	margin-bottom: 1rem;
+}
+
+.app-setup-types a {
+	display: inline-block;
+	padding: 6px 10px;
+	border: 1px solid #EEE;
+	font-size: 1rem;
+	margin: 5px 5px 5px 0;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+}
+
+.app-setup-types a:hover,
+.app-setup-types a.active {
+	background-color: #222;
+	color: #EEE;
+}
+
+/* /\ Barcode Types Available /\ */
+
+/* \/ Select Type Dropdown Menu \/ */
+
+.app-setup-type {
+	position: relative;
+	text-transform: uppercase;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+	background-color: #F7F7F7;
+	border-bottom: 1px solid #222;
+}
+
+.app-setup-type:after {
+	background-size: 32px 32px;
+	content: "";
+	position: absolute;
+	background-position: right center;
+	background-repeat: no-repeat;
+	width: 32px;
+	height: 32px;
+	right: 10px;
+	top: 2px;
+	transition: transform 0.2s ease-in-out;
+	pointer-events: none;
+}
+
+.app-setup-type.open:after {
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+.app-setup-type a {
+	width: 100%;
+	display: block;
+	cursor: pointer;
+	text-decoration: none;
+	outline: none;
+	padding: 0.5rem 1rem;
+}
+
+/* /\ Select Type Dropdown Menu /\ */
+
+/* \/ Text Action Buttons \/ */
+
+.button {
+	font-family: 'IBM Plex Mono';
+	width: 100%;
+	border-radius: 1.5rem;
+	background: #222;
+	padding: 1rem;
+	margin: 0;
+	outline: none;
+	color: #FFF;
+	border: 0;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease-in-out;
+	margin-bottom: 1rem;
+}
+
+button:disabled,
+button[disabled] {
+	background: #999;
+	pointer-events: none;
+}
+
+/* /\ Text Action Buttons /\ */
+
+/* \/ Icon Action Buttons \/ */
+
+.action-icon {
+	width: 36px;
+	height: 36px;
+	border-radius: 18px;
+	margin: 5px;
+	display: flex;
+	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.2s ease-in-out;
+	text-align: center;
+	background-color: #222;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.action-icon:hover {
+	background-color: #999;
+}
+
+.action-icon.email:hover {
+	background-color: #ea4335;
+}
+
+/* /\ Icon Action Buttons /\ */
+
+/* \/ Text Links \/ */
+
+a:visited,
+a:active,
+a:link {
+	color: #222;
+	transition: all 0.2s ease-in-out;
+}
+
+a:hover {
+	color: #888;
+}
+
+.text-link {
+	font-size: 14px;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.text-link:before {
+
+	padding-left: 0;
+	padding-right: 6px;
+	height: 14px;
+	width: 14px;
+	top: 3px;
+	position: relative;
+
+	display: inline-block;
+	background-size: 12px 12px;
+	background-position: right center;
+	background-repeat: no-repeat;
+	pointer-events: none;
+}
+
+.text-link:after {
+
+	width: 8px;
+	height: 12px;
+	position: relative;
+	top: 2px;
+	padding-left: 0.65em;
+
+	display: inline-block;
+	background-size: 8px 12px;
+	content: "";
+	background-position: center;
+	background-repeat: no-repeat;
+	pointer-events: none;
+}
+
+/* /\ Text Links /\ */
+
+/* \/ Copy Message \/ */
+
+#message {
+	display: none;
+	padding: 10px;
+	border: 1px solid #CCC;
+	background: #FFF;
+	color: #222;
+	text-align: center;
+	width: 200px;
+	box-sizing: border-box;
+	position: absolute;
+	font-size: 13px;
+	line-height: 19px;
+	z-index: 1000;
+}
+
+.message-fade {
+	display: block;
+	animation-name: fadeOut;
+	animation-duration: 0.5s;
+	animation-delay: 2s;
+	animation-iteration-count: 1;
+}
+
+/* /\ Copy Message /\ */
+
+/* \/ Rate Limit Plan Info \/ */
+
+.plan-overview {
+	padding-top: 0.5em;
+	padding-bottom: 1.0em;
+}
+
+.plan-free {
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+.plan-pro {
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+.plan-expert {
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+.plan-links {
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+/* /\ Rate Limit Plan Info /\ */
+
+/* \/ Animation Keyframes \/ */
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes pulseBg {
+	0% {
+		border-color: #222;
+	}
+
+	50% {
+		border-color: #EEE;
+	}
+
+	100% {
+		border-color: #222;
+	}
+}
+
+/* /\ Animation Keyframes /\ */
+
+/* \/ Types Page Specific \/ */
+
+.type-name {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.type-title {
+	font-size: 24px;
+}
+
+.barcode-type-example img {
+	height: auto;
+	display: block;
+	margin: 0 auto;
+	max-height: 180px;
+}
+
+/* /\ Types Page Specific /\ */
+
+/* \/ Documentation Page Specific \/ */
+
+.example-code-title {
+	text-align: left;
+	font-weight: bold;
+}
+
+.example-code {
+	text-align: left;
+}
+
+/* /\ Documentation Page Specific /\ */
+
+/* \/ Bulk Page Specific \/ */
+
+.bulk-barcodes {
+	max-width: 640px;
+	margin-bottom: 4rem;
+}
+
+.bulk-barcodes p {
+	text-align: left;
+	margin-bottom: 2rem;
+}
+
+.bulk-barcodes p.small {
+	font-size: 11px;
+}
+
+.bulk-barcodes h2 img {
+	position: relative;
+	top: 3px;
+	padding-right: 10px;
+}
+
+.text-file-table {
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
+}
+
+.text-file-table .heading-text div {
+	padding: 0.25rem;
+	color: #222;
+	background: #EEE;
+	text-align: center;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.text-file-table .attribute div {
+	padding: 0.25rem;
+	background: #FFF;
+	color: #222;
+	text-align: center;
+	font-size: 12px;
+}
+
+#optional_column_text {
+	float: right;
+}
+
+[type="file"] {
+	border: 0;
+	clip: rect(0, 0, 0, 0);
+	height: 1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute !important;
+	white-space: nowrap;
+	width: 1px;
+}
+
+[type="file"]+label {
+	cursor: pointer;
+	display: inline-block;
+	font-family: 'IBM Plex Mono';
+	outline: none;
+	width: 100%;
+	padding: 1rem;
+	border-radius: 1.5rem;
+	text-align: center;
+	background: #222;
+	font-size: 13px;
+	color: #FFF;
+	font-weight: 600;
+	box-sizing: border-box;
+	transition: background-color 0.2s ease-in-out;
+	margin-bottom: 1rem;
+}
+
+[type="file"]:focus+label,
+[type="file"]+label:hover {
+	background-color: #2e7bca;
+}
+
+[type="file"]:focus+label {
+	outline: 1px dotted #2e7bca;
+}
+
+/* /\ Bulk Page Specific /\ */

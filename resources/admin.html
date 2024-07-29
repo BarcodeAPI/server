@@ -8,85 +8,79 @@
 <head>
 	<title>BarcodeAPI.org - Admin Tools</title>
 
+	<link rel="icon" type="image/png" href="/ext/favicon.png" />
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link rel="icon" type="image/png" href="/static/favicon.png" />
+	<link rel="stylesheet" type="text/css" href="/ext/3p/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/ext/css/layout.css" />
 
-	<script src="/static/admin.js"></script>
-
-	<link rel="stylesheet" type="text/css" href="/inc/flexboxgrid.min.css" />
-
-	<link rel="stylesheet" type="text/css" href="/static/layout.css" />
-	<link rel="stylesheet" type="text/css" href="/static/index.css" />
+	<script src="/ext/js/admin.js"></script>
 </head>
 
 <body onload="loadInfo();">
-	<div class="wrap container-fluid">
+	<div class="wrapper container-fluid">
 
-		<div class="header row middle-xs between-xs">
-			<div class="col-xs-12 col-sm-3">
-				<a href="/">
-					<div class="logo">
-						<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo" aria-label="Logo">
-					</div>
-				</a>
+		<div class="header row between-sm start-sm center-xs">
+			<div class="header-logo start-sm center-xs col-xs-12 col-sm-5"></div>
+		</div>
+
+		<div class="row start-xs top-xs">
+			<div class="col-xs-8">
+				<b>Server</b>
+				<br />
+				<a href="/info">Server Information</a>
+				<br />
+				<a href="/server/stats">Server Statistics</a>
+				<br />
+				<a href="/admin/server/reload">Reload Config</a>
+				<br />
+				<br />
+				<b>Barcodes</b>
+				<br />
+				<a href="/admin/cache/dump">Download Cache</a>
+				<br />
+				<a href="/admin/cache/flush">Flush Barcode Caches</a>
+				<br />
+				<br />
+				<b>Limiters</b>
+				<br />
+				<a href="/admin/limiter/list">List Limiters</a>
+				<br />
+				<a href="/admin/limiter/flush">Flush Limiter</a>
+				<br />
+				<br />
+				<b>Sessions</b>
+				<br />
+				<a href="/session">Current Session</a>
+				<br />
+				<a href="/admin/session/list">List Sessions</a>
+				<br />
+				<a href="/admin/session/flush">Flush Sessions</a>
+				<br />
+				<br />
+				<b>Generation API</b>
+				<br />
+				<a href="/types">Barcode Types</a>
+				<br />
+				<br />
 			</div>
-		</div>
 
-		<div class="right">
-			<b>Version</b>
-			<br />
-			<span id="appVersion">0</span>
-			<br />
-			<br />
-			<b>Hostname</b>
-			<br />
-			<span id="appHost">_unknown_</span>
-			<br />
-			<br />
-			<b>Uptime</b>
-			<br />
-			<span id="appUptime">0</span>
-		</div>
-
-		<div class="left">
-			<b>Server</b>
-			<br />
-			<a href="/info">Server Information</a>
-			<br />
-			<a href="/server/stats">Server Statistics</a>
-			<br />
-			<a href="/admin/server/reload">Reload Config</a>
-			<br />
-			<br />
-			<b>Barcodes</b>
-			<br />
-			<a href="/admin/cache/dump">Download Cache</a>
-			<br />
-			<a href="/admin/cache/flush">Flush Barcode Caches</a>
-			<br />
-			<br />
-			<b>Limiters</b>
-			<br />
-			<a href="/admin/limiter/list">List Limiters</a>
-			<br />
-			<a href="/admin/limiter/flush">Flush Limiter</a>
-			<br />
-			<br />
-			<b>Sessions</b>
-			<br />
-			<a href="/session">Current Session</a>
-			<br />
-			<a href="/admin/session/list">List Sessions</a>
-			<br />
-			<a href="/admin/session/flush">Flush Sessions</a>
-			<br />
-			<br />
-			<b>Generation API</b>
-			<br />
-			<a href="/types">Barcode Types</a>
-			<br />
-			<br />
+			<div class="col-xs-4">
+				<b>Version</b>
+				<br />
+				<span id="appVersion">0</span>
+				<br />
+				<br />
+				<b>Hostname</b>
+				<br />
+				<span id="appHost">_unknown_</span>
+				<br />
+				<br />
+				<b>Uptime</b>
+				<br />
+				<span id="appUptime">0</span>
+			</div>
 		</div>
 	</div>
 </body>

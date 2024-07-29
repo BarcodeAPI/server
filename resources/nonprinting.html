@@ -6,148 +6,38 @@
  -->
 
 <head>
-	<title>BarcodeAPI.org - API Usage</title>
+	<title>BarcodeAPI.org - Nonprinting Characters</title>
+
+	<meta name="keywords"
+		content="barcode, barcode api, barcode app, barcode generator, download barcode, free barcodes, custom barcodes">
+	<meta name="description"
+		content="Free online barcode generator! Scan barcodes in the web browser or download the images for free!">
+
+	<link rel="icon" type="image/png" href="/ext/favicon.png" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<meta name="keywords" content="barcode, barcode app, barcode generator, barcode api, download barcode">
-	<meta name="description"
-		content="Online barcode app: Generate, scan, and download barcodes for free. Get started with our easy-to-use barcode generator!">
-
-	<link rel="icon" type="image/png" href="/static/favicon.png" />
-
-	<link rel="stylesheet" type="text/css" href="/inc/flexboxgrid.min.css" />
-
-	<link rel="stylesheet" type="text/css" href="/static/layout.css" />
-	<link rel="stylesheet" type="text/css" href="/static/index.css" />
+	<link rel="stylesheet" type="text/css" href="/ext/3p/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/ext/css/layout.css" />
 </head>
 
 <body>
-	<div class="wrap container-fluid">
+	<div class="wrapper container-fluid">
 
-		<div class="header row middle-xs between-xs">
-			<div class="col-xs-12 col-sm-3">
-				<a href="/">
-					<div class="logo">
-						<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo" aria-label="Logo">
-					</div>
-				</a>
-			</div>
-			<div class="header-share">
-				<div class="row end-xs middle-xs">
-					<div class="col-xs">
-						<h4>
-							<a href="/support.html">FEEDBACK & SUPPORT</a>
-							<br />
-							<span class="contact">support@barcodeapi.org</span>
-						</h4>
-					</div>
-					<div class="share-icon email">
-						<a href="mailto:support@barcodeapi.org">
-							<img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
-						</a>
-					</div>
-				</div>
+		<div class="header row between-sm start-sm center-xs">
+			<div class="header-logo start-sm center-xs col-xs-12 col-sm-5"></div>
+			<div class="header-contact col-sm-5 middle-xs end-xs">
+				<h4>
+					FEEDBACK &amp; SUPPORT<br />
+					<span class="header-email">support@barcodeapi.org</span>
+				</h4>
+				<div class="action-icon action-email icon-email"></div>
 			</div>
 		</div>
 
 		<div class="row center-xs middle-xs">
-			<div class="display-barcode col-xs-12">
-				<div id="frame">
-					<div class="row center-xs middle-xs">
-						<div class="col-xs-12">
-							Designed with scale in mind, the BarcodeAPI.org[1] web server was built to handle even the
-							most demanding environments. With some instances having generated over 100 million barcodes,
-							the server can be used for nearly and use-cases. Using their favorite web browser a user can
-							navigate to an elegant website and quickly create barcodes of many different types. For
-							advanced users who wish to automate the generation of barodes, the server also features a
-							full rendering API via the HTTP protocol; this is useful where barcode generation libraries
-							might not be available or where system resources are limited.
-							<br />
-							<a href="/types.html" class="text-link">Supported Barcode Types<img
-									src="/img/chevron-right.svg" class="icon-last" /></a>
-
-
-							2 API Server
-							The server will generate a barcode for any content passed to the /api endpoint; this can be
-							done using a
-							web browser, fetched through a user script, or even simply with cURL.
-							curl / wget
-							curl https://barcodeapi.org/api/A_Barcode > gen.png
-							wget -o gen.png https://barcodeapi.org/api/A_Barcode
-							HTML / JS
-							<img id=“barcode” />
-							<script>
-								document.getElementById("barcode").src = "https://barcodeapi.org/api/A_Barcode";
-							</script>
-							2.1 Type Selection
-							The API offers two types of barcode type selection, automatic or manual; users of the
-							web-based
-							interface might prefer the barcode type be selected based on what they type, while direct
-							callers of
-							the API might want to have control over which barcode format they will receive back from the
-							server.
-							2.1.1 Automatic Type Detection
-							When calling the API endpoint without specifying an explicit code type the server will make
-							its best
-							judgment as to which code type will be best suited for the supplied data.
-							curl https://barcodeapi.org/api/abc123
-							curl https://barcodeapi.org/api/auto/abc123
-							BarcodeAPI.org Technical User Manual, v.PRERELEASE 3 / 14 ↑
-							2.1.2 Manual Type Selection
-							A specific barcode type may be requested by using the type string in the request URL.
-							curl https://barcodeapi.org/api/128/abc123
-							curl https://barcodeapi.org/api/qr/abc123
-							2.2 Web Server
-							The server comes with a minimal set of static HTML and Javascript files that allow users to
-							generate
-							barcodes in their web browser with ease. The UI allows users to quickly download, print, or
-							copy the
-							images for use in other applications.
-							2.2.1 Multi-Barcode Generation
-							Some users will want to generate a large number of barcodes with one request - a basic
-							JavaScript utility
-							is provided at /multi.html which will generate as many images as requested then prepare the
-							file to be
-							printed.
-							https://barcodeapi.org/multi.html?Barcode1&Barcode2&dm/A%20Data%20Matrix&qr/And%20QR
-							2.2.2 Forced Redirect
-							The server provides a set of static resources served from the root url of the server, in the
-							event a request
-							is made which is not targeted directly at the API nor references a known resources, a 403
-							redirect will be
-							provided to send the send request to the API handler.
-							$ curl --head https://barcodeapi.org/abc123
-							...
-							Location: https://barcodeapi.org/api/auto/abc123
-							2.3 Response Headers
-							The server will add several headers related to the barcode including the type and encoded
-							contents.
-							$ curl --head https://barcodeapi.org/api/auto/abc123
-							...
-							X-Barcode-Type: Code128
-							BarcodeAPI.org Technical User Manual, v.PRERELEASE 4 / 14 ↑
-							X-Barcode-Content: abc123
-							Content-Type: image/png;charset=utf-8
-							Content-Disposition: filename=abc123.png
-							Cache Control
-							In an attempt to minimize the number of requests
-							Cache-Control: max-age=86400, public
-							Error Headers
-							In the event of a render error, an additional header will be available containing details
-							about the exception.
-							X-Error-Message: (exception.toString())
-							3 Barcode Generation
-							The primary purpose of the server is barcode image generation behind a RESTful endpoint. The
-							server
-							has been designed to support a wide variety of barcode types and offers additional
-							configuration options
-							for most.
-							3.1 Barcode Types
-							A list of all supported barcodes types is available by calling the /types/
-						</div>
-					</div>
-				</div>
+			<div class="col-xs-12">
+				Non-printing.
 			</div>
 		</div>
 	</div>

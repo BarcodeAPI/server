@@ -16,7 +16,7 @@
 	"example": "1234567890",
 	"pattern": {
 		"auto": "^[0-9:$]{4,12}$",
-		"extended": "^[0-9-:$\\/.+]+$"
+		"extended": "^[0-9\\-:$\\/.+]+$"
 	},
 	"description": {
 		"en": "An early barode designed to be printed on dot-matrix printers."

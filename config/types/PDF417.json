@@ -14,11 +14,11 @@
 		"custom": 4
 	},
 	"checksum": false,
-	"nonprinting": false,
+	"nonprinting": true,
 	"example": "PDF - 417",
 	"pattern": {
-		"auto": "^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$",
-		"extended": "^[ !\"#$%&'()*+,-.\\/0-9:;<=>?@A-Z\\[\\\\\\]^_`a-z{|}~]{1,2335}$"
+		"auto": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,2335}$",
+		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,2335}$"
 	},
 	"description": {
 		"en": "A stacked linear barcode most commonly found on identification cards."

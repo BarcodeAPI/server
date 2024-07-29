@@ -3,26 +3,30 @@
 // api.js
 //
 
+var mode = '';
 var language = "en";
+var filter = window.location.hash.substring(1);
 
-function init(mode) {
-	var filter = window.location.hash.substring(1);
+function init() {
 
 	fetch('/types/')
 		.then(response => {
 			return response.json();
 		})
-		.then(data => {
-			for (var x in data) {
-				if (!filter) {
-					addType(mode, data[x]);
-				} else if (data[x].name == filter) {
-					addType(mode, data[x]);
-				}
-			}
+		.then(loadTypes);
+}
 
-			delTemplate();
-		});
+function loadTypes(data) {
+
+	for (var x in data) {
+		if (!filter) {
+			addType(mode, data[x]);
+		} else if (data[x].name == filter) {
+			addType(mode, data[x]);
+		}
+	}
+
+	delTemplate();
 }
 
 function addType(mode, type) {

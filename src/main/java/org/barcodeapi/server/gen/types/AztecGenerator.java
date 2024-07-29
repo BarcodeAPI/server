@@ -32,7 +32,7 @@ public class AztecGenerator extends CodeGenerator {
 	@Override
 	public byte[] onRender(String data, JSONObject options) throws WriterException, IOException {
 
-		int size = options.optInt("size", 300);
+		int size = options.optInt("size", 280);
 		int correction = options.optInt("correction", 4);
 		double qz = options.optDouble("qz", 2);
 

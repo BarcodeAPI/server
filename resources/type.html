@@ -8,48 +8,32 @@
 <head>
 	<title>BarcodeAPI.org - API Docs ($TYPE$)</title>
 
+	<meta name="keywords"
+		content="barcode, barcode api, barcode app, barcode generator, download barcode, free barcodes, custom barcodes">
+	<meta name="description"
+		content="Free online barcode generator! Scan barcodes in the web browser or download the images for free!">
+
+	<link rel="icon" type="image/png" href="/ext/favicon.png" />
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<meta name="keywords" content="barcode, barcode app, barcode generator, barcode api, download barcode">
-	<meta name="description"
-		content="Online barcode app: Generate, scan, and download barcodes for free. Get started with our easy-to-use barcode generator!">
+	<link rel="stylesheet" type="text/css" href="/ext/3p/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/ext/css/layout.css" />
 
-	<link rel="icon" type="image/png" href="/static/favicon.png" />
-
-	<script src="/static/api.js"></script>
-
-	<link rel="stylesheet" type="text/css" href="/inc/flexboxgrid.min.css" />
-
-	<link rel="stylesheet" type="text/css" href="/static/layout.css" />
-	<link rel="stylesheet" type="text/css" href="/static/index.css" />
+	<script src="/ext/js/types.js"></script>
 </head>
 
-<body onload="init('single');">
-	<div id="barcode-types" class="wrap container-fluid">
+<body onload="mode='single'; init();">
+	<div class="wrapper container-fluid">
 
-		<div class="header row middle-xs between-xs">
-			<div class="col-xs-12 col-sm-3">
-				<a href="/">
-					<div class="logo">
-						<img src="/img/barcodeapi-logo.svg" alt="BarcodeAPI Logo" aria-label="Logo">
-					</div>
-				</a>
-			</div>
-			<div class="header-share">
-				<div class="row end-xs middle-xs">
-					<div class="col-xs">
-						<h4>
-							<a href="/support.html">FEEDBACK & SUPPORT</a>
-							<br />
-							<span class="contact">support@barcodeapi.org</span>
-						</h4>
-					</div>
-					<div class="share-icon email">
-						<a href="mailto:support@barcodeapi.org">
-							<img src="/img/email.svg" alt="Contact Support" aria-label="Share Icon">
-						</a>
-					</div>
-				</div>
+		<div class="header row between-sm start-sm center-xs">
+			<div class="header-logo start-sm center-xs col-xs-12 col-sm-5"></div>
+			<div class="header-contact col-sm-5 middle-xs end-xs">
+				<h4>
+					FEEDBACK &amp; SUPPORT<br />
+					<span class="header-email">support@barcodeapi.org</span>
+				</h4>
+				<div class="action-icon action-email icon-email"></div>
 			</div>
 		</div>
 
@@ -61,45 +45,47 @@
 			</div>
 		</div>
 
-		<div id="barcode-template" class="row start-xs middle-xs barcode-template">
-			<div class="col-xs-9 barcode-type-info">
-				<span class="type-name type-title">-</span>
-				<hr />
-				<br />
-				Cost
-				<br />
-				Basic: <span class="type-cost-basic">-</span>
-				<br />
-				Custom: <span class="type-cost-custom">-</span>
-				<br />
-				<br />
-				Target:&nbsp;<span class="type-target">-</span>
-				<br />
-				<br />
-				Format:&nbsp;<span class="type-format">-</span>
-				<br />
-				<br />
-				Checksums Enforced:&nbsp;<span class="type-checksum">-</span>
-				<br />
-				Non-Printing Characters:&nbsp;<span class="type-nonprinting">-</span>&nbsp;<a href="nonprinting.html"
-					class="text-link">?</a>
-				<br />
-				<br />
-				<span class="type-description">-</span>
-				<br />
-				<br />
-				Read more on <a class="type-wiki" target="_blank">Wikipedia</a>.
-				<br />
-				<br />
-				Parameters
-				<br />
-				<div class="type-params">-</div>
-				<br />
-			</div>
-			<div class="col-xs-3 barcode-type-example">
-				<a class="type-example-link">
-					<img class="type-example" src="" />
-				</a>
+		<div id="barcode-types">
+			<div id="barcode-template" class="row start-xs middle-xs barcode-template">
+				<div class="col-xs-9 barcode-type-info">
+					<span class="type-name type-title">-</span>
+					<hr />
+					<br />
+					Cost
+					<br />
+					Basic: <span class="type-cost-basic">-</span>
+					<br />
+					Custom: <span class="type-cost-custom">-</span>
+					<br />
+					<br />
+					Target:&nbsp;<span class="type-target">-</span>
+					<br />
+					<br />
+					Format:&nbsp;<span class="type-format">-</span>
+					<br />
+					<br />
+					Checksums Enforced:&nbsp;<span class="type-checksum">-</span>
+					<br />
+					Non-Printing Characters:&nbsp;<span class="type-nonprinting">-</span>&nbsp;<a
+						href="nonprinting.html" class="text-link">?</a>
+					<br />
+					<br />
+					<span class="type-description">-</span>
+					<br />
+					<br />
+					Read more on <a class="type-wiki" target="_blank">Wikipedia</a>.
+					<br />
+					<br />
+					Parameters
+					<br />
+					<div class="type-params">-</div>
+					<br />
+				</div>
+				<div class="col-xs-3 barcode-type-example">
+					<a class="type-example-link">
+						<img class="type-example" src="" />
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>

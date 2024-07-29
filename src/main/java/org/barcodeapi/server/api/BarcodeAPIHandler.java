@@ -134,7 +134,8 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		switch (request.getOptions().optString("format", "png")) {
 
-		case "b64": // serve as base64
+		// serve as base64
+		case "b64":
 
 			// encode as string
 			String encoded = Base64.getEncoder()//
@@ -148,7 +149,8 @@ public class BarcodeAPIHandler extends RestHandler {
 			response.getOutputStream().write(encodedBytes);
 			break;
 
-		case "png": // serve as PNG
+		// serve as PNG
+		case "png":
 
 			// file save-as name / force download
 			boolean download = request.getOptions().optBoolean("download");
@@ -162,6 +164,9 @@ public class BarcodeAPIHandler extends RestHandler {
 			response.setHeader("Content-Length", Long.toString(barcode.getDataSize()));
 			response.getOutputStream().write(barcode.getData());
 			break;
+
+		// serve as JSON
+		case "json":
 
 		default:
 			// unknown output format
