@@ -42,6 +42,7 @@ body {
 .header-contact h4 {
 	margin-right: 0.65em;
 	text-transform: uppercase;
+	font-size: 14px;
 }
 
 .header-email {
@@ -108,8 +109,7 @@ body {
 	padding-bottom: 1em;
 }
 
-.notice-limits {
-}
+.notice-limits {}
 
 .notice-type {}
 

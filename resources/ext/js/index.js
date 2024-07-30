@@ -54,27 +54,22 @@ async function init() {
 	uiShowHide("action-copy", appFeatures.copyImage);
 	uiShowHide("action-url", appFeatures.copyURL);
 
-	// Hide copy image button if unsupported
-	if (appFeatures.copyImage) {
-		document.getElementsByClassName("action-copy")[0].style.display = "none";
-	}
-
 	// Update states from appOptions
 	document.getElementById("option-api-key").value = appOptions.apiKey;
 	document.getElementById("option-trim-before").checked = appOptions.trim.before;
 	document.getElementById("option-trim-after").checked = appOptions.trim.after;
 
 	// Setup event handlers
-	document.getElementsByClassName("app-setup-type")[0].addEventListener('click', toggleOpenBarcodeTypes);
-	document.getElementsByClassName("app-options-link")[0].addEventListener('click', toggleShowRenderOptions);
-	document.getElementsByClassName("barcode-text-input")[0].addEventListener('keyup', checkInput);
+	uiAddListener("app-setup-type", toggleOpenBarcodeTypes);
+	uiAddListener("app-options-link", toggleShowRenderOptions);
+	uiAddListener("barcode-text-input", checkInput, 'keyup');
 
 	// Setup barcode action handler
-	document.getElementsByClassName("action-clear")[0].addEventListener('click', actionClearInput);
-	document.getElementsByClassName("action-print")[0].addEventListener('click', actionPrintImage);
-	document.getElementsByClassName("action-url")[0].addEventListener('click', actionCopyURL);
-	document.getElementsByClassName("action-copy")[0].addEventListener('click', actionCopyImage);
-	document.getElementsByClassName("action-download")[0].addEventListener('click', actionDownloadImage);
+	uiAddListener("action-clear", actionClearInput);
+	uiAddListener("action-print", actionPrintImage);
+	uiAddListener("action-url", actionCopyURL);
+	uiAddListener("action-copy", actionCopyImage);
+	uiAddListener("action-download", actionDownloadImage);
 }
 
 /**

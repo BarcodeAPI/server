@@ -3,6 +3,7 @@
  */
 const appDisplay = {
 	'about': false,
+	'support': false,
 	'tokenCount': false,
 	'bulkPages': true,
 	'limitsNotice': false,
@@ -47,8 +48,11 @@ window.addEventListener("load", function() {
  */
 function initHeader() {
 
-	document.getElementsByClassName("header-logo")[0].addEventListener('click', actionGoHome);
-	document.getElementsByClassName("action-email")[0].addEventListener('click', actionContactUs);
+	uiAddListener("header-logo", actionHome);
+	uiAddListener("action-email", actionContact);
+	if (appDisplay.support) {
+		uiAddListener("header-support", actionSupport)
+	}
 }
 
 /**
@@ -68,21 +72,28 @@ function initFooter() {
 	uiShowHide("footer-link", appDisplay.about);
 	uiShowHide("footer-docs", appDisplay.helpManual);
 
-	document.getElementsByClassName("footer-docs-link")[0].addEventListener('click', actionShowDocs);
+	uiAddListener("footer-docs-link", actionShowDocs);
 }
 
 /**
  * Called when a user should be sent home page.
  */
-function actionGoHome() {
-	window.location = "/index.html";
+function actionHome() {
+	window.location.href = "/index.html";
 }
 
 /**
- * Called when a user should be sent to support page.
+ * Called when a user clicks contact via email.
  */
-function actionContactUs() {
+function actionContact() {
 	window.location.href = "mailto:support@barcodeapi.org";
+}
+
+/**
+ * Called when a user should be sent to the support page.
+ */
+function actionSupport() {
+	window.location.href = "/support.html";
 }
 
 /**
@@ -99,5 +110,16 @@ function uiShowHide(elem, show) {
 	var obj = document.getElementsByClassName(elem)[0];
 	if (obj) {
 		obj.style.display = ((show) ? '' : 'none');
+	}
+}
+
+/**
+ * Add an event listener to a UI element.
+ */
+function uiAddListener(elem, h, e) {
+	e = (e) ? e : "click";
+	var obj = document.getElementsByClassName(elem)[0];
+	if (obj) {
+		obj.addEventListener(e, h);
 	}
 }
