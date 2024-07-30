@@ -105,17 +105,17 @@ body {
 }
 
 .notice {
-	padding: 1em 0;
+	padding-bottom: 1em;
 }
 
 .notice-limits {
-	margin: 1em 0;
 }
 
 .notice-type {}
 
 .notice-tokens {
-	font-size: 13px;
+	padding-top: 0.65em;
+	font-size: 14px;
 }
 
 .barcode-text-input {
@@ -216,8 +216,7 @@ body {
 	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%2076%2076%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20fill-opacity%3D%221%22%20stroke-width%3D%220.2%22%20stroke-linejoin%3D%22round%22%20d%3D%22M%2047.5282%2C42.9497L%2042.5784%2C38L%2047.5282%2C33.0502L%2044.9497%2C30.4718L%2040%2C35.4216L%2035.0502%2C30.4718L%2032.4718%2C33.0502L%2037.4216%2C38L%2032.4718%2C42.9497L%2035.0502%2C45.5282L%2040%2C40.5784L%2044.9497%2C45.5282L%2047.5282%2C42.9497%20Z%20M%2018.0147%2C41.5355L%2026.9646%2C50.4854C%2028.0683%2C51.589%2029%2C52%2031%2C52L%2052%2C52C%2054.7614%2C52%2057%2C49.7614%2057%2C47L%2057%2C29C%2057%2C26.2386%2054.7614%2C24%2052%2C24L%2031%2C24C%2029%2C24%2028.0683%2C24.4113%2026.9646%2C25.5149L%2018.0147%2C34.4645C%2016.0621%2C36.4171%2016.0621%2C39.5829%2018.0147%2C41.5355%20Z%20M%2031%2C49C%2030%2C49%2029.6048%2C48.8828%2029.086%2C48.3641L%2020.1361%2C39.4142C%2019.355%2C38.6332%2019.355%2C37.3669%2020.1361%2C36.5858L%2029.086%2C27.6362C%2029.6048%2C27.1175%2030%2C27%2031%2C27.0001L%2052%2C27.0001C%2053.1046%2C27.0001%2054%2C27.8955%2054%2C29.0001L%2054%2C47.0001C%2054%2C48.1046%2053.1046%2C49.0001%2052%2C49.0001L%2031%2C49%20Z%20%22%2F%3E%3C%2Fsvg%3E');
 }
 
-.icon-chevron,
-.text-link:after {
+.icon-chevron:after {
 	background-size: 12px 12px;
 	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%20304%20448%22%3E%3Cpath%20fill%3D%22%23000%22%20d%3D%22M276.75%20219.25l-185.5%20185.5c-6.25%206.25-16.25%206.25-22.5%200l-41.5-41.5c-6.25-6.25-6.25-16.25%200-22.5l132.75-132.75-132.75-132.75c-6.25-6.25-6.25-16.25%200-22.5l41.5-41.5c6.25-6.25%2016.25-6.25%2022.5%200l185.5%20185.5c6.25%206.25%206.25%2016.25%200%2022.5z%22%2F%3E%3C%2Fsvg%3E');
 }
@@ -585,23 +584,7 @@ a:hover {
 	cursor: pointer;
 }
 
-.text-link:before {
-
-	padding-left: 0;
-	padding-right: 6px;
-	height: 14px;
-	width: 14px;
-	top: 3px;
-	position: relative;
-
-	display: inline-block;
-	background-size: 12px 12px;
-	background-position: right center;
-	background-repeat: no-repeat;
-	pointer-events: none;
-}
-
-.text-link:after {
+.icon-chevron:after {
 
 	width: 8px;
 	height: 12px;

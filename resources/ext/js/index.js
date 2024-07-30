@@ -8,25 +8,10 @@
  */
 const appOptions = {
 	'language': 'en',
-	'display': {
-		'about': false,
-		'tokenCount': false,
-		'bulkPages': true,
-		'limitsNotice': false,
-		'renderOptions': false,
-		'helpType': false,
-		'helpManual': false
-	},
 	'current': false,
 	'drawerOpen': false,
 	'optionsOpen': false,
 	'apiKey': window.localStorage.getItem("apiKey"),
-	'browser': {
-		// Firefox unsupported
-		'copyImage': (navigator.userAgent.indexOf("Firefox") == -1),
-		// Must be secure context
-		'copyURL': window.isSecureContext
-	},
 	'genDelay': 415,
 	'default': {
 		'colorFG': "000000",
@@ -60,21 +45,17 @@ async function init() {
 	// Load supported types
 	loadBarcodeTypes();
 
-	initUI();
-
 	// Hide UI elements based on config
-	uiShowHide("app-setup-options", appOptions.display.renderOptions);
-	uiShowHide("app-setup-bulk", appOptions.display.bulkPages);
-	uiShowHide("notice-limits", appOptions.display.limitsNotice);
-	uiShowHide("notice-tokens", appOptions.display.tokenCount);
-	uiShowHide("notice-type", appOptions.display.helpType);
+	uiShowHide("app-setup-options", appDisplay.renderOptions);
+	uiShowHide("app-setup-bulk", appDisplay.bulkPages);
+	uiShowHide("notice-type", appDisplay.helpType);
 
 	// Hide UI elements based on browser support
-	uiShowHide("action-copy", appOptions.browser.copyImage);
-	uiShowHide("action-url", appOptions.browser.copyURL);
+	uiShowHide("action-copy", appFeatures.copyImage);
+	uiShowHide("action-url", appFeatures.copyURL);
 
 	// Hide copy image button if unsupported
-	if (appOptions.browser.copyImage) {
+	if (appFeatures.copyImage) {
 		document.getElementsByClassName("action-copy")[0].style.display = "none";
 	}
 
@@ -86,7 +67,7 @@ async function init() {
 	// Setup event handlers
 	document.getElementsByClassName("app-setup-type")[0].addEventListener('click', toggleOpenBarcodeTypes);
 	document.getElementsByClassName("app-options-link")[0].addEventListener('click', toggleShowRenderOptions);
-	document.getElementsByClassName("barcode-text-input")[0].addEventListener('keyup', delayUpdateBarcode);
+	document.getElementsByClassName("barcode-text-input")[0].addEventListener('keyup', checkInput);
 
 	// Setup barcode action handler
 	document.getElementsByClassName("action-clear")[0].addEventListener('click', actionClearInput);
@@ -94,7 +75,6 @@ async function init() {
 	document.getElementsByClassName("action-url")[0].addEventListener('click', actionCopyURL);
 	document.getElementsByClassName("action-copy")[0].addEventListener('click', actionCopyImage);
 	document.getElementsByClassName("action-download")[0].addEventListener('click', actionDownloadImage);
-
 }
 
 /**
@@ -253,7 +233,7 @@ function optionsChange() {
 		inHRT.value = appOptions.render.hrt;
 	}
 
-	delayUpdateBarcode();
+	checkInput();
 }
 
 /**
@@ -294,11 +274,6 @@ function buildBarcodeURL() {
 	if (trimmed) {
 		textInput.value = text;
 		return buildBarcodeURL();
-	}
-
-	// Fail if invalid.
-	if (!textInput.checkValidity()) {
-		return false;
 	}
 
 	// The API target
@@ -348,6 +323,21 @@ function updateBarcodeImage(url) {
 				document.getElementById('barcode_output').src = URL.createObjectURL(blob);
 			});
 		});
+}
+
+/**
+ * Validate user input before rendering.
+ */
+function checkInput() {
+
+	// Fail if invalid input
+	const textInput = document.getElementById("text");
+	if (!textInput.checkValidity()) {
+		return false;
+	}
+
+	// Call delayed update
+	delayUpdateBarcode();
 }
 
 /**
@@ -501,7 +491,7 @@ function actionPrintImage() {
 function actionCopyURL() {
 
 	// Fail if unsupported
-	if (!appOptions.browser.copyURL) {
+	if (!appFeatures.copyURL) {
 		console.log("Browser unsupported.");
 		return false;
 	}
@@ -525,7 +515,7 @@ function actionCopyURL() {
 async function actionCopyImage() {
 
 	// Fail if unsupported
-	if (!appOptions.browser.copyImage) {
+	if (!appFeatures.copyImage) {
 		console.log("Browser unsupported.");
 		return false;
 	}

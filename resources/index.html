@@ -20,7 +20,7 @@
 	<link rel="stylesheet" type="text/css" href="/ext/3p/flexboxgrid.min.css" />
 	<link rel="stylesheet" type="text/css" href="/ext/css/layout.css" />
 
-	<script src="/ext/js/actions.js"></script>
+	<script src="/ext/js/ui.js"></script>
 	<script src="/ext/js/index.js"></script>
 </head>
 
@@ -54,7 +54,7 @@
 				</div>
 
 				<div class="app-setup-options col-xs-12">
-					<span class="app-options-link text-link">Render Options</span>
+					<span class="app-options-link text-link icon-chevron">Render Options</span>
 					<div class="app-barcode-options">
 						<div>
 							Whitespace<br /> <input type="checkbox" id="option-trim-before" onchange="optionsChange()"
@@ -88,8 +88,8 @@
 
 				<div class="app-setup-bulk col-xs-12">
 					<h4>Need more barcodes?</h4>
-					<a href="/multi.html" class="text-link bulk-link anim">MULTIS GENERATOR</a><br />
-					<a href="/bulk.html" class="text-link bulk-link anim">BULK BARCODE GENERATOR</a>
+					<a href="/multi.html" class="text-link icon-chevron bulk-link anim">MULTIS GENERATOR</a><br />
+					<a href="/bulk.html" class="text-link icon-chevron bulk-link anim">BULK BARCODE GENERATOR</a>
 				</div>
 			</div>
 
@@ -120,13 +120,14 @@
 		</div>
 
 		<div class="notice row start-xs between-xs middle-xs bottom-sm">
-			<div class="notice-limits col-xs-12">
-				<b>Important Update!</b><br />
-				<a href="/limits.html" class="text-link anim">Introducing Rate Limits</a>
-			</div>
-
-			<div class="notice-tokens col-xs-6">
-				Tokens Remaining:&nbsp;<span id="barcode_tokens"></span>
+			<div class="col-xs-6">
+				<div class="notice-limits">
+					<b>Important Update!</b><br />
+					<a href="/limits.html" class="text-link icon-chevron anim">Introducing Rate Limits</a>
+				</div>
+				<div class="notice-tokens">
+					Tokens Remaining:&nbsp;<span id="barcode_tokens"></span>
+				</div>
 			</div>
 
 			<div class="notice-type col-xs-6 end-xs">

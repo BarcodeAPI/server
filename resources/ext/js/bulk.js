@@ -1,12 +1,5 @@
-const appOptions = {
-	'display': {
-		'about': false,
-		'helpManual': false
-	}
-}
 
 function init() {
-	initUI();
 
 	document.getElementsByClassName("link-csv")[0].addEventListener('click', actionDownloadCSV);
 }
