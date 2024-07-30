@@ -48,8 +48,9 @@ public class CodeGenerators {
 	}
 
 	@SuppressWarnings("unchecked")
-	private LibObjectPooler<CodeGenerator> setupBarcodePooler(CodeType codeType) {
+	private LibObjectPooler<CodeGenerator> setupBarcodePooler(final CodeType codeType) {
 
+		final String name = codeType.getName();
 		final Class<? extends CodeGenerator> clazz;
 		final Constructor<? extends CodeGenerator> constructor;
 
@@ -68,7 +69,9 @@ public class CodeGenerators {
 
 					@Override
 					public CodeGenerator onCreate() {
-						LibLog._clogF("I0180", clazz.getName());
+						LibLog._clogF("I0180", name);
+						LibMetrics.instance().hitCounter("generators", name, "pool", "created");
+
 						try {
 							return constructor.newInstance();
 						} catch (Exception | Error e) {
@@ -79,7 +82,8 @@ public class CodeGenerators {
 
 					@Override
 					public void onDestroy(CodeGenerator t) {
-						LibLog._clogF("I0181", t.getClass().getName());
+						LibLog._clogF("I0181", name);
+						LibMetrics.instance().hitCounter("generators", name, "pool", "destroyed");
 					}
 				});
 
