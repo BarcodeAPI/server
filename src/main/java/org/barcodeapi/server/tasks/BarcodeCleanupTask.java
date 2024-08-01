@@ -1,6 +1,5 @@
 package org.barcodeapi.server.tasks;
 
-import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeTypes;
 import org.barcodeapi.server.core.ObjectCache;
@@ -21,14 +20,20 @@ public class BarcodeCleanupTask extends BackgroundTask {
 	@Override
 	public void onRun() {
 
-		int active = 0;
-		int removed = 0;
+		int active = 0, removed = 0;
+
+		// Loop each supported type
 		for (String type : CodeTypes.inst().getTypes()) {
-			ObjectCache cache = BarcodeCache.getCache(type);
+
+			// Get the type cache
+			ObjectCache cache = ObjectCache.getCache(type);
+
+			// Expire and count objects
 			removed += cache.expireOldObjects();
 			active += cache.count();
 		}
 
+		// Log the counts
 		LibLog._clogF("I2201", removed, active);
 	}
 }

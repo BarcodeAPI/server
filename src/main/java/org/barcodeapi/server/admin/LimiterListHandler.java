@@ -25,25 +25,28 @@ public class LimiterListHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
+		// List by IP
 		JSONObject byIp = new JSONObject();
 		for (Map.Entry<String, CachedObject> entry : LimiterCache.getIpCache().getRawCache().entrySet()) {
 			CachedLimiter limiter = (CachedLimiter) entry.getValue();
 			byIp.put(limiter.getCaller(), limiter.numTokens());
 		}
 
+		// List by key
 		JSONObject byKey = new JSONObject();
 		for (Map.Entry<String, CachedObject> entry : LimiterCache.getKeyCache().getRawCache().entrySet()) {
 			CachedLimiter limiter = (CachedLimiter) entry.getValue();
 			byKey.put(limiter.getCaller(), limiter.numTokens());
 		}
 
-		// print response to client
-		JSONObject output = new JSONObject()//
+		// Print response to client
+		r.setStatus(HttpServletResponse.SC_OK);
+		r.setHeader("Content-Type", "application/json");
+		r.getOutputStream().println((new JSONObject()//
 				.put("ips", byIp)//
-				.put("keys", byKey);
-		response.setHeader("Content-Type", "application/json");
-		response.getOutputStream().println(output.toString(4));
+				.put("keys", byKey)//
+		).toString());
 	}
 }

@@ -60,31 +60,35 @@ public abstract class RestHandler extends AbstractHandler {
 		return apiRateLimited;
 	}
 
-	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
+	public void _impl(String target, Request baseRequest, HttpServletRequest request, //
+			HttpServletResponse response) throws IOException, ServletException {
+	}
 
-		// build the request context
+	public void handle(String target, Request baseRequest, HttpServletRequest request, //
+			HttpServletResponse response) throws IOException, ServletException {
+
+		// Build the request context
 		RequestContext ctx = new RequestContext(baseRequest);
 
-		// hit the counters
+		// Hit the counters
 		getStats().hitCounter("request", "count");
 		getStats().hitCounter("request", "method", ctx.getMethod());
 		getStats().hitCounter("request", "target", _NAME, "count");
 		getStats().hitCounter("request", "target", _NAME, "method", ctx.getMethod());
 
-		// skip if already handled
+		// Skip if already handled
 		if (!baseRequest.isHandled()) {
 			baseRequest.setHandled(true);
 		} else {
 			return;
 		}
 
-		// log the request
+		// Log the request
 		LibLog.clogF("request", //
 				((ctx.getProxy() == null) ? "I4001" : "I4002"), //
 				_NAME, target, ctx.getSource(), ctx.getIP(), ctx.getProxy());
 
-		// setup default response headers
+		// Setup default response headers
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setCharacterEncoding("UTF-8");
 		response.setHeader("Server", "BarcodeAPI.org");
@@ -92,7 +96,7 @@ public abstract class RestHandler extends AbstractHandler {
 		response.setHeader("Accept-Charset", "utf-8");
 		response.addCookie(ctx.getSession().getCookie());
 
-		// authenticate the user if required
+		// Authenticate the user if required
 		if (apiAuthRequired && (!ctx.isAdmin())) {
 
 			getStats().hitCounter("request", "authfail");
@@ -102,37 +106,43 @@ public abstract class RestHandler extends AbstractHandler {
 			return;
 		}
 
-		// add open CORS headers
+		// Add open CORS headers
 		response.setHeader("Access-Control-Max-Age", "86400");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Origin", //
 				(ctx.getOrigin() != null) ? ctx.getOrigin() : "*");
 
-		// request complete if only options
+		// Send token count to user
+		ctx.getLimiter().touch();
+		response.setHeader("X-RateLimit-Tokens", //
+				String.format("%.2f", ctx.getLimiter().numTokens()));
+
+		// Request complete if only options
 		if (ctx.getMethod().equals("OPTIONS")) {
 			response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 			return;
 		}
 
-		// send token count to user
-		ctx.getLimiter().touch();
-		response.setHeader("X-RateLimit-Tokens", //
-				String.format("%.2f", ctx.getLimiter().numTokens()));
-
 		try {
 
-			// call the implemented method
+			// Check for implementation overrides
+			this._impl(target, baseRequest, request, response);
+
+			// Call the normal method
 			this.onRequest(ctx, response);
 		} catch (Exception | Error e) {
 
-			// log the error
+			// Log any errors
 			LibLog._clog("E0699", e);
 		} finally {
 
-			// calculate total processing time
+			// Flush output buffer
+			response.flushBuffer();
+
+			// Calculate total processing time
 			long runTime = System.currentTimeMillis() - ctx.getTimestamp();
 
-			// hit the time and status counters
+			// Hit the time and status counters
 			getStats().hitCounter(runTime, "request", "time");
 			getStats().hitCounter(runTime, "request", "target", _NAME, "time");
 			getStats().hitCounter("request", "result", ("_" + response.getStatus()));

@@ -5,9 +5,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.core.CachedObject;
 import org.barcodeapi.server.core.CodeTypes;
+import org.barcodeapi.server.core.ObjectCache;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONArray;
@@ -26,32 +26,32 @@ public class CacheDumpHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
-		// loop all caches
+		// Loop all caches
 		JSONObject types = new JSONObject();
 		for (String type : CodeTypes.inst().getTypes()) {
 
-			// loop all cached objects
+			// Loop all cached objects
 			JSONArray entries = new JSONArray();
-			for (Map.Entry<String, CachedObject> entry : BarcodeCache.getCache(type).getRawCache().entrySet()) {
+			for (Map.Entry<String, CachedObject> entry : ObjectCache.getCache(type).getRawCache().entrySet()) {
 
 				entries.put(new JSONObject()//
 						.put("text", entry.getKey())//
 						.put("hits", entry.getValue().getAccessCount()));
 			}
 
-			// add to master element
+			// Add to master element
 			types.put(type, entries);
 		}
 
-		// download the results
-		response.setHeader("Content-Type", "application/json");
-		response.setHeader("Content-Disposition", "attachment, filename=cache.json");
-
-		// print response to client
-		JSONObject output = new JSONObject()//
-				.put("cache", types);
-		response.getOutputStream().println(output.toString(4));
+		// Print response to client
+		r.setStatus(HttpServletResponse.SC_OK);
+		r.setHeader("Content-Type", "application/json");
+		r.setHeader("Content-Disposition", "attachment, filename=cache.json");
+		r.getOutputStream().println((new JSONObject()//
+				.put("code", 200)//
+				.put("cache", types)//
+		).toString());
 	}
 }

@@ -22,7 +22,7 @@ public class TypesHandler extends RestHandler {
 
 	static {
 
-		// loop all supported types
+		// Loop all supported types
 		CodeTypes types = CodeTypes.inst();
 		JSONArray output = new JSONArray();
 		for (String type : types.getTypes()) {
@@ -30,8 +30,8 @@ public class TypesHandler extends RestHandler {
 			output.put(CodeType.toJSON(types.getType(type)));
 		}
 
-		// convert to string and cache
-		TYPES = output.toString(4);
+		// Convert to string, save for later
+		TYPES = output.toString();
 	}
 
 	public TypesHandler() {
@@ -39,10 +39,11 @@ public class TypesHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
-		// print types string to client
-		response.setHeader("Content-Type", "application/json");
-		response.getOutputStream().println(TYPES);
+		// Print response to client
+		r.setStatus(HttpServletResponse.SC_OK);
+		r.setHeader("Content-Type", "application/json");
+		r.getOutputStream().println(TYPES);
 	}
 }

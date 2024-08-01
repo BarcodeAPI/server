@@ -23,19 +23,20 @@ public class SessionListHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext ctx, HttpServletResponse response)
-			throws JSONException, IOException {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
+		// Loop all sessions
 		JSONArray sessions = new JSONArray();
 		for (String key : SessionCache.getCache().getRawCache().keySet()) {
 			sessions.put(key);
 		}
 
-		// print response to client
-		JSONObject output = new JSONObject()//
+		// Print response to client
+		r.setStatus(HttpServletResponse.SC_OK);
+		r.setHeader("Content-Type", "application/json");
+		r.getOutputStream().println((new JSONObject()//
 				.put("sessions", sessions)//
-				.put("count", sessions.length());
-		response.setHeader("Content-Type", "application/json");
-		response.getOutputStream().println(output.toString(4));
+				.put("count", sessions.length())//
+		).toString());
 	}
 }

@@ -22,15 +22,17 @@ public class SessionFlushHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
+		// Clear cache and get count
 		double count = SessionCache.getCache().clearCache();
 
-		// print response to client
-		JSONObject output = new JSONObject()//
+		// Print response to client
+		r.setStatus(HttpServletResponse.SC_OK);
+		r.setHeader("Content-Type", "application/json");
+		r.getOutputStream().println((new JSONObject()//
 				.put("message", "sessions flushed")//
-				.put("count", count);
-		response.setHeader("Content-Type", "application/json");
-		response.getOutputStream().println(output.toString(4));
+				.put("count", count)//
+		).toString());
 	}
 }

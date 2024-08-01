@@ -13,24 +13,17 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
  */
 public class BarcodeCache {
 
-	public static ObjectCache getCache(String type) {
-		return ObjectCache.getCache(type);
-	}
-
 	public static CachedBarcode getBarcode(BarcodeRequest request) {
 		LibMetrics.hitMethodRunCounter();
 
-		CachedObject o = getCache(request.getType().getName()).get(request.getData());
-		if (o == null) {
-			return null;
-		}
+		CachedObject o = ObjectCache.getCache(request.getType().getName()).get(request.getData());
 
-		return (CachedBarcode) o;
+		return ((o == null) ? null : ((CachedBarcode) o));
 	}
 
 	public static void addBarcode(String type, String data, CachedBarcode object) {
 		LibMetrics.hitMethodRunCounter();
 
-		getCache(type).put(data, object);
+		ObjectCache.getCache(type).put(data, object);
 	}
 }

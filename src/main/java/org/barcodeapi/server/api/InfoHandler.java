@@ -22,15 +22,15 @@ public class InfoHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext ctx, HttpServletResponse response)
-			throws JSONException, IOException {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
-		// print response to client
-		JSONObject output = new JSONObject()//
+		// Print response to client
+		r.setStatus(HttpServletResponse.SC_OK);
+		r.setHeader("Content-Type", "application/json");
+		r.getOutputStream().println((new JSONObject()//
 				.put("uptime", ServerRuntime.getTimeRunning())//
 				.put("hostname", ServerRuntime.getHostname())//
-				.put("version", ServerRuntime.getVersion());
-		response.setHeader("Content-Type", "application/json");
-		response.getOutputStream().println(output.toString(4));
+				.put("version", ServerRuntime.getVersion())//
+		).toString());
 	}
 }

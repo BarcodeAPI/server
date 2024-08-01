@@ -1,5 +1,11 @@
 package org.barcodeapi.server.core;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,17 +19,41 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
  */
 public class ObjectCache {
 
+	private static final LibMetrics stats = LibMetrics.instance();
+
 	private static ConcurrentHashMap<String, ObjectCache> caches = new ConcurrentHashMap<>();
 
 	private final String name;
-	private final LibMetrics stats;
+	private final File cacheFile;
+
 	private final ConcurrentHashMap<String, CachedObject> cache;
 
+	@SuppressWarnings("unchecked")
 	public ObjectCache(String name) {
 
 		this.name = name;
-		this.stats = LibMetrics.instance();
-		this.cache = new ConcurrentHashMap<>();
+		this.cacheFile = (new File(//
+				String.format("cache-%s.snap", name)));
+
+		ConcurrentHashMap<String, CachedObject> c;
+
+		try {
+			FileInputStream st = new FileInputStream(cacheFile);
+			ObjectInputStream str = new ObjectInputStream(st);
+
+			// Read the cache file
+			c = ((ConcurrentHashMap<String, CachedObject>) str.readObject());
+
+			str.close();
+			st.close();
+
+		} catch (Exception e) {
+
+			// Create a new cache
+			c = new ConcurrentHashMap<String, CachedObject>();
+		}
+
+		this.cache = c;
 	}
 
 	public String getName() {
@@ -86,6 +116,24 @@ public class ObjectCache {
 
 		stats.hitCounter("cache", name, "remove");
 		return cache.remove(key);
+	}
+
+	public int snapshot() throws IOException {
+
+		FileOutputStream st = new FileOutputStream(cacheFile);
+		ObjectOutputStream str = new ObjectOutputStream(st);
+
+		int count;
+		synchronized (cache) {
+
+			count = cache.size();
+			str.writeObject(cache);
+		}
+
+		str.close();
+		st.close();
+
+		return count;
 	}
 
 	public double clearCache() {

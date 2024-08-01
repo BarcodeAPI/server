@@ -20,11 +20,13 @@ public class LimiterCleanupTask extends BackgroundTask {
 	@Override
 	public void onRun() {
 
+		// Cleanup IP caches
 		ObjectCache byIp = LimiterCache.getIpCache();
 		int removedByIp = byIp.expireOldObjects();
 		int activeByIp = byIp.count();
 		LibLog._clogF("I2601", "IP", removedByIp, activeByIp);
 
+		// Cleanup Key caches
 		ObjectCache byKey = LimiterCache.getKeyCache();
 		int removedByKey = byKey.expireOldObjects();
 		int activeByKey = byKey.count();

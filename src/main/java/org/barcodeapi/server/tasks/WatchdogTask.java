@@ -10,6 +10,7 @@ import org.barcodeapi.core.ServerRuntime;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.CodeTypes;
+import org.barcodeapi.server.core.ObjectCache;
 import org.barcodeapi.server.gen.CodeGenerator;
 
 import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
@@ -88,6 +89,19 @@ public class WatchdogTask extends BackgroundTask {
 			getStats().setValue(pool.getMaxPoolSize(), "generators", type, "pool", "maxPoolSize");
 			getStats().setValue(pool.getNumLocked(), "generators", type, "pool", "numLocked");
 			getStats().setValue(pool.getPoolSize(), "generators", type, "pool", "size");
+		}
+
+		// update sizes of app caches
+		String[] appCaches = new String[] { "sessions", "LIMITS-IP", "LIMITS-KEY" };
+		for (String cache : appCaches) {
+			getStats().setValue(ObjectCache//
+					.getCache(cache).count(), "cache", cache, "size");
+		}
+
+		// update sizes of barcode caches
+		for (String cache : CodeTypes.inst().getTypes()) {
+			getStats().setValue(ObjectCache//
+					.getCache(cache).count(), "cache", cache, "size");
 		}
 	}
 }

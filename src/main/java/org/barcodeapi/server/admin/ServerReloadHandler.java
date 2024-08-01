@@ -22,14 +22,16 @@ public class ServerReloadHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
+		// Reload config
 		AppConfig.reload();
 
-		// print response to client
-		JSONObject output = new JSONObject()//
-				.put("message", "config reloaded");
-		response.setHeader("Content-Type", "application/json");
-		response.getOutputStream().println(output.toString(4));
+		// Print response to client
+		r.setStatus(HttpServletResponse.SC_OK);
+		r.setHeader("Content-Type", "application/json");
+		r.getOutputStream().println((new JSONObject()//
+				.put("message", "config reloaded")//
+		).toString());
 	}
 }

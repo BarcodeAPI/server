@@ -22,37 +22,45 @@ public class LimiterFlushHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
-		String limiter = ctx.getRequest().getParameter("limiter");
+		// Lookup limiter info
+		String limiter = c.getRequest().getParameter("limiter");
 
+		// Fail if not found
 		if (limiter == null) {
-			// print response to client
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			JSONObject output = new JSONObject()//
-					.put("message", "limiter not set");
-			response.setHeader("Content-Type", "application/json");
-			response.getOutputStream().println(output.toString(4));
+
+			// Print failure to client
+			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			r.setHeader("Content-Type", "application/json");
+			r.getOutputStream().println((new JSONObject()//
+					.put("code", 400)//
+					.put("message", "limiter not set")//
+			).toString());
 			return;
 		}
 
 		boolean flushed = false;
 
+		// Check & flush Key cache
 		if (LimiterCache.getKeyCache().has(limiter)) {
 			LimiterCache.getKeyCache().remove(limiter);
 			flushed = true;
 		}
 
+		// Check & flush IP cache
 		if (LimiterCache.getIpCache().has(limiter)) {
 			LimiterCache.getIpCache().remove(limiter);
 			flushed = true;
 		}
 
-		// print response to client
-		JSONObject output = new JSONObject()//
+		// Print response to client
+		r.setStatus(HttpServletResponse.SC_OK);
+		r.setHeader("Content-Type", "application/json");
+		r.getOutputStream().println((new JSONObject()//
+				.put("code", 200)//
 				.put("message", "limiter flushed")//
-				.put("flushed", flushed);
-		response.setHeader("Content-Type", "application/json");
-		response.getOutputStream().println(output.toString(4));
+				.put("flushed", flushed)//
+		).toString());
 	}
 }

@@ -15,6 +15,9 @@ jobs:
       run: |
         repo="ssh://git@git.mclarkdev.com:2222/${{ gitea.repository }}"
         echo "Cloning $repo" && git clone --recurse-submodules $repo .
+    - name: Set version number
+      run: |
+        echo -n "${{ github.run_id }}" > src/main/resources/app.version
     - name: Build artifacts with Maven
       run: mvn clean install
     - name: Package the server

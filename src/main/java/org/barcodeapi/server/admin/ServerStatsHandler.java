@@ -20,10 +20,11 @@ public class ServerStatsHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws JSONException, IOException {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
-		// print response to client
-		response.setHeader("Content-Type", "application/json");
-		response.getOutputStream().println(getStats().getDetails().toString(4));
+		// Print response to client
+		r.setStatus(HttpServletResponse.SC_OK);
+		r.setHeader("Content-Type", "application/json");
+		r.getOutputStream().println(getStats().getDetails().toString());
 	}
 }

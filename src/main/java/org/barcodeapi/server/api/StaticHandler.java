@@ -19,39 +19,47 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
  */
 public class StaticHandler extends RestHandler {
 
+	private static final int CACHEsec = 604800;
+
 	private ResourceHandler resources = new ResourceHandler() {
 	};
 
 	public StaticHandler(Server server) throws Exception {
 		super(false, false);
 
+		// Load the Jetty resource handler
 		resources = new ResourceHandler();
 		resources.setServer(server);
 		resources.setResourceBase("resources");
 		resources.setRedirectWelcome(true);
 		resources.setWelcomeFiles(new String[] { "index.html" });
-		resources.setCacheControl("max-age=604800");
+		resources.setCacheControl(("max-age=" + CACHEsec));
 		resources.start();
 	}
 
 	@Override
-	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
+	public void _impl(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		super.handle(target, baseRequest, request, response);
 
-		// call through to resources
+		// Call through to resources
 		baseRequest.setHandled(false);
 		resources.handle(target, baseRequest, request, response);
-		long expires = System.currentTimeMillis() + 604800;
-		response.setDateHeader("expires", expires);
 
-		// send non resources to api
+		// Calculate and set cache expiration time
+		response.setDateHeader("expires", //
+				(System.currentTimeMillis() + (CACHEsec * 1000)));
+
+		// Send non resources to API
 		if (!baseRequest.isHandled()) {
 			response.sendRedirect("/api/auto" + request.getPathInfo());
 		}
 	}
 
 	@Override
-	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws Exception {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws Exception {
+
+		// Do Nothing.
+		// This class overrides the lower level (handle) method to serve static files.
 	}
 }

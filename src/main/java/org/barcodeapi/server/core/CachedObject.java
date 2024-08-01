@@ -1,5 +1,6 @@
 package org.barcodeapi.server.core;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -7,7 +8,9 @@ import java.util.concurrent.TimeUnit;
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
-public abstract class CachedObject {
+public abstract class CachedObject implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private final long timeCreated;
 	private long timeTimeout;

@@ -12,6 +12,7 @@ import org.barcodeapi.server.admin.ServerReloadHandler;
 import org.barcodeapi.server.admin.ServerStatsHandler;
 import org.barcodeapi.server.admin.SessionFlushHandler;
 import org.barcodeapi.server.admin.SessionListHandler;
+import org.barcodeapi.server.admin.SessionSnapshotHandler;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.BulkHandler;
 import org.barcodeapi.server.api.InfoHandler;
@@ -21,6 +22,7 @@ import org.barcodeapi.server.api.TypesHandler;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.RestHandler;
+import org.barcodeapi.server.session.SessionCache;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -87,15 +89,15 @@ public class ServerLauncher {
 	public void launch() throws Exception {
 
 		// Initialize API server
-		LibLog._clog("I0002");
+		LibLog._clog("I0001");
 		initApiServer();
 
 		// Start system tasks
-		LibLog._clog("I0003");
+		LibLog._clog("I0002");
 		initSystemTasks();
 
 		// Start the server
-		LibLog._clog("I0004");
+		LibLog._clog("I0003");
 		startServer();
 	}
 
@@ -137,6 +139,7 @@ public class ServerLauncher {
 		initHandler("/admin/limiter/flush", LimiterFlushHandler.class);
 		initHandler("/admin/session/list", SessionListHandler.class);
 		initHandler("/admin/session/flush", SessionFlushHandler.class);
+		initHandler("/admin/session/snapshot", SessionSnapshotHandler.class);
 		initHandler("/admin/server/reload", ServerReloadHandler.class);
 
 		// Server Stats
@@ -172,8 +175,11 @@ public class ServerLauncher {
 	 */
 	private void initSystemTasks() {
 
-		final String TASK_ROOT = "org.barcodeapi.server.tasks";
+		// Register shutdown hook
+		LibLog._clog("I0031");
+		Runtime.getRuntime().addShutdownHook(shutdownRunner);
 
+		final String TASK_ROOT = "org.barcodeapi.server.tasks";
 		JSONArray taskList = AppConfig.get().getJSONArray("tasks");
 
 		for (int x = 0; x < taskList.length(); x++) {
@@ -201,6 +207,23 @@ public class ServerLauncher {
 			}
 		}
 	}
+
+	/**
+	 * Hook called as the JVM is shutting down.
+	 */
+	private Thread shutdownRunner = new Thread() {
+
+		public void run() {
+			try {
+
+				// Save sessions
+				LibLog._clog("I0042");
+				int c = SessionCache.getCache().snapshot();
+				LibLog._clogF("I0043", c);
+			} catch (IOException e) {
+			}
+		}
+	};
 
 	/**
 	 * Start the Jetty server.

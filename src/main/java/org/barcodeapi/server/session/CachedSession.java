@@ -19,14 +19,14 @@ import org.json.JSONObject;
  */
 public class CachedSession extends CachedObject {
 
-	private static final JSONObject conf = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("session");
+	private static final long serialVersionUID = 1L;
 
 	private final String key;
 	private final ConcurrentHashMap<String, Integer> sessionRequests;
 
 	public CachedSession() {
-		this.setTimeout(conf.getInt("life"), TimeUnit.MINUTES);
+		this.setTimeout(AppConfig.get().getJSONObject("cache")//
+				.getJSONObject("session").getInt("life"), TimeUnit.MINUTES);
 
 		this.key = UUID.randomUUID().toString();
 		this.sessionRequests = new ConcurrentHashMap<String, Integer>();
