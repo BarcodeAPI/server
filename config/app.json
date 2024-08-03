@@ -46,6 +46,7 @@
 			"interval": 300
 		}
 	],
+	"cacheDir": "./",
 	"cache": {
 		"barcode": {
 			"life": 4320

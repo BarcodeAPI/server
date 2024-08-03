@@ -218,9 +218,9 @@ public class ServerLauncher {
 
 				// Save caches
 				LibLog._clog("I0042");
-				int numIPs = ObjectCache.getCache(ObjectCache.CACHE_IP).snapshot();
-				int numKeys = ObjectCache.getCache(ObjectCache.CACHE_KEY).snapshot();
-				int numSess = ObjectCache.getCache(ObjectCache.CACHE_SESSIONS).snapshot();
+				int numIPs = ObjectCache.getCache(ObjectCache.CACHE_IP).saveSnapshot();
+				int numKeys = ObjectCache.getCache(ObjectCache.CACHE_KEY).saveSnapshot();
+				int numSess = ObjectCache.getCache(ObjectCache.CACHE_SESSIONS).saveSnapshot();
 				LibLog._clogF("I0043", numIPs, numKeys, numSess);
 			} catch (IOException e) {
 

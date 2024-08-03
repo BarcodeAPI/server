@@ -26,7 +26,7 @@ public class LimiterCleanupTask extends BackgroundTask {
 			ObjectCache byIp = ObjectCache.getCache(ObjectCache.CACHE_IP);
 			int removedByIp = byIp.expireOldObjects(), activeByIp = byIp.count();
 			LibLog._clogF("I2601", "IP", removedByIp, activeByIp);
-			byIp.snapshot();
+			byIp.saveSnapshot();
 		} catch (IOException e) {
 		}
 
@@ -35,7 +35,7 @@ public class LimiterCleanupTask extends BackgroundTask {
 			ObjectCache byKey = ObjectCache.getCache(ObjectCache.CACHE_KEY);
 			int removedByKey = byKey.expireOldObjects(), activeByKey = byKey.count();
 			LibLog._clogF("I2601", "KEY", removedByKey, activeByKey);
-			byKey.snapshot();
+			byKey.saveSnapshot();
 		} catch (IOException e) {
 		}
 	}

@@ -29,7 +29,7 @@ public class SessionSnapshotHandler extends RestHandler {
 
 			// Save the session cache
 			count = ObjectCache.getCache(//
-					ObjectCache.CACHE_SESSIONS).snapshot();
+					ObjectCache.CACHE_SESSIONS).saveSnapshot();
 
 		} catch (IOException e) {
 

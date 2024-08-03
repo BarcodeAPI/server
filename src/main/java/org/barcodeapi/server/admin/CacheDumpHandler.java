@@ -34,7 +34,8 @@ public class CacheDumpHandler extends RestHandler {
 
 			// Loop all cached objects
 			JSONArray entries = new JSONArray();
-			for (Map.Entry<String, CachedObject> entry : ObjectCache.getCache(type).getRawCache().entrySet()) {
+			ObjectCache cache = ObjectCache.getCache(type);
+			for (Map.Entry<String, CachedObject> entry : cache.raw().entrySet()) {
 
 				entries.put(new JSONObject()//
 						.put("text", entry.getKey())//

@@ -28,7 +28,7 @@ public class SessionListHandler extends RestHandler {
 		// Loop all sessions
 		JSONArray sessions = new JSONArray();
 		for (String key : ObjectCache.getCache(//
-				ObjectCache.CACHE_SESSIONS).getRawCache().keySet()) {
+				ObjectCache.CACHE_SESSIONS).raw().keySet()) {
 			sessions.put(key);
 		}
 

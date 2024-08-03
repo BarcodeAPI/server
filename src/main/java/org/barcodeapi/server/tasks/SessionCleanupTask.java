@@ -32,7 +32,7 @@ public class SessionCleanupTask extends BackgroundTask {
 
 		try {
 
-			sessions.snapshot();
+			sessions.saveSnapshot();
 		} catch (IOException e) {
 		}
 	}

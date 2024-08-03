@@ -30,7 +30,7 @@ public class LimiterListHandler extends RestHandler {
 		// List by IP
 		JSONObject byIp = new JSONObject();
 		ObjectCache ipCache = ObjectCache.getCache(ObjectCache.CACHE_IP);
-		for (Map.Entry<String, CachedObject> entry : ipCache.getRawCache().entrySet()) {
+		for (Map.Entry<String, CachedObject> entry : ipCache.raw().entrySet()) {
 			CachedLimiter limiter = (CachedLimiter) entry.getValue();
 			byIp.put(limiter.getCaller(), limiter.numTokens());
 		}
@@ -38,7 +38,7 @@ public class LimiterListHandler extends RestHandler {
 		// List by key
 		JSONObject byKey = new JSONObject();
 		ObjectCache keyCache = ObjectCache.getCache(ObjectCache.CACHE_KEY);
-		for (Map.Entry<String, CachedObject> entry : keyCache.getRawCache().entrySet()) {
+		for (Map.Entry<String, CachedObject> entry : keyCache.raw().entrySet()) {
 			CachedLimiter limiter = (CachedLimiter) entry.getValue();
 			byKey.put(limiter.getCaller(), limiter.numTokens());
 		}

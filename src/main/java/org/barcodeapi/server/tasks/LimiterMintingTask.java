@@ -35,7 +35,7 @@ public class LimiterMintingTask extends BackgroundTask {
 	private double mintTokens(ObjectCache cache) {
 
 		double tokensMinted = 0;
-		for (Map.Entry<String, CachedObject> entry : cache.getRawCache().entrySet()) {
+		for (Map.Entry<String, CachedObject> entry : cache.raw().entrySet()) {
 
 			// mint the limiter tokens
 			tokensMinted += ((CachedLimiter) entry.getValue()).mintTokens();
