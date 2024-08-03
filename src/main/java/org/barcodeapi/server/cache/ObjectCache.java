@@ -128,6 +128,12 @@ public class ObjectCache {
 
 	public int snapshot() throws IOException {
 
+		// Delete old cache
+		if (cacheFile.exists()) {
+			cacheFile.delete();
+		}
+
+		// Open output streams
 		FileOutputStream st = new FileOutputStream(cacheFile);
 		ObjectOutputStream str = new ObjectOutputStream(st);
 
