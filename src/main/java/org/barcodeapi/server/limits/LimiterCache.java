@@ -18,12 +18,12 @@ public class LimiterCache {
 
 	private static final boolean LIMITS_ENFORCE = LIMITS_CONFIG.getBoolean("enforce");
 
-	private static final long DEFAULT_LIMIT_IP = LIMITS_CONFIG.getJSONObject("ips").getLong("__default");
-
-	private static final long DEFAULT_LIMIT_KEYS = LIMITS_CONFIG.getJSONObject("keys").getLong("__default");
-
+	private static final JSONObject CONFIG_IPS = LIMITS_CONFIG.getJSONObject("ips");
+	private static final long DEFAULT_LIMIT_IP = CONFIG_IPS.getLong("__default");
 	private static final ObjectCache CACHE_IPS = ObjectCache.getCache(ObjectCache.CACHE_IP);
 
+	private static final JSONObject CONFIG_KEYS = LIMITS_CONFIG.getJSONObject("keys");
+	private static final long DEFAULT_LIMIT_KEYS = CONFIG_KEYS.getLong("__default");
 	private static final ObjectCache CACHE_KEYS = ObjectCache.getCache(ObjectCache.CACHE_KEY);
 
 	public static CachedLimiter getByIp(String caller) {
@@ -33,8 +33,8 @@ public class LimiterCache {
 		if (CACHE_IPS.has(caller)) {
 			limiter = (CachedLimiter) CACHE_IPS.get(caller);
 		} else {
-			CACHE_IPS.put(caller, (limiter = //
-					newLimiter(CACHE_IPS.getName(), caller, DEFAULT_LIMIT_IP)));
+			CACHE_IPS.put(caller, (limiter = new CachedLimiter(//
+					LIMITS_ENFORCE, caller, CONFIG_IPS.optLong(caller, DEFAULT_LIMIT_IP))));
 		}
 
 		return limiter;
@@ -47,18 +47,10 @@ public class LimiterCache {
 		if (CACHE_KEYS.has(caller)) {
 			limiter = (CachedLimiter) CACHE_KEYS.get(caller);
 		} else {
-			CACHE_KEYS.put(caller, (limiter = //
-					newLimiter(CACHE_KEYS.getName(), caller, DEFAULT_LIMIT_KEYS)));
+			CACHE_KEYS.put(caller, (limiter = new CachedLimiter(//
+					LIMITS_ENFORCE, caller, CONFIG_KEYS.optLong(caller, DEFAULT_LIMIT_KEYS))));
 		}
 
 		return limiter;
-	}
-
-	private static CachedLimiter newLimiter(String index, String caller, long defaultLimit) {
-		LibMetrics.hitMethodRunCounter();
-
-		long userLimit = LIMITS_CONFIG//
-				.getJSONObject(index).optLong(caller, defaultLimit);
-		return new CachedLimiter(LIMITS_ENFORCE, caller, userLimit);
 	}
 }
