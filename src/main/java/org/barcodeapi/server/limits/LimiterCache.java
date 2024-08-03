@@ -22,9 +22,9 @@ public class LimiterCache {
 
 	private static final long DEFAULT_LIMIT_KEYS = LIMITS_CONFIG.getJSONObject("keys").getLong("__default");
 
-	private static final ObjectCache CACHE_IPS = ObjectCache.getCache("ips");
+	private static final ObjectCache CACHE_IPS = ObjectCache.getCache(ObjectCache.CACHE_IP);
 
-	private static final ObjectCache CACHE_KEYS = ObjectCache.getCache("keys");
+	private static final ObjectCache CACHE_KEYS = ObjectCache.getCache(ObjectCache.CACHE_KEY);
 
 	public static CachedLimiter getByIp(String caller) {
 		LibMetrics.hitMethodRunCounter();
