@@ -1,5 +1,7 @@
 package org.barcodeapi.server.tasks;
 
+import java.io.IOException;
+
 import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 
@@ -19,14 +21,22 @@ public class LimiterCleanupTask extends BackgroundTask {
 	@Override
 	public void onRun() {
 
-		// Cleanup IP caches
-		ObjectCache byIp = ObjectCache.getCache(ObjectCache.CACHE_IP);
-		int removedByIp = byIp.expireOldObjects(), activeByIp = byIp.count();
-		LibLog._clogF("I2601", "IP", removedByIp, activeByIp);
+		try {
+			// Cleanup IP caches
+			ObjectCache byIp = ObjectCache.getCache(ObjectCache.CACHE_IP);
+			int removedByIp = byIp.expireOldObjects(), activeByIp = byIp.count();
+			LibLog._clogF("I2601", "IP", removedByIp, activeByIp);
+			byIp.snapshot();
+		} catch (IOException e) {
+		}
 
-		// Cleanup Key caches
-		ObjectCache byKey = ObjectCache.getCache(ObjectCache.CACHE_KEY);
-		int removedByKey = byKey.expireOldObjects(), activeByKey = byKey.count();
-		LibLog._clogF("I2601", "KEY", removedByKey, activeByKey);
+		try {
+			// Cleanup Key caches
+			ObjectCache byKey = ObjectCache.getCache(ObjectCache.CACHE_KEY);
+			int removedByKey = byKey.expireOldObjects(), activeByKey = byKey.count();
+			LibLog._clogF("I2601", "KEY", removedByKey, activeByKey);
+			byKey.snapshot();
+		} catch (IOException e) {
+		}
 	}
 }

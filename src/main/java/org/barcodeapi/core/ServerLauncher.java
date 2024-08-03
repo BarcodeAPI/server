@@ -216,12 +216,15 @@ public class ServerLauncher {
 		public void run() {
 			try {
 
-				// Save sessions
+				// Save caches
 				LibLog._clog("I0042");
-				int count = ObjectCache.getCache(//
-						ObjectCache.CACHE_SESSIONS).snapshot();
-				LibLog._clogF("I0043", count);
+				int numIPs = ObjectCache.getCache(ObjectCache.CACHE_IP).snapshot();
+				int numKeys = ObjectCache.getCache(ObjectCache.CACHE_KEY).snapshot();
+				int numSess = ObjectCache.getCache(ObjectCache.CACHE_SESSIONS).snapshot();
+				LibLog._clogF("I0043", numIPs, numKeys, numSess);
 			} catch (IOException e) {
+
+				LibLog._clog("E0049", e);
 			}
 		}
 	};
