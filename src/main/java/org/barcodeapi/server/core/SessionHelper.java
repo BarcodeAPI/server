@@ -5,8 +5,9 @@ import java.util.Base64;
 import javax.servlet.http.Cookie;
 
 import org.barcodeapi.core.AppConfig;
-import org.barcodeapi.server.session.CachedSession;
-import org.barcodeapi.server.session.SessionCache;
+import org.barcodeapi.server.cache.CachedObject;
+import org.barcodeapi.server.cache.CachedSession;
+import org.barcodeapi.server.cache.ObjectCache;
 import org.eclipse.jetty.server.Request;
 import org.json.JSONObject;
 
@@ -19,6 +20,28 @@ import com.mclarkdev.tools.libextras.LibExtrasHashes;
  */
 public class SessionHelper {
 
+	public static CachedSession getSession(String key) {
+
+		CachedObject o = ObjectCache.getCache(//
+				ObjectCache.CACHE_SESSIONS).get(key);
+
+		return (o == null) ? null : (CachedSession) o;
+	}
+
+	public static CachedSession createSession() {
+
+		// create the new session object
+		CachedSession session = new CachedSession();
+
+		// add session to the cache
+		ObjectCache.getCache(//
+				ObjectCache.CACHE_SESSIONS).put(//
+						session.getKey(), session);
+
+		// return the session
+		return session;
+	}
+
 	public static CachedSession getSession(Request request) {
 
 		// get existing user session
@@ -26,14 +49,14 @@ public class SessionHelper {
 		if (request.getCookies() != null) {
 			for (Cookie cookie : request.getCookies()) {
 				if (cookie.getName().equals("session")) {
-					session = SessionCache.getSession(cookie.getValue());
+					session = getSession(cookie.getValue());
 				}
 			}
 		}
 
 		// new session if none existing
 		if (session == null) {
-			session = SessionCache.createNewSession();
+			session = createSession();
 		}
 
 		return session;

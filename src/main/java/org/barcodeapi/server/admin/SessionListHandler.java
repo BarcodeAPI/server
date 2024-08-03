@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
-import org.barcodeapi.server.session.SessionCache;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +27,8 @@ public class SessionListHandler extends RestHandler {
 
 		// Loop all sessions
 		JSONArray sessions = new JSONArray();
-		for (String key : SessionCache.getCache().getRawCache().keySet()) {
+		for (String key : ObjectCache.getCache(//
+				ObjectCache.CACHE_SESSIONS).getRawCache().keySet()) {
 			sessions.put(key);
 		}
 

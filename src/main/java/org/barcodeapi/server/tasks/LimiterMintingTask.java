@@ -2,11 +2,10 @@ package org.barcodeapi.server.tasks;
 
 import java.util.Map;
 
+import org.barcodeapi.server.cache.CachedLimiter;
+import org.barcodeapi.server.cache.CachedObject;
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
-import org.barcodeapi.server.core.CachedObject;
-import org.barcodeapi.server.core.ObjectCache;
-import org.barcodeapi.server.limits.CachedLimiter;
-import org.barcodeapi.server.limits.LimiterCache;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
@@ -26,8 +25,8 @@ public class LimiterMintingTask extends BackgroundTask {
 
 		double tokensMinted = 0;
 
-		tokensMinted += mintTokens(LimiterCache.getIpCache());
-		tokensMinted += mintTokens(LimiterCache.getKeyCache());
+		tokensMinted += mintTokens(ObjectCache.getCache(ObjectCache.CACHE_IP));
+		tokensMinted += mintTokens(ObjectCache.getCache(ObjectCache.CACHE_KEY));
 
 		LibLog._clogF("I2621", tokensMinted);
 		getStats().hitCounter(tokensMinted, "task", getName(), "minted");
@@ -36,7 +35,7 @@ public class LimiterMintingTask extends BackgroundTask {
 	private double mintTokens(ObjectCache cache) {
 
 		double tokensMinted = 0;
-		for (Map.Entry<String, CachedObject> entry : LimiterCache.getIpCache().getRawCache().entrySet()) {
+		for (Map.Entry<String, CachedObject> entry : cache.getRawCache().entrySet()) {
 
 			// mint the limiter tokens
 			tokensMinted += ((CachedLimiter) entry.getValue()).mintTokens();

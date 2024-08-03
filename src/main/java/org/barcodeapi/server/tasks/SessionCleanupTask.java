@@ -1,8 +1,9 @@
 package org.barcodeapi.server.tasks;
 
+import java.io.IOException;
+
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
-import org.barcodeapi.server.core.ObjectCache;
-import org.barcodeapi.server.session.SessionCache;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
@@ -13,6 +14,9 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class SessionCleanupTask extends BackgroundTask {
 
+	private final ObjectCache sessions = //
+			ObjectCache.getCache(ObjectCache.CACHE_SESSIONS);
+
 	public SessionCleanupTask() {
 		super();
 	}
@@ -20,10 +24,16 @@ public class SessionCleanupTask extends BackgroundTask {
 	@Override
 	public void onRun() {
 
-		ObjectCache sessions = SessionCache.getCache();
 		int removed = sessions.expireOldObjects();
 		int active = sessions.count();
 
+		// Log session count
 		LibLog._clogF("I2401", removed, active);
+
+		try {
+
+			sessions.snapshot();
+		} catch (IOException e) {
+		}
 	}
 }

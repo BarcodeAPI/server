@@ -2,8 +2,9 @@ package org.barcodeapi.server.gen;
 
 import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.core.utils.CodeUtils;
-import org.barcodeapi.server.cache.BarcodeCache;
 import org.barcodeapi.server.cache.CachedBarcode;
+import org.barcodeapi.server.cache.CachedObject;
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.core.GenerationException;
@@ -69,10 +70,14 @@ public class BarcodeGenerator {
 		// is cache allowed
 		if (request.useCache()) {
 
-			// lookup image from cache, serve if found
-			barcode = BarcodeCache.getBarcode(request);
-			if (barcode != null) {
-				return barcode;
+			// lookup image from cache
+			CachedObject obj = ObjectCache.getCache(//
+					request.getType().getName())//
+					.get(request.getData());
+
+			// return if found
+			if (obj != null) {
+				return ((CachedBarcode) obj);
 			}
 		}
 
@@ -112,7 +117,7 @@ public class BarcodeGenerator {
 
 			// add to cache if allowed
 			if (request.useCache()) {
-				BarcodeCache.addBarcode(type.getName(), data, barcode);
+				ObjectCache.getCache(type.getName()).put(data, barcode);
 			}
 
 		} catch (GenerationException e) {

@@ -1,8 +1,8 @@
 package org.barcodeapi.server.core;
 
-import org.barcodeapi.server.limits.CachedLimiter;
+import org.barcodeapi.server.cache.CachedLimiter;
+import org.barcodeapi.server.cache.CachedSession;
 import org.barcodeapi.server.limits.LimiterCache;
-import org.barcodeapi.server.session.CachedSession;
 import org.eclipse.jetty.server.Request;
 
 /**

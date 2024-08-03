@@ -5,9 +5,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.server.core.CachedObject;
+import org.barcodeapi.server.cache.CachedObject;
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.CodeTypes;
-import org.barcodeapi.server.core.ObjectCache;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONArray;

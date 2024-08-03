@@ -1,4 +1,4 @@
-package org.barcodeapi.server.core;
+package org.barcodeapi.server.cache;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
@@ -50,7 +50,7 @@ public abstract class CachedObject implements Serializable {
 		return accessCount;
 	}
 
-	protected void touch() {
+	public void touch() {
 		accessCount += 1;
 		timeTouched = System.currentTimeMillis();
 	}

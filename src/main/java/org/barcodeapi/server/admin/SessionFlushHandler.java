@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
-import org.barcodeapi.server.session.SessionCache;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,7 +25,8 @@ public class SessionFlushHandler extends RestHandler {
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
 		// Clear cache and get count
-		double count = SessionCache.getCache().clearCache();
+		double count = ObjectCache.getCache(//
+				ObjectCache.CACHE_SESSIONS).clearCache();
 
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);

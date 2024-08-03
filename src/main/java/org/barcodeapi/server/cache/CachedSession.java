@@ -1,4 +1,4 @@
-package org.barcodeapi.server.session;
+package org.barcodeapi.server.cache;
 
 import java.util.Map;
 import java.util.UUID;
@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.Cookie;
 
 import org.barcodeapi.core.AppConfig;
-import org.barcodeapi.server.core.CachedObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,20 +20,31 @@ public class CachedSession extends CachedObject {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int OBJECT_LIFE = AppConfig.get()//
+			.getJSONObject("cache").getJSONObject("session").getInt("life");
+
 	private final String key;
+
+	private final Cookie cookie;
+
 	private final ConcurrentHashMap<String, Integer> sessionRequests;
 
 	public CachedSession() {
-		this.setTimeout(AppConfig.get().getJSONObject("cache")//
-				.getJSONObject("session").getInt("life"), TimeUnit.MINUTES);
+		this.setTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
 
 		this.key = UUID.randomUUID().toString();
+		this.cookie = new Cookie("session", this.key);
 		this.sessionRequests = new ConcurrentHashMap<String, Integer>();
 	}
 
 	public String getKey() {
 
 		return key;
+	}
+
+	public Cookie getCookie() {
+
+		return cookie;
 	}
 
 	public void hit(String data) {
@@ -68,10 +78,5 @@ public class CachedSession extends CachedObject {
 				.put("timeExpires", getTimeExpires())//
 				.put("requestCount", requestCount)//
 				.put("requestList", requests);
-	}
-
-	public Cookie getCookie() {
-
-		return new Cookie("session", getKey());
 	}
 }

@@ -19,10 +19,10 @@ import org.barcodeapi.server.api.InfoHandler;
 import org.barcodeapi.server.api.SessionDetailsHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.TypesHandler;
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.RestHandler;
-import org.barcodeapi.server.session.SessionCache;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -218,8 +218,9 @@ public class ServerLauncher {
 
 				// Save sessions
 				LibLog._clog("I0042");
-				int c = SessionCache.getCache().snapshot();
-				LibLog._clogF("I0043", c);
+				int count = ObjectCache.getCache(//
+						ObjectCache.CACHE_SESSIONS).snapshot();
+				LibLog._clogF("I0043", count);
 			} catch (IOException e) {
 			}
 		}

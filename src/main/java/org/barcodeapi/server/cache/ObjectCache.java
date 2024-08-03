@@ -1,4 +1,4 @@
-package org.barcodeapi.server.core;
+package org.barcodeapi.server.cache;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,9 +19,17 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
  */
 public class ObjectCache {
 
+	public static final String CACHE_IP = "LIMITS-IP";
+	public static final String CACHE_KEY = "LIMITS-KEY";
+	public static final String CACHE_SESSIONS = "sessions";
+
 	private static final LibMetrics stats = LibMetrics.instance();
 
-	private static ConcurrentHashMap<String, ObjectCache> caches = new ConcurrentHashMap<>();
+	private static final ConcurrentHashMap<String, ObjectCache> caches;
+
+	static {
+		caches = new ConcurrentHashMap<>();
+	}
 
 	private final String name;
 	private final File cacheFile;

@@ -1,9 +1,8 @@
-package org.barcodeapi.server.limits;
+package org.barcodeapi.server.cache;
 
 import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.core.AppConfig;
-import org.barcodeapi.server.core.CachedObject;
 
 /**
  * CachedLimiter.java
@@ -11,6 +10,8 @@ import org.barcodeapi.server.core.CachedObject;
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class CachedLimiter extends CachedObject {
+
+	private static final long serialVersionUID = 1L;
 
 	private static final int LIMITER_LIFE = AppConfig.get()//
 			.getJSONObject("cache").getJSONObject("limiter").getInt("life");
@@ -25,9 +26,9 @@ public class CachedLimiter extends CachedObject {
 
 	private double tokens;
 
-	private long minted = 0;
+	private long minted;
 
-	public CachedLimiter(String caller, long requests, boolean enforce) {
+	public CachedLimiter(boolean enforce, String caller, long requests) {
 		this.setTimeout(LIMITER_LIFE, TimeUnit.MINUTES);
 
 		this.enforce = enforce;

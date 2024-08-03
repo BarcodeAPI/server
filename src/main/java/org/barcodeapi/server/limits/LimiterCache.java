@@ -1,7 +1,8 @@
 package org.barcodeapi.server.limits;
 
 import org.barcodeapi.core.AppConfig;
-import org.barcodeapi.server.core.ObjectCache;
+import org.barcodeapi.server.cache.CachedLimiter;
+import org.barcodeapi.server.cache.ObjectCache;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;
@@ -17,47 +18,47 @@ public class LimiterCache {
 
 	private static final boolean LIMITS_ENFORCE = LIMITS_CONFIG.getBoolean("enforce");
 
-	private static final String CACHE_IP = "LIMITS-IP";
-	private static final String CACHE_KEY = "LIMITS-KEY";
+	private static final long DEFAULT_LIMIT_IP = LIMITS_CONFIG.getJSONObject("ips").getLong("__default");
 
-	public static ObjectCache getIpCache() {
-		return ObjectCache.getCache(CACHE_IP);
-	}
+	private static final long DEFAULT_LIMIT_KEYS = LIMITS_CONFIG.getJSONObject("keys").getLong("__default");
 
-	public static ObjectCache getKeyCache() {
-		return ObjectCache.getCache(CACHE_KEY);
-	}
+	private static final ObjectCache CACHE_IPS = ObjectCache.getCache("ips");
+
+	private static final ObjectCache CACHE_KEYS = ObjectCache.getCache("keys");
 
 	public static CachedLimiter getByIp(String caller) {
 		LibMetrics.hitMethodRunCounter();
 
-		ObjectCache cache = ObjectCache.getCache(CACHE_IP);
-		if (!cache.has(caller)) {
-			cache.put(caller, newLimiter("ips", caller));
+		CachedLimiter limiter;
+		if (!CACHE_IPS.has(caller)) {
+			limiter = (CachedLimiter) CACHE_IPS.get(caller);
+		} else {
+			CACHE_IPS.put(caller, (limiter = //
+					newLimiter(CACHE_IPS.getName(), caller, DEFAULT_LIMIT_IP)));
 		}
 
-		return (CachedLimiter) cache.get(caller);
+		return limiter;
 	}
 
 	public static CachedLimiter getByKey(String caller) {
 		LibMetrics.hitMethodRunCounter();
 
-		ObjectCache cache = ObjectCache.getCache(CACHE_KEY);
-		if (!cache.has(caller)) {
-			cache.put(caller, newLimiter("keys", caller));
+		CachedLimiter limiter;
+		if (!CACHE_KEYS.has(caller)) {
+			limiter = (CachedLimiter) CACHE_KEYS.get(caller);
+		} else {
+			CACHE_KEYS.put(caller, (limiter = //
+					newLimiter(CACHE_KEYS.getName(), caller, DEFAULT_LIMIT_KEYS)));
 		}
 
-		return (CachedLimiter) cache.get(caller);
+		return limiter;
 	}
 
-	private static CachedLimiter newLimiter(String index, String caller) {
+	private static CachedLimiter newLimiter(String index, String caller, long defaultLimit) {
+		LibMetrics.hitMethodRunCounter();
 
-		JSONObject idx = LIMITS_CONFIG.getJSONObject(index);
-
-		long defaultLimit = idx.getLong("__default");
-
-		long userLimit = idx.optLong(caller, defaultLimit);
-
-		return new CachedLimiter(caller, userLimit, LIMITS_ENFORCE);
+		long userLimit = LIMITS_CONFIG//
+				.getJSONObject(index).optLong(caller, defaultLimit);
+		return new CachedLimiter(LIMITS_ENFORCE, caller, userLimit);
 	}
 }

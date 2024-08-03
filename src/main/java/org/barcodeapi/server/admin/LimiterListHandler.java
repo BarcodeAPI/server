@@ -5,11 +5,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.server.core.CachedObject;
+import org.barcodeapi.server.cache.CachedLimiter;
+import org.barcodeapi.server.cache.CachedObject;
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
-import org.barcodeapi.server.limits.CachedLimiter;
-import org.barcodeapi.server.limits.LimiterCache;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,14 +29,16 @@ public class LimiterListHandler extends RestHandler {
 
 		// List by IP
 		JSONObject byIp = new JSONObject();
-		for (Map.Entry<String, CachedObject> entry : LimiterCache.getIpCache().getRawCache().entrySet()) {
+		ObjectCache ipCache = ObjectCache.getCache(ObjectCache.CACHE_IP);
+		for (Map.Entry<String, CachedObject> entry : ipCache.getRawCache().entrySet()) {
 			CachedLimiter limiter = (CachedLimiter) entry.getValue();
 			byIp.put(limiter.getCaller(), limiter.numTokens());
 		}
 
 		// List by key
 		JSONObject byKey = new JSONObject();
-		for (Map.Entry<String, CachedObject> entry : LimiterCache.getKeyCache().getRawCache().entrySet()) {
+		ObjectCache keyCache = ObjectCache.getCache(ObjectCache.CACHE_KEY);
+		for (Map.Entry<String, CachedObject> entry : keyCache.getRawCache().entrySet()) {
 			CachedLimiter limiter = (CachedLimiter) entry.getValue();
 			byKey.put(limiter.getCaller(), limiter.numTokens());
 		}

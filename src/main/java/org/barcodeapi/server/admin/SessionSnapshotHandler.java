@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
-import org.barcodeapi.server.session.SessionCache;
 import org.json.JSONObject;
 
 /**
@@ -28,7 +28,8 @@ public class SessionSnapshotHandler extends RestHandler {
 		try {
 
 			// Save the session cache
-			count = SessionCache.getCache().snapshot();
+			count = ObjectCache.getCache(//
+					ObjectCache.CACHE_SESSIONS).snapshot();
 
 		} catch (IOException e) {
 

@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.CodeTypes;
-import org.barcodeapi.server.core.ObjectCache;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;

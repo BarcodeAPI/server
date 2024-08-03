@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Set;
 
 import org.barcodeapi.core.ServerRuntime;
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.CodeTypes;
-import org.barcodeapi.server.core.ObjectCache;
 import org.barcodeapi.server.gen.CodeGenerator;
 
 import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;

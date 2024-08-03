@@ -4,9 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.core.utils.CodeUtils;
-import org.barcodeapi.server.core.CachedObject;
 import org.barcodeapi.server.core.CodeType;
-import org.json.JSONObject;
 
 import com.mclarkdev.tools.libextras.LibExtrasHashes;
 
@@ -17,8 +15,10 @@ import com.mclarkdev.tools.libextras.LibExtrasHashes;
  */
 public class CachedBarcode extends CachedObject {
 
-	private static final JSONObject conf = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("barcode");
+	private static final long serialVersionUID = 1L;
+
+	private static final int OBJECT_LIFE = AppConfig.get()//
+			.getJSONObject("cache").getJSONObject("barcode").getInt("life");
 
 	private final CodeType type;
 	private final String raw;
@@ -29,7 +29,7 @@ public class CachedBarcode extends CachedObject {
 	private final String checksum;
 
 	public CachedBarcode(CodeType type, String raw, byte[] data) {
-		this.setTimeout(conf.getInt("life"), TimeUnit.MINUTES);
+		this.setTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
 
 		this.type = type;
 		this.raw = raw;

@@ -1,8 +1,8 @@
 package org.barcodeapi.server.tasks;
 
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeTypes;
-import org.barcodeapi.server.core.ObjectCache;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
