@@ -16,7 +16,7 @@ import org.json.JSONException;
 public class ServerStatsHandler extends RestHandler {
 
 	public ServerStatsHandler() {
-		super(true, false);
+		super(true);
 	}
 
 	@Override

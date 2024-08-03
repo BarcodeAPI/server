@@ -35,7 +35,7 @@ public class TypesHandler extends RestHandler {
 	}
 
 	public TypesHandler() {
-		super(false, false);
+		super();
 	}
 
 	@Override

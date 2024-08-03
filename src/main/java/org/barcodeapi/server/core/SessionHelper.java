@@ -54,11 +54,6 @@ public class SessionHelper {
 			}
 		}
 
-		// new session if none existing
-		if (session == null) {
-			session = createSession();
-		}
-
 		return session;
 	}
 

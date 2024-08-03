@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public class SessionFlushHandler extends RestHandler {
 
 	public SessionFlushHandler() {
-		super(true, false);
+		super(true);
 	}
 
 	@Override

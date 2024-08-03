@@ -30,7 +30,13 @@ public class BarcodeAPIHandler extends RestHandler {
 	private final CachedBarcode BSY;
 
 	public BarcodeAPIHandler() {
-		super(false, true);
+		super(
+				// Authentication not required
+				false,
+				// Use client rate limit
+				true,
+				// Do not create new sessions
+				false);
 
 		try {
 

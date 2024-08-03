@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public class InfoHandler extends RestHandler {
 
 	public InfoHandler() {
-		super(false, false);
+		super();
 	}
 
 	@Override

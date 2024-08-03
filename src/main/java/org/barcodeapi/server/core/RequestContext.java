@@ -27,12 +27,12 @@ public class RequestContext {
 
 	private final String source;
 
+	private final boolean admin;
+
 	private final CachedLimiter limiter;
 	private final CachedSession session;
 
-	private final boolean admin;
-
-	public RequestContext(Request request) {
+	public RequestContext(Request request, boolean createSession) {
 		this.request = request;
 
 		// request time
@@ -65,6 +65,9 @@ public class RequestContext {
 		String ref = request.getHeader("Referer");
 		this.source = (ref != null) ? ref : "API";
 
+		// check if user logged in
+		this.admin = SessionHelper.validateAdmin(request);
+
 		// get limiter by API key or IP
 		CachedLimiter limiter = null;
 		String apiKey = request.getParameter("key");
@@ -77,11 +80,13 @@ public class RequestContext {
 		this.limiter = limiter;
 
 		// get user session info
-		this.session = SessionHelper.getSession(request);
-		session.hit(request.getOriginalURI().toString());
+		CachedSession tmpSession = SessionHelper.getSession(request);
+		this.session = (tmpSession != null) ? tmpSession : //
+				((createSession) ? SessionHelper.createSession() : null);
 
-		// check if user logged in
-		this.admin = SessionHelper.validateAdmin(request);
+		if (this.session != null) {
+			session.hit(request.getOriginalURI().toString());
+		}
 	}
 
 	public Request getRequest() {
@@ -116,15 +121,19 @@ public class RequestContext {
 		return this.source;
 	}
 
+	public boolean isAdmin() {
+		return this.admin;
+	}
+
 	public CachedLimiter getLimiter() {
 		return this.limiter;
 	}
 
-	public CachedSession getSession() {
-		return this.session;
+	public boolean hasSession() {
+		return (this.session != null);
 	}
 
-	public boolean isAdmin() {
-		return this.admin;
+	public CachedSession getSession() {
+		return this.session;
 	}
 }

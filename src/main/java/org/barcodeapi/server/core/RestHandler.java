@@ -30,7 +30,21 @@ public abstract class RestHandler extends AbstractHandler {
 
 	private final boolean apiRateLimited;
 
+	private final boolean createSessions;
+
+	public RestHandler() {
+		this(false, false, true);
+	}
+
+	public RestHandler(boolean autoRequired) {
+		this(autoRequired, false, true);
+	}
+
 	public RestHandler(boolean authRequired, boolean rateLimited) {
+		this(authRequired, rateLimited, true);
+	}
+
+	public RestHandler(boolean authRequired, boolean rateLimited, boolean createSessions) {
 		LibMetrics.hitMethodRunCounter();
 
 		// extract class name
@@ -46,6 +60,7 @@ public abstract class RestHandler extends AbstractHandler {
 		this.stats = LibMetrics.instance();
 		this.apiAuthRequired = authRequired;
 		this.apiRateLimited = rateLimited;
+		this.createSessions = createSessions;
 	}
 
 	public LibMetrics getStats() {
@@ -60,6 +75,10 @@ public abstract class RestHandler extends AbstractHandler {
 		return apiRateLimited;
 	}
 
+	public boolean createSessions() {
+		return createSessions;
+	}
+
 	public void _impl(String target, Request baseRequest, HttpServletRequest request, //
 			HttpServletResponse response) throws IOException, ServletException {
 	}
@@ -68,7 +87,7 @@ public abstract class RestHandler extends AbstractHandler {
 			HttpServletResponse response) throws IOException, ServletException {
 
 		// Build the request context
-		RequestContext ctx = new RequestContext(baseRequest);
+		RequestContext ctx = new RequestContext(baseRequest, createSessions);
 
 		// Hit the counters
 		getStats().hitCounter("request", "count");
@@ -94,7 +113,11 @@ public abstract class RestHandler extends AbstractHandler {
 		response.setHeader("Server", "BarcodeAPI.org");
 		response.setHeader("Server-Node", serverName);
 		response.setHeader("Accept-Charset", "utf-8");
-		response.addCookie(ctx.getSession().getCookie());
+
+		// Add session header
+		if (ctx.hasSession()) {
+			response.addCookie(ctx.getSession().getCookie());
+		}
 
 		// Authenticate the user if required
 		if (apiAuthRequired && (!ctx.isAdmin())) {

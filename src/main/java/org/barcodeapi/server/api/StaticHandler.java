@@ -25,7 +25,7 @@ public class StaticHandler extends RestHandler {
 	};
 
 	public StaticHandler(Server server) throws Exception {
-		super(false, false);
+		super();
 
 		// Load the Jetty resource handler
 		resources = new ResourceHandler();

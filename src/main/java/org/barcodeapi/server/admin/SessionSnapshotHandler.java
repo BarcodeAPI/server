@@ -17,7 +17,7 @@ import org.json.JSONObject;
 public class SessionSnapshotHandler extends RestHandler {
 
 	public SessionSnapshotHandler() {
-		super(true, false);
+		super(true);
 	}
 
 	@Override
