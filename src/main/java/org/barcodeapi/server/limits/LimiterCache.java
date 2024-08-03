@@ -30,7 +30,7 @@ public class LimiterCache {
 		LibMetrics.hitMethodRunCounter();
 
 		CachedLimiter limiter;
-		if (!CACHE_IPS.has(caller)) {
+		if (CACHE_IPS.has(caller)) {
 			limiter = (CachedLimiter) CACHE_IPS.get(caller);
 		} else {
 			CACHE_IPS.put(caller, (limiter = //
@@ -44,7 +44,7 @@ public class LimiterCache {
 		LibMetrics.hitMethodRunCounter();
 
 		CachedLimiter limiter;
-		if (!CACHE_KEYS.has(caller)) {
+		if (CACHE_KEYS.has(caller)) {
 			limiter = (CachedLimiter) CACHE_KEYS.get(caller);
 		} else {
 			CACHE_KEYS.put(caller, (limiter = //
