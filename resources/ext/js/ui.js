@@ -7,7 +7,7 @@ const appDisplay = {
 	'tokenCount': false,
 	'bulkPages': true,
 	'limitsNotice': false,
-	'renderOptions': false,
+	'renderOptions': true,
 	'helpType': false,
 	'helpManual': false
 };

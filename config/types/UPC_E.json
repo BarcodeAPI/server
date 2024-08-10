@@ -1,6 +1,7 @@
 {
 	"name": "UPC_E",
 	"display": "UPC E",
+	"show": true,
 	"target": [
 		"e",
 		"upc-e",
@@ -29,38 +30,52 @@
 	"options": [
 		{
 			"name": "dpi",
+			"type": "number",
 			"default": 150,
-			"values": "50 -> 300"
+			"min": 50,
+			"max": 300
 		},
 		{
 			"name": "qz",
+			"type": "number",
 			"default": 4,
-			"values": "0 -> 10"
+			"min": 0,
+			"max": 10
 		},
 		{
 			"name": "height",
+			"type": "number",
 			"default": 25,
-			"values": "5 -> 150"
+			"min": 5,
+			"max": 150
 		},
 		{
 			"name": "text",
+			"type": "option",
 			"default": "bottom",
-			"values": "(bottom|top|none)"
+			"options": [
+				"bottom",
+				"top",
+				"none"
+			]
 		},
 		{
 			"name": "pattern",
+			"type": "text",
 			"default": "_",
-			"values": "_"
+			"pattern": "[ _]+"
 		},
 		{
 			"name": "bg",
+			"type": "text",
 			"default": "ffffff",
-			"values": "000000 -> ffffff"
+			"pattern": "[0-9A-F]{6}"
 		},
 		{
 			"name": "fg",
+			"type": "text",
 			"default": "000000",
-			"values": "000000 -> ffffff"
+			"pattern": "[0-9A-F]{6}"
 		}
 	]
 }

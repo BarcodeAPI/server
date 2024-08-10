@@ -46,13 +46,13 @@
 			"interval": 300
 		}
 	],
-	"cacheDir": "./",
+	"cacheDir": "./cache/",
 	"cache": {
 		"barcode": {
 			"life": 4320
 		},
 		"session": {
-			"life": 1440
+			"life": 10080
 		},
 		"limiter": {
 			"life": 1440

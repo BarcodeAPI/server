@@ -59,7 +59,7 @@ public class CachedSession extends CachedObject {
 		sessionRequests.put(data, sessionRequests.get(data) + 1);
 	}
 
-	public JSONObject getDetails() {
+	public JSONObject asJSON() {
 
 		int requestCount = 0;
 		JSONArray requests = new JSONArray();
@@ -74,7 +74,7 @@ public class CachedSession extends CachedObject {
 		return new JSONObject()//
 				.put("sessionKey", getKey())//
 				.put("timeCreated", getTimeCreated())//
-				.put("timeLastSeen", getTimeLastSeen())//
+				.put("timeLastSeen", getTimeLastTouched())//
 				.put("timeExpires", getTimeExpires())//
 				.put("requestCount", requestCount)//
 				.put("requestList", requests);

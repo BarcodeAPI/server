@@ -1,6 +1,7 @@
 {
 	"name": "QRCode",
 	"display": "QR Code",
+	"show": true,
 	"target": [
 		"qr",
 		"qr-code",
@@ -25,5 +26,6 @@
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/QR_code"
-	}
+	},
+	"options": []
 }

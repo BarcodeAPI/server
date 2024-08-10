@@ -2,6 +2,7 @@ package org.barcodeapi.core;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import org.barcodeapi.server.admin.CacheDumpHandler;
@@ -18,8 +19,8 @@ import org.barcodeapi.server.api.BulkHandler;
 import org.barcodeapi.server.api.InfoHandler;
 import org.barcodeapi.server.api.SessionDetailsHandler;
 import org.barcodeapi.server.api.StaticHandler;
+import org.barcodeapi.server.api.TypeHandler;
 import org.barcodeapi.server.api.TypesHandler;
-import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.RestHandler;
@@ -56,6 +57,7 @@ public class ServerLauncher {
 	// The Jetty server and it's handlers
 	private Server server;
 	private HandlerCollection handlers;
+	private ArrayList<BackgroundTask> tasks;
 
 	/**
 	 * Initialize the server loader by processing the command line arguments
@@ -128,6 +130,7 @@ public class ServerLauncher {
 		// Setup rest handlers
 		initHandler("/api", BarcodeAPIHandler.class);
 		initHandler("/bulk", BulkHandler.class);
+		initHandler("/type", TypeHandler.class);
 		initHandler("/types", TypesHandler.class);
 		initHandler("/session", SessionDetailsHandler.class);
 		initHandler("/info", InfoHandler.class);
@@ -151,7 +154,6 @@ public class ServerLauncher {
 		resourceHandler.setHandler(new StaticHandler(server));
 		resourceHandler.setContextPath("/");
 		handlers.addHandler(resourceHandler);
-
 	}
 
 	/**
@@ -175,13 +177,10 @@ public class ServerLauncher {
 	 */
 	private void initSystemTasks() {
 
-		// Register shutdown hook
-		LibLog._clog("I0031");
-		Runtime.getRuntime().addShutdownHook(shutdownRunner);
-
 		final String TASK_ROOT = "org.barcodeapi.server.tasks";
 		JSONArray taskList = AppConfig.get().getJSONArray("tasks");
 
+		tasks = new ArrayList<>();
 		for (int x = 0; x < taskList.length(); x++) {
 			JSONObject taskDef = taskList.getJSONObject(x);
 
@@ -199,13 +198,18 @@ public class ServerLauncher {
 
 				// Create and schedule the task
 				LibLog._clogF("I0036", taskName);
-				ServerRuntime.getSystemTimer().schedule(//
-						constructor.newInstance(), 0, (taskTime * 1000));
+				BackgroundTask task = constructor.newInstance();
+				ServerRuntime.getSystemTimer().schedule(task, 500, (taskTime * 1000));
+				tasks.add(task);
 			} catch (Exception | Error e) {
 
 				LibLog._clog("E0039", e);
 			}
 		}
+
+		// Register shutdown hook
+		LibLog._clog("I0031");
+		Runtime.getRuntime().addShutdownHook(shutdownRunner);
 	}
 
 	/**
@@ -214,17 +218,11 @@ public class ServerLauncher {
 	private Thread shutdownRunner = new Thread() {
 
 		public void run() {
-			try {
 
-				// Save caches
-				LibLog._clog("I0042");
-				int numIPs = ObjectCache.getCache(ObjectCache.CACHE_IP).saveSnapshot();
-				int numKeys = ObjectCache.getCache(ObjectCache.CACHE_KEY).saveSnapshot();
-				int numSess = ObjectCache.getCache(ObjectCache.CACHE_SESSIONS).saveSnapshot();
-				LibLog._clogF("I0043", numIPs, numKeys, numSess);
-			} catch (IOException e) {
-
-				LibLog._clog("E0049", e);
+			// Run each task
+			LibLog._log("Running shutdown tasks.");
+			for (BackgroundTask task : tasks) {
+				task.run();
 			}
 		}
 	};

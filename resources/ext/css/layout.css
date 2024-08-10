@@ -131,6 +131,7 @@ body {
 }
 
 .barcode-text-input:invalid {
+	animation-name: unset;
 	border-bottom: 2px solid #b00000;
 }
 

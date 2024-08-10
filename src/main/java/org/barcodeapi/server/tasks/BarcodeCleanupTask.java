@@ -1,5 +1,7 @@
 package org.barcodeapi.server.tasks;
 
+import java.io.IOException;
+
 import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeTypes;
@@ -20,9 +22,8 @@ public class BarcodeCleanupTask extends BackgroundTask {
 	@Override
 	public void onRun() {
 
-		int active = 0, removed = 0;
-
 		// Loop each supported type
+		int active = 0, removed = 0;
 		for (String type : CodeTypes.inst().getTypes()) {
 
 			// Get the type cache
@@ -31,6 +32,17 @@ public class BarcodeCleanupTask extends BackgroundTask {
 			// Expire and count objects
 			removed += cache.expireOldObjects();
 			active += cache.count();
+
+			try {
+
+				// Save cache snapshot
+				int saved = cache.saveSnapshot();
+				LibLog._logF("Cache snapshot saved. (%s : %d)", type, saved);
+			} catch (IOException e) {
+
+				// Log failure.
+				LibLog._log("Failed to save barcode cache.", e);
+			}
 		}
 
 		// Log the counts

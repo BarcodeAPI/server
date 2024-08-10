@@ -1,6 +1,7 @@
 {
 	"name": "EAN8",
 	"display": "EAN 8",
+	"show": true,
 	"target": [
 		"8",
 		"ean-8",
@@ -25,5 +26,6 @@
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/EAN-8"
-	}
+	},
+	"options": []
 }

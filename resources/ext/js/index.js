@@ -6,11 +6,15 @@
 /**
  * User Interface App Options
  */
-const appOptions = {
-	'language': 'en',
+const appState = {
 	'current': false,
 	'drawerOpen': false,
 	'optionsOpen': false,
+	'types': {}
+};
+
+const appOptions = {
+	'language': 'en',
 	'apiKey': window.localStorage.getItem("apiKey"),
 	'genDelay': 415,
 	'default': {
@@ -30,9 +34,8 @@ const appOptions = {
 	'trim': {
 		'before': (window.localStorage.getItem("trimBefore") != "false"),
 		'after': (window.localStorage.getItem("trimAfter") != "false")
-	},
-	'types': {}
-}
+	}
+};
 
 /**
  * Called when the page is initially loaded.
@@ -46,7 +49,6 @@ async function init() {
 	loadBarcodeTypes();
 
 	// Hide UI elements based on config
-	uiShowHide("app-setup-options", appDisplay.renderOptions);
 	uiShowHide("app-setup-bulk", appDisplay.bulkPages);
 	uiShowHide("notice-type", appDisplay.helpType);
 
@@ -79,7 +81,7 @@ async function loadBarcodeTypes() {
 
 	// Fetch /types/ endpoint
 	const url = location.origin + "/types/";
-	appOptions.types = await fetch(url)
+	appState.types = await fetch(url)
 		.then((response) => {
 			return response.json();
 		}).then((data) => {
@@ -101,17 +103,23 @@ function renderTypeSelection() {
 	const menu = document.getElementsByClassName("app-setup-types")[0];
 
 	// Loop all supported types
-	for (t in appOptions.types) {
+	for (t in appState.types) {
+		var type = appState.types[t];
+
+		// Skip if not show
+		if (!type.show) {
+			continue;
+		}
 
 		// Create type entry
 		var node = document.createElement("a");
 		node.setAttribute('rel', 'tooltip');
-		node.setAttribute('id', "type-" + appOptions.types[t].name);
-		node.setAttribute('onclick', 'setType(\'' + appOptions.types[t].targets[0] + '\')');
-		node.innerHTML = appOptions.types[t].display;
+		node.setAttribute('id', "type-" + type.name);
+		node.setAttribute('onclick', 'setType(\'' + type.targets[0] + '\')');
+		node.innerHTML = type.display;
 
 		// Build tooltip element
-		addTooltip(node, appOptions.types[t].description[appOptions.language]);
+		addTooltip(node, appState.types[t].description[appOptions.language]);
 
 		// Add to menu
 		menu.appendChild(node);
@@ -158,6 +166,9 @@ function loadSelectedType() {
 	var text = document.getElementById("text");
 	text.setAttribute("pattern", (codeType) ? codeType.pattern : '.*');
 
+	// Render options menu
+	renderOptions(codeType);
+
 	// Regenerate the code
 	var url = buildBarcodeURL();
 	if (url) {
@@ -166,6 +177,24 @@ function loadSelectedType() {
 
 	// Focus text input
 	text.focus();
+}
+
+function renderOptions(type) {
+
+	// Close drawer
+	showRenderMenu(false);
+
+	// Determine if showing options
+	var showOptions = (type) && //
+		(appDisplay.renderOptions && (type.options.length > 0));
+
+	// Show / hide menu
+	uiShowHide("app-setup-options", showOptions);
+
+	if (showOptions) {
+
+		// Setup options
+	}
 }
 
 /**
@@ -288,12 +317,12 @@ function buildBarcodeURL() {
 function updateBarcodeImage(url) {
 
 	// Skip if unchanged
-	if (appOptions.current == url) {
+	if (url && appState.current == url) {
 		return;
 	}
 
 	// Update current URL
-	appOptions.current = url;
+	appState.current = url;
 
 	// Request the image
 	fetch(url, { cache: "no-store" })
@@ -345,7 +374,7 @@ function delayUpdateBarcode() {
 	const url = buildBarcodeURL();
 
 	// Do nothing if unchanged
-	if (!url || (appOptions.current == url)) {
+	if (!url || (appState.current == url)) {
 		return;
 	}
 
@@ -410,12 +439,12 @@ function buildOptionsString() {
  */
 function showTypesMenu(show) {
 
-	if (show && !appOptions.drawerOpen) {
-		appOptions.drawerOpen = true;
+	if (show && !appState.drawerOpen) {
+		appState.drawerOpen = true;
 		document.getElementsByClassName("app-setup-type")[0].classList.add("open");
 		document.getElementsByClassName("app-setup-types")[0].classList.add("open");
 	} else {
-		appOptions.drawerOpen = false;
+		appState.drawerOpen = false;
 		document.getElementsByClassName("app-setup-type")[0].classList.remove("open");
 		document.getElementsByClassName("app-setup-types")[0].classList.remove("open");
 	}
@@ -427,7 +456,7 @@ function showTypesMenu(show) {
 function toggleOpenBarcodeTypes() {
 
 	// Toggle types dropdown state
-	showTypesMenu(!appOptions.drawerOpen);
+	showTypesMenu(!appState.drawerOpen);
 }
 
 /**
@@ -435,12 +464,12 @@ function toggleOpenBarcodeTypes() {
  */
 function showRenderMenu(show) {
 
-	if (show && !appOptions.optionsOpen) {
-		appOptions.optionsOpen = true;
+	if (show && !appState.optionsOpen) {
+		appState.optionsOpen = true;
 		document.getElementsByClassName("app-options-link")[0].classList.add("open");
 		document.getElementsByClassName("app-barcode-options")[0].classList.add("open");
 	} else {
-		appOptions.optionsOpen = false;
+		appState.optionsOpen = false;
 		document.getElementsByClassName("app-options-link")[0].classList.remove("open");
 		document.getElementsByClassName("app-barcode-options")[0].classList.remove("open");
 	}
@@ -452,7 +481,7 @@ function showRenderMenu(show) {
 function toggleShowRenderOptions() {
 
 	// Toggle render options dropdown state
-	showRenderMenu(!appOptions.optionsOpen);
+	showRenderMenu(!appState.optionsOpen);
 
 }
 
@@ -492,7 +521,7 @@ function actionCopyURL() {
 	}
 
 	// Copy to the clipboard
-	navigator.clipboard.writeText(appOptions.current);
+	navigator.clipboard.writeText(appState.current);
 
 	// Show copy popup
 	const copyTextMessage = document.getElementById("message");
@@ -516,7 +545,7 @@ async function actionCopyImage() {
 	}
 
 	try {
-		const fetched = await fetch(appOptions.current);
+		const fetched = await fetch(appState.current);
 		const blobInput = await fetched.blob();
 		const clipboardItemInput = new ClipboardItem({ 'image/png': blobInput });
 		await navigator.clipboard.write([clipboardItemInput]);
@@ -531,7 +560,7 @@ async function actionCopyImage() {
  */
 function actionDownloadImage() {
 
-	window.open(appOptions.current, '_blank');
+	window.open(appState.current, '_blank');
 }
 
 /**
@@ -540,15 +569,16 @@ function actionDownloadImage() {
 function getType(code) {
 
 	// Loop all supported types
-	for (let i in appOptions.types) {
+	for (let i in appState.types) {
+		let type = appState.types[i];
 
 		// Loop all targets
-		for (let t in appOptions.types[i].targets) {
+		for (let t in type.targets) {
 
 			// Check if target matches
-			if (appOptions.types[i].targets[t] === code) {
+			if (type.targets[t] === code) {
 
-				return appOptions.types[i];
+				return type;
 			}
 		}
 	}

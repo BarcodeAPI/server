@@ -23,8 +23,8 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class BarcodeAPIHandler extends RestHandler {
 
-	private final CachedBarcode ERR;
-	private final CachedBarcode EXC;
+	private final CachedBarcode INV;
+	private final CachedBarcode FLD;
 	private final CachedBarcode BLK;
 	private final CachedBarcode RTE;
 	private final CachedBarcode BSY;
@@ -40,9 +40,9 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		try {
 
-			ERR = BarcodeGenerator.requestBarcode(//
-					BarcodeRequest.fromURI("/128/$$@E$$@R$$@R$$@O$$@R$$@"));
-			EXC = BarcodeGenerator.requestBarcode(//
+			INV = BarcodeGenerator.requestBarcode(//
+					BarcodeRequest.fromURI("/128/$$@INVALID$$@"));
+			FLD = BarcodeGenerator.requestBarcode(//
 					BarcodeRequest.fromURI("/128/$$@F$$@A$$@I$$@L$$@E$$@D$$@"));
 			BLK = BarcodeGenerator.requestBarcode(//
 					BarcodeRequest.fromURI("/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
@@ -109,7 +109,7 @@ public class BarcodeAPIHandler extends RestHandler {
 			// Send bad request response code
 			case EMPTY:
 			case INVALID:
-				barcode = ERR;
+				barcode = INV;
 				r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				break;
 
@@ -121,7 +121,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// Send server error response code
 			case FAILED:
-				barcode = EXC;
+				barcode = FLD;
 				r.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				break;
 			}

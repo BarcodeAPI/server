@@ -1,6 +1,7 @@
 {
 	"name": "Code39",
 	"display": "Code 39",
+	"show": true,
 	"target": [
 		"39",
 		"code-39",
@@ -25,5 +26,6 @@
 	},
 	"wiki" : {
 		"en" : "https://en.wikipedia.org/wiki/Code_39"
-	}
+	},
+	"options": []
 }

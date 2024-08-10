@@ -1,6 +1,7 @@
 {
 	"name": "PDF417",
 	"display": "PDF-417",
+	"show": true,
 	"target": [
 		"417",
 		"pdf417",
@@ -25,5 +26,6 @@
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/PDF417"
-	}
+	},
+	"options": []
 }

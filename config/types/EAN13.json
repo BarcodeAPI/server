@@ -1,6 +1,7 @@
 {
 	"name": "EAN13",
 	"display": "EAN 13",
+	"show": true,
 	"target": [
 		"13",
 		"ean-13",
@@ -25,5 +26,6 @@
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/International_Article_Number"
-	}
+	},
+	"options": []
 }

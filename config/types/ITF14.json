@@ -1,6 +1,7 @@
 {
 	"name": "ITF14",
 	"display": "ITF14",
+	"show": true,
 	"target": [
 		"14",
 		"itf-14",
@@ -26,5 +27,6 @@
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/Interleaved_2_of_5"
-	}
+	},
+	"options": []
 }

@@ -5,4 +5,5 @@ target/
 cache/
 logs/
 resources/blacklist.conf
+cache/
 *.snap

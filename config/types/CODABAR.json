@@ -1,6 +1,7 @@
 {
 	"name": "CODABAR",
 	"display": "CODABAR",
+	"show": true,
 	"target": [
 		"codabar"
 	],
@@ -23,5 +24,6 @@
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/Codabar"
-	}
+	},
+	"options": []
 }

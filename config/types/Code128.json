@@ -1,6 +1,7 @@
 {
 	"name": "Code128",
 	"display": "Code 128",
+	"show": true,
 	"target": [
 		"128",
 		"code-128",
@@ -25,5 +26,6 @@
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/Code_128"
-	}
+	},
+	"options": []
 }

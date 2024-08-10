@@ -33,19 +33,19 @@ public abstract class BackgroundTask extends TimerTask {
 	@Override
 	public void run() {
 
-		// log task name`
+		// Log the task name
 		LibLog._clogF("I2001", getName());
 		long timeStart = System.currentTimeMillis();
 
-		// call implemented method
-		onRun();
+		// Call implemented method
+		this.onRun();
 
-		// hit the counter
+		// Hit the counter
 		getStats().hitCounter("task", getName(), "count");
 		long timeTask = System.currentTimeMillis() - timeStart;
 		getStats().hitCounter(timeTask, "task", getName(), "time");
 
-		// clean garbage
+		// Clean garbage
 		System.gc();
 	}
 

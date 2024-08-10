@@ -1,6 +1,7 @@
 {
 	"name": "UPC_A",
 	"display": "UPC A",
+	"show": true,
 	"target": [
 		"a",
 		"upc-a",
@@ -26,5 +27,6 @@
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/Universal_Product_Code"
-	}
+	},
+	"options": []
 }
