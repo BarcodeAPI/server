@@ -5,8 +5,27 @@
 
 var barcodes = [];
 
+window.onhashchange = init;
+
 function init() {
 
+	multiClear();
+	var share = window.location.hash.substring(1);
+	((share) ? loadShare(share) : loadArgs());
+}
+
+function loadShare(share) {
+
+	fetch("/share/?key=" + share)
+		.then(response => {
+			return response.json();
+		})
+		.then(function(d) {
+			renderRequests(d);
+		});
+}
+
+function loadArgs() {
 	var root = window.location.href;
 	var start = root.indexOf("?");
 	if (start >= 0) {
@@ -14,10 +33,14 @@ function init() {
 		// parse page arguments as barcodes to render
 		var params = root.substring(start + 1);
 		var requests = params.split("&");
-		for (var request in requests) {
 
-			addFromText(requests[request]);
-		}
+		renderRequests(requests);
+	}
+}
+
+function renderRequests(requests) {
+	for (var request in requests) {
+		addFromText(requests[request]);
 	}
 
 	document.getElementById("input").focus();
@@ -72,13 +95,25 @@ function generateImage(request) {
 	return img;
 }
 
-function multiShare() {
-	var url = "/multi.html?";
-	for (var x in barcodes) {
-		url += barcodes[x] + "&";
-	}
+function multiClear() {
+	barcodes.length = 0;
+	document.getElementById("barcodes").innerHTML = "";
+}
 
-	window.location = url;
+function multiShare() {
+
+	fetch('/share/', {
+		method: "post",
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(barcodes)
+	}).then(response => {
+		return response.text();
+	}).then(function(d) {
+		window.location.hash = d;
+	});
 }
 
 function printPage() {

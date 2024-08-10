@@ -23,6 +23,7 @@ public class ObjectCache {
 
 	public static final String CACHE_IP = "LIMITS-IP";
 	public static final String CACHE_KEY = "LIMITS-KEY";
+	public static final String CACHE_SHARE = "MULTI-SHARE";
 	public static final String CACHE_SESSIONS = "sessions";
 
 	private static final LibMetrics stats = LibMetrics.instance();
