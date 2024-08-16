@@ -1,12 +1,12 @@
 package org.barcodeapi.server.cache;
 
+import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.CodeType;
-
-import com.mclarkdev.tools.libextras.LibExtrasHashes;
+import org.json.JSONObject;
 
 /**
  * CachedBarcode.java
@@ -21,59 +21,66 @@ public class CachedBarcode extends CachedObject {
 			.getJSONObject("cache").getJSONObject("barcode").getInt("life");
 
 	private final CodeType type;
-	private final String raw;
 	private final byte[] data;
 
-	private final String nice;
-	private final String encoded;
-	private final String checksum;
+	private final String strRaw;
+	private final String strNice;
+	private final String strEncoded;
 
 	public CachedBarcode(CodeType type, String raw, byte[] data) {
 		this.setTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
 
 		this.type = type;
-		this.raw = raw;
-
 		this.data = data;
-		this.checksum = LibExtrasHashes.sumMD5(data);
 
-		this.nice = CodeUtils.stripIllegal(raw);
-		this.encoded = CodeUtils.encode(raw);
+		this.strRaw = raw;
+		this.strNice = CodeUtils.stripIllegal(raw);
+		this.strEncoded = CodeUtils.encodeURL(raw);
 	}
 
-	public CodeType getType() {
+	public CodeType getBarcodeType() {
 
 		return type;
 	}
 
-	public String getRaw() {
-
-		return raw;
-	}
-
-	public byte[] getData() {
+	public byte[] getBarcodeData() {
 
 		this.touch();
 		return data;
 	}
 
-	public int getDataSize() {
+	public String getBarcodeStringRaw() {
+
+		return strRaw;
+	}
+
+	public String getBarcodeStringNice() {
+
+		return strNice;
+	}
+
+	public String getBarcodeStringEncoded() {
+
+		return strEncoded;
+	}
+
+	public int getBarcodeDataSize() {
 
 		return data == null ? 0 : data.length;
 	}
 
-	public String getChecksum() {
+	public String encodeBase64() {
 
-		return checksum;
+		return Base64.getEncoder()//
+				.encodeToString(getBarcodeData());
 	}
 
-	public String getNice() {
+	public String encodeJSON() {
 
-		return nice;
-	}
-
-	public String getEncoded() {
-
-		return encoded;
+		return ((new JSONObject()//
+				.put("type", getBarcodeType().getName()))//
+				.put("encoded", getBarcodeStringEncoded())//
+				.put("b64", encodeBase64())//
+		).toString(4);
 	}
 }

@@ -36,11 +36,11 @@ public class Ean8Generator extends CodeGenerator {
 		}
 
 		int checksum = CodeUtils.calculateEanChecksum(data, 8);
-		String provided = data.substring(data.length() - 1);
+		int provided = data.charAt(data.length() - 1) - '0';
 
-		if (!Integer.toString(checksum).equals(provided)) {
+		if (checksum != provided) {
 
-			throw new GenerationException(ExceptionType.INVALID, //
+			throw new GenerationException(ExceptionType.CHECKSUM, //
 					new Throwable("Expected checksum : " + checksum));
 		}
 

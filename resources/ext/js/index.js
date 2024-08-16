@@ -15,7 +15,7 @@ const appState = {
 
 const appOptions = {
 	'language': 'en',
-	'apiKey': window.localStorage.getItem("apiKey"),
+	'apiKey': false,
 	'genDelay': 415,
 	'default': {
 		'colorFG': "000000",
@@ -44,6 +44,9 @@ async function init() {
 
 	// Call our method when the URL hash changes.
 	window.onhashchange = loadSelectedType;
+
+	// Load previously configured API key
+	appOptions.apiKey = window.localStorage.getItem("apiKey");
 
 	// Load supported types
 	loadBarcodeTypes();
@@ -85,6 +88,17 @@ async function loadBarcodeTypes() {
 		.then((response) => {
 			return response.json();
 		}).then((data) => {
+
+			data.sort((a, b) => {
+				if (a.name < b.name) {
+					return -1;
+				}
+				if (a.name > b.name) {
+					return 1;
+				}
+				return 0;
+			});
+
 			return data;
 		});
 
@@ -107,7 +121,7 @@ function renderTypeSelection() {
 		var type = appState.types[t];
 
 		// Skip if not show
-		if (!type.show) {
+		if (!type.show && !appDisplay.showHidden) {
 			continue;
 		}
 

@@ -9,7 +9,8 @@ const appDisplay = {
 	'limitsNotice': false,
 	'renderOptions': true,
 	'helpType': false,
-	'helpManual': false
+	'helpManual': false,
+	'showHidden': false
 };
 
 /**

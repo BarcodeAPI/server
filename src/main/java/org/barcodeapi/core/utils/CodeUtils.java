@@ -92,7 +92,7 @@ public class CodeUtils {
 	 * @param data
 	 * @return
 	 */
-	public static String encode(String data) {
+	public static String encodeURL(String data) {
 		LibMetrics.hitMethodRunCounter();
 
 		try {
@@ -110,7 +110,7 @@ public class CodeUtils {
 	 * @param data
 	 * @return
 	 */
-	public static String decode(String data) {
+	public static String decodeURL(String data) {
 		LibMetrics.hitMethodRunCounter();
 
 		try {

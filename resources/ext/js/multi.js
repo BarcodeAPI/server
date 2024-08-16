@@ -14,6 +14,9 @@ function init() {
 	((share) ? loadShare(share) : loadArgs());
 }
 
+/**
+ * Load share hash from server.
+ */
 function loadShare(share) {
 
 	fetch("/share/?key=" + share)
@@ -25,6 +28,9 @@ function loadShare(share) {
 		});
 }
 
+/**
+ * Load page arguments as request string.
+ */
 function loadArgs() {
 	var root = window.location.href;
 	var start = root.indexOf("?");
@@ -38,6 +44,9 @@ function loadArgs() {
 	}
 }
 
+/**
+ * Render a list of requests.
+ */
 function renderRequests(requests) {
 	for (var request in requests) {
 		addFromText(requests[request]);
@@ -46,10 +55,16 @@ function renderRequests(requests) {
 	document.getElementById("input").focus();
 }
 
+/**
+ * Send the user back to the homse page.
+ */
 function goHome() {
 	window.location = "/index.html";
 }
 
+/**
+ * Add user text from the input field.
+ */
 function addFromInput() {
 	var input = document.getElementById("input");
 	var inStr = input.value.split("\n");
@@ -62,28 +77,48 @@ function addFromInput() {
 	input.focus();
 }
 
+/**
+ * Render a barcode request.
+ */
 function addFromText(text) {
-	if (text.length) {
-		var img = generateImage(text);
-		document.getElementById("barcodes").appendChild(img);
-		barcodes.push(text);
+	if (!text.length) {
+		return;
 	}
+
+	var img = generateImage(text);
+	document.getElementById("barcodes").appendChild(img);
+	barcodes.push(text);
 }
 
+/**
+ * Handle key-down events in text field. 
+ */
 function onKeyDown(e) {
+
+	// Handle {Enter} keypress
 	if (e.keyCode === 13) {
+
+		// Add input text
 		addFromInput();
 		e.preventDefault();
 		return;
 	}
 }
 
+/**
+ * Handle hey-up events in text field.
+ */
 function onKeyUp(e) {
+
+	// Handle scan or paste event
 	if (e.target.value.endsWith("\n")) {
 		addFromInput();
 	}
 }
 
+/**
+ * Generate a barcode image from a request.
+ */
 function generateImage(request) {
 
 	var url = location.origin + "/api/" + request;
@@ -95,11 +130,17 @@ function generateImage(request) {
 	return img;
 }
 
+/**
+ * Clear all rendered images.
+ */
 function multiClear() {
 	barcodes.length = 0;
 	document.getElementById("barcodes").innerHTML = "";
 }
 
+/**
+ * Get request code for requests.
+ */
 function multiShare() {
 
 	fetch('/share/', {
@@ -116,6 +157,21 @@ function multiShare() {
 	});
 }
 
+/**
+ * Get URL for requests. (legacy share)
+ */
+function multiShareLegacy() {
+	var url = "/multi.html?";
+	for (var x in barcodes) {
+		document.getElementById("barcodes").innerHTML = "";
+		url += barcodes[x] + "&";
+	}
+	window.location = url;
+}
+
+/**
+ * Print the page.
+ */
 function printPage() {
 	window.print();
 }

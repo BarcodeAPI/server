@@ -27,5 +27,20 @@
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/QR_code"
 	},
-	"options": []
+	"options": [
+		{
+			"name": "size",
+			"type": "number",
+			"default": 280,
+			"min": 50,
+			"max": 500
+		},
+		{
+			"name": "qz",
+			"type": "number",
+			"default": 2,
+			"min": 0,
+			"max": 8
+		}
+	]
 }
