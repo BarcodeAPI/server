@@ -87,12 +87,21 @@ public class BarcodeAPIHandler extends RestHandler {
 			// Set response code okay
 			r.setStatus(HttpServletResponse.SC_OK);
 
+			// Add cache headers
+			if (request.useCache()) {
+				long tplus = 86400;
+				long expires = System.currentTimeMillis() + (tplus * 1000);
+				r.setDateHeader("Expires", expires);
+				r.setHeader("Cache-Control", String.format("max-age=%d, public", tplus));
+			}
+
 		} catch (GenerationException e) {
 
-			// Log barcode generation failures
+			// Log the generation failure
 			LibLog._clogF("E6009", c.getUri(), e.getMessage());
 			r.setHeader("X-Error-Message", e.getMessage());
 
+			// Determine the reason for the failure
 			switch (e.getExceptionType()) {
 
 			// Send rate limit response code
@@ -111,7 +120,7 @@ public class BarcodeAPIHandler extends RestHandler {
 			// Send bad checksum response code
 			case CHECKSUM:
 				barcode = CHK;
-				r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				r.setStatus(HttpServletResponse.SC_CONFLICT);
 				break;
 
 			// Send bad request response code
@@ -132,36 +141,15 @@ public class BarcodeAPIHandler extends RestHandler {
 				barcode = FLD;
 				r.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				break;
-
 			}
 		}
 
-		// Add cache headers
-		if (request.useCache()) {
-			long tplus = 86400;
-			long expires = System.currentTimeMillis() + (tplus * 1000);
-			r.setDateHeader("Expires", expires);
-			r.setHeader("Cache-Control", String.format("max-age=%d, public", tplus));
-		}
-
-		// Add type and barcode detail headers
+		// Add the code type and detail headers
 		r.setHeader("X-Barcode-Type", barcode.getBarcodeType().getName());
 		r.setHeader("X-Barcode-Content", barcode.getBarcodeStringEncoded());
 
+		// Determine output format to send
 		switch (request.getOptions().optString("format", "png")) {
-
-		// Serve as base64
-		case "b64":
-
-			// Get data as base64 encoded string
-			byte[] encodedBytes = barcode.encodeBase64().getBytes();
-
-			// Add content headers and write data to stream
-			r.setHeader("Content-Type", "image/png");
-			r.setHeader("Content-Encoding", "base64");
-			r.setHeader("Content-Length", Long.toString(encodedBytes.length));
-			r.getOutputStream().write(encodedBytes);
-			break;
 
 		// Serve as PNG
 		case "png":
@@ -177,7 +165,22 @@ public class BarcodeAPIHandler extends RestHandler {
 			r.setHeader("Content-Type", "image/png");
 			r.setHeader("Content-Length", Long.toString(barcode.getBarcodeDataSize()));
 			r.getOutputStream().write(barcode.getBarcodeData());
+			break;
 
+		// Serve as base64
+		case "b64":
+
+			// Get data as base64 encoded string
+			byte[] encodedBytes = barcode.encodeBase64().getBytes();
+
+			// Add content headers and write data to stream
+			r.setHeader("Content-Type", "image/png");
+			r.setHeader("Content-Encoding", "base64");
+			r.setHeader("Content-Length", Long.toString(encodedBytes.length));
+			r.getOutputStream().write(encodedBytes);
+			break;
+
+		// Serve as JSON
 		case "json":
 
 			// Get data as JSON encoded string
@@ -189,9 +192,9 @@ public class BarcodeAPIHandler extends RestHandler {
 			r.getOutputStream().write(encodedJson);
 			break;
 
-		// Unknown output formats
+		// Unknown output format
 		default:
-			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			r.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
 			r.setHeader("X-Error-Message", "Invalid output format.");
 			break;
 		}

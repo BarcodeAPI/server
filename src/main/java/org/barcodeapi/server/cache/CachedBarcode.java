@@ -28,7 +28,11 @@ public class CachedBarcode extends CachedObject {
 	private final String strEncoded;
 
 	public CachedBarcode(CodeType type, String raw, byte[] data) {
-		this.setTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
+
+		// Fail if null data
+		if (type == null || data == null) {
+			throw new IllegalArgumentException();
+		}
 
 		this.type = type;
 		this.data = data;
@@ -36,6 +40,8 @@ public class CachedBarcode extends CachedObject {
 		this.strRaw = raw;
 		this.strNice = CodeUtils.stripIllegal(raw);
 		this.strEncoded = CodeUtils.encodeURL(raw);
+
+		this.setTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
 	}
 
 	public CodeType getBarcodeType() {
@@ -66,7 +72,7 @@ public class CachedBarcode extends CachedObject {
 
 	public int getBarcodeDataSize() {
 
-		return data == null ? 0 : data.length;
+		return data.length;
 	}
 
 	public String encodeBase64() {
