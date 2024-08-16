@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.mclarkdev.tools.libextras.LibExtrasStreams;
 import com.mclarkdev.tools.liblog.LibLog;
+import com.mclarkdev.tools.libmetrics.LibMetrics;
 
 /**
  * AppConfig.java
@@ -31,7 +32,13 @@ public class AppConfig {
 		}
 	}
 
+	/**
+	 * 
+	 * @return the app config
+	 */
 	public static JSONObject get() {
+		LibMetrics.hitMethodRunCounter();
+
 		return appConfig;
 	}
 }

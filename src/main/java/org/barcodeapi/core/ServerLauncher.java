@@ -83,7 +83,7 @@ public class ServerLauncher {
 	}
 
 	/**
-	 * Main entry point to start the server; jetty will be initialized followed by
+	 * Main entry point to start the server; Jetty will be initialized followed by
 	 * each handler. Once initialized the server will be started and ready to server
 	 * requests.
 	 * 
