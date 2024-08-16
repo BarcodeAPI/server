@@ -135,10 +135,6 @@ body {
 	border-bottom: 2px solid #b00000;
 }
 
-.action-clear:hover {
-	background-color: #ea4335;
-}
-
 .barcode-image {}
 
 .barcode_wrapper {
@@ -560,8 +556,28 @@ button[disabled] {
 	background-color: #999;
 }
 
-.action-icon.email:hover {
+.action-icon.action-clear:hover {
 	background-color: #ea4335;
+}
+
+.action-icon.action-email:hover {
+	background-color: #ea4335;
+}
+
+.action-icon.action-download:hover {
+	background-color: #3232c0;
+}
+
+.action-icon.action-print:hover {
+	background-color: #3232c0;
+}
+
+.action-icon.action-url:hover {
+	background-color: #3232c0;
+}
+
+.action-icon.action-copy:hover {
+	background-color: #3232c0;
 }
 
 /* /\ Icon Action Buttons /\ */
