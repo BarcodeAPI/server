@@ -12,6 +12,8 @@ import com.mclarkdev.tools.liblog.LibLog;
 /**
  * LimiterMintingTask.java
  * 
+ * A background task which periodically mints rate limiting tokens.
+ * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class LimiterMintingTask extends BackgroundTask {
