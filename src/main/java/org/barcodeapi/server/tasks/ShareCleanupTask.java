@@ -14,6 +14,9 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class ShareCleanupTask extends BackgroundTask {
 
+	private final ObjectCache shares = //
+			ObjectCache.getCache(ObjectCache.CACHE_SHARE);
+
 	public ShareCleanupTask() {
 		super();
 	}
@@ -21,13 +24,19 @@ public class ShareCleanupTask extends BackgroundTask {
 	@Override
 	public void onRun() {
 
+		// Cleanup Share cache
+		int removed = shares.expireOldObjects(), active = shares.count();
+		LibLog._clogF("I2611", removed, active);
+
 		try {
-			// Cleanup IP caches
-			ObjectCache shares = ObjectCache.getCache(ObjectCache.CACHE_SHARE);
-			int removed = shares.expireOldObjects(), active = shares.count();
-			LibLog._clogF("I2611", removed, active);
-			shares.saveSnapshot();
+
+			// Save cache snapshot
+			int saved = shares.saveSnapshot();
+			LibLog._clogF("I2602", shares.getName(), saved);
 		} catch (IOException e) {
+
+			// Log the failure
+			LibLog._clog("E2602", e);
 		}
 	}
 }

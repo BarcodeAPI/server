@@ -33,7 +33,7 @@ public class LimiterCleanupTask extends BackgroundTask {
 		// Get the requested limiter cache
 		ObjectCache cache = ObjectCache.getCache(type);
 
-		// Remove expired objects and log current count
+		// Remove expired objects and log current counts
 		int removed = cache.expireOldObjects(), active = cache.count();
 		LibLog._clogF("I2601", type, removed, active);
 

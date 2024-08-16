@@ -24,16 +24,19 @@ public class SessionCleanupTask extends BackgroundTask {
 	@Override
 	public void onRun() {
 
-		int removed = sessions.expireOldObjects();
-		int active = sessions.count();
-
-		// Log session count
+		// Remove expired objects and log current counts
+		int removed = sessions.expireOldObjects(), active = sessions.count();
 		LibLog._clogF("I2401", removed, active);
 
 		try {
 
-			sessions.saveSnapshot();
+			// Save cache snapshot
+			int saved = sessions.saveSnapshot();
+			LibLog._clogF("I2602", sessions.getName(), saved);
 		} catch (IOException e) {
+
+			// Log the failure
+			LibLog._clog("E2602", e);
 		}
 	}
 }

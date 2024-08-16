@@ -43,7 +43,7 @@ public class BarcodeCleanupTask extends BackgroundTask {
 				LibLog._clogF("I2602", type, saved);
 			} catch (IOException e) {
 
-				// Log failure.
+				// Log the failure
 				LibLog._clog("E2602", e);
 			}
 		}
