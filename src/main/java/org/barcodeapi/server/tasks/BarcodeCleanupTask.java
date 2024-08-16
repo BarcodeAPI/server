@@ -11,6 +11,9 @@ import com.mclarkdev.tools.liblog.LibLog;
 /**
  * BarcodeCleanupTask.java
  * 
+ * A background task which periodically removes stale barcodes from the cache.
+ * Additionally saves a cache snapshot to disk, to be used on crash recovery.
+ * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class BarcodeCleanupTask extends BackgroundTask {
@@ -23,7 +26,7 @@ public class BarcodeCleanupTask extends BackgroundTask {
 	public void onRun() {
 
 		// Loop each supported type
-		int active = 0, removed = 0;
+		int removed = 0, active = 0;
 		for (String type : CodeTypes.inst().getTypes()) {
 
 			// Get the type cache
@@ -37,11 +40,11 @@ public class BarcodeCleanupTask extends BackgroundTask {
 
 				// Save cache snapshot
 				int saved = cache.saveSnapshot();
-				LibLog._logF("Cache snapshot saved. (%s : %d)", type, saved);
+				LibLog._clogF("I2602", type, saved);
 			} catch (IOException e) {
 
 				// Log failure.
-				LibLog._log("Failed to save barcode cache.", e);
+				LibLog._clog("E2602", e);
 			}
 		}
 

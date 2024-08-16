@@ -22,13 +22,6 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class BarcodeAPIHandler extends RestHandler {
 
-	private final CachedBarcode CHK;
-	private final CachedBarcode INV;
-	private final CachedBarcode FLD;
-	private final CachedBarcode BLK;
-	private final CachedBarcode RTE;
-	private final CachedBarcode BSY;
-
 	public BarcodeAPIHandler() {
 		super(
 				// Authentication not required
@@ -37,26 +30,6 @@ public class BarcodeAPIHandler extends RestHandler {
 				true,
 				// Do not create new sessions
 				false);
-
-		try {
-
-			CHK = BarcodeGenerator.requestBarcode(//
-					BarcodeRequest.fromURI("/128/$$@CHECKSUM$$@"));
-			INV = BarcodeGenerator.requestBarcode(//
-					BarcodeRequest.fromURI("/128/$$@INVALID$$@"));
-			FLD = BarcodeGenerator.requestBarcode(//
-					BarcodeRequest.fromURI("/128/$$@F$$@A$$@I$$@L$$@E$$@D$$@"));
-			BLK = BarcodeGenerator.requestBarcode(//
-					BarcodeRequest.fromURI("/128/$$@B$$@L$$@A$$@C$$@K$$@L$$@I$$@S$$@T$$@"));
-			RTE = BarcodeGenerator.requestBarcode(//
-					BarcodeRequest.fromURI("/128/$$@RATE$$@$$@LIMIT$$@"));
-			BSY = BarcodeGenerator.requestBarcode(//
-					BarcodeRequest.fromURI("/128/$$@B$$@U$$@S$$@Y$$@"));
-		} catch (GenerationException e) {
-
-			throw LibLog._clog("E0789", e)//
-					.asException(IllegalStateException.class);
-		}
 	}
 
 	@Override
@@ -99,53 +72,17 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// Log the generation failure
 			LibLog._clogF("E6009", c.getUri(), e.getMessage());
+
+			// Set status headers for failure
+			r.setStatus(e.getExceptionType().getStatusCode());
 			r.setHeader("X-Error-Message", e.getMessage());
 
-			// Determine the reason for the failure
-			switch (e.getExceptionType()) {
-
-			// Send rate limit response code
-			case LIMITED:
-				barcode = RTE;
-				r.setStatus(HttpServletResponse.SC_PAYMENT_REQUIRED);
-				r.setHeader("X-ClientRateLimited", "YES");
-				break;
-
-			// Send blacklist response code
-			case BLACKLIST:
-				barcode = BLK;
-				r.setStatus(HttpServletResponse.SC_FORBIDDEN);
-				break;
-
-			// Send bad checksum response code
-			case CHECKSUM:
-				barcode = CHK;
-				r.setStatus(HttpServletResponse.SC_CONFLICT);
-				break;
-
-			// Send bad request response code
-			case EMPTY:
-			case INVALID:
-				barcode = INV;
-				r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				break;
-
-			// Send server busy response code
-			case BUSY:
-				barcode = BSY;
-				r.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-				break;
-
-			// Send server error response code
-			case FAILED:
-				barcode = FLD;
-				r.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				break;
-			}
+			// Replace barcode with failure image
+			barcode = e.getExceptionType().getBarcodeImage();
 		}
 
 		// Add the code type and detail headers
-		r.setHeader("X-Barcode-Type", barcode.getBarcodeType().getName());
+		r.setHeader("X-Barcode-Type", barcode.getBarcodeType());
 		r.setHeader("X-Barcode-Content", barcode.getBarcodeStringEncoded());
 
 		// Determine output format to send

@@ -5,7 +5,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.core.utils.CodeUtils;
-import org.barcodeapi.server.core.CodeType;
 import org.json.JSONObject;
 
 /**
@@ -20,14 +19,14 @@ public class CachedBarcode extends CachedObject {
 	private static final int OBJECT_LIFE = AppConfig.get()//
 			.getJSONObject("cache").getJSONObject("barcode").getInt("life");
 
-	private final CodeType type;
+	private final String type;
 	private final byte[] data;
 
 	private final String strRaw;
 	private final String strNice;
 	private final String strEncoded;
 
-	public CachedBarcode(CodeType type, String raw, byte[] data) {
+	public CachedBarcode(String type, String raw, byte[] data) {
 
 		// Fail if null data
 		if (type == null || data == null) {
@@ -44,7 +43,7 @@ public class CachedBarcode extends CachedObject {
 		this.setTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
 	}
 
-	public CodeType getBarcodeType() {
+	public String getBarcodeType() {
 
 		return type;
 	}
@@ -84,7 +83,7 @@ public class CachedBarcode extends CachedObject {
 	public String encodeJSON() {
 
 		return ((new JSONObject()//
-				.put("type", getBarcodeType().getName()))//
+				.put("type", getBarcodeType()))//
 				.put("encoded", getBarcodeStringEncoded())//
 				.put("b64", encodeBase64())//
 		).toString(4);
