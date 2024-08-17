@@ -19,20 +19,18 @@ public class DataMatrixGenerator extends CodeGenerator {
 
 	private DataMatrixBean generator;
 
-	/**
-	 * https://en.wikipedia.org/wiki/Data_Matrix
-	 */
 	public DataMatrixGenerator() {
 
+		// Setup DataMatrix generator
 		generator = new DataMatrixBean();
 	}
 
 	@Override
 	public byte[] onRender(String data, JSONObject options) throws IOException {
 
-		int dpi = options.optInt("dpi", 200);
+		int dpi = options.optInt("dpi", 150);
 		double scale = options.optDouble("scale", 1.5);
-		double qz = options.optDouble("qz", (scale * 2));
+		double qz = options.optDouble("qz", 3);
 
 		boolean square = options.optBoolean("square", true);
 

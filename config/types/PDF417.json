@@ -27,5 +27,48 @@
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/PDF417"
 	},
-	"options": []
+	"options": [
+				{
+			"name": "dpi",
+			"type": "number",
+			"default": 150,
+			"min": 50,
+			"max": 300
+		},
+		{
+			"name": "qz",
+			"type": "number",
+			"default": 2,
+			"min": 0,
+			"max": 8
+		},
+		{
+			"name": "text",
+			"type": "option",
+			"default": "bottom",
+			"options": [
+				"bottom",
+				"top",
+				"none"
+			]
+		},
+		{
+			"name": "pattern",
+			"type": "text",
+			"default": "_",
+			"pattern": "[ _]+"
+		},
+		{
+			"name": "bg",
+			"type": "text",
+			"default": "ffffff",
+			"pattern": "[0-9A-F]{6}"
+		},
+		{
+			"name": "fg",
+			"type": "text",
+			"default": "000000",
+			"pattern": "[0-9A-F]{6}"
+		}
+	]
 }

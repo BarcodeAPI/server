@@ -26,8 +26,47 @@
 	"description": {
 		"en": "A 2D data barode whose timing markers are along the the edges."
 	},
-	"wiki" : {
-		"en" : "https://en.wikipedia.org/wiki/Data_Matrix"
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Data_Matrix"
 	},
-	"options": []
+	"options": [
+		{
+			"name": "dpi",
+			"type": "number",
+			"default": 150,
+			"min": 50,
+			"max": 300
+		},
+		{
+			"name": "scale",
+			"type": "number",
+			"default": 1.5,
+			"min": 0.25,
+			"max": 5.0
+		},
+		{
+			"name": "qz",
+			"type": "number",
+			"default": 3,
+			"min": 0,
+			"max": 10
+		},
+		{
+			"name": "square",
+			"type": "checkbox",
+			"default": true
+		},
+		{
+			"name": "bg",
+			"type": "text",
+			"default": "ffffff",
+			"pattern": "[0-9A-F]{6}"
+		},
+		{
+			"name": "fg",
+			"type": "text",
+			"default": "000000",
+			"pattern": "[0-9A-F]{6}"
+		}
+	]
 }

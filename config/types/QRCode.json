@@ -31,7 +31,7 @@
 		{
 			"name": "size",
 			"type": "number",
-			"default": 280,
+			"default": 275,
 			"min": 50,
 			"max": 500
 		},
@@ -41,6 +41,17 @@
 			"default": 2,
 			"min": 0,
 			"max": 8
+		},
+		{
+			"name": "correction",
+			"type": "option",
+			"default": "M",
+			"options": [
+				"M",
+				"L",
+				"H",
+				"Q"
+			]
 		}
 	]
 }

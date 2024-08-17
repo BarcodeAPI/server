@@ -20,7 +20,7 @@ public class USPSMailGenerator extends CodeGenerator {
 
 	public USPSMailGenerator() {
 
-		// Setup Code39 generator
+		// Setup USPS-Mail generator
 		generator = new USPSIntelligentMailBean();
 	}
 

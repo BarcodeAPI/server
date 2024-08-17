@@ -27,18 +27,21 @@ public class QRCodeGenerator extends CodeGenerator {
 
 	public QRCodeGenerator() {
 
+		// Setup QR-Code generator
 		generator = new QRCodeWriter();
 	}
 
 	@Override
 	public byte[] onRender(String data, JSONObject options) throws WriterException, IOException {
 
-		int size = options.optInt("size", 280);
+		int size = options.optInt("size", 275);
 		int qz = options.optInt("qz", 2);
+		String correction = options.optString("correction", "M");
 
 		Map<EncodeHintType, Object> hintsMap = new HashMap<>();
 		hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
-		hintsMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
+		hintsMap.put(EncodeHintType.ERROR_CORRECTION, //
+				ErrorCorrectionLevel.valueOf(correction));
 		hintsMap.put(EncodeHintType.MARGIN, qz);
 
 		BitMatrix bitMatrix = generator.encode(//

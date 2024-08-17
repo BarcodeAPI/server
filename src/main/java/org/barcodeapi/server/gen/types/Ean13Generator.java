@@ -25,6 +25,7 @@ public class Ean13Generator extends CodeGenerator {
 
 	public Ean13Generator() {
 
+		// Setup EAN13 generator
 		generator = new EAN13Bean();
 	}
 
@@ -37,7 +38,7 @@ public class Ean13Generator extends CodeGenerator {
 		}
 
 		int checksum = CodeUtils.calculateEanChecksum(data, 13);
-		int provided = data.charAt(data.length() - 1) - '0';
+		int provided = (data.charAt(data.length() - 1) - '0');
 
 		if (checksum != provided) {
 

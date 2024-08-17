@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
@@ -21,17 +20,10 @@ public class PDF417Generator extends CodeGenerator {
 
 	private PDF417Bean generator;
 
-	/**
-	 * https://en.wikipedia.org/wiki/Data_Matrix
-	 */
 	public PDF417Generator() {
 
+		// Setup PDF417 generator
 		generator = new PDF417Bean();
-	}
-
-	@Override
-	public String onValidateRequest(String data) {
-		return CodeUtils.parseControlChars(data);
 	}
 
 	@Override

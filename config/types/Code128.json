@@ -27,5 +27,55 @@
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/Code_128"
 	},
-	"options": []
+	"options": [
+		{
+			"name": "dpi",
+			"type": "number",
+			"default": 150,
+			"min": 50,
+			"max": 300
+		},
+		{
+			"name": "qz",
+			"type": "number",
+			"default": 4,
+			"min": 0,
+			"max": 10
+		},
+		{
+			"name": "height",
+			"type": "number",
+			"default": 25,
+			"min": 5,
+			"max": 150
+		},
+		{
+			"name": "text",
+			"type": "option",
+			"default": "bottom",
+			"options": [
+				"bottom",
+				"top",
+				"none"
+			]
+		},
+		{
+			"name": "pattern",
+			"type": "text",
+			"default": "_",
+			"pattern": "[ _]+"
+		},
+		{
+			"name": "bg",
+			"type": "text",
+			"default": "ffffff",
+			"pattern": "[0-9A-F]{6}"
+		},
+		{
+			"name": "fg",
+			"type": "text",
+			"default": "000000",
+			"pattern": "[0-9A-F]{6}"
+		}
+	]
 }

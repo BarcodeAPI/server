@@ -20,7 +20,7 @@ public class RoyalMailGenerator extends CodeGenerator {
 
 	public RoyalMailGenerator() {
 
-		// Setup Code39 generator
+		// Setup RoyalMail generator
 		generator = new RoyalMailCBCBean();
 	}
 

@@ -10,6 +10,7 @@ import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
+import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
 import org.krysalis.barcode4j.tools.UnitConv;
 
@@ -24,6 +25,7 @@ public class Ean8Generator extends CodeGenerator {
 
 	public Ean8Generator() {
 
+		// Setup EAN8 generator
 		generator = new EAN8Bean();
 	}
 
@@ -36,7 +38,7 @@ public class Ean8Generator extends CodeGenerator {
 		}
 
 		int checksum = CodeUtils.calculateEanChecksum(data, 8);
-		int provided = data.charAt(data.length() - 1) - '0';
+		int provided = (data.charAt(data.length() - 1) - '0');
 
 		if (checksum != provided) {
 
@@ -56,10 +58,32 @@ public class Ean8Generator extends CodeGenerator {
 		double qz = options.optDouble("qz", 4);
 		int height = options.optInt("height", 25);
 
+		String text = options.optString("text", "bottom");
+		String pattern = options.optString("pattern", null);
+
+		switch (text) {
+
+		case "bottom":
+			generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
+			break;
+
+		case "top":
+			generator.setMsgPosition(HumanReadablePlacement.HRP_TOP);
+			break;
+
+		case "none":
+		default:
+			generator.setMsgPosition(HumanReadablePlacement.HRP_NONE);
+			break;
+		}
+
 		generator.doQuietZone(true);
 		generator.setQuietZone(qz);
 		generator.setHeight(height);
 		generator.setModuleWidth(moduleWidth);
+
+		generator.setPattern(pattern);
+		generator.setFontSize(12 * moduleWidth);
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		BarcodeCanvasProvider canvasProvider = new BarcodeCanvasProvider(out, dpi);
