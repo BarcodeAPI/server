@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.barcodeapi.server.core.CodeType;
+import org.barcodeapi.server.gen.BarcodeRequest;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
 
@@ -33,18 +34,25 @@ public class AztecGenerator extends CodeGenerator {
 	}
 
 	@Override
-	public byte[] onRender(String data, JSONObject options) throws WriterException, IOException {
+	public byte[] onRender(BarcodeRequest request) throws WriterException, IOException {
 
-		int size = options.optInt("size", 250);
-		double qz = options.optDouble("qz", 4);
-		int correction = options.optInt("correction", 33);
+		JSONObject options = request.getOptions();
+
+		int size = options.optInt("size", //
+				(Integer) getDefaults().getOrDefault("size", 275));
+
+		double qz = options.optDouble("qz", //
+				(Integer) getDefaults().getOrDefault("qz", 4));
+
+		int correction = options.optInt("correction", //
+				(Integer) getDefaults().getOrDefault("correction", 33));
 
 		Map<EncodeHintType, Object> hintsMap = new HashMap<>();
 		hintsMap.put(EncodeHintType.ERROR_CORRECTION, correction);
 		hintsMap.put(EncodeHintType.MARGIN, qz);
 
 		BitMatrix bitMatrix = generator.encode(//
-				data, BarcodeFormat.AZTEC, size, size, hintsMap);
+				request.getData(), BarcodeFormat.AZTEC, size, size, hintsMap);
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		MatrixToImageWriter.writeToStream(bitMatrix, "png", out);

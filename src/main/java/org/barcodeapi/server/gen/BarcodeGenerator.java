@@ -110,10 +110,10 @@ public class BarcodeGenerator {
 			}
 
 			// run implementation specific validations
-			String validated = generator.onValidateRequest(encoded);
+			generator.onValidateRequest(encoded);
 
 			// render new image and get the bytes
-			byte[] png = generator.onRender(validated, request.getOptions());
+			byte[] png = generator.onRender(request);
 
 			// calculate run time and log generation
 			int time = (int) (System.currentTimeMillis() - timeStart);

@@ -1,7 +1,7 @@
 package org.barcodeapi.server.gen.types;
 
 import org.barcodeapi.server.core.CodeType;
-import org.barcodeapi.server.gen.impl.Barcode4JProvider;
+import org.barcodeapi.server.gen.impl.DefaultBarcodeProvider;
 import org.krysalis.barcode4j.impl.fourstate.RoyalMailCBCBean;
 
 /**
@@ -9,7 +9,7 @@ import org.krysalis.barcode4j.impl.fourstate.RoyalMailCBCBean;
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
-public class RoyalMailGenerator extends Barcode4JProvider {
+public class RoyalMailGenerator extends DefaultBarcodeProvider {
 
 	public RoyalMailGenerator(CodeType codeType) {
 

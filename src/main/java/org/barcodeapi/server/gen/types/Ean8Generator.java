@@ -4,7 +4,7 @@ import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
-import org.barcodeapi.server.gen.impl.Barcode4JProvider;
+import org.barcodeapi.server.gen.impl.DefaultBarcodeProvider;
 import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
 
 /**
@@ -12,7 +12,7 @@ import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
-public class Ean8Generator extends Barcode4JProvider {
+public class Ean8Generator extends DefaultBarcodeProvider {
 
 	public Ean8Generator(CodeType codeType) {
 
@@ -21,22 +21,18 @@ public class Ean8Generator extends Barcode4JProvider {
 	}
 
 	@Override
-	public String onValidateRequest(String data) throws GenerationException {
+	public void onValidateRequest(String data) throws GenerationException {
 
 		if (data.length() == 7) {
-
-			return data;
+			return;
 		}
 
-		int checksum = CodeUtils.calculateEanChecksum(data, 8);
 		int provided = (data.charAt(data.length() - 1) - '0');
+		int checksum = CodeUtils.calculateEanChecksum(data, 8);
 
 		if (checksum != provided) {
-
 			throw new GenerationException(ExceptionType.CHECKSUM, //
 					new Throwable("Expected checksum : " + checksum));
 		}
-
-		return data;
 	}
 }
