@@ -151,9 +151,15 @@ function multiShare() {
 		},
 		body: JSON.stringify(barcodes)
 	}).then(response => {
+
+		// Get the body of the response
 		return response.text();
-	}).then(function(d) {
-		window.location.hash = d;
+
+	}).then(function(shareCode) {
+
+		// Update URL hash to share code
+		window.location = //
+			(window.location.pathname + '#' + shareCode);
 	});
 }
 
@@ -161,6 +167,7 @@ function multiShare() {
  * Get URL for requests. (legacy share)
  */
 function multiShareLegacy() {
+
 	var url = "/multi.html?";
 	for (var x in barcodes) {
 		document.getElementById("barcodes").innerHTML = "";
