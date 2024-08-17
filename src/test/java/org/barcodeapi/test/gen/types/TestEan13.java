@@ -39,12 +39,12 @@ public class TestEan13 extends ServerTestBase {
 	}
 
 	@Test
-	public void testEan13_8NumsInvalidChecksum() throws Exception {
+	public void testEan13_13NumsInvalidChecksum() throws Exception {
 
 		apiGet("13/1234567890123");
 
 		Assert.assertEquals("Response Code", //
-				HttpStatus.BAD_REQUEST_400, getResponseCode());
+				HttpStatus.CONFLICT_409, getResponseCode());
 	}
 
 	@Test

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
@@ -22,6 +23,11 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class BarcodeAPIHandler extends RestHandler {
 
+	private static final int CACHED_LIFE = AppConfig.get()//
+			.getJSONObject("cache").getJSONObject("barcode").getInt("client");
+
+	private final String cacheControl = String.format("max-age=%d, public", CACHED_LIFE);
+
 	public BarcodeAPIHandler() {
 		super(
 				// Authentication not required
@@ -36,13 +42,12 @@ public class BarcodeAPIHandler extends RestHandler {
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
 		CachedBarcode barcode = null;
-		BarcodeRequest request = BarcodeRequest.fromURI(c.getUri());
+		BarcodeRequest request = new BarcodeRequest(c.getUri());
 
 		try {
 
 			// Calculate token cost
-			int cost = (request.useCache()) ? //
-					request.getType().getCostBasic() : request.getType().getCostCustom();
+			int cost = request.getCost();
 
 			// Send token cost to user
 			r.setHeader("X-RateLimit-Cost", Integer.toString(cost));
@@ -62,10 +67,9 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// Add cache headers
 			if (request.useCache()) {
-				long tplus = 86400;
-				long expires = System.currentTimeMillis() + (tplus * 1000);
-				r.setDateHeader("Expires", expires);
-				r.setHeader("Cache-Control", String.format("max-age=%d, public", tplus));
+				r.setDateHeader("Expires", //
+						(System.currentTimeMillis() + (CACHED_LIFE * 1000)));
+				r.setHeader("Cache-Control", cacheControl);
 			}
 
 		} catch (GenerationException e) {

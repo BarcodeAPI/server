@@ -2,7 +2,6 @@ package org.barcodeapi.server.core;
 
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.gen.BarcodeGenerator;
-import org.barcodeapi.server.gen.BarcodeRequest;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
@@ -30,15 +29,14 @@ public class GenerationException extends Exception {
 
 		BUSY(503, "/128/$$@BUSY$$@");
 
-		private final int statusCode;
+		private final int status;
 
-		private final CachedBarcode barcodeImage;
+		private final CachedBarcode image;
 
-		ExceptionType(int statusCode, String req) {
-			this.statusCode = statusCode;
+		ExceptionType(int status, String target) {
+			this.status = status;
 			try {
-				this.barcodeImage = BarcodeGenerator//
-						.requestBarcode(BarcodeRequest.fromURI(req));
+				this.image = BarcodeGenerator.requestBarcode(target);
 			} catch (GenerationException e) {
 				throw LibLog._clog("E0789", e)//
 						.asException(IllegalStateException.class);
@@ -46,11 +44,11 @@ public class GenerationException extends Exception {
 		}
 
 		public int getStatusCode() {
-			return statusCode;
+			return status;
 		}
 
 		public CachedBarcode getBarcodeImage() {
-			return barcodeImage;
+			return image;
 		}
 	}
 

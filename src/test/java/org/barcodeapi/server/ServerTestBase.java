@@ -58,11 +58,19 @@ public abstract class ServerTestBase {
 	}
 
 	protected void apiGet(String path) {
+		apiGet(path, null);
+	}
+
+	protected void apiGet(String path, String args) {
 
 		try {
 
 			String encoded = URLEncoder.encode(path, "UTF-8");
-			serverGet("/api/" + encoded);
+			String request = "/api/" + encoded;
+			if (args != null) {
+				request += ('?' + args);
+			}
+			serverGet(request);
 
 		} catch (UnsupportedEncodingException e) {
 

@@ -38,7 +38,7 @@ public class CodeType {
 	private final JSONObject description;
 	private final JSONObject wiki;
 
-	private final JSONArray options;
+	private final JSONObject options;
 
 	private CodeType(JSONObject config) {
 		this.config = config;
@@ -83,7 +83,7 @@ public class CodeType {
 		this.wiki = config.getJSONObject("wiki");
 
 		// get available options
-		this.options = config.getJSONArray("options");
+		this.options = config.getJSONObject("options");
 	}
 
 	public JSONObject getConfig() {
@@ -155,7 +155,7 @@ public class CodeType {
 		return wiki;
 	}
 
-	public JSONArray getOptions() {
+	public JSONObject getOptions() {
 		return options;
 	}
 

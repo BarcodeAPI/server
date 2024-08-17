@@ -1,6 +1,5 @@
 package org.barcodeapi.server.core;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 import org.barcodeapi.core.AppConfig;
@@ -10,7 +9,6 @@ import org.json.JSONArray;
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
-import com.mclarkdev.tools.libobjectpooler.LibObjectPoolerController;
 
 /**
  * CodeGenerators.java
@@ -34,58 +32,28 @@ public class CodeGenerators {
 
 		JSONArray enabled = AppConfig.get().getJSONArray("types");
 
-		// loop all enabled types
+		// Loop all enabled types
 		for (int x = 0; x < enabled.length(); x++) {
 
-			String type = enabled.getString(x);
+			try {
 
-			// load code type from config
-			CodeType config = CodeTypes.inst().loadType(type);
+				// Load type from config and setup pooler
+				String type = enabled.getString(x);
+				CodeType config = CodeTypes.inst().loadType(type);
+				generators.put(type, setupBarcodePooler(config));
 
-			// setup a pooler for code type
-			generators.put(type, setupBarcodePooler(config));
+			} catch (Exception | Error e) {
+
+				// Log initialization failure
+				LibLog._log("Failed initializing CodeType.", e);
+			}
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private LibObjectPooler<CodeGenerator> setupBarcodePooler(final CodeType codeType) {
 
-		final String name = codeType.getName();
-		final Class<? extends CodeGenerator> clazz;
-		final Constructor<? extends CodeGenerator> constructor;
-
-		try {
-
-			String genClass = codeType.getGeneratorClass();
-			clazz = (Class<? extends CodeGenerator>) Class.forName(genClass);
-			constructor = clazz.getDeclaredConstructor();
-
-		} catch (Exception e) {
-			throw LibLog._clog("E0059", e).asException();
-		}
-
-		LibObjectPooler<CodeGenerator> pooler = new LibObjectPooler<CodeGenerator>(3, //
-				new LibObjectPoolerController<CodeGenerator>() {
-
-					@Override
-					public CodeGenerator onCreate() {
-						LibLog._clogF("I0180", name);
-						LibMetrics.instance().hitCounter("generators", name, "pool", "created");
-
-						try {
-							return constructor.newInstance();
-						} catch (Exception | Error e) {
-							e.printStackTrace();
-							return null;
-						}
-					}
-
-					@Override
-					public void onDestroy(CodeGenerator t) {
-						LibLog._clogF("I0181", name);
-						LibMetrics.instance().hitCounter("generators", name, "pool", "destroyed");
-					}
-				});
+		LibObjectPooler<CodeGenerator> pooler = //
+				new LibObjectPooler<CodeGenerator>(3, new GeneratorPoolController(codeType));
 
 		pooler.setMaxLockTime(1000);
 		pooler.setMaxIdleTime(15 * 60 * 1000);

@@ -55,7 +55,8 @@
 	"cacheDir": "./cache/",
 	"cache": {
 		"barcode": {
-			"life": 4320
+			"life": 4320,
+			"client": 1440
 		},
 		"session": {
 			"life": 10080
@@ -69,21 +70,20 @@
 	},
 	"bulkMax": 250,
 	"blacklist": [
-		"^__tstblk2$",
 		"^_tstblk_$"
 	],
 	"admins": {
 		"admin": "5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8"
 	},
 	"limits": {
-		"enforce": false,
+		"enforce": true,
 		"ips": {
 			"__default": 10000,
 			"127.0.0.1": -1
 		},
 		"keys": {
 			"__default": 0,
-			"test000005": 50
+			"test00000050": 50
 		}
 	}
 }

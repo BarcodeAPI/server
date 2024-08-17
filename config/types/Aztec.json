@@ -25,31 +25,27 @@
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/Aztec_Code"
 	},
-	"options": [
-		{
-			"name": "size",
+	"options": {
+		"size": {
+			"name": "Size",
 			"type": "number",
 			"default": 275,
 			"min": 50,
 			"max": 500
 		},
-		{
-			"name": "qz",
+		"qz": {
+			"name": "Quiet Zone",
 			"type": "number",
 			"default": 2,
 			"min": 0,
 			"max": 8
 		},
-		{
-			"name": "correction",
-			"type": "option",
-			"default": "M",
-			"options": [
-				"M",
-				"L",
-				"H",
-				"Q"
-			]
+		"correction": {
+			"name": "Error Correction",
+			"type": "number",
+			"default": 33,
+			"min": 8,
+			"max": 65
 		}
-	]
+	}
 }

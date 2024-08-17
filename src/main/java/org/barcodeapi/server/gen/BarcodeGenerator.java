@@ -26,6 +26,14 @@ public class BarcodeGenerator {
 	private static final CodeGenerators generators = CodeGenerators.getInstance();
 
 	private BarcodeGenerator() {
+		throw new IllegalStateException();
+	}
+
+	public static CachedBarcode requestBarcode(String target) throws GenerationException {
+		LibMetrics.hitMethodRunCounter();
+
+		return requestBarcode(//
+				new BarcodeRequest(target));
 	}
 
 	public static CachedBarcode requestBarcode(BarcodeRequest request) throws GenerationException {

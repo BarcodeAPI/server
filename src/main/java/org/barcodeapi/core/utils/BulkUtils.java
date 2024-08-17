@@ -91,7 +91,7 @@ public class BulkUtils {
 		String uri = String.format(//
 				"/api/%s/%s?", type, record[0], params);
 
-		return BarcodeRequest.fromURI(uri);
+		return new BarcodeRequest(uri);
 	}
 
 	private static ArrayList<CachedBarcode> generateBarcodes(ArrayList<BarcodeRequest> requests) {

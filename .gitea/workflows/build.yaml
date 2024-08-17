@@ -15,6 +15,7 @@ jobs:
       run: |
         repo="ssh://git@git.mclarkdev.com:2222/${{ gitea.repository }}"
         echo "Cloning $repo" && git clone --recurse-submodules $repo .
+        echo "Checking out $GITHUB_REF_NAME"; git checkout $GITHUB_REF_NAME
     - name: Set version number
       run: |
         echo -n "${{ github.run_id }}" > src/main/resources/app.version

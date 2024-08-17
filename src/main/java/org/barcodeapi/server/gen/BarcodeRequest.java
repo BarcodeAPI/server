@@ -14,15 +14,13 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
  */
 public class BarcodeRequest {
 
-	private CodeType type;
-	private String data;
-	private boolean cached;
-	private JSONObject options;
+	private final CodeType type;
+	private final String data;
+	private final int cost;
+	private final boolean cached;
+	private final JSONObject options;
 
-	private BarcodeRequest() {
-	}
-
-	public static BarcodeRequest fromURI(String target) {
+	public BarcodeRequest(String target) {
 		LibMetrics.hitMethodRunCounter();
 
 		// remove [ /api ]
@@ -33,15 +31,6 @@ public class BarcodeRequest {
 		// get and decode the request string
 		String[] parts = target.split("\\?");
 		String data = CodeUtils.decodeURL(parts[0].substring(1));
-
-		// get and parse options
-		JSONObject options = new JSONObject();
-		if (parts.length == 2) {
-			options = CodeUtils.parseOptions(parts[1]);
-		}
-
-		// use cache based on options and data length
-		boolean cached = ((options.length() == 0) && (data.length() <= 48));
 
 		// extract code type and data string
 		CodeType type;
@@ -78,13 +67,18 @@ public class BarcodeRequest {
 			type = TypeSelector.getTypeFromData(data);
 		}
 
-		// create and return request object
-		BarcodeRequest r = new BarcodeRequest();
-		r.type = type;
-		r.data = data;
-		r.cached = cached;
-		r.options = options;
-		return r;
+		// get and parse options
+		this.options = ((parts.length == 2) ? //
+				CodeUtils.parseOptions(parts[1]) : new JSONObject());
+
+		// use cache based on options and data length
+		this.cached = ((options.length() == 0) && (data.length() <= 48));
+
+		// Calculate the cost of the request
+		this.cost = (cached) ? type.getCostBasic() : type.getCostCustom();
+
+		this.type = type;
+		this.data = data;
 	}
 
 	/**
@@ -103,6 +97,15 @@ public class BarcodeRequest {
 	 */
 	public String getData() {
 		return data;
+	}
+
+	/**
+	 * Returns the token cost for the request.
+	 * 
+	 * @return
+	 */
+	public int getCost() {
+		return cost;
 	}
 
 	/**

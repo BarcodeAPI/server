@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
 
@@ -25,7 +26,8 @@ public class QRCodeGenerator extends CodeGenerator {
 
 	private QRCodeWriter generator;
 
-	public QRCodeGenerator() {
+	public QRCodeGenerator(CodeType codeType) {
+		super(codeType);
 
 		// Setup QR-Code generator
 		generator = new QRCodeWriter();

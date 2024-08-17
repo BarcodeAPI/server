@@ -10,7 +10,7 @@ const appDisplay = {
 	'renderOptions': false,
 	'helpType': false,
 	'helpManual': false,
-	'showHidden': false
+	'showHidden': true
 };
 
 /**
