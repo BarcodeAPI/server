@@ -1,6 +1,7 @@
 {
 	"name": "QRCode",
 	"display": "QR Code",
+	"show": true,
 	"target": [
 		"qr",
 		"qr-code",
@@ -25,5 +26,32 @@
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/QR_code"
-	}
+	},
+	"options": [
+		{
+			"name": "size",
+			"type": "number",
+			"default": 275,
+			"min": 50,
+			"max": 500
+		},
+		{
+			"name": "qz",
+			"type": "number",
+			"default": 2,
+			"min": 0,
+			"max": 8
+		},
+		{
+			"name": "correction",
+			"type": "option",
+			"default": "M",
+			"options": [
+				"M",
+				"L",
+				"H",
+				"Q"
+			]
+		}
+	]
 }

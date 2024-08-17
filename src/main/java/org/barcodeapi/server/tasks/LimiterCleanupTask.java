@@ -10,6 +10,9 @@ import com.mclarkdev.tools.liblog.LibLog;
 /**
  * LimiterCleanupTask.java
  * 
+ * A background task which periodically removes stale limiters from the cache.
+ * Additionally saves a cache snapshot to disk, to be used on server restart.
+ * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class LimiterCleanupTask extends BackgroundTask {
@@ -21,22 +24,28 @@ public class LimiterCleanupTask extends BackgroundTask {
 	@Override
 	public void onRun() {
 
-		try {
-			// Cleanup IP caches
-			ObjectCache byIp = ObjectCache.getCache(ObjectCache.CACHE_IP);
-			int removedByIp = byIp.expireOldObjects(), activeByIp = byIp.count();
-			LibLog._clogF("I2601", "IP", removedByIp, activeByIp);
-			byIp.saveSnapshot();
-		} catch (IOException e) {
-		}
+		cleanLimiterCache(ObjectCache.CACHE_IP);
+		cleanLimiterCache(ObjectCache.CACHE_KEY);
+	}
+
+	private void cleanLimiterCache(String type) {
+
+		// Get the requested limiter cache
+		ObjectCache cache = ObjectCache.getCache(type);
+
+		// Remove expired objects and log current counts
+		int removed = cache.expireOldObjects(), active = cache.count();
+		LibLog._clogF("I2601", type, removed, active);
 
 		try {
-			// Cleanup Key caches
-			ObjectCache byKey = ObjectCache.getCache(ObjectCache.CACHE_KEY);
-			int removedByKey = byKey.expireOldObjects(), activeByKey = byKey.count();
-			LibLog._clogF("I2601", "KEY", removedByKey, activeByKey);
-			byKey.saveSnapshot();
+
+			// Save cache snapshot
+			int saved = cache.saveSnapshot();
+			LibLog._clogF("I2602", type, saved);
 		} catch (IOException e) {
+
+			// Log the failure
+			LibLog._clog("E2602", e);
 		}
 	}
 }

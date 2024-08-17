@@ -18,6 +18,8 @@ import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
 /**
  * WatchdogTask.java
  * 
+ * A background task which monitors the health state of the application.
+ * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class WatchdogTask extends BackgroundTask {

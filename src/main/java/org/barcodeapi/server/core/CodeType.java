@@ -17,6 +17,8 @@ public class CodeType {
 	private final String name;
 	private final String display;
 
+	private final boolean show;
+
 	private final String generator;
 	private final int threads;
 
@@ -36,12 +38,17 @@ public class CodeType {
 	private final JSONObject description;
 	private final JSONObject wiki;
 
+	private final JSONArray options;
+
 	private CodeType(JSONObject config) {
 		this.config = config;
 
 		// generator name
 		this.name = config.getString("name");
 		this.display = config.getString("display");
+
+		// show on web UI
+		this.show = config.getBoolean("show");
 
 		// generator config
 		this.generator = (GEN_ROOT + config.getString("generator"));
@@ -74,6 +81,9 @@ public class CodeType {
 		this.example = config.getString("example");
 		this.description = config.getJSONObject("description");
 		this.wiki = config.getJSONObject("wiki");
+
+		// get available options
+		this.options = config.getJSONArray("options");
 	}
 
 	public JSONObject getConfig() {
@@ -85,8 +95,12 @@ public class CodeType {
 		return name;
 	}
 
-	public String getDisplayNme() {
+	public String getDisplayName() {
 		return display;
+	}
+
+	public boolean getShowType() {
+		return show;
 	}
 
 	public String getGeneratorClass() {
@@ -141,6 +155,10 @@ public class CodeType {
 		return wiki;
 	}
 
+	public JSONArray getOptions() {
+		return options;
+	}
+
 	public static CodeType fromJSON(JSONObject conf) {
 
 		return new CodeType(conf);
@@ -149,7 +167,8 @@ public class CodeType {
 	public static JSONObject toJSON(CodeType type) {
 		return new JSONObject()//
 				.put("name", type.getName())//
-				.put("display", type.getDisplayNme())//
+				.put("display", type.getDisplayName())//
+				.put("show", type.getShowType())//
 				.put("pattern", type.getPatternExtended())//
 				.put("example", type.getExample())//
 				.put("checksum", type.enforceChecksum())//
@@ -158,6 +177,7 @@ public class CodeType {
 				.put("costCustom", type.getCostCustom())//
 				.put("targets", new JSONArray(type.getTargets()))//
 				.put("description", type.getDescription())//
-				.put("wiki", type.getWiki());
+				.put("wiki", type.getWiki())//
+				.put("options", type.getOptions());
 	}
 }

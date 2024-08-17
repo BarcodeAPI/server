@@ -3,9 +3,11 @@
 // api.js
 //
 
-var mode = '';
 var language = "en";
-var filter = window.location.hash.substring(1);
+
+window.onhashchange = function() {
+	location.reload();
+}
 
 function init() {
 
@@ -19,17 +21,13 @@ function init() {
 function loadTypes(data) {
 
 	for (var x in data) {
-		if (!filter) {
-			addType(mode, data[x]);
-		} else if (data[x].name == filter) {
-			addType(mode, data[x]);
-		}
+		addType(data[x]);
 	}
 
 	delTemplate();
 }
 
-function addType(mode, type) {
+function addType(type) {
 
 	var target = type.targets[0];
 
@@ -44,23 +42,9 @@ function addType(mode, type) {
 	info.querySelector(".type-cost-basic").innerHTML = type.costBasic;
 	info.querySelector(".type-cost-custom").innerHTML = type.costCustom;
 
-	switch (mode) {
-		case "single":
-			document.title = document.title.replace("$TYPE$", type.display);
-			info.querySelector(".type-example-link").href = "index.html#" + target;
-			info.querySelector(".type-format").innerHTML = type.pattern;
-			info.querySelector(".type-description").innerHTML = type.description[language];
-			info.querySelector(".type-wiki").href = type.wiki[language];
-			info.querySelector(".type-checksum").innerHTML = (type.checksum ? "Yes" : "No");
-			info.querySelector(".type-nonprinting").innerHTML = (type.nonprinting ? "Yes" : "No");
-			//		info.querySelector(".type-parameters").innerHTML = type.parameters;
-			break;
-		case "all":
-			var moreLink = ("type.html#" + type.name);
-			info.querySelector(".type-example-link").href = moreLink;
-			info.querySelector(".type-more").href = moreLink;
-			break;
-	}
+	var moreLink = ("type.html#" + target);
+	info.querySelector(".type-example-link").href = moreLink;
+	info.querySelector(".type-more").href = moreLink;
 
 	document.getElementById("barcode-types").append(info);
 }

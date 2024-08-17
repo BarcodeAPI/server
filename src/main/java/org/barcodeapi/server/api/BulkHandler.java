@@ -7,11 +7,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.core.utils.BulkUtils;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.eclipse.jetty.server.Request;
+
+import com.mclarkdev.tools.liblog.LibLog;
 
 /**
  * BulkHandler.java
@@ -20,7 +23,7 @@ import org.eclipse.jetty.server.Request;
  */
 public class BulkHandler extends RestHandler {
 
-	private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement("./");
+	private final int BULK_MAX = AppConfig.get().getInt("bulkMax");
 
 	public BulkHandler() {
 		super(
@@ -34,7 +37,7 @@ public class BulkHandler extends RestHandler {
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws ServletException, IOException {
 
 		// Setup accept multi-part
-		c.getRequest().setAttribute(Request.MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
+		c.getRequest().setAttribute(Request.MULTIPART_CONFIG_ELEMENT, new MultipartConfigElement("./"));
 		if (!c.getRequest().getContentType().startsWith("multipart/")) {
 			return;
 		}
@@ -49,12 +52,18 @@ public class BulkHandler extends RestHandler {
 			Part part = c.getRequest().getPart("csvFile");
 
 			// Pass input and output streams to bulk helper
-			BulkUtils.getZippedBarcodes(250, //
+			BulkUtils.getZippedBarcodes(BULK_MAX, //
 					part.getInputStream(), r.getOutputStream());
 
 		} catch (GenerationException e) {
 
-			e.printStackTrace();
+			// Log the failure
+			LibLog._log("Failed to generate bulk barcodes.", e);
+
+			// Print response to client
+			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			r.setHeader("Content-Type", "application/json");
+			r.getOutputStream().println(e.toString());
 		}
 	}
 }

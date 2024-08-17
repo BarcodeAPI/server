@@ -12,7 +12,8 @@
 		"QRCode",
 		"DataMatrix",
 		"PDF417",
-		"USPSMail"
+		"USPSMail",
+		"RoyalMail"
 	],
 	"tasks": [
 		{
@@ -44,20 +45,29 @@
 			"name": "Limiter Minting",
 			"impl": ".LimiterMintingTask",
 			"interval": 300
+		},
+		{
+			"name": "Share Cleanup",
+			"impl": ".ShareCleanupTask",
+			"interval": 3600
 		}
 	],
-	"cacheDir": "./",
+	"cacheDir": "./cache/",
 	"cache": {
 		"barcode": {
 			"life": 4320
 		},
 		"session": {
-			"life": 1440
+			"life": 10080
 		},
 		"limiter": {
 			"life": 1440
+		},
+		"share": {
+			"life": 10080
 		}
 	},
+	"bulkMax": 250,
 	"blacklist": [
 		"^__tstblk2$",
 		"^_tstblk_$"

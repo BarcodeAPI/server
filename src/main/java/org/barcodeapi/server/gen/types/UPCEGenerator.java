@@ -22,7 +22,7 @@ public class UPCEGenerator extends CodeGenerator {
 
 	public UPCEGenerator() {
 
-		// Setup Code39 generator
+		// Setup UPC-E generator
 		generator = new UPCEBean();
 	}
 
@@ -32,11 +32,11 @@ public class UPCEGenerator extends CodeGenerator {
 		int dpi = options.optInt("dpi", 150);
 		double moduleWidth = UnitConv.in2mm(2.5f / dpi);
 
-		double qz = options.optDouble("qz", (10 * moduleWidth));
+		double qz = options.optDouble("qz", 4);
 		int height = options.optInt("height", 25);
 
 		String text = options.optString("text", "bottom");
-		String pattern = options.optString("format", null);
+		String pattern = options.optString("pattern", null);
 
 		switch (text) {
 
@@ -74,5 +74,4 @@ public class UPCEGenerator extends CodeGenerator {
 
 		return out.toByteArray();
 	}
-
 }

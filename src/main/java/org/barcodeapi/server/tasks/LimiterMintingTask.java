@@ -12,6 +12,8 @@ import com.mclarkdev.tools.liblog.LibLog;
 /**
  * LimiterMintingTask.java
  * 
+ * A background task which periodically mints rate limiting tokens.
+ * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class LimiterMintingTask extends BackgroundTask {
@@ -25,14 +27,16 @@ public class LimiterMintingTask extends BackgroundTask {
 
 		double tokensMinted = 0;
 
-		tokensMinted += mintTokens(ObjectCache.getCache(ObjectCache.CACHE_IP));
-		tokensMinted += mintTokens(ObjectCache.getCache(ObjectCache.CACHE_KEY));
+		tokensMinted += mintTokens(ObjectCache.CACHE_IP);
+		tokensMinted += mintTokens(ObjectCache.CACHE_KEY);
 
 		LibLog._clogF("I2621", tokensMinted);
 		getStats().hitCounter(tokensMinted, "task", getName(), "minted");
 	}
 
-	private double mintTokens(ObjectCache cache) {
+	private double mintTokens(String cacheName) {
+
+		ObjectCache cache = ObjectCache.getCache(cacheName);
 
 		double tokensMinted = 0;
 		for (Map.Entry<String, CachedObject> entry : cache.raw().entrySet()) {

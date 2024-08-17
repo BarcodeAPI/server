@@ -1,6 +1,7 @@
 {
 	"name": "Aztec",
 	"display": "Aztec",
+	"show": true,
 	"target": [
 		"aztec"
 	],
@@ -23,5 +24,32 @@
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/Aztec_Code"
-	}
+	},
+	"options": [
+		{
+			"name": "size",
+			"type": "number",
+			"default": 275,
+			"min": 50,
+			"max": 500
+		},
+		{
+			"name": "qz",
+			"type": "number",
+			"default": 2,
+			"min": 0,
+			"max": 8
+		},
+		{
+			"name": "correction",
+			"type": "option",
+			"default": "M",
+			"options": [
+				"M",
+				"L",
+				"H",
+				"Q"
+			]
+		}
+	]
 }

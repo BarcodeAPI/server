@@ -22,7 +22,7 @@ public class UPCAGenerator extends CodeGenerator {
 
 	public UPCAGenerator() {
 
-		// Setup Code39 generator
+		// Setup UPC-A generator
 		generator = new UPCABean();
 	}
 

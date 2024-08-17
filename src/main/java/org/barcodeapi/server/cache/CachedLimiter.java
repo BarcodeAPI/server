@@ -16,27 +16,31 @@ public class CachedLimiter extends CachedObject {
 	private static final int LIMITER_LIFE = AppConfig.get()//
 			.getJSONObject("cache").getJSONObject("limiter").getInt("life");
 
-	private final String caller;
-
-	private final long requests;
+	private static final double TOKENS_INITIAL = 0.5;
 
 	private final boolean enforce;
 
-	private final double tpms;
+	private final String caller;
 
-	private double tokens;
+	private final long tokenLimit;
 
-	private long minted;
+	private final double tokensPerMilli;
+
+	private long timeMinted;
+
+	private double tokenCount;
 
 	public CachedLimiter(boolean enforce, String caller, long requests) {
 		this.setTimeout(LIMITER_LIFE, TimeUnit.MINUTES);
 
 		this.enforce = enforce;
 		this.caller = caller;
-		this.requests = requests;
-		this.tokens = (requests == -1) ? -1 : (requests * 0.5);
-		this.minted = System.currentTimeMillis();
-		this.tpms = (requests > 0) ? ((double) requests / (double) getTimeout()) : 0;
+		this.tokenLimit = requests;
+
+		this.timeMinted = System.currentTimeMillis();
+		this.tokensPerMilli = (requests > 0) ? //
+				((double) requests / (double) getTimeout()) : 0;
+		this.tokenCount = (requests == -1) ? -1 : (requests * TOKENS_INITIAL);
 	}
 
 	/**
@@ -54,7 +58,7 @@ public class CachedLimiter extends CachedObject {
 	 * @return rate limit
 	 */
 	public long getLimit() {
-		return requests;
+		return tokenLimit;
 	}
 
 	/**
@@ -77,7 +81,7 @@ public class CachedLimiter extends CachedObject {
 	public double mintTokens() {
 
 		// Unlimited
-		if (tokens == -1) {
+		if (tokenCount == -1) {
 			return 0;
 		}
 
@@ -88,17 +92,17 @@ public class CachedLimiter extends CachedObject {
 			long timeSinceLastMint = (timeNow - getTimeLastMinted());
 
 			// Generate new tokens based on user delay
-			double tokensMinted = (timeSinceLastMint * this.tpms);
+			double tokensMinted = (timeSinceLastMint * this.tokensPerMilli);
 
 			// Add minted count to existing count
-			double newTokenCount = (this.tokens + tokensMinted);
+			double newTokenCount = (this.tokenCount + tokensMinted);
 
 			// Cap maximum number of tokens
-			newTokenCount = ((newTokenCount > this.requests) ? this.requests : newTokenCount);
+			newTokenCount = ((newTokenCount > this.tokenLimit) ? this.tokenLimit : newTokenCount);
 
 			// Update the token count
-			this.minted = timeNow;
-			this.tokens = newTokenCount;
+			this.timeMinted = timeNow;
+			this.tokenCount = newTokenCount;
 
 			// Return tokens minted
 			return tokensMinted;
@@ -111,7 +115,7 @@ public class CachedLimiter extends CachedObject {
 	 * @return time tokens last minted
 	 */
 	public long getTimeLastMinted() {
-		return minted;
+		return timeMinted;
 	}
 
 	/**
@@ -120,7 +124,7 @@ public class CachedLimiter extends CachedObject {
 	 * @return
 	 */
 	public double numTokens() {
-		return tokens;
+		return tokenCount;
 	}
 
 	/**
@@ -132,17 +136,17 @@ public class CachedLimiter extends CachedObject {
 	public boolean spendTokens(double count) {
 
 		// Unlimited
-		if (tokens == -1) {
+		if (tokenCount == -1) {
 			return true;
 		}
 
 		synchronized (this) {
 
 			// Set new token count
-			this.tokens = (tokens > count) ? (tokens - count) : 0;
+			this.tokenCount = (tokenCount > count) ? (tokenCount - count) : 0;
 
 			// Return if has tokens based on enforcement
-			return (this.tokens > 0) || !isEnforced();
+			return (this.tokenCount > 0) || !isEnforced();
 		}
 	}
 }

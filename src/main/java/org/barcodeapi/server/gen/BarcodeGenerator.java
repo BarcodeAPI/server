@@ -71,9 +71,8 @@ public class BarcodeGenerator {
 		if (request.useCache()) {
 
 			// lookup image from cache
-			CachedObject obj = ObjectCache.getCache(//
-					request.getType().getName())//
-					.get(request.getData());
+			CachedObject obj = ObjectCache//
+					.getCache(name).get(data);
 
 			// return if found
 			if (obj != null) {
@@ -83,7 +82,7 @@ public class BarcodeGenerator {
 
 		// get the generator pool
 		LibObjectPooler<CodeGenerator> pool = //
-				generators.getGeneratorPool(type.getName());
+				generators.getGeneratorPool(name);
 
 		CodeGenerator generator = null;
 
@@ -113,11 +112,11 @@ public class BarcodeGenerator {
 			LibLog.clogF("barcode", "I0601", name, data, png.length, time);
 
 			// create the object to be cached
-			barcode = new CachedBarcode(type, data, png);
+			barcode = new CachedBarcode(name, data, png);
 
 			// add to cache if allowed
 			if (request.useCache()) {
-				ObjectCache.getCache(type.getName()).put(data, barcode);
+				ObjectCache.getCache(name).put(data, barcode);
 			}
 
 		} catch (GenerationException e) {

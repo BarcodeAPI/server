@@ -1,6 +1,7 @@
 {
 	"name": "RoyalMail",
 	"display": "Royal Mail",
+	"show": false,
 	"target": [
 		"royal",
 		"royal-mail"
@@ -24,5 +25,26 @@
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/PostBar"
-	}
+	},
+	"options": [
+		{
+			"name": "dpi",
+			"type": "number",
+			"default": 150,
+			"min": 50,
+			"max": 300
+		},
+		{
+			"name": "bg",
+			"type": "text",
+			"default": "ffffff",
+			"pattern": "[0-9A-F]{6}"
+		},
+		{
+			"name": "fg",
+			"type": "text",
+			"default": "000000",
+			"pattern": "[0-9A-F]{6}"
+		}
+	]
 }

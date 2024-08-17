@@ -23,16 +23,18 @@ public class ObjectCache {
 
 	public static final String CACHE_IP = "LIMITS-IP";
 	public static final String CACHE_KEY = "LIMITS-KEY";
+	public static final String CACHE_SHARE = "MULTI-SHARE";
 	public static final String CACHE_SESSIONS = "sessions";
 
 	private static final LibMetrics stats = LibMetrics.instance();
 
 	private static final ConcurrentHashMap<String, ObjectCache> caches;
 
-	private static final File cacheDir = new File(AppConfig.get().getString("cacheDir"));
+	private static final File cacheDir;
 
 	static {
 		caches = new ConcurrentHashMap<>();
+		cacheDir = new File(AppConfig.get().getString("cacheDir"));
 	}
 
 	private final String name;
@@ -150,19 +152,18 @@ public class ObjectCache {
 			return null;
 		}
 
+		// Open cache file streams
 		ConcurrentHashMap<String, CachedObject> c = null;
-
-		try {
-			FileInputStream st = new FileInputStream(cacheFile);
+		try (FileInputStream st = new FileInputStream(cacheFile)) {
 			ObjectInputStream str = new ObjectInputStream(st);
 
-			// Read the cache file
+			// Read the cache file as a map
 			c = ((ConcurrentHashMap<String, CachedObject>) str.readObject());
 
-			str.close();
-			st.close();
-
 		} catch (Exception e) {
+
+			// Log the failure
+			LibLog._log("Failed to load cache snapshot.", e);
 		}
 
 		return c;

@@ -9,7 +9,8 @@ const appDisplay = {
 	'limitsNotice': false,
 	'renderOptions': false,
 	'helpType': false,
-	'helpManual': false
+	'helpManual': false,
+	'showHidden': false
 };
 
 /**
@@ -116,10 +117,10 @@ function uiShowHide(elem, show) {
 /**
  * Add an event listener to a UI element.
  */
-function uiAddListener(elem, h, e) {
-	e = (e) ? e : "click";
+function uiAddListener(elem, handler, event) {
+	event = (event) ? event : "click";
 	var obj = document.getElementsByClassName(elem)[0];
 	if (obj) {
-		obj.addEventListener(e, h);
+		obj.addEventListener(event, handler);
 	}
 }

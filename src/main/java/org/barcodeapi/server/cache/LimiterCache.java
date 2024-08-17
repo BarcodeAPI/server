@@ -1,8 +1,6 @@
-package org.barcodeapi.server.limits;
+package org.barcodeapi.server.cache;
 
 import org.barcodeapi.core.AppConfig;
-import org.barcodeapi.server.cache.CachedLimiter;
-import org.barcodeapi.server.cache.ObjectCache;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;

@@ -1,6 +1,7 @@
 {
 	"name": "USPSMail",
 	"display": "USPS Mail",
+	"show": true,
 	"target": [
 		"usps",
 		"intelligent-mail"
@@ -28,18 +29,22 @@
 	"options": [
 		{
 			"name": "dpi",
+			"type": "number",
 			"default": 150,
-			"values": "50 -> 300"
+			"min": 50,
+			"max": 300
 		},
 		{
 			"name": "bg",
+			"type": "text",
 			"default": "ffffff",
-			"values": "000000 -> ffffff"
+			"pattern": "[0-9A-F]{6}"
 		},
 		{
 			"name": "fg",
+			"type": "text",
 			"default": "000000",
-			"values": "000000 -> ffffff"
+			"pattern": "[0-9A-F]{6}"
 		}
 	]
 }

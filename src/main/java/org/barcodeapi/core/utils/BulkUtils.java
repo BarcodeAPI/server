@@ -54,9 +54,9 @@ public class BulkUtils {
 
 		for (CachedBarcode barcode : barcodes) {
 
-			ZipEntry zipEntry = new ZipEntry(barcode.getNice() + ".png");
+			ZipEntry zipEntry = new ZipEntry(barcode.getBarcodeStringNice() + ".png");
 			zip.putNextEntry(zipEntry);
-			zip.write(barcode.getData(), 0, barcode.getDataSize());
+			zip.write(barcode.getBarcodeData(), 0, barcode.getBarcodeDataSize());
 			zip.closeEntry();
 		}
 

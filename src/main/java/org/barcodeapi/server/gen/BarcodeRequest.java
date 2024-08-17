@@ -32,7 +32,7 @@ public class BarcodeRequest {
 
 		// get and decode the request string
 		String[] parts = target.split("\\?");
-		String data = CodeUtils.decode(parts[0].substring(1));
+		String data = CodeUtils.decodeURL(parts[0].substring(1));
 
 		// get and parse options
 		JSONObject options = new JSONObject();
