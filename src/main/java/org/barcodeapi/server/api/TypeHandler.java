@@ -13,7 +13,7 @@ import org.barcodeapi.server.core.TypeSelector;
 import org.json.JSONException;
 
 /**
- * TypesHandler.java
+ * TypeHandler.java
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */

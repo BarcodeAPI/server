@@ -11,6 +11,11 @@ import org.json.JSONObject;
 import com.mclarkdev.tools.libextras.LibExtrasStreams;
 import com.mclarkdev.tools.liblog.LibLog;
 
+/**
+ * CodeTypes.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ */
 public class CodeTypes {
 
 	private static final CodeTypes typeCache = new CodeTypes();

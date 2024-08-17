@@ -11,7 +11,7 @@ import com.mclarkdev.tools.liblog.LibLog;
  * LimiterCleanupTask.java
  * 
  * A background task which periodically removes stale limiters from the cache.
- * Additionally saves a cache snapshot to disk, to be used on crash recovery.
+ * Additionally saves a cache snapshot to disk, to be used on server restart.
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */

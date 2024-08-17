@@ -12,6 +12,8 @@ import com.mclarkdev.tools.liblog.LibLog;
 /**
  * StatsDumpTask.java
  * 
+ * A background task which periodically logs the server stats.
+ * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class StatsDumpTask extends BackgroundTask {
