@@ -148,7 +148,7 @@ public abstract class RestHandler extends AbstractHandler {
 
 		try {
 
-			// Check for implementation overrides
+			// Run raw implementation overrides
 			this._impl(target, baseRequest, request, response);
 
 			// Call the normal method
@@ -173,5 +173,12 @@ public abstract class RestHandler extends AbstractHandler {
 		}
 	}
 
+	/**
+	 * The implemented logic to run on execution of the handler..
+	 * 
+	 * @param ctx      the request context
+	 * @param response the server response
+	 * @throws Exception processing failure
+	 */
 	protected abstract void onRequest(RequestContext ctx, HttpServletResponse response) throws Exception;
 }

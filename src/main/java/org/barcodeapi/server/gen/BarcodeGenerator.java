@@ -138,34 +138,35 @@ public class BarcodeGenerator {
 
 		} catch (LibObjectPoolerException e) {
 
-			// update global and engine counters
+			// Update global and engine counters
 			LibMetrics.instance().hitCounter("render", "busy");
 			LibMetrics.instance().hitCounter("render", "type", name, "busy");
 
-			// failed if unable to get object from pool
+			// Failed if unable to get object from pool
 			throw new GenerationException(ExceptionType.BUSY);
 
 		} catch (Exception | Error e) {
 
-			// update global and engine counters
+			// Update global and engine counters
 			LibMetrics.instance().hitCounter("render", "fail");
 			LibMetrics.instance().hitCounter("render", "type", name, "fail");
 
-			// generation itself failed
+			// Generation itself failed
 			throw new GenerationException(ExceptionType.FAILED);
 		} finally {
 
-			// update global and engine counters
+			// Update global and engine counters
 			int time = (int) (System.currentTimeMillis() - timeStart);
 			LibMetrics.instance().hitCounter(time, "render", "time");
 			LibMetrics.instance().hitCounter(time, "render", "type", name, "time");
 
-			// release the generator back to the pool
+			// Release the generator back to the pool
 			if (generator != null) {
 				pool.release(generator);
 			}
 		}
 
+		// Return the barcode
 		return barcode;
 	}
 }

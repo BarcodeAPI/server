@@ -38,7 +38,7 @@ public class TypeSelector {
 	public static CodeType getTypeFromString(String codeType) {
 		LibMetrics.hitMethodRunCounter();
 
-		return typeCache.get(codeType.toLowerCase());
+		return ((codeType == null) ? null : typeCache.get(codeType.toLowerCase()));
 	}
 
 	/**

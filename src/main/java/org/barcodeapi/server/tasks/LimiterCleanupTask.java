@@ -24,10 +24,18 @@ public class LimiterCleanupTask extends BackgroundTask {
 	@Override
 	public void onRun() {
 
+		// Clean IP limiter cache
 		cleanLimiterCache(ObjectCache.CACHE_IP);
+
+		// Clean Key limiter cache
 		cleanLimiterCache(ObjectCache.CACHE_KEY);
 	}
 
+	/**
+	 * Remove expired objects for a given limiter cache.
+	 * 
+	 * @param type cache type
+	 */
 	private void cleanLimiterCache(String type) {
 
 		// Get the requested limiter cache

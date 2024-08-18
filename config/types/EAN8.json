@@ -16,7 +16,7 @@
 	},
 	"checksum": true,
 	"nonprinting": false,
-	"example": "01023459",
+	"example": "01234565",
 	"pattern": {
 		"auto": "^[0-9]{8}$",
 		"extended": "^[0-9]{7,8}$"

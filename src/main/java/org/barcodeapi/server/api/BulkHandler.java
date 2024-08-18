@@ -13,6 +13,7 @@ import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.eclipse.jetty.server.Request;
+import org.json.JSONObject;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
@@ -58,12 +59,16 @@ public class BulkHandler extends RestHandler {
 		} catch (GenerationException e) {
 
 			// Log the failure
-			LibLog._log("Failed to generate bulk barcodes.", e);
+			LibLog._logF("Failed to generate bulk barcodes. (%s)", e.getMessage());
 
-			// Print response to client
+			// Print error to client
 			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			r.setHeader("Content-Type", "application/json");
-			r.getOutputStream().println(e.toString());
+			r.getOutputStream().println((new JSONObject() //
+					.put("code", 400)//
+					.put("message", "failed to process bulk request")//
+					.put("error", e.getMessage())//
+			).toString());
 		}
 	}
 }

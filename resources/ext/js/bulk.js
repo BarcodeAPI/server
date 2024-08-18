@@ -31,14 +31,17 @@ function checkIfFileSelected() {
 }
 
 var csvExample = //
+	"Aztec Barcode,aztec\n" + //
 	"1234567890,codabar\n" + //
-	"PDF - 417,417\n" + //
+	"Try Me!,128\n" + //
 	"TRY 39 ME,39\n" + //
 	"Data Matrix Barcode,dm\n" + //
-	"Try Me!,128\n" + //
-	"QR Barcode,qr\n" + //
-	"Aztec Barcode,aztec\n" + //
+	"1234567890128,13\n" + //
+	"01234565,8\n" + //
 	"98765432109213,14\n" + //
+	"PDF - 417,417\n" + //
+	"QR Barcode,qr\n" + //
+	"11212345612345678,royal\n" + //
 	"123456789012,a\n" + //
 	"01023459,e\n" + //
-	"1234567890128,13";
+	"0123456709498765432101234567891,usps\n";

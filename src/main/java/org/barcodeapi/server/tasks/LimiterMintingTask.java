@@ -24,27 +24,33 @@ public class LimiterMintingTask extends BackgroundTask {
 
 	@Override
 	public void onRun() {
-
 		double tokensMinted = 0;
 
+		// Mint tokens for IP cache
 		tokensMinted += mintTokens(ObjectCache.CACHE_IP);
+
+		// Mint tokens for Key cache
 		tokensMinted += mintTokens(ObjectCache.CACHE_KEY);
 
+		// Log number of tokens minted
 		LibLog._clogF("I2621", tokensMinted);
 		getStats().hitCounter(tokensMinted, "task", getName(), "minted");
 	}
 
 	private double mintTokens(String cacheName) {
+		double tokensMinted = 0;
 
+		// Lookup the requested cache
 		ObjectCache cache = ObjectCache.getCache(cacheName);
 
-		double tokensMinted = 0;
+		// Loop each cache entry
 		for (Map.Entry<String, CachedObject> entry : cache.raw().entrySet()) {
 
-			// mint the limiter tokens
+			// Mint tokens for the limiter
 			tokensMinted += ((CachedLimiter) entry.getValue()).mintTokens();
 		}
 
+		// Return number minted
 		return tokensMinted;
 	}
 }

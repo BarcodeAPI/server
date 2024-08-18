@@ -22,10 +22,20 @@ public abstract class BackgroundTask extends TimerTask {
 		name = clazz.substring(clazz.lastIndexOf('.') + 1);
 	}
 
-	public LibMetrics getStats() {
+	/**
+	 * Returns an instance of the stats collector.
+	 * 
+	 * @return an instance of the stats collector
+	 */
+	protected LibMetrics getStats() {
 		return stats;
 	}
 
+	/**
+	 * Returns the name of the background task.
+	 * 
+	 * @return the name of the background task
+	 */
 	public String getName() {
 		return name;
 	}
@@ -49,5 +59,8 @@ public abstract class BackgroundTask extends TimerTask {
 		System.gc();
 	}
 
+	/**
+	 * The implemented logic to run on execution of the BackgroundTask.
+	 */
 	public abstract void onRun();
 }

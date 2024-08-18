@@ -48,7 +48,7 @@ public class BarcodeCleanupTask extends BackgroundTask {
 			}
 		}
 
-		// Log the counts
+		// Log the cache counts
 		LibLog._clogF("I2201", removed, active);
 	}
 }

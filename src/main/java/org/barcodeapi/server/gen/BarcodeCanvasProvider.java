@@ -43,6 +43,12 @@ public class BarcodeCanvasProvider extends AbstractCanvasProvider {
 		this.colorFG = Color.decode("0x" + fg);
 	}
 
+	/**
+	 * Encode and render the image.
+	 * 
+	 * @return the image bytes
+	 * @throws IOException generation failure
+	 */
 	public byte[] finish() throws IOException {
 
 		ByteArrayOutputStream out = //

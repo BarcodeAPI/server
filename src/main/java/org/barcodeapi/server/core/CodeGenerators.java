@@ -13,12 +13,20 @@ import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
 /**
  * CodeGenerators.java
  * 
+ * Initializes all supported CodeTypes from configuration and provides access to
+ * their associated generation object pools.
+ * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class CodeGenerators {
 
 	private static CodeGenerators codeGenerators;
 
+	/**
+	 * Returns an instance of the CodeGenerators map.
+	 * 
+	 * @return an instance of the CodeGenerators map
+	 */
 	public static synchronized CodeGenerators getInstance() {
 		if (codeGenerators == null) {
 			codeGenerators = new CodeGenerators();
@@ -26,6 +34,9 @@ public class CodeGenerators {
 		return codeGenerators;
 	}
 
+	/**
+	 * A map of generation pools for all supported CodeTypes.
+	 */
 	private HashMap<String, LibObjectPooler<CodeGenerator>> generators = new HashMap<>();
 
 	private CodeGenerators() {
@@ -50,6 +61,12 @@ public class CodeGenerators {
 		}
 	}
 
+	/**
+	 * Creates a new object pool for the given CodeType.
+	 * 
+	 * @param codeType type of pooler to create
+	 * @return the created pooler
+	 */
 	private LibObjectPooler<CodeGenerator> setupBarcodePooler(final CodeType codeType) {
 
 		LibObjectPooler<CodeGenerator> pooler = //
@@ -62,6 +79,12 @@ public class CodeGenerators {
 		return pooler;
 	}
 
+	/**
+	 * Returns the generation pool for the given CodeType.
+	 * 
+	 * @param type type of pooler to get
+	 * @return the generation pool
+	 */
 	public LibObjectPooler<CodeGenerator> getGeneratorPool(String type) {
 		LibMetrics.hitMethodRunCounter();
 

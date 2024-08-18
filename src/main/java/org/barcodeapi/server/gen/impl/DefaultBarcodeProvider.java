@@ -69,6 +69,7 @@ public abstract class DefaultBarcodeProvider extends CodeGenerator {
 				break;
 			}
 
+			// Set render options
 			generator.doQuietZone(true);
 			generator.setQuietZone(qz);
 			generator.setHeight(height);
@@ -76,9 +77,11 @@ public abstract class DefaultBarcodeProvider extends CodeGenerator {
 			generator.setPattern(pattern);
 			generator.setFontSize(font);
 
+			// Create the canvas object
 			BarcodeCanvasProvider canvasProvider = //
 					new BarcodeCanvasProvider(dpi, colorBG, colorFG);
 
+			// Render the barcode, get as bytes
 			generator.generateBarcode(canvasProvider, request.getData());
 			bytes = canvasProvider.finish();
 		}

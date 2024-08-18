@@ -4,9 +4,11 @@
 //
 
 var barcodes = [];
-
 window.onhashchange = init;
 
+/**
+ * Called when the page body is loaded.
+ */
 function init() {
 
 	multiClear();
@@ -23,8 +25,10 @@ function loadShare(share) {
 		.then(response => {
 			return response.json();
 		})
-		.then(function(d) {
-			renderRequests(d);
+		.then(function(data) {
+			console.log(data);
+			renderRequests(//
+				JSON.parse(data.data));
 		});
 }
 
@@ -48,6 +52,7 @@ function loadArgs() {
  * Render a list of requests.
  */
 function renderRequests(requests) {
+	console.log(requests);
 	for (var request in requests) {
 		addFromText(requests[request]);
 	}
@@ -109,6 +114,15 @@ function onKeyDown(e) {
  * Handle hey-up events in text field.
  */
 function onKeyUp(e) {
+
+	// Clear input text {ESC}
+	if (e.keyCode === 27) {
+		var input = document.getElementById("input");
+		input.value = "";
+		input.focus();
+		e.preventDefault();
+		return;
+	}
 
 	// Handle scan or paste event
 	if (e.target.value.endsWith("\n")) {

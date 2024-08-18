@@ -14,6 +14,9 @@ import org.json.JSONObject;
 /**
  * CachedSession.java
  * 
+ * A user session object allowing for the detailed tracking of individual user
+ * usage activities across all handlers/
+ * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class CachedSession extends CachedObject {
@@ -37,16 +40,32 @@ public class CachedSession extends CachedObject {
 		this.sessionRequests = new ConcurrentHashMap<String, Integer>();
 	}
 
+	/**
+	 * Returns the key for the session.
+	 * 
+	 * @return the key for the session
+	 */
 	public String getKey() {
 
 		return key;
 	}
 
+	/**
+	 * Returns the browser cookie for the session.
+	 * 
+	 * @return the browser cookie for the session
+	 */
 	public Cookie getCookie() {
 
 		return cookie;
 	}
 
+	/**
+	 * Called when the user session is loaded when navigating across handlers.
+	 * Tracks a users usage across the site, viewable through the /session/ handler.
+	 * 
+	 * @param data
+	 */
 	public void hit(String data) {
 
 		this.touch();
@@ -59,7 +78,12 @@ public class CachedSession extends CachedObject {
 		sessionRequests.put(data, sessionRequests.get(data) + 1);
 	}
 
-	public JSONObject asJSON() {
+	/**
+	 * Returns the user session as a JSON object.
+	 * 
+	 * @return the user session in JSON format
+	 */
+	public String encodeJSON() {
 
 		int requestCount = 0;
 		JSONArray requests = new JSONArray();
@@ -71,12 +95,13 @@ public class CachedSession extends CachedObject {
 					.put("hits", entry.getValue()));
 		}
 
-		return new JSONObject()//
-				.put("sessionKey", getKey())//
-				.put("timeCreated", getTimeCreated())//
-				.put("timeLastSeen", getTimeLastTouched())//
-				.put("timeExpires", getTimeExpires())//
-				.put("requestCount", requestCount)//
-				.put("requestList", requests);
+		return (new JSONObject()//
+				.put("key", getKey())//
+				.put("created", getTimeCreated())//
+				.put("last", getTimeLastTouched())//
+				.put("expires", getTimeExpires())//
+				.put("count", requestCount)//
+				.put("requests", requests)//
+		).toString();
 	}
 }
