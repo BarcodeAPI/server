@@ -4,7 +4,7 @@
 const appDisplay = {
 	'about': false,
 	'support': false,
-	'tokenCount': false,
+	'tokenCount': true,
 	'bulkPages': true,
 	'limitsNotice': false,
 	'renderOptions': false,

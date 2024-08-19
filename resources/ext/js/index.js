@@ -351,7 +351,7 @@ function updateBarcodeImage(url) {
 	if (appOptions.apiKey) {
 
 		// Use API key in Authorization header
-		options.headers.Authorization = appOptions.apiKey;
+		options.headers.Authorization = ("Token=" + appOptions.apiKey);
 	}
 
 	// Request the image

@@ -25,7 +25,7 @@ import com.opencsv.exceptions.CsvValidationException;
  */
 public class BulkUtils {
 
-	public static void getZippedBarcodes(int max, InputStream in, OutputStream out)//
+	public static void getZippedBarcodes(InputStream in, OutputStream out)//
 			throws IOException, GenerationException {
 		LibMetrics.hitMethodRunCounter();
 
@@ -35,18 +35,17 @@ public class BulkUtils {
 
 			String[] record;
 			CachedBarcode barcode;
-			ZipEntry zipEntry;
 
 			// Loop each entry in the CSV
 			while ((record = csvReader.readNext()) != null) {
 				try {
 
+					// Generate the barcode
 					barcode = BarcodeGenerator//
 							.requestBarcode(BarcodeRequest.fromCSV(record));
 
-					zipEntry = new ZipEntry(barcode.getBarcodeStringNice() + ".png");
-
-					zipArchive.putNextEntry(zipEntry);
+					// Add barcode entry to ZIP archive
+					zipArchive.putNextEntry(new ZipEntry(barcode.getBarcodeStringNice() + ".png"));
 					zipArchive.write(barcode.getBarcodeData(), 0, barcode.getBarcodeDataSize());
 					zipArchive.closeEntry();
 
@@ -60,9 +59,9 @@ public class BulkUtils {
 			out.close();
 		} catch (CsvValidationException e) {
 
-			LibLog._log("Failed to generate bulk barcode.");
+			// Log and return the processing failure
+			LibLog._log("Failed to generate bulk barcodes.");
 			throw new GenerationException(ExceptionType.INVALID, e);
 		}
-
 	}
 }

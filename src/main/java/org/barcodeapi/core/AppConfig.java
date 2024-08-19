@@ -22,6 +22,9 @@ public class AppConfig {
 		reload();
 	}
 
+	/**
+	 * Reloads cached configuration from file on disk.
+	 */
 	public static void reload() {
 		try {
 			File confFile = new File("config", "app.json");
@@ -33,6 +36,7 @@ public class AppConfig {
 	}
 
 	/**
+	 * Returns an instance of the app config.
 	 * 
 	 * @return the app config
 	 */

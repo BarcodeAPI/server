@@ -50,26 +50,56 @@ public class ServerRuntime {
 		_SYS_TIMER = new Timer();
 	}
 
+	/**
+	 * Returns the current runtime ID of the server.
+	 * 
+	 * @return the current runtime ID of the server
+	 */
 	public static final String getRuntimeID() {
 		return _RUNTIME_ID;
 	}
 
+	/**
+	 * Returns the time, in milliseconds, the server was started.
+	 * 
+	 * @return the time the server was started
+	 */
 	public static final long getTimeStart() {
 		return _RUNTIME_TIMESTART;
 	}
 
+	/**
+	 * Returns the amount of time, in milliseconds, the server has been running.
+	 * 
+	 * @return the amount of time the server has been running
+	 */
 	public static final long getTimeRunning() {
 		return System.currentTimeMillis() - getTimeStart();
 	}
 
+	/**
+	 * Returns the build version of the server.
+	 * 
+	 * @return the build version of the server
+	 */
 	public static final int getVersion() {
 		return _RUNTIME_VERSION;
 	}
 
+	/**
+	 * Returns the system host name.
+	 * 
+	 * @return the system host name
+	 */
 	public static final String getHostname() {
 		return _RUNTIME_HOST;
 	}
 
+	/**
+	 * Returns an instance of the system timer.
+	 * 
+	 * @return an instance of the system timer
+	 */
 	public static final Timer getSystemTimer() {
 		return _SYS_TIMER;
 	}

@@ -142,11 +142,18 @@ public class CachedLimiter extends CachedObject {
 
 		synchronized (this) {
 
-			// Set new token count
-			this.tokenCount = (tokenCount > count) ? (tokenCount - count) : 0;
+			// If costs more
+			if (count >= tokenCount) {
 
-			// Return if has tokens based on enforcement
-			return (this.tokenCount > 0) || !isEnforced();
+				// Return based on enforcement
+				return (!isEnforced());
+			}
+
+			// Set new token count
+			this.tokenCount = (tokenCount - count);
+
+			// Return true if spent
+			return true;
 		}
 	}
 }
