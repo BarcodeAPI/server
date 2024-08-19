@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -30,83 +29,40 @@ public class BulkUtils {
 			throws IOException, GenerationException {
 		LibMetrics.hitMethodRunCounter();
 
-		ArrayList<BarcodeRequest> requests = new ArrayList<>();
+		ZipOutputStream zipArchive = new ZipOutputStream(out);
 
-		try (CSVReader reader = new CSVReader(new InputStreamReader(in))) {
+		try (CSVReader csvReader = new CSVReader(new InputStreamReader(in))) {
 
 			String[] record;
-			while ((record = reader.readNext()) != null) {
-				if (requests.size() < max) {
-					requests.add(buildBarcodeRequest(record));
-				} else {
-					break;
+			CachedBarcode barcode;
+			ZipEntry zipEntry;
+
+			// Loop each entry in the CSV
+			while ((record = csvReader.readNext()) != null) {
+				try {
+
+					barcode = BarcodeGenerator//
+							.requestBarcode(BarcodeRequest.fromCSV(record));
+
+					zipEntry = new ZipEntry(barcode.getBarcodeStringNice() + ".png");
+
+					zipArchive.putNextEntry(zipEntry);
+					zipArchive.write(barcode.getBarcodeData(), 0, barcode.getBarcodeDataSize());
+					zipArchive.closeEntry();
+
+				} catch (GenerationException e) {
+					LibLog._log("Failed to create barcode.", e);
 				}
 			}
-			reader.close();
+
+			// Close the stream
+			zipArchive.close();
+			out.close();
 		} catch (CsvValidationException e) {
 
+			LibLog._log("Failed to generate bulk barcode.");
 			throw new GenerationException(ExceptionType.INVALID, e);
 		}
 
-		ArrayList<CachedBarcode> barcodes = generateBarcodes(requests);
-
-		ZipOutputStream zip = new ZipOutputStream(out);
-
-		for (CachedBarcode barcode : barcodes) {
-
-			ZipEntry zipEntry = new ZipEntry(barcode.getBarcodeStringNice() + ".png");
-			zip.putNextEntry(zipEntry);
-			zip.write(barcode.getBarcodeData(), 0, barcode.getBarcodeDataSize());
-			zip.closeEntry();
-		}
-
-		zip.close();
-		out.close();
-	}
-
-	private static BarcodeRequest buildBarcodeRequest(String[] record) {
-		LibMetrics.hitMethodRunCounter();
-
-		String params = "";
-		String type = "auto";
-		if (record.length >= 2 && !record[1].equals("")) {
-			type = record[1];
-		}
-
-		// size
-		if (record.length >= 3 && !record[2].equals("")) {
-			params += "size=" + record[2] + "&";
-		}
-
-		// dpi
-		if (record.length >= 4 && !record[3].equals("")) {
-			params += "dpi=" + record[3] + "&";
-		}
-
-		// extras
-		if (record.length >= 5 && !record[4].equals("")) {
-			params += record[4];
-		}
-
-		String uri = String.format(//
-				"/api/%s/%s?", type, record[0], params);
-
-		return new BarcodeRequest(uri);
-	}
-
-	private static ArrayList<CachedBarcode> generateBarcodes(ArrayList<BarcodeRequest> requests) {
-		LibMetrics.hitMethodRunCounter();
-
-		ArrayList<CachedBarcode> barcodes = new ArrayList<>();
-
-		for (BarcodeRequest request : requests) {
-			try {
-				barcodes.add(BarcodeGenerator.requestBarcode(request));
-			} catch (GenerationException e) {
-				LibLog.log("server", "Failed to generate bulk barcode.");
-			}
-		}
-
-		return barcodes;
 	}
 }

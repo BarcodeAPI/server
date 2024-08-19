@@ -42,13 +42,13 @@ public class StaticHandler extends RestHandler {
 			throws IOException, ServletException {
 		super.handle(target, baseRequest, request, response);
 
-		// Call through to resources
-		baseRequest.setHandled(false);
-		resources.handle(target, baseRequest, request, response);
-
 		// Calculate and set cache expiration time
 		response.setDateHeader("expires", //
 				(System.currentTimeMillis() + (CACHEsec * 1000)));
+
+		// Call through to resources
+		baseRequest.setHandled(false);
+		resources.handle(target, baseRequest, request, response);
 
 		// Send non resources to API
 		if (!baseRequest.isHandled()) {

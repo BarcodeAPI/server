@@ -55,7 +55,7 @@ public abstract class CodeGenerator {
 	 * @return
 	 * @throws GenerationException
 	 */
-	public void onValidateRequest(String data) throws GenerationException {
+	public void onValidateRequest(BarcodeRequest data) throws GenerationException {
 	}
 
 	/**

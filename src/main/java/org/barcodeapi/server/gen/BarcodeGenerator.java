@@ -1,15 +1,11 @@
 package org.barcodeapi.server.gen;
 
-import org.barcodeapi.core.AppConfig;
-import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.cache.CachedObject;
 import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.CodeGenerators;
-import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
-import org.json.JSONArray;
 
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
@@ -29,136 +25,103 @@ public class BarcodeGenerator {
 		throw new IllegalStateException();
 	}
 
-	public static CachedBarcode requestBarcode(String target) throws GenerationException {
+	public static CachedBarcode requestBarcode(String uri) throws GenerationException {
 		LibMetrics.hitMethodRunCounter();
 
-		return requestBarcode(//
-				new BarcodeRequest(target));
+		return requestBarcode(BarcodeRequest.fromURI(uri));
 	}
 
 	public static CachedBarcode requestBarcode(BarcodeRequest request) throws GenerationException {
 		LibMetrics.hitMethodRunCounter();
 
-		// start request processing timer
-		long timeStart = System.currentTimeMillis();
+		// Start request processing timer
+		long start = System.currentTimeMillis();
 
-		// get the type of renderer
-		CodeType type = request.getType();
-		String name = type.getName();
-
-		// check for valid render data
+		// Get the render request data
+		String type = request.getType().getName();
 		String data = request.getData();
-		if (data == null || data.equals("")) {
 
-			// fail on empty requests
-			throw new GenerationException(ExceptionType.EMPTY);
-		}
-
-		// match against blacklist entries
-		JSONArray blacklist = AppConfig.get().getJSONArray("blacklist");
-		for (int x = 0; x < blacklist.length(); x++) {
-
-			// fail if request matches blacklist entry
-			if (data.matches(blacklist.getString(x))) {
-				throw new GenerationException(ExceptionType.BLACKLIST);
-			}
-		}
-
-		// validate barcode pattern
-		if (!data.matches(type.getPatternExtended())) {
-
-			// fail if request does not match pattern
-			throw new GenerationException(ExceptionType.INVALID, //
-					new Throwable("Invalid data for selected code type."));
-		}
-
-		// the barcode image object
+		// The barcode image object
 		CachedBarcode barcode = null;
 
-		// is cache allowed
+		// Is cache allowed
 		if (request.useCache()) {
 
-			// lookup image from cache
+			// Lookup image from cache
 			CachedObject obj = ObjectCache//
-					.getCache(name).get(data);
+					.getCache(type).get(data);
 
-			// return if found
+			// Return if found
 			if (obj != null) {
 				return ((CachedBarcode) obj);
 			}
 		}
 
-		// get the generator pool
+		// Get the generator pool for the type
 		LibObjectPooler<CodeGenerator> pool = //
-				generators.getGeneratorPool(name);
+				generators.getGeneratorPool(type);
 
 		CodeGenerator generator = null;
 
 		try {
 
-			// get a generator from the pool
+			// Get a generator from the pool
 			generator = pool.getWait();
 
-			// update global and engine counters
+			// Update global and engine counters
 			LibMetrics.instance().hitCounter("render", "count");
-			LibMetrics.instance().hitCounter("render", "type", name, "count");
+			LibMetrics.instance().hitCounter("render", "type", type, "count");
 
-			// encode control characters
-			String encoded = data;
-			if (type.getAllowNonprinting()) {
-				encoded = CodeUtils.parseControlChars(data);
-			}
+			// Run implementation specific validations
+			generator.onValidateRequest(request);
 
-			// run implementation specific validations
-			generator.onValidateRequest(encoded);
-
-			// render new image and get the bytes
+			// Render new image and get the bytes
 			byte[] png = generator.onRender(request);
 
-			// calculate run time and log generation
-			int time = (int) (System.currentTimeMillis() - timeStart);
-			LibLog.clogF("barcode", "I0601", name, data, png.length, time);
+			// Calculate run time and log generation
+			int time = (int) (System.currentTimeMillis() - start);
+			LibLog.clogF("barcode", "I0601", type, data, png.length, time);
 
-			// create the object to be cached
-			barcode = new CachedBarcode(name, data, png);
+			// Create the object to be cached
+			barcode = new CachedBarcode(type, data, png);
 
-			// add to cache if allowed
+			// Add to cache if allowed
 			if (request.useCache()) {
-				ObjectCache.getCache(name).put(data, barcode);
+				ObjectCache.getCache(type).put(data, barcode);
 			}
 
 		} catch (GenerationException e) {
 
-			// update global and engine counters
+			// Update global and engine counters
 			LibMetrics.instance().hitCounter("render", "invalid");
-			LibMetrics.instance().hitCounter("render", "type", name, "invalid");
+			LibMetrics.instance().hitCounter("render", "type", type, "invalid");
 
-			// pass it up
+			// Pass it up
 			throw e;
 
 		} catch (LibObjectPoolerException e) {
 
 			// Update global and engine counters
 			LibMetrics.instance().hitCounter("render", "busy");
-			LibMetrics.instance().hitCounter("render", "type", name, "busy");
+			LibMetrics.instance().hitCounter("render", "type", type, "busy");
 
-			// Failed if unable to get object from pool
+			// Failed if unable to get generator from pool
 			throw new GenerationException(ExceptionType.BUSY);
 
 		} catch (Exception | Error e) {
 
 			// Update global and engine counters
 			LibMetrics.instance().hitCounter("render", "fail");
-			LibMetrics.instance().hitCounter("render", "type", name, "fail");
+			LibMetrics.instance().hitCounter("render", "type", type, "fail");
 
 			// Generation itself failed
 			throw new GenerationException(ExceptionType.FAILED);
 		} finally {
 
 			// Update global and engine counters
-			int time = (int) (System.currentTimeMillis() - timeStart);
+			int time = (int) (System.currentTimeMillis() - start);
 			LibMetrics.instance().hitCounter(time, "render", "time");
-			LibMetrics.instance().hitCounter(time, "render", "type", name, "time");
+			LibMetrics.instance().hitCounter(time, "render", "type", type, "time");
 
 			// Release the generator back to the pool
 			if (generator != null) {

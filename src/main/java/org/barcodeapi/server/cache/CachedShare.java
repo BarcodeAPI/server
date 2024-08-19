@@ -24,6 +24,8 @@ public class CachedShare extends CachedObject {
 
 	private final String data;
 
+	private final int entries;
+
 	private final String hash;
 
 	/**
@@ -37,11 +39,12 @@ public class CachedShare extends CachedObject {
 		// Turn requests into JSON array
 		JSONArray reqs = new JSONArray();
 		for (BarcodeRequest r : requests) {
-			reqs.put(r.getURI());
+			reqs.put(r.encodeURI());
 		}
 
 		// Hash the data and save for later
 		this.data = reqs.toString();
+		this.entries = reqs.length();
 		this.hash = LibExtrasHashes.sumMD5(data);
 	}
 
@@ -54,6 +57,16 @@ public class CachedShare extends CachedObject {
 
 		this.touch();
 		return data;
+	}
+
+	/**
+	 * Returns the number of request entries in the share.
+	 * 
+	 * @return the number of request entries in the share
+	 */
+	public int getNumEntries() {
+
+		return entries;
 	}
 
 	/**

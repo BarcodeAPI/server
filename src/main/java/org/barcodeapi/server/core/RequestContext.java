@@ -12,6 +12,68 @@ import org.eclipse.jetty.server.Request;
  */
 public class RequestContext {
 
+	public enum Format {
+		AS_REQUIRED(null),
+
+		TEXT("text/plain"),
+
+		JSON("application/json"),
+
+		PNG("image/png");
+
+		private final String mime;
+
+		Format(String mime) {
+			this.mime = mime;
+		}
+
+		public String getMime() {
+			return mime;
+		}
+
+		public static Format parse(String accept) {
+			if (accept == null) {
+				return Format.AS_REQUIRED;
+			}
+
+			// Loop each supported format
+			for (Format f : Format.values()) {
+
+				// Skip if empty MIME type
+				if (f.getMime() == null) {
+					continue;
+				}
+
+				// Check if MIME type matches
+				if (accept.contains(f.getMime())) {
+					return f;
+				}
+			}
+
+			// Return default as required
+			return Format.AS_REQUIRED;
+		}
+	}
+
+	public enum Encoding {
+		NONE, BASE64;
+
+		public static Encoding parse(String accept) {
+			if (accept == null) {
+				return Encoding.NONE;
+			}
+
+			switch (accept) {
+
+			case "base64":
+				return Encoding.BASE64;
+
+			default:
+				return Encoding.NONE;
+			}
+		}
+	}
+
 	private final Request request;
 
 	private final long ts;
@@ -27,7 +89,11 @@ public class RequestContext {
 
 	private final String source;
 
-	private final boolean admin;
+	private final Format format;
+
+	private final Encoding encoding;
+
+	private final String user;
 
 	private final CachedLimiter limiter;
 	private final CachedSession session;
@@ -65,19 +131,27 @@ public class RequestContext {
 		String ref = request.getHeader("Referer");
 		this.source = (ref != null) ? ref : "API";
 
-		// Check if user logged in
-		this.admin = SessionHelper.validateAdmin(request);
-
-		// Get limiter by API key or IP
+		String user = null;
 		CachedLimiter limiter = null;
-		String apiKey = request.getHeader("Authorization");
-		if (apiKey != null) {
-			limiter = LimiterCache.getByKey(apiKey);
+
+		String auth = request.getHeader("Authorization");
+
+		if (auth != null) {
+			if (auth.startsWith("Basic")) {
+				auth = auth.substring(6);
+				user = SessionHelper.validateUser(auth);
+			} else //
+			if (auth.startsWith("Token")) {
+				auth = auth.substring(6);
+				limiter = LimiterCache.getByKey(auth);
+			}
 		}
-		if (limiter == null) {
-			limiter = LimiterCache.getByIp(ip);
-		}
-		this.limiter = limiter;
+
+		// Set user if logged in
+		this.user = user;
+
+		// Check for null limiter and update based on IP address
+		this.limiter = (limiter != null) ? limiter : LimiterCache.getByIp(ip);
 
 		// Get user session info
 		CachedSession tmpSession = SessionHelper.getSession(request);
@@ -88,6 +162,10 @@ public class RequestContext {
 		if (this.session != null) {
 			session.hit(request.getOriginalURI().toString());
 		}
+
+		// Determine output format and encoding
+		this.format = Format.parse(request.getHeader("Accept"));
+		this.encoding = Encoding.parse(request.getHeader("Accept-Encoding"));
 	}
 
 	/**
@@ -163,12 +241,30 @@ public class RequestContext {
 	}
 
 	/**
-	 * Returns true if user is Admin.
+	 * Returns the requested output format.
 	 * 
-	 * @return if user is admin
+	 * @return the requested output format
 	 */
-	public boolean isAdmin() {
-		return this.admin;
+	public Format getFormat() {
+		return this.format;
+	}
+
+	/**
+	 * Returns the requested content encoding.
+	 * 
+	 * @return the requested content encoding
+	 */
+	public Encoding getEncoding() {
+		return this.encoding;
+	}
+
+	/**
+	 * Returns the user currently logged in.
+	 * 
+	 * @return the user currently logged in
+	 */
+	public String getUser() {
+		return this.user;
 	}
 
 	/**

@@ -4,6 +4,7 @@ import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
+import org.barcodeapi.server.gen.BarcodeRequest;
 import org.barcodeapi.server.gen.impl.DefaultBarcodeProvider;
 import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
 
@@ -21,7 +22,8 @@ public class Ean8Generator extends DefaultBarcodeProvider {
 	}
 
 	@Override
-	public void onValidateRequest(String data) throws GenerationException {
+	public void onValidateRequest(BarcodeRequest request) throws GenerationException {
+		String data = request.getData();
 
 		if (data.length() == 7) {
 			return;

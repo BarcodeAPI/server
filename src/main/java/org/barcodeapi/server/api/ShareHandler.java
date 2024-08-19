@@ -127,16 +127,16 @@ public class ShareHandler extends RestHandler {
 		// Loop each user request string
 		List<BarcodeRequest> requestObjects = new ArrayList<>();
 		for (int index = 0; index < requests.length(); index++) {
-			String req = requests.getString(index);
+			String uri = requests.getString(index);
 
 			try {
 
 				// Parse request string as BarcodeRequest, add to map
-				requestObjects.add(new BarcodeRequest(req));
+				requestObjects.add(BarcodeRequest.fromURI(uri));
 			} catch (Exception e) {
 
 				// Log failure but continue
-				LibLog._logF("Failed to add request to share. (%s)", req);
+				LibLog._logF("Failed to add request to share. (%s : %s)", uri, e.getMessage());
 			}
 		}
 

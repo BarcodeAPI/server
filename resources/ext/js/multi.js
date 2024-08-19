@@ -92,7 +92,6 @@ function addFromText(text) {
 
 	var img = generateImage(text);
 	document.getElementById("barcodes").appendChild(img);
-	barcodes.push(text);
 }
 
 /**
@@ -124,6 +123,14 @@ function onKeyUp(e) {
 		return;
 	}
 
+	// Previous entry on Up arrow
+	if (e.keyCode === 38) {
+		var input = document.getElementById("input");
+		input.value = barcodes[barcodes.length - 1];
+		e.preventDefault();
+		return;
+	}
+
 	// Handle scan or paste event
 	if (e.target.value.endsWith("\n")) {
 		addFromInput();
@@ -135,11 +142,17 @@ function onKeyUp(e) {
  */
 function generateImage(request) {
 
-	var url = location.origin + "/api/" + request;
+	var url = "";
+	if (!request.startsWith("/api/")) {
+		url += '/api/';
+	}
+	url += request;
 
 	var img = document.createElement("img");
 	img.classList.add("multis-barcode");
-	img.src = url;
+	img.src = (location.origin + url);
+
+	barcodes.push(url);
 
 	return img;
 }

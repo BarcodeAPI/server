@@ -80,24 +80,42 @@ public class SessionHelper {
 	 * @param request
 	 * @return
 	 */
-	public static boolean validateAdmin(Request request) {
+	public static String validateUser(String basicAuth) {
 
-		// False if no authentication
-		String auth = request.getHeader("Authorization");
-		if (auth == null || !auth.startsWith("Basic")) {
-			return false;
+		// False if no authentication string
+		if (basicAuth == null) {
+			return null;
 		}
 
-		// Parse authentication string
-		String authString = auth.substring(6);
-		String decode = new String(Base64.getDecoder().decode(authString));
-		String[] unpw = decode.split(":");
+		String decoded;
+		try {
 
-		String uName = unpw[0];
-		String passHash = LibExtrasHashes.sumSHA256(unpw[1].getBytes());
+			// Decode as Base64
+			decoded = new String(//
+					Base64.getDecoder().decode(basicAuth));
+		} catch (IllegalArgumentException e) {
 
-		// Check if login exists in user file
-		JSONObject admins = AppConfig.get().getJSONObject("admins");
-		return admins.getString(uName).equals(passHash);
+			// Fail if unable to decode
+			return null;
+		}
+
+		// Determine where to split
+		int split = decoded.indexOf(':');
+		if (split < 1) {
+
+			// Fail if not user:pass
+			return null;
+		}
+
+		// Split BasicAuth on [:]
+		String uName = decoded.substring(0, split);
+		String pWord = decoded.substring(split + 1);
+
+		// Calculate the expected password hash
+		String passHash = LibExtrasHashes.sumSHA256(pWord.getBytes());
+
+		// Check if login exists in app config and return
+		JSONObject logins = AppConfig.get().getJSONObject("logins");
+		return (passHash.equals(logins.optString(uName)) ? uName : null);
 	}
 }

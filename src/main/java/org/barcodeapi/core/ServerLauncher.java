@@ -13,6 +13,7 @@ import org.barcodeapi.server.admin.ServerReloadHandler;
 import org.barcodeapi.server.admin.ServerStatsHandler;
 import org.barcodeapi.server.admin.SessionFlushHandler;
 import org.barcodeapi.server.admin.SessionListHandler;
+import org.barcodeapi.server.admin.ShareListHandler;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.BulkHandler;
 import org.barcodeapi.server.api.InfoHandler;
@@ -137,6 +138,7 @@ public class ServerLauncher {
 		initHandler("/info", InfoHandler.class);
 
 		// Setup admin handlers
+		initHandler("/admin/share/list", ShareListHandler.class);
 		initHandler("/admin/cache/dump", CacheDumpHandler.class);
 		initHandler("/admin/cache/flush", CacheFlushHandler.class);
 		initHandler("/admin/limiter/list", LimiterListHandler.class);
