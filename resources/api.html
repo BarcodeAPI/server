@@ -42,8 +42,9 @@
 			<div class="col-xs-12">
 				<h2>BarcodeAPI User Manual</h2>
 				<p class="start-xs">
-					The core function of our server is to generate barcode images through a RESTful
-					endpoint.
+					The primary intent of our service is to provide an easy to use, all purpose, barcode generator.
+					Provided to you through a simple HTTP endpoint, our barcodes can be embedded in nearly any
+					application, requiring little more then an internet connection.
 					<br />
 					<br />
 					Our server is built to accommodate a diverse range of barcode types and
@@ -52,7 +53,7 @@
 					complexity of the request.
 					<br />
 					<br />
-					The API exposes a number of barcode formats and customization options for each.
+					Join the ranks of thousands that depend on BarcodeAPI.org.
 				</p>
 			</div>
 		</div>
@@ -62,20 +63,33 @@
 			<div class="col-xs-12">
 				<h2><a href="#tokens">&sect;1</a>&nbsp;Tokens and Rate Limits</h2>
 				<p class="start-xs">
-					Each user of the service is granted a limited number of request tokens to ensure fair
-					use among all users.
+					To ensure that we are able to provide the best service for all users we have implemented Rate
+					Limiting and tiered pricing plans for our power users.
 					<br />
 					<br />
-					Visit <a href="/limits.html" class="text-link">Rate Limits</a>
-					<br />
-					<br />
+					Our FREE tier should be sufficient for basic use, however some users may not find this limit
+					sufficient for their needs. Please visit <a href="/limits.html" class="text-link">Rate Limits</a>
+					for additional details.
+				</p>
+			</div>
+
+			<div class="col-xs-6">
+				<b>Requesting a Token</b>
+				<p>
 					To upgrade your account, please visit <a href="/contracts.html" class="text-link">Usage
 						Contracts</a>
 				</p>
 			</div>
 
-			<div class="col-xs-12">
-				Authorization: Token=xxxxxxxxxxxx
+			<div class="col-xs-6">
+				<b>Using A Token</b>
+				<p>
+					If you have been issued an API token, it should be attached to each request as an Authorization
+					header.
+				<pre>
+Authorization: Token=xxxxxxxxxxxx
+					</pre>
+				</p>
 			</div>
 		</div>
 
@@ -211,7 +225,7 @@ https://barcodeapi.org/api/auto/abc123
 		<div class="row center-xs middle-xs">
 			<div class="col-xs-12">
 				<h2><a href="#custom">&sect;4</a>&nbsp;Barcode Customization</h2>
-				<p class="start-xs">
+				<p class="center-xs">
 					Barcodes can be customized!
 				</p>
 			</div>
@@ -235,22 +249,25 @@ https://barcodeapi.org/api/auto/abc123
 		<div class="row center-xs middle-xs">
 			<div class="col-xs-12">
 				<h2><a href="#bulk">&sect;5</a>&nbsp;Bulk Barcode Generation</h2>
-				<p class="start-xs">
-					Bulk!
+				<p class="center-xs">
+					Some users need to generate a lot of barcodes, for this we provide two different tools.
 				</p>
 			</div>
 
 			<div class="col-sm-6 col-xs-12">
-				<h3>Bulk</h3>
+				<h3>Bulk Generator</h3>
 				<p class="start-xs">
-					&nbsp;&nbsp;Bulk Barcode Generation
+					Users wishing to generate a large number of barcodes may wish to use the Bulk Barcode generator.
+					This utility will allow the upload of a CSV containing the barcode requests, and will return a ZIP
+					file containing each of the barcodes.
+					<br />
 					<br />
 					Visit <a href="/bulk.html" class="text-link">Bulk Generator</a>
 				</p>
 			</div>
 
 			<div class="col-sm-6 col-xs-12">
-				<h3>Multi</h3>
+				<h3>Multis Utility</h3>
 				<p class="start-xs">
 					Some users may wish to generate a large number of barcodes with one
 					request - a basic JavaScript utility is provided at /multi.html which will
@@ -268,7 +285,7 @@ https://barcodeapi.org/api/auto/abc123
 		<div class="row center-xs middle-xs">
 			<div class="col-xs-12">
 				<h2><a href="#headers">&sect;6</a>&nbsp;Server Headers</h2>
-				<p class="start-xs">
+				<p class="center-xs">
 					The server makes a number of headers available.
 				</p>
 			</div>
@@ -348,8 +365,11 @@ X-Error-Message: (exception.toString())
 		<div class="row center-xs middle-xs">
 			<div class="col-xs-12">
 				<h2><a href="#session">&sect;7</a>&nbsp;User Session</h2>
-				<p class="start-xs">
-					User session.
+				<p class="center-xs">
+					Users of the web interface are assigned a session token for basic history tracking.
+					<br />
+					<br />
+					To view the details of your current session, visit the <a href="/session/">/session/</a> endpoint.
 				</p>
 			</div>
 		</div>
@@ -358,11 +378,13 @@ X-Error-Message: (exception.toString())
 		<div class="row center-xs middle-xs">
 			<div class="col-xs-12">
 				<h2><a href="#support">&sect;8</a>&nbsp;Technical Support</h2>
-				<p class="start-xs">
+				<p class="center-xs">
+
 					Did we miss something?
 					<br />
+					Please send us an email.
 					<br />
-					Please send us an email, we will respond as soon as possible.
+					We will respond as soon as possible.
 					<br />
 					<br />
 					<a href="mailto:support@barcodeapi.org" class="text-link">support@barcodeapi.org</a>

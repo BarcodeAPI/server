@@ -705,6 +705,15 @@ a:hover {
 
 /* \/ Types Page Specific \/ */
 
+#barcode-types {
+	margin-top: 24px;
+}
+
+.barcode-template {
+	padding-top: 24px;
+	padding-bottom: 55px;
+}
+
 .type-name {
 	font-size: 16px;
 	font-weight: bold;
