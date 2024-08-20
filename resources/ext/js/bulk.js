@@ -6,12 +6,15 @@ function init() {
 
 function actionDownloadCSV() {
 
-	var format = 'text/csv';
+	var blob = "";
+	for (var line in csvExample) {
+		blob += (csvExample[line] + "\n");
+	}
 
-	var file = new Blob([csvExample], { type: format });
+	var file = new Blob([blob], { type: 'text/csv' });
 	var a = document.createElement("a");
 	a.href = URL.createObjectURL(file);
-	a.download = 'test.csv';
+	a.download = 'bulk-barcodes-example.csv';
 	document.body.appendChild(a);
 	a.click();
 	document.body.removeChild(a);
@@ -30,18 +33,24 @@ function checkIfFileSelected() {
 	});
 }
 
-var csvExample = //
-	"Aztec Barcode,aztec\n" + //
-	"1234567890,codabar\n" + //
-	"Try Me!,128\n" + //
-	"TRY 39 ME,39\n" + //
-	"Data Matrix Barcode,dm\n" + //
-	"1234567890128,13\n" + //
-	"01234565,8\n" + //
-	"98765432109213,14\n" + //
-	"PDF - 417,417\n" + //
-	"QR Barcode,qr\n" + //
-	"11212345612345678,royal\n" + //
-	"123456789012,a\n" + //
-	"01023459,e\n" + //
-	"0123456709498765432101234567891,usps\n";
+var csvExample = [
+	"Aztec Barcode,aztec",
+	"1234567890,codabar",
+	"Try Me!,128",
+	"TRY 39 ME,39",
+	"Data Matrix Barcode,dm",
+	"1234567890128,13",
+	"01234565,8",
+	"98765432109213,14",
+	"PDF - 417,417",
+	"QR Barcode,qr",
+	"11212345612345678,royal",
+	"123456789012,a",
+	"01023459,e",
+	"0123456709498765432101234567891,usps",
+	"test-128-colors,128,fg=206060,bg=c0c0c0",
+	"test-128-notext,128,height=8,text=none",
+	"test-dm-color,dm,fg=602060,bg=d0d0d0",
+	"test-dm-noqz,dm,qz=0",
+	"00000000,8,text=none,fg=ff0000"
+];

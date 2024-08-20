@@ -117,7 +117,7 @@ public class BarcodeRequest {
 		String type = (record.length > 1) ? record[1] : "auto";
 
 		String args = "";
-		for (int x = 2; x < (record.length - 1); x++) {
+		for (int x = 2; x < record.length; x++) {
 			if ((record[x] == null) || //
 					(record[x].length() == 0)) {
 				continue;

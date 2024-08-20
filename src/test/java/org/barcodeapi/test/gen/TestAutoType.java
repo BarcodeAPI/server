@@ -8,6 +8,21 @@ import org.junit.Test;
 public class TestAutoType extends ServerTestBase {
 
 	@Test
+	public void testAutoType_Codabar() {
+
+		apiGet("000000");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"CODABAR", getHeader("X-Barcode-Type"));
+
+		Assert.assertEquals("Code Data", //
+				encode("000000"), getHeader("X-Barcode-Content"));
+	}
+
+	@Test
 	public void testAutoType_UPC_E() {
 
 		apiGet("00000000");
