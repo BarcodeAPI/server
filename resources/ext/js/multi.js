@@ -3,7 +3,8 @@
 // multi.js
 //
 
-var barcodes = [];
+var index = false;
+var barcodes = false;
 window.onhashchange = init;
 
 /**
@@ -14,6 +15,7 @@ function init() {
 	multiClear();
 	var share = window.location.hash.substring(1);
 	((share) ? loadShare(share) : loadArgs());
+	document.getElementById("input").focus();
 }
 
 /**
@@ -26,7 +28,6 @@ function loadShare(share) {
 			return response.json();
 		})
 		.then(function(data) {
-			console.log(data);
 			renderRequests(//
 				JSON.parse(data.data));
 		});
@@ -52,12 +53,9 @@ function loadArgs() {
  * Render a list of requests.
  */
 function renderRequests(requests) {
-	console.log(requests);
 	for (var request in requests) {
 		addFromText(requests[request]);
 	}
-
-	document.getElementById("input").focus();
 }
 
 /**
@@ -124,9 +122,17 @@ function onKeyUp(e) {
 	}
 
 	// Previous entry on Up arrow
-	if (e.keyCode === 38) {
+	if (e.keyCode === 38 && index > 0) {
 		var input = document.getElementById("input");
-		input.value = barcodes[barcodes.length - 1];
+		input.value = barcodes[--index];
+		e.preventDefault();
+		return;
+	}
+
+	// Next entry on Down arrow
+	if (e.keyCode == 40 && index < (barcodes.length - 1)) {
+		var input = document.getElementById("input");
+		input.value = barcodes[++index];
 		e.preventDefault();
 		return;
 	}
@@ -153,6 +159,7 @@ function generateImage(request) {
 	img.src = (location.origin + url);
 
 	barcodes.push(url);
+	index = barcodes.length;
 
 	return img;
 }
@@ -161,8 +168,11 @@ function generateImage(request) {
  * Clear all rendered images.
  */
 function multiClear() {
-	barcodes.length = 0;
+	index = 0;
+	barcodes = [];
 	document.getElementById("barcodes").innerHTML = "";
+	document.getElementById("input").value = "";
+	document.getElementById("input").focus();
 }
 
 /**

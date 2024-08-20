@@ -53,22 +53,6 @@ public abstract class DefaultBarcodeProvider extends CodeGenerator {
 		byte[] bytes;
 		synchronized (generator) {
 
-			switch (text) {
-
-			case "bottom":
-				generator.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
-				break;
-
-			case "top":
-				generator.setMsgPosition(HumanReadablePlacement.HRP_TOP);
-				break;
-
-			case "none":
-			default:
-				generator.setMsgPosition(HumanReadablePlacement.HRP_NONE);
-				break;
-			}
-
 			// Set render options
 			generator.doQuietZone(true);
 			generator.setQuietZone(qz);
@@ -76,6 +60,7 @@ public abstract class DefaultBarcodeProvider extends CodeGenerator {
 			generator.setModuleWidth((module / 10d));
 			generator.setPattern(pattern);
 			generator.setFontSize(font);
+			generator.setMsgPosition(HumanReadablePlacement.byName(text));
 
 			// Create the canvas object
 			BarcodeCanvasProvider canvasProvider = //
