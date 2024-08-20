@@ -2,14 +2,14 @@
  * App Display Options
  */
 const appDisplay = {
-	'about': false,
+	'about': true,
 	'support': false,
-	'tokenCount': true,
+	'tokenCount': false,
 	'bulkPages': true,
 	'limitsNotice': false,
 	'renderOptions': false,
-	'helpType': false,
-	'helpManual': false,
+	'helpType': true,
+	'helpManual': true,
 	'showHidden': false
 };
 

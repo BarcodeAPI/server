@@ -25,10 +25,10 @@ public class BarcodeRequest {
 	private final boolean cached;
 	private final JSONObject options;
 
-	private BarcodeRequest(CodeType codeType, String data, JSONObject options) {
+	private BarcodeRequest(CodeType type, String data, JSONObject options) {
 		LibMetrics.hitMethodRunCounter();
 
-		this.type = codeType;
+		this.type = type;
 		this.data = data;
 		this.options = options;
 
@@ -36,7 +36,9 @@ public class BarcodeRequest {
 		this.cached = ((options.length() == 0) && (data.length() <= 48));
 
 		// Calculate the cost of the request
-		this.cost = (cached) ? type.getCostBasic() : type.getCostCustom();
+		boolean free = (data.equals(type.getExample()));
+		int cost = (cached) ? type.getCostBasic() : type.getCostCustom();
+		this.cost = (free) ? 0 : cost;
 	}
 
 	/**
