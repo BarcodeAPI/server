@@ -225,20 +225,29 @@ https://barcodeapi.org/api/auto/abc123
 		<div class="row center-xs middle-xs">
 			<div class="col-xs-12">
 				<h2><a href="#custom">&sect;4</a>&nbsp;Barcode Customization</h2>
-				<p class="center-xs">
-					Barcodes can be customized!
+				<p class="start-xs">
+					Each barcode type provides a number of customization options that may be passed along with the
+					request. The supported options for each barcode can be viewed on the associated <a
+						href="types.html">Types</a> page.
 				</p>
 			</div>
 
-			<div class="col-sm-6 col-xs-12">
-				<h3>Test</h3>
-				<p class="start-xs">
-					Test.
+			<div class="col-sm-5 col-xs-12">
+				<h3>Options</h3>
+				<p class="center-xs">
+					Barcode options are simply added to each request as a GET parameter.
+				</p>
+				<pre>
+/api/dm/test?fg=ff0000
+				</pre>
 			</div>
 
-			<div class="col-sm-6 col-xs-12">
+			<div class="col-sm-5 col-xs-12">
 				<h3>Control Characters</h3>
-				<p class="start-xs">
+				<p class="center-xs">
+					Some barcodes support the encoding of NonPrinting ASCII characters.
+					<br />
+					<br />
 					Visit <a href="/nonprinting.html" class="text-link">NonPrinting</a>
 				</p>
 			</div>
@@ -250,7 +259,9 @@ https://barcodeapi.org/api/auto/abc123
 			<div class="col-xs-12">
 				<h2><a href="#bulk">&sect;5</a>&nbsp;Bulk Barcode Generation</h2>
 				<p class="center-xs">
-					Some users need to generate a lot of barcodes, for this we provide two different tools.
+					Some users need to generate a lot of barcodes.
+					<br/>
+					For this we provide two different tools.
 				</p>
 			</div>
 

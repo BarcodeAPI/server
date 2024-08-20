@@ -49,5 +49,17 @@ function loadType(type) {
 	info.querySelector(".type-wiki").href = type.wiki[language];
 	info.querySelector(".type-checksum").innerHTML = (type.checksum ? "Yes" : "No");
 	info.querySelector(".type-nonprinting").innerHTML = (type.nonprinting ? "Yes" : "No");
-	//		info.querySelector(".type-parameters").innerHTML = type.parameters;
+	info.querySelector(".type-options").innerHTML = buildOptions(type.options);
+}
+
+function buildOptions(options) {
+
+
+	var r = "";
+	for (var x in options) {
+		var opt = options[x];
+
+		r += x + "=" + opt.default + "<br/>";
+	}
+	return r;
 }
