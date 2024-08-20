@@ -157,7 +157,7 @@ public class BarcodeRequest {
 		} catch (IllegalArgumentException e) {
 
 			// Log and throw the decoding failure
-			throw LibLog._log("Failed to decode URL.").asException();
+			throw LibLog._clog("E0608").asException();
 		}
 
 		// Extract code type and data string

@@ -163,7 +163,7 @@ public class ObjectCache {
 		} catch (Exception e) {
 
 			// Log the failure
-			LibLog._log("Failed to load cache snapshot.", e);
+			LibLog._clog("E2603", e);
 		}
 
 		return c;

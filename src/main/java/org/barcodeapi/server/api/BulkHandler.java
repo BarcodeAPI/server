@@ -55,7 +55,7 @@ public class BulkHandler extends RestHandler {
 		} catch (GenerationException e) {
 
 			// Log the failure
-			LibLog._logF("Failed to generate bulk barcodes. (%s)", e.getMessage());
+			LibLog._clogF("E0509", e.getMessage());
 
 			// Print error to client
 			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);

@@ -56,7 +56,7 @@ public class CodeGenerators {
 			} catch (Exception | Error e) {
 
 				// Log initialization failure
-				LibLog._log("Failed initializing CodeType.", e);
+				LibLog._clog("E0051", e);
 			}
 		}
 	}

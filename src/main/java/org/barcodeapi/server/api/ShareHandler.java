@@ -136,7 +136,7 @@ public class ShareHandler extends RestHandler {
 			} catch (Exception e) {
 
 				// Log failure but continue
-				LibLog._logF("Failed to add request to share. (%s : %s)", uri, e.getMessage());
+				LibLog._clogF("E0539", uri, e.getMessage());
 			}
 		}
 

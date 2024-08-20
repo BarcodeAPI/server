@@ -52,7 +52,7 @@ public class GeneratorPoolController implements LibObjectPoolerController<CodeGe
 		} catch (Exception | Error e) {
 
 			// Log the failure
-			LibLog._log("Failed to create generator.", e);
+			LibLog._clog("E0059", e);
 			return null;
 		}
 	}
