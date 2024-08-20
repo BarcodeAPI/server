@@ -86,7 +86,7 @@ public class BarcodeAPIHandler extends RestHandler {
 			r.setStatus(e.getExceptionType().getStatusCode());
 			r.setHeader("X-Error-Message", e.getMessage());
 
-			// Replace barcode with failure image
+			// Replace barcode with failure barcode
 			barcode = e.getExceptionType().getBarcodeImage();
 		}
 
