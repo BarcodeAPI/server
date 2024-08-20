@@ -1,6 +1,7 @@
 package org.barcodeapi.test.gen.types;
 
 import org.barcodeapi.server.ServerTestBase;
+import org.barcodeapi.server.core.GenerationException;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -44,7 +45,7 @@ public class TestEan13 extends ServerTestBase {
 		apiGet("13/1234567890123");
 
 		Assert.assertEquals("Response Code", //
-				HttpStatus.CONFLICT_409, getResponseCode());
+				GenerationException.ExceptionType.CHECKSUM.getStatusCode(), getResponseCode());
 	}
 
 	@Test
