@@ -734,6 +734,19 @@ a:hover {
 
 /* \/ Documentation Page Specific \/ */
 
+.help-entry {
+	margin-top: 24px;
+}
+
+.help-entry p {
+	margin-top: 24px;
+	line-height: 1.5;
+}
+
+.help-entry h2 a {
+	text-decoration: none;
+}
+
 .example-code-title {
 	text-align: left;
 	font-weight: bold;
