@@ -3,7 +3,6 @@ Allow: /about.html
 Allow: /api.html
 Allow: /bulk.html
 Allow: /contracts.html
-Allow: /history.html
 Allow: /index.html
 Allow: /limits.html
 Allow: /nonprinting.html
