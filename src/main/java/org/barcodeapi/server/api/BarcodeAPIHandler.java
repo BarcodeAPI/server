@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
@@ -22,6 +23,15 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class BarcodeAPIHandler extends RestHandler {
 
+	private static final int CACHED_LIFE_MIN = AppConfig.get()//
+			.getJSONObject("cache").getJSONObject("barcode").getInt("client");
+
+	private static final int CACHED_LIFE_SEC = (CACHED_LIFE_MIN * 60);
+
+	private static final int CACHED_LIFE_MS = (CACHED_LIFE_SEC * 1000);
+
+	private final String cacheControl = String.format("max-age=%d, public", CACHED_LIFE_SEC);
+
 	public BarcodeAPIHandler() {
 		super(
 				// Authentication not required
@@ -35,20 +45,20 @@ public class BarcodeAPIHandler extends RestHandler {
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
+		BarcodeRequest request = null;
 		CachedBarcode barcode = null;
-		BarcodeRequest request = BarcodeRequest.fromURI(c.getUri());
 
 		try {
 
-			// Calculate token cost
-			int cost = (request.useCache()) ? //
-					request.getType().getCostBasic() : request.getType().getCostCustom();
+			// Parse the request
+			request = BarcodeRequest.fromURI(c.getUri());
 
 			// Send token cost to user
-			r.setHeader("X-RateLimit-Cost", Integer.toString(cost));
+			r.setHeader("X-RateLimit-Cost", //
+					Integer.toString(request.getCost()));
 
 			// Try to spend tokens
-			if (!c.getLimiter().spendTokens(cost)) {
+			if (!c.getLimiter().spendTokens(request.getCost())) {
 
 				// Return rate limited barcode to user
 				throw new GenerationException(ExceptionType.LIMITED);
@@ -62,10 +72,9 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// Add cache headers
 			if (request.useCache()) {
-				long tplus = 86400;
-				long expires = System.currentTimeMillis() + (tplus * 1000);
-				r.setDateHeader("Expires", expires);
-				r.setHeader("Cache-Control", String.format("max-age=%d, public", tplus));
+				r.setDateHeader("Expires", //
+						(System.currentTimeMillis() + (CACHED_LIFE_MS)));
+				r.setHeader("Cache-Control", cacheControl);
 			}
 
 		} catch (GenerationException e) {
@@ -77,7 +86,7 @@ public class BarcodeAPIHandler extends RestHandler {
 			r.setStatus(e.getExceptionType().getStatusCode());
 			r.setHeader("X-Error-Message", e.getMessage());
 
-			// Replace barcode with failure image
+			// Replace barcode with failure barcode
 			barcode = e.getExceptionType().getBarcodeImage();
 		}
 
@@ -85,48 +94,40 @@ public class BarcodeAPIHandler extends RestHandler {
 		r.setHeader("X-Barcode-Type", barcode.getBarcodeType());
 		r.setHeader("X-Barcode-Content", barcode.getBarcodeStringEncoded());
 
-		// Determine output format to send
-		switch (request.getOptions().optString("format", "png")) {
-
-		// Serve as PNG
-		case "png":
-
-			// file save-as name / force download
-			boolean download = request.getOptions().optBoolean("download");
-			r.setHeader("Content-Disposition", //
-					((download) ? "attachment; " : "") + //
-							("filename=" + barcode.getBarcodeStringNice() + ".png"));
-
-			// add content headers and write data to stream
-			r.setCharacterEncoding(null);
-			r.setHeader("Content-Type", "image/png");
-			r.setHeader("Content-Length", Long.toString(barcode.getBarcodeDataSize()));
-			r.getOutputStream().write(barcode.getBarcodeData());
-			break;
-
-		// Serve as base64
-		case "b64":
-
-			// Get data as base64 encoded string
-			byte[] encodedBytes = barcode.encodeBase64().getBytes();
-
-			// Add content headers and write data to stream
-			r.setHeader("Content-Type", "image/png");
-			r.setHeader("Content-Encoding", "base64");
-			r.setHeader("Content-Length", Long.toString(encodedBytes.length));
-			r.getOutputStream().write(encodedBytes);
-			break;
+		switch (c.getFormat()) {
 
 		// Serve as JSON
-		case "json":
+		case JSON:
 
 			// Get data as JSON encoded string
 			byte[] encodedJson = barcode.encodeJSON().getBytes();
 
 			// Add content headers and write data to stream
-			r.setHeader("Content-Type", "application/json");
+			r.setHeader("Content-Type", c.getFormat().getMime());
 			r.setHeader("Content-Length", Long.toString(encodedJson.length));
 			r.getOutputStream().write(encodedJson);
+			break;
+
+		// Serve as PNG
+		case AS_REQUIRED:
+		case PNG:
+
+			// Determine if response is B64 encoded
+			boolean asB64 = (c.getEncoding() == RequestContext.Encoding.BASE64);
+			byte[] bytes = (asB64) ? barcode.encodeBase64().getBytes() : barcode.getBarcodeData();
+
+			// Add content length and type headers
+			r.setHeader("Content-Length", Long.toString(bytes.length));
+			r.setHeader("Content-Type", (RequestContext.Format.PNG.getMime() + ((asB64) ? ";base64" : "")));
+
+			// File save-as name / force download
+			boolean download = (c.getRequest().getHeader("X-ForceDownload") != null);
+			r.setHeader("Content-Disposition", //
+					((download) ? "attachment; " : "") + //
+							("filename=" + barcode.getBarcodeStringNice() + ".png"));
+
+			// Write data to stream
+			r.getOutputStream().write(bytes);
 			break;
 
 		// Unknown output format

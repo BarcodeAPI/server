@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.barcodeapi.server.core.CodeType;
+import org.barcodeapi.server.gen.BarcodeRequest;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
 
@@ -25,18 +27,26 @@ public class QRCodeGenerator extends CodeGenerator {
 
 	private QRCodeWriter generator;
 
-	public QRCodeGenerator() {
+	public QRCodeGenerator(CodeType codeType) {
+		super(codeType);
 
 		// Setup QR-Code generator
 		generator = new QRCodeWriter();
 	}
 
 	@Override
-	public byte[] onRender(String data, JSONObject options) throws WriterException, IOException {
+	public byte[] onRender(BarcodeRequest request) throws WriterException, IOException {
 
-		int size = options.optInt("size", 275);
-		int qz = options.optInt("qz", 2);
-		String correction = options.optString("correction", "M");
+		JSONObject options = request.getOptions();
+
+		int size = options.optInt("size", //
+				(Integer) getDefaults().getOrDefault("size", 275));
+
+		int qz = options.optInt("qz", //
+				(Integer) getDefaults().getOrDefault("qz", 4));
+
+		String correction = options.optString("correction", //
+				(String) getDefaults().getOrDefault("correction", "M"));
 
 		Map<EncodeHintType, Object> hintsMap = new HashMap<>();
 		hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
@@ -45,7 +55,7 @@ public class QRCodeGenerator extends CodeGenerator {
 		hintsMap.put(EncodeHintType.MARGIN, qz);
 
 		BitMatrix bitMatrix = generator.encode(//
-				data, BarcodeFormat.QR_CODE, size, size, hintsMap);
+				request.getData(), BarcodeFormat.QR_CODE, size, size, hintsMap);
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		MatrixToImageWriter.writeToStream(bitMatrix, "png", out);

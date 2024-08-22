@@ -1,6 +1,5 @@
 package org.barcodeapi.server.core;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 import org.barcodeapi.core.AppConfig;
@@ -10,10 +9,12 @@ import org.json.JSONArray;
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
-import com.mclarkdev.tools.libobjectpooler.LibObjectPoolerController;
 
 /**
  * CodeGenerators.java
+ * 
+ * Initializes all supported CodeTypes from configuration and provides access to
+ * their associated generation object pools.
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
@@ -21,6 +22,11 @@ public class CodeGenerators {
 
 	private static CodeGenerators codeGenerators;
 
+	/**
+	 * Returns an instance of the CodeGenerators map.
+	 * 
+	 * @return an instance of the CodeGenerators map
+	 */
 	public static synchronized CodeGenerators getInstance() {
 		if (codeGenerators == null) {
 			codeGenerators = new CodeGenerators();
@@ -28,64 +34,43 @@ public class CodeGenerators {
 		return codeGenerators;
 	}
 
+	/**
+	 * A map of generation pools for all supported CodeTypes.
+	 */
 	private HashMap<String, LibObjectPooler<CodeGenerator>> generators = new HashMap<>();
 
 	private CodeGenerators() {
 
 		JSONArray enabled = AppConfig.get().getJSONArray("types");
 
-		// loop all enabled types
+		// Loop all enabled types
 		for (int x = 0; x < enabled.length(); x++) {
 
-			String type = enabled.getString(x);
+			try {
 
-			// load code type from config
-			CodeType config = CodeTypes.inst().loadType(type);
+				// Load type from config and setup pooler
+				String type = enabled.getString(x);
+				CodeType config = CodeTypes.inst().loadType(type);
+				generators.put(type, setupBarcodePooler(config));
 
-			// setup a pooler for code type
-			generators.put(type, setupBarcodePooler(config));
+			} catch (Exception | Error e) {
+
+				// Log initialization failure
+				LibLog._clog("E0051", e);
+			}
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Creates a new object pool for the given CodeType.
+	 * 
+	 * @param codeType type of pooler to create
+	 * @return the created pooler
+	 */
 	private LibObjectPooler<CodeGenerator> setupBarcodePooler(final CodeType codeType) {
 
-		final String name = codeType.getName();
-		final Class<? extends CodeGenerator> clazz;
-		final Constructor<? extends CodeGenerator> constructor;
-
-		try {
-
-			String genClass = codeType.getGeneratorClass();
-			clazz = (Class<? extends CodeGenerator>) Class.forName(genClass);
-			constructor = clazz.getDeclaredConstructor();
-
-		} catch (Exception e) {
-			throw LibLog._clog("E0059", e).asException();
-		}
-
-		LibObjectPooler<CodeGenerator> pooler = new LibObjectPooler<CodeGenerator>(3, //
-				new LibObjectPoolerController<CodeGenerator>() {
-
-					@Override
-					public CodeGenerator onCreate() {
-						LibLog._clogF("I0180", name);
-						LibMetrics.instance().hitCounter("generators", name, "pool", "created");
-
-						try {
-							return constructor.newInstance();
-						} catch (Exception | Error e) {
-							e.printStackTrace();
-							return null;
-						}
-					}
-
-					@Override
-					public void onDestroy(CodeGenerator t) {
-						LibLog._clogF("I0181", name);
-						LibMetrics.instance().hitCounter("generators", name, "pool", "destroyed");
-					}
-				});
+		LibObjectPooler<CodeGenerator> pooler = //
+				new LibObjectPooler<CodeGenerator>(3, new GeneratorPoolController(codeType));
 
 		pooler.setMaxLockTime(1000);
 		pooler.setMaxIdleTime(15 * 60 * 1000);
@@ -94,6 +79,12 @@ public class CodeGenerators {
 		return pooler;
 	}
 
+	/**
+	 * Returns the generation pool for the given CodeType.
+	 * 
+	 * @param type type of pooler to get
+	 * @return the generation pool
+	 */
 	public LibObjectPooler<CodeGenerator> getGeneratorPool(String type) {
 		LibMetrics.hitMethodRunCounter();
 

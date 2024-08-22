@@ -24,9 +24,8 @@ public class CodeUtils {
 	 * 
 	 * A$$_A --> A(US)A
 	 * 
-	 * @param offset
-	 * @param data
-	 * @return
+	 * @param data the data to parse
+	 * @return the parsed string
 	 */
 	public static String parseControlChars(String data) {
 		LibMetrics.hitMethodRunCounter();
@@ -35,7 +34,9 @@ public class CodeUtils {
 
 		for (int x = 0; x < data.length(); x++) {
 
-			if (data.length() > x + 2 && data.charAt(x) == '$' && data.charAt(x + 1) == '$') {
+			if ((data.length() > (x + 2)) && //
+					(data.charAt(x) == '$') && //
+					(data.charAt(x + 1) == '$')) {
 
 				newData += (char) (((int) data.charAt(x += 2)) - 64);
 			} else {
@@ -50,47 +51,35 @@ public class CodeUtils {
 	/**
 	 * Calculate the checksum for an EAN type barcode.
 	 * 
-	 * @param data
-	 * @param count
-	 * @return
+	 * @param data  the EAN data
+	 * @param count the number of digits
+	 * @return the checksum value
 	 */
 	public static int calculateEanChecksum(String data, int count) {
 		LibMetrics.hitMethodRunCounter();
 
-		int sum0 = 0;
-		int sum1 = 0;
-
+		int sum0, sum1 = sum0 = 0;
 		for (int x = count; x > 1; x--) {
 
 			int digit = Character.getNumericValue(data.charAt(count - x));
 
 			if (x % 2 == 0) {
-
 				sum1 += (3 * digit);
 			} else {
-
 				sum0 += digit;
 			}
 		}
 
-		int sum = sum0 + sum1;
+		int check = (10 - ((sum0 + sum1) % 10));
 
-		int check = 10 - (sum % 10);
-
-		if (check == 10) {
-
-			return 0;
-		} else {
-
-			return check;
-		}
+		return (check == 10) ? 0 : check;
 	}
 
 	/**
 	 * Encode a UTF-8 string to a URL.
 	 * 
-	 * @param data
-	 * @return
+	 * @param data the data to encode
+	 * @return the encoded string
 	 */
 	public static String encodeURL(String data) {
 		LibMetrics.hitMethodRunCounter();
@@ -98,17 +87,22 @@ public class CodeUtils {
 		try {
 
 			return URLEncoder.encode(data, "UTF-8");
-		} catch (Exception e) {
 
-			return null;
+		} catch (UnsupportedEncodingException e) {
+
+			throw new IllegalArgumentException(e);
+
+		} catch (IllegalArgumentException e) {
+
+			throw e;
 		}
 	}
 
 	/**
 	 * Decode a URL to a UTF-8 string.
 	 * 
-	 * @param data
-	 * @return
+	 * @param data the data to decode
+	 * @return the decoded string
 	 */
 	public static String decodeURL(String data) {
 		LibMetrics.hitMethodRunCounter();
@@ -120,14 +114,18 @@ public class CodeUtils {
 		} catch (UnsupportedEncodingException e) {
 
 			throw new IllegalArgumentException(e);
+
+		} catch (IllegalArgumentException e) {
+
+			throw e;
 		}
 	}
 
 	/**
 	 * Strip illegal characters for building a nice file name.
 	 * 
-	 * @param data
-	 * @return
+	 * @param data the data to strip
+	 * @return the stripped string
 	 */
 	public static String stripIllegal(String data) {
 		LibMetrics.hitMethodRunCounter();
@@ -138,20 +136,25 @@ public class CodeUtils {
 	/**
 	 * Returns a JSON map of options from the passed query string.
 	 * 
-	 * @param opts
-	 * @return
+	 * @param opts the options string
+	 * @return the parsed options
 	 */
 	public static JSONObject parseOptions(String opts) {
 		LibMetrics.hitMethodRunCounter();
 
+		// Loop each supplied option
 		JSONObject options = new JSONObject();
+		for (String option : opts.split("&")) {
 
-		String[] parts = opts.split("&");
-
-		for (String option : parts) {
-
+			// Split on [key=value]
 			String[] kv = option.split("=");
-			options.put(kv[0], (kv.length == 2) ? kv[1] : true);
+			if (kv[0].equals("")) {
+				continue;
+			}
+
+			// Add to option map
+			options.put(kv[0], //
+					(kv.length == 2) ? kv[1] : true);
 		}
 
 		return options;

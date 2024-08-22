@@ -40,6 +40,13 @@ public class TypeHandler extends RestHandler {
 		String typeStr = c.getRequest().getParameter("type");
 		CodeType type = TypeSelector.getTypeFromString(typeStr);
 
+		if (type == null) {
+
+			// Print error to client
+			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setHeader("Content-Type", "application/json");

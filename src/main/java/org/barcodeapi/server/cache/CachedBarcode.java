@@ -43,49 +43,89 @@ public class CachedBarcode extends CachedObject {
 		this.setTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
 	}
 
+	/**
+	 * Returns the name of the barcode type.
+	 * 
+	 * @return the name of the barcode type
+	 */
 	public String getBarcodeType() {
 
 		return type;
 	}
 
+	/**
+	 * Returns the barcode image data.
+	 * 
+	 * @return the barcode image data
+	 */
 	public byte[] getBarcodeData() {
 
 		this.touch();
 		return data;
 	}
 
+	/**
+	 * Returns the raw data encoded in the barcode.
+	 * 
+	 * @return the raw barcode text string
+	 */
 	public String getBarcodeStringRaw() {
 
 		return strRaw;
 	}
 
+	/**
+	 * Returns a _nice_ string representing the data encoded in the barcode.
+	 * 
+	 * @return a _nice_ barcode text string
+	 */
 	public String getBarcodeStringNice() {
 
 		return strNice;
 	}
 
+	/**
+	 * Returns an encoded string representing the data encoded in the barcode.
+	 * 
+	 * @return an encoded barcode text string
+	 */
 	public String getBarcodeStringEncoded() {
 
 		return strEncoded;
 	}
 
+	/**
+	 * returns the number of bytes in the data array.
+	 * 
+	 * @return number of data bytesS
+	 */
 	public int getBarcodeDataSize() {
 
 		return data.length;
 	}
 
+	/**
+	 * Returns the barcode data encoded as Base64.
+	 * 
+	 * @return barcode data in Base64 format
+	 */
 	public String encodeBase64() {
 
 		return Base64.getEncoder()//
 				.encodeToString(getBarcodeData());
 	}
 
+	/**
+	 * Returns the barcode data encoded as Base64, wrapped in a JSON object.
+	 * 
+	 * @return barcode data in JSON format
+	 */
 	public String encodeJSON() {
 
-		return ((new JSONObject()//
-				.put("type", getBarcodeType()))//
+		return (new JSONObject()//
+				.put("type", getBarcodeType())//
 				.put("encoded", getBarcodeStringEncoded())//
-				.put("b64", encodeBase64())//
-		).toString(4);
+				.put("base64", encodeBase64())//
+		).toString();
 	}
 }

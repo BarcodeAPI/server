@@ -41,7 +41,7 @@ public class TestServerRoot extends ServerTestBase {
 	}
 
 	@Test
-	public void testServer_404RedirectToAPI() {
+	public void testServer_302RedirectToAPI() {
 
 		serverGet("/unknown.html");
 

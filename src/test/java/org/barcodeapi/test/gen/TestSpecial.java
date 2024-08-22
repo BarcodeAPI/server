@@ -23,6 +23,36 @@ public class TestSpecial extends ServerTestBase {
 	}
 
 	@Test
+	public void testSpecial_testURL_http() {
+
+		apiGet("http://barcodeapi.org/");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"QRCode", getHeader("X-Barcode-Type"));
+
+		Assert.assertEquals("Code Data", //
+				encode("http://barcodeapi.org/"), getHeader("X-Barcode-Content"));
+	}
+
+	@Test
+	public void testSpecial_testURL_https() {
+
+		apiGet("https://barcodeapi.org/");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"QRCode", getHeader("X-Barcode-Type"));
+
+		Assert.assertEquals("Code Data", //
+				encode("https://barcodeapi.org/"), getHeader("X-Barcode-Content"));
+	}
+
+	@Test
 	public void testSpecial_testAmazonASIN() {
 
 		apiGet("BXXXXXXXXX");

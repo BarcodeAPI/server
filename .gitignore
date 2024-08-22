@@ -1,6 +1,7 @@
 .classpath
-.projet
+.project
 .settings/
+bin/
 target/
 cache/
 logs/

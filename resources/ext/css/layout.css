@@ -650,7 +650,6 @@ a:hover {
 
 .plan-overview {
 	padding-top: 0.5em;
-	padding-bottom: 1.0em;
 }
 
 .plan-free {
@@ -705,6 +704,15 @@ a:hover {
 
 /* \/ Types Page Specific \/ */
 
+#barcode-types {
+	margin-top: 24px;
+}
+
+.barcode-template {
+	padding-top: 24px;
+	padding-bottom: 55px;
+}
+
 .type-name {
 	font-size: 16px;
 	font-weight: bold;
@@ -724,6 +732,19 @@ a:hover {
 /* /\ Types Page Specific /\ */
 
 /* \/ Documentation Page Specific \/ */
+
+.help-entry {
+	margin-top: 24px;
+}
+
+.help-entry p {
+	margin-top: 24px;
+	line-height: 1.5;
+}
+
+.help-entry h2 a {
+	text-decoration: none;
+}
 
 .example-code-title {
 	text-align: left;

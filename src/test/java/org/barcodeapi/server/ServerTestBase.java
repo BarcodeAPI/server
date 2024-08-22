@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import org.barcodeapi.core.ServerLauncher;
+import org.eclipse.jetty.http.HttpStatus;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -58,11 +59,19 @@ public abstract class ServerTestBase {
 	}
 
 	protected void apiGet(String path) {
+		apiGet(path, null);
+	}
+
+	protected void apiGet(String path, String args) {
 
 		try {
 
 			String encoded = URLEncoder.encode(path, "UTF-8");
-			serverGet("/api/" + encoded);
+			String request = "/api/" + encoded;
+			if (args != null) {
+				request += ('?' + args);
+			}
+			serverGet(request);
 
 		} catch (UnsupportedEncodingException e) {
 
@@ -81,16 +90,14 @@ public abstract class ServerTestBase {
 
 			responseCode = urlConnection.getResponseCode();
 
-			if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-
-				response = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+			if (responseCode == HttpStatus.OK_200) {
+				response = new BufferedReader(//
+						new InputStreamReader(urlConnection.getInputStream()));
 			}
-
 		} catch (Exception e) {
 
 			e.printStackTrace(System.err);
 			Assert.fail("IOException.");
-
 		}
 	}
 

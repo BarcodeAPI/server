@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.barcodeapi.server.core.CodeType;
+import org.barcodeapi.server.gen.BarcodeRequest;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONObject;
 
@@ -14,7 +16,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.aztec.AztecWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 /**
  * AztecGenerator.java
@@ -25,27 +26,33 @@ public class AztecGenerator extends CodeGenerator {
 
 	private AztecWriter generator;
 
-	public AztecGenerator() {
+	public AztecGenerator(CodeType codeType) {
+		super(codeType);
 
 		// Setup Aztec generator
 		generator = new AztecWriter();
 	}
 
 	@Override
-	public byte[] onRender(String data, JSONObject options) throws WriterException, IOException {
+	public byte[] onRender(BarcodeRequest request) throws WriterException, IOException {
 
-		int size = options.optInt("size", 275);
-		double qz = options.optDouble("qz", 2);
-		String correction = options.optString("correction", "M");
+		JSONObject options = request.getOptions();
+
+		int size = options.optInt("size", //
+				(Integer) getDefaults().getOrDefault("size", 275));
+
+		double qz = options.optDouble("qz", //
+				(Integer) getDefaults().getOrDefault("qz", 4));
+
+		int correction = options.optInt("correction", //
+				(Integer) getDefaults().getOrDefault("correction", 33));
 
 		Map<EncodeHintType, Object> hintsMap = new HashMap<>();
-		hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
-		hintsMap.put(EncodeHintType.ERROR_CORRECTION, //
-				ErrorCorrectionLevel.valueOf(correction));
+		hintsMap.put(EncodeHintType.ERROR_CORRECTION, correction);
 		hintsMap.put(EncodeHintType.MARGIN, qz);
 
 		BitMatrix bitMatrix = generator.encode(//
-				data, BarcodeFormat.AZTEC, size, size, hintsMap);
+				request.getData(), BarcodeFormat.AZTEC, size, size, hintsMap);
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		MatrixToImageWriter.writeToStream(bitMatrix, "png", out);

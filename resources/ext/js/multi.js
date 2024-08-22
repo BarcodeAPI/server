@@ -3,15 +3,19 @@
 // multi.js
 //
 
-var barcodes = [];
-
+var index = false;
+var barcodes = false;
 window.onhashchange = init;
 
+/**
+ * Called when the page body is loaded.
+ */
 function init() {
 
 	multiClear();
 	var share = window.location.hash.substring(1);
 	((share) ? loadShare(share) : loadArgs());
+	document.getElementById("input").focus();
 }
 
 /**
@@ -23,8 +27,9 @@ function loadShare(share) {
 		.then(response => {
 			return response.json();
 		})
-		.then(function(d) {
-			renderRequests(d);
+		.then(function(data) {
+			renderRequests(//
+				JSON.parse(data.data));
 		});
 }
 
@@ -51,8 +56,6 @@ function renderRequests(requests) {
 	for (var request in requests) {
 		addFromText(requests[request]);
 	}
-
-	document.getElementById("input").focus();
 }
 
 /**
@@ -87,7 +90,6 @@ function addFromText(text) {
 
 	var img = generateImage(text);
 	document.getElementById("barcodes").appendChild(img);
-	barcodes.push(text);
 }
 
 /**
@@ -110,6 +112,31 @@ function onKeyDown(e) {
  */
 function onKeyUp(e) {
 
+	// Clear input text {ESC}
+	if (e.keyCode === 27) {
+		var input = document.getElementById("input");
+		input.value = "";
+		input.focus();
+		e.preventDefault();
+		return;
+	}
+
+	// Previous entry on Up arrow
+	if (e.keyCode === 38 && index > 0) {
+		var input = document.getElementById("input");
+		input.value = barcodes[--index];
+		e.preventDefault();
+		return;
+	}
+
+	// Next entry on Down arrow
+	if (e.keyCode == 40 && index < (barcodes.length - 1)) {
+		var input = document.getElementById("input");
+		input.value = barcodes[++index];
+		e.preventDefault();
+		return;
+	}
+
 	// Handle scan or paste event
 	if (e.target.value.endsWith("\n")) {
 		addFromInput();
@@ -121,11 +148,18 @@ function onKeyUp(e) {
  */
 function generateImage(request) {
 
-	var url = location.origin + "/api/" + request;
+	var url = "";
+	if (!request.startsWith("/api/")) {
+		url += '/api/';
+	}
+	url += request;
 
 	var img = document.createElement("img");
 	img.classList.add("multis-barcode");
-	img.src = url;
+	img.src = (location.origin + url);
+
+	barcodes.push(url);
+	index = barcodes.length;
 
 	return img;
 }
@@ -134,8 +168,11 @@ function generateImage(request) {
  * Clear all rendered images.
  */
 function multiClear() {
-	barcodes.length = 0;
+	index = 0;
+	barcodes = [];
 	document.getElementById("barcodes").innerHTML = "";
+	document.getElementById("input").value = "";
+	document.getElementById("input").focus();
 }
 
 /**

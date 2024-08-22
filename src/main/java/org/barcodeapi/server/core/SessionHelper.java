@@ -20,6 +20,12 @@ import com.mclarkdev.tools.libextras.LibExtrasHashes;
  */
 public class SessionHelper {
 
+	/**
+	 * Returns a user session object for the provided session key.
+	 * 
+	 * @param key the session key
+	 * @return the user session object
+	 */
 	public static CachedSession getSession(String key) {
 
 		CachedObject o = ObjectCache.getCache(//
@@ -28,23 +34,34 @@ public class SessionHelper {
 		return (o == null) ? null : (CachedSession) o;
 	}
 
+	/**
+	 * Creates a new user session object.
+	 * 
+	 * @return the user session object
+	 */
 	public static CachedSession createSession() {
 
-		// create the new session object
+		// Create the new session object
 		CachedSession session = new CachedSession();
 
-		// add session to the cache
+		// Add session to the cache
 		ObjectCache.getCache(//
 				ObjectCache.CACHE_SESSIONS).put(//
 						session.getKey(), session);
 
-		// return the session
+		// Return the session
 		return session;
 	}
 
+	/**
+	 * Lookup a user session object for a given HTTP request.
+	 * 
+	 * @param request the raw request
+	 * @return the user session object
+	 */
 	public static CachedSession getSession(Request request) {
 
-		// get existing user session
+		// Get existing user session
 		CachedSession session = null;
 		if (request.getCookies() != null) {
 			for (Cookie cookie : request.getCookies()) {
@@ -57,22 +74,48 @@ public class SessionHelper {
 		return session;
 	}
 
-	public static boolean validateAdmin(Request request) {
+	/**
+	 * Validate a user based on the provided Authentication string.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static String validateUser(String basicAuth) {
 
-		// false if no authentication
-		String auth = request.getHeader("Authorization");
-		if (auth == null || !auth.startsWith("Basic")) {
-			return false;
+		// False if no authentication string
+		if (basicAuth == null) {
+			return null;
 		}
 
-		String authString = auth.substring(6);
-		String decode = new String(Base64.getDecoder().decode(authString));
-		String[] unpw = decode.split(":");
+		String decoded;
+		try {
 
-		String uName = unpw[0];
-		String passHash = LibExtrasHashes.sumSHA256(unpw[1].getBytes());
+			// Decode as Base64
+			decoded = new String(//
+					Base64.getDecoder().decode(basicAuth));
+		} catch (IllegalArgumentException e) {
 
-		JSONObject admins = AppConfig.get().getJSONObject("admins");
-		return admins.getString(uName).equals(passHash);
+			// Fail if unable to decode
+			return null;
+		}
+
+		// Determine where to split
+		int split = decoded.indexOf(':');
+		if (split < 1) {
+
+			// Fail if not user:pass
+			return null;
+		}
+
+		// Split BasicAuth on [:]
+		String uName = decoded.substring(0, split);
+		String pWord = decoded.substring(split + 1);
+
+		// Calculate the expected password hash
+		String passHash = LibExtrasHashes.sumSHA256(pWord.getBytes());
+
+		// Check if login exists in app config and return
+		JSONObject logins = AppConfig.get().getJSONObject("logins");
+		return (passHash.equals(logins.optString(uName)) ? uName : null);
 	}
 }

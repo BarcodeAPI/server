@@ -7,12 +7,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.core.utils.BulkUtils;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.eclipse.jetty.server.Request;
+import org.json.JSONObject;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
@@ -22,8 +22,6 @@ import com.mclarkdev.tools.liblog.LibLog;
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class BulkHandler extends RestHandler {
-
-	private final int BULK_MAX = AppConfig.get().getInt("bulkMax");
 
 	public BulkHandler() {
 		super(
@@ -52,18 +50,21 @@ public class BulkHandler extends RestHandler {
 			Part part = c.getRequest().getPart("csvFile");
 
 			// Pass input and output streams to bulk helper
-			BulkUtils.getZippedBarcodes(BULK_MAX, //
-					part.getInputStream(), r.getOutputStream());
+			BulkUtils.getZippedBarcodes(part.getInputStream(), r.getOutputStream());
 
 		} catch (GenerationException e) {
 
 			// Log the failure
-			LibLog._log("Failed to generate bulk barcodes.", e);
+			LibLog._clogF("E0509", e.getMessage());
 
-			// Print response to client
+			// Print error to client
 			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			r.setHeader("Content-Type", "application/json");
-			r.getOutputStream().println(e.toString());
+			r.getOutputStream().println((new JSONObject() //
+					.put("code", 400)//
+					.put("message", "failed to process bulk request")//
+					.put("error", e.getMessage())//
+			).toString());
 		}
 	}
 }

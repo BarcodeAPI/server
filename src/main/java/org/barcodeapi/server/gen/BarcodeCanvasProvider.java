@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.krysalis.barcode4j.BarcodeDimension;
 import org.krysalis.barcode4j.TextAlignment;
 import org.krysalis.barcode4j.output.AbstractCanvasProvider;
 import org.krysalis.barcode4j.output.bitmap.BitmapBuilder;
+import org.krysalis.barcode4j.output.bitmap.BitmapEncoder;
 import org.krysalis.barcode4j.output.bitmap.BitmapEncoderRegistry;
 import org.krysalis.barcode4j.output.java2d.Java2DCanvasProvider;
 
@@ -23,32 +24,43 @@ public class BarcodeCanvasProvider extends AbstractCanvasProvider {
 
 	private static final String _MIME = "image/x-png";
 
-	private OutputStream out;
+	private static final BitmapEncoder _ENCODER = //
+			BitmapEncoderRegistry.getInstance(_MIME);
+
 	private int dpi;
 	private BufferedImage image;
 	private Graphics2D g2d;
 	private Java2DCanvasProvider delegate;
 
-	private Color colorBG = Color.white;
-	private Color colorFG = Color.black;
+	private final Color colorBG;
+	private final Color colorFG;
 
-	public BarcodeCanvasProvider(OutputStream out, int dpi) {
+	public BarcodeCanvasProvider(int dpi, String bg, String fg) {
 		super(0);
-		this.out = out;
+
 		this.dpi = dpi;
+		this.colorBG = Color.decode("0x" + bg);
+		this.colorFG = Color.decode("0x" + fg);
 	}
 
-	public void setColors(Color bg, Color fg) {
-		this.colorBG = bg;
-		this.colorFG = fg;
-	}
+	/**
+	 * Encode and render the image.
+	 * 
+	 * @return the image bytes
+	 * @throws IOException generation failure
+	 */
+	public byte[] finish() throws IOException {
 
-	public void finish() throws IOException {
-		this.image.flush();
-		if (this.out != null) {
-			BitmapEncoderRegistry.getInstance(_MIME)//
-					.encode(this.image, out, _MIME, dpi);
+		ByteArrayOutputStream out = //
+				new ByteArrayOutputStream();
+
+		synchronized (image) {
+
+			image.flush();
+			_ENCODER.encode(image, out, _MIME, dpi);
 		}
+
+		return out.toByteArray();
 	}
 
 	/** {@inheritDoc} */

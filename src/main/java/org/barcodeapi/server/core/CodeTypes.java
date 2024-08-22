@@ -32,8 +32,15 @@ public class CodeTypes {
 		codeTypes = new HashMap<>();
 	}
 
+	/**
+	 * Initializes a give CodeType from config.
+	 * 
+	 * @param name the name of the config file
+	 * @return the loaded CodeType
+	 */
 	public CodeType loadType(String name) {
 
+		// Setup and log config file name
 		File typeFile = new File(typeDir, (name + ".json"));
 		LibLog._clogF("I0061", typeFile.getPath());
 
@@ -58,11 +65,22 @@ public class CodeTypes {
 		}
 	}
 
+	/**
+	 * Returns a list of all supported types.
+	 * 
+	 * @return a list of all supported types
+	 */
 	public Set<String> getTypes() {
 
 		return codeTypes.keySet();
 	}
 
+	/**
+	 * Returns the CodeType object for a give name.
+	 * 
+	 * @param name the name of the CodeType
+	 * @return the CodeType object
+	 */
 	public CodeType getType(String name) {
 
 		return codeTypes.get(name);

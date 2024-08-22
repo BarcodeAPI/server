@@ -24,67 +24,94 @@ import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
  */
 public class WatchdogTask extends BackgroundTask {
 
-	private final Runtime runtime;
+	private final Runtime runtime = Runtime.getRuntime();
 
 	public WatchdogTask() {
 		super();
-
-		this.runtime = Runtime.getRuntime();
 	}
 
 	@Override
 	public void onRun() {
 
-		// update system runtime statistics
+		updateRunningTime();
+
+		updateJVMMemoryStatistics();
+
+		updateJVMGCStatistics();
+
+		updateJVMThreadStateCounters();
+
+		updateGeneratorPoolStatistics();
+
+		updateCacheStatistics();
+	}
+
+	private void updateRunningTime() {
+
+		// Update system runtime statistics
 		getStats().setValue(System.currentTimeMillis(), "system", "time", "now");
 		getStats().setValue(ServerRuntime.getTimeRunning(), "system", "time", "running");
+	}
 
-		// update jvm memory statistics
+	private void updateJVMMemoryStatistics() {
+
+		// Get and update JVM memory used
 		double memUsed = (double) (runtime.totalMemory() - runtime.freeMemory());
 		getStats().setValue(memUsed, "system", "jvm", "memory", "used");
 
+		// Get and update JVM memory free
 		double memFree = (double) (runtime.freeMemory());
 		getStats().setValue(memFree, "system", "jvm", "memory", "free");
 
+		// Get and update JVM memory total
 		double memTotal = (double) (runtime.totalMemory());
 		getStats().setValue(memTotal, "system", "jvm", "memory", "total");
 
+		// Get and update JVM memory max
 		double memMax = (double) (runtime.maxMemory());
 		getStats().setValue(memMax, "system", "jvm", "memory", "max");
+	}
 
-		// update jvm gc statistics
+	private void updateJVMGCStatistics() {
+		// Update JVM garbage collection statistics
 		for (GarbageCollectorMXBean gc : ManagementFactory.getGarbageCollectorMXBeans()) {
 
 			String name = gc.getName().replace(" ", "_");
 			getStats().setValue(gc.getCollectionCount(), "system", "jvm", "gc", name, "count");
 			getStats().setValue(gc.getCollectionTime(), "system", "jvm", "gc", name, "time");
 		}
+	}
 
-		// update jvm thread statistics
+	private void updateJVMThreadStateCounters() {
+
+		// Update JVM thread statistics
 		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
 		Thread[] threads = threadSet.toArray(new Thread[threadSet.size()]);
 		getStats().setValue(threads.length, "system", "jvm", "threads", "count");
 
-		// get state of each thread
+		// Get the state of each thread
 		HashMap<State, Integer> threadStates = new HashMap<>();
-		for (Thread t : threads) {
-			int cur = threadStates.getOrDefault(t.getState(), 0);
-			threadStates.put(t.getState(), cur + 1);
+		for (Thread thread : threads) {
+			int current = threadStates.getOrDefault(thread.getState(), 0);
+			threadStates.put(thread.getState(), current + 1);
 		}
 
-		// update thread state counters
+		// Update thread state counters
 		for (State state : threadStates.keySet()) {
 			getStats().setValue(threadStates.get(state), "system", "jvm", "threads", "state", state.toString());
 		}
+	}
 
-		// loop each type of barcode generator
+	private void updateGeneratorPoolStatistics() {
+
+		// Loop each type of barcode generator
 		for (String type : CodeTypes.inst().getTypes()) {
 
-			// access generator pool
+			// Access generator pool
 			LibObjectPooler<CodeGenerator> pool = //
 					CodeGenerators.getInstance().getGeneratorPool(type);
 
-			// update counters for generator pool
+			// Update counters for each generator pool
 			getStats().setValue(pool.getMaxAge(), "generators", type, "pool", "maxAge");
 			getStats().setValue(pool.getMaxIdle(), "generators", type, "pool", "maxIdle");
 			getStats().setValue(pool.getMaxLockCount(), "generators", type, "pool", "maxLockCount");
@@ -92,15 +119,18 @@ public class WatchdogTask extends BackgroundTask {
 			getStats().setValue(pool.getNumLocked(), "generators", type, "pool", "numLocked");
 			getStats().setValue(pool.getPoolSize(), "generators", type, "pool", "size");
 		}
+	}
 
-		// update sizes of app caches
+	private void updateCacheStatistics() {
+
+		// Update size counters for app caches
 		String[] appCaches = new String[] { "sessions", "LIMITS-IP", "LIMITS-KEY" };
 		for (String cache : appCaches) {
 			getStats().setValue(ObjectCache//
 					.getCache(cache).count(), "cache", cache, "size");
 		}
 
-		// update sizes of barcode caches
+		// Update size counters for barcode caches
 		for (String cache : CodeTypes.inst().getTypes()) {
 			getStats().setValue(ObjectCache//
 					.getCache(cache).count(), "cache", cache, "size");

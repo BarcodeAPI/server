@@ -36,6 +36,6 @@ public class SessionDetailsHandler extends RestHandler {
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setHeader("Content-Type", "application/json");
-		r.getOutputStream().println(c.getSession().asJSON().toString());
+		r.getOutputStream().println(c.getSession().encodeJSON());
 	}
 }

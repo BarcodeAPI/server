@@ -338,29 +338,44 @@ function updateBarcodeImage(url) {
 	// Update current URL
 	appState.current = url;
 
+	// Default request headers
+	var options = {
+		method: "GET",
+		cache: "no-store",
+		headers: {
+			"Accept": "image/png",
+		}
+	};
+
+	// If user has API key
+	if (appOptions.apiKey) {
+
+		// Use API key in Authorization header
+		options.headers.Authorization = ("Token=" + appOptions.apiKey);
+	}
+
 	// Request the image
-	fetch(url, { cache: "no-store" })
-		.then(response => {
+	fetch(url, options).then(response => {
 
-			// Upate token count if not cached
-			var tokens = response.headers.get('x-ratelimit-tokens');
-			tokens = (tokens == -1) ? "Unlimited" : tokens;
-			document.getElementById("barcode_tokens").innerHTML = tokens;
+		// Upate token count if not cached
+		var tokens = response.headers.get('x-ratelimit-tokens');
+		tokens = (tokens == -1) ? "Unlimited" : tokens;
+		document.getElementById("barcode_tokens").innerHTML = tokens;
 
-			// Update learn more link
-			var codeType = response.headers.get('x-barcode-type');
-			var displayType = codeType.replace("_", " ");
+		// Update learn more link
+		var codeType = response.headers.get('x-barcode-type');
+		var displayType = codeType.replace("_", " ");
 
-			// Update learn more link
-			var link = document.getElementsByClassName("link-more")[0];
-			link.innerHTML = "Learn more about " + displayType + "!";
-			link.href = "/type.html#" + codeType;
+		// Update learn more link
+		var link = document.getElementsByClassName("link-more")[0];
+		link.innerHTML = "Learn more about " + displayType + "!";
+		link.href = "/type.html#" + codeType;
 
-			// Update the image blob
-			response.blob().then(blob => {
-				document.getElementById('barcode_output').src = URL.createObjectURL(blob);
-			});
+		// Update the image blob
+		response.blob().then(blob => {
+			document.getElementById('barcode_output').src = URL.createObjectURL(blob);
 		});
+	});
 }
 
 /**
@@ -414,11 +429,6 @@ function delayUpdateBarcode() {
 function buildOptionsString() {
 
 	var options = "";
-
-	// Override API Key
-	if (appOptions.apiKey) {
-		options += "&key=" + appOptions.apiKey;
-	}
 
 	// Override Color (FG)
 	if (appOptions.render.colorFG != appOptions.default.colorFG) {

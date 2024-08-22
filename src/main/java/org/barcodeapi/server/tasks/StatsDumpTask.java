@@ -28,37 +28,48 @@ public class StatsDumpTask extends BackgroundTask {
 	@Override
 	public void onRun() {
 
-		// get and print metric data
+		// Get and log metrics data
 		String data = getStats().getDetails().toString();
 		LibLog.log("stats", data);
 
-		// upload metrics if enabled
+		// Upload if enabled
 		if (_TELEM_ENABLED) {
+			sendUsageReport(data);
+		}
+	}
 
-			LibLog._clog("I2604");
+	/**
+	 * Send usage statistics to a remote server to monitoring.
+	 * 
+	 * @param data usage statistics
+	 */
+	private void sendUsageReport(String data) {
 
-			try {
+		LibLog._clog("I2604");
 
-				// create http client
-				URL url = new URL(_TELEM_TARGET);
-				URLConnection con = url.openConnection();
-				HttpURLConnection http = (HttpURLConnection) con;
+		try {
 
-				// set request options
-				http.setDoOutput(true);
-				http.setRequestMethod("POST");
-				http.setFixedLengthStreamingMode(data.length());
-				http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			// Create HTTP client
+			URL url = new URL(_TELEM_TARGET);
+			URLConnection con = url.openConnection();
+			HttpURLConnection http = (HttpURLConnection) con;
 
-				// connect and write
-				http.connect();
-				http.getOutputStream().write(data.getBytes());
-				http.getResponseCode();
+			// Set request options
+			http.setDoOutput(true);
+			http.setRequestMethod("POST");
+			http.setFixedLengthStreamingMode(data.length());
+			http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
-			} catch (Exception e) {
+			// Connect
+			http.connect();
 
-				LibLog._clog("E2609", e);
-			}
+			// Write metrics data
+			http.getOutputStream().write(data.getBytes());
+			http.getResponseCode();
+
+		} catch (Exception | Error e) {
+
+			LibLog._clog("E2609", e);
 		}
 	}
 }
