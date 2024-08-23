@@ -9,6 +9,7 @@ import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.core.RequestContext;
+import org.barcodeapi.server.core.RequestContext.Format;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.gen.BarcodeGenerator;
 import org.barcodeapi.server.gen.BarcodeRequest;
@@ -47,6 +48,8 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		BarcodeRequest request = null;
 		CachedBarcode barcode = null;
+		Format format = Format.PNG;
+		byte[] bytes = null;
 
 		try {
 
@@ -67,6 +70,15 @@ public class BarcodeAPIHandler extends RestHandler {
 			// Generate user requested barcode
 			barcode = BarcodeGenerator.requestBarcode(request);
 
+			// Determine output format
+			for (Format f : c.getFormats()) {
+				if (f.equals(Format.JSON)) {
+					// Encode data as JSON
+					format = f;
+					bytes = barcode.encodeJSON().getBytes();
+				}
+			}
+
 			// Set response code okay
 			r.setStatus(HttpServletResponse.SC_OK);
 
@@ -77,6 +89,11 @@ public class BarcodeAPIHandler extends RestHandler {
 				r.setHeader("Cache-Control", cacheControl);
 			}
 
+			// File save-as name / force download
+			boolean download = (c.getRequest().getHeader("X-ForceDownload") != null);
+			r.setHeader("Content-Disposition", ((download) ? "attachment; " : "") + //
+					("filename=" + (barcode.getBarcodeStringEncoded() + format.getExt())));
+
 		} catch (GenerationException e) {
 
 			// Log the generation failure
@@ -84,57 +101,25 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// Set status headers for failure
 			r.setStatus(e.getExceptionType().getStatusCode());
-			r.setHeader("X-Error-Message", e.getMessage());
+			r.setHeader("X-Error-Message", e.getCause().getMessage());
 
 			// Replace barcode with failure barcode
 			barcode = e.getExceptionType().getBarcodeImage();
+		} finally {
+
+			// Get barcode data if not already set
+			bytes = ((bytes == null) ? barcode.getBarcodeData() : bytes);
 		}
 
-		// Add the code type and detail headers
+		// Add content headers type and length
+		r.setHeader("Content-Type", format.getMime());
+		r.setHeader("Content-Length", Long.toString(bytes.length));
+
+		// Add the barcode type and detail headers
 		r.setHeader("X-Barcode-Type", barcode.getBarcodeType());
 		r.setHeader("X-Barcode-Content", barcode.getBarcodeStringEncoded());
 
-		switch (c.getFormat()) {
-
-		// Serve as JSON
-		case JSON:
-
-			// Get data as JSON encoded string
-			byte[] encodedJson = barcode.encodeJSON().getBytes();
-
-			// Add content headers and write data to stream
-			r.setHeader("Content-Type", c.getFormat().getMime());
-			r.setHeader("Content-Length", Long.toString(encodedJson.length));
-			r.getOutputStream().write(encodedJson);
-			break;
-
-		// Serve as PNG
-		case AS_REQUIRED:
-		case PNG:
-
-			// Determine if response is B64 encoded
-			boolean asB64 = (c.getEncoding() == RequestContext.Encoding.BASE64);
-			byte[] bytes = (asB64) ? barcode.encodeBase64().getBytes() : barcode.getBarcodeData();
-
-			// Add content length and type headers
-			r.setHeader("Content-Length", Long.toString(bytes.length));
-			r.setHeader("Content-Type", (RequestContext.Format.PNG.getMime() + ((asB64) ? ";base64" : "")));
-
-			// File save-as name / force download
-			boolean download = (c.getRequest().getHeader("X-ForceDownload") != null);
-			r.setHeader("Content-Disposition", //
-					((download) ? "attachment; " : "") + //
-							("filename=" + barcode.getBarcodeStringNice() + ".png"));
-
-			// Write data to stream
-			r.getOutputStream().write(bytes);
-			break;
-
-		// Unknown output format
-		default:
-			r.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-			r.setHeader("X-Error-Message", "Invalid output format.");
-			break;
-		}
+		// Write the data to the stream
+		r.getOutputStream().write(bytes);
 	}
 }

@@ -31,7 +31,7 @@ public class SessionHelper {
 		CachedObject o = ObjectCache.getCache(//
 				ObjectCache.CACHE_SESSIONS).get(key);
 
-		return (o == null) ? null : (CachedSession) o;
+		return ((o != null) ? ((CachedSession) o) : null);
 	}
 
 	/**
@@ -66,7 +66,10 @@ public class SessionHelper {
 		if (request.getCookies() != null) {
 			for (Cookie cookie : request.getCookies()) {
 				if (cookie.getName().equals("session")) {
-					session = getSession(cookie.getValue());
+					if ((session = //
+							getSession(cookie.getValue())) != null) {
+						break;
+					}
 				}
 			}
 		}

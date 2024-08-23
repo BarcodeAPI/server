@@ -15,15 +15,17 @@ public class GenerationException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public enum ExceptionType {
-		EMPTY(400, "/128/$$@INVALID$$@"),
+		EMPTY(400, "/128/$$@EMPTY$$@"),
 
 		INVALID(400, "/128/$$@INVALID$$@"),
 
-		LIMITED(402, "/128/$$@RATE$$@$$@LIMIT$$@"),
-
 		BLACKLIST(403, "/128/$$@BLACKLIST$$@"),
 
+		FORMAT(406, "/128/$$@FORMAT$$@"),
+
 		CHECKSUM(409, "/128/$$@CHECKSUM$$@"),
+
+		LIMITED(429, "/128/$$@RATE$$@$$@LIMIT$$@"),
 
 		FAILED(500, "/128/$$@FAILED$$@"),
 

@@ -1,5 +1,8 @@
 package org.barcodeapi.server.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.barcodeapi.server.cache.CachedLimiter;
 import org.barcodeapi.server.cache.CachedSession;
 import org.barcodeapi.server.cache.LimiterCache;
@@ -13,64 +16,52 @@ import org.eclipse.jetty.server.Request;
 public class RequestContext {
 
 	public enum Format {
-		AS_REQUIRED(null),
 
-		TEXT("text/plain"),
+		ANY("*/*", null),
 
-		JSON("application/json"),
+		TEXT("text/plain", ".txt"),
 
-		PNG("image/png");
+		HTML("text/html", ".html"),
+
+		PNG("image/png", ".png"),
+
+		JSON("application/json", ".json");
 
 		private final String mime;
 
-		Format(String mime) {
+		private final String ext;
+
+		Format(String mime, String ext) {
 			this.mime = mime;
+			this.ext = ext;
 		}
 
 		public String getMime() {
 			return mime;
 		}
 
-		public static Format parse(String accept) {
+		public String getExt() {
+			return ext;
+		}
+
+		public static Format[] parse(String accept) {
 			if (accept == null) {
-				return Format.AS_REQUIRED;
+				return null;
 			}
 
 			// Loop each supported format
+			List<Format> supported = new ArrayList<>();
 			for (Format f : Format.values()) {
-
-				// Skip if empty MIME type
-				if (f.getMime() == null) {
-					continue;
-				}
 
 				// Check if MIME type matches
 				if (accept.contains(f.getMime())) {
-					return f;
+					supported.add(f);
 				}
 			}
 
-			// Return default as required
-			return Format.AS_REQUIRED;
-		}
-	}
-
-	public enum Encoding {
-		NONE, BASE64;
-
-		public static Encoding parse(String accept) {
-			if (accept == null) {
-				return Encoding.NONE;
-			}
-
-			switch (accept) {
-
-			case "base64":
-				return Encoding.BASE64;
-
-			default:
-				return Encoding.NONE;
-			}
+			// Return as static array
+			return supported.toArray(//
+					new Format[supported.size()]);
 		}
 	}
 
@@ -89,9 +80,7 @@ public class RequestContext {
 
 	private final String source;
 
-	private final Format format;
-
-	private final Encoding encoding;
+	private final Format[] formats;
 
 	private final String user;
 
@@ -164,8 +153,7 @@ public class RequestContext {
 		}
 
 		// Determine output format and encoding
-		this.format = Format.parse(request.getHeader("Accept"));
-		this.encoding = Encoding.parse(request.getHeader("Accept-Encoding"));
+		this.formats = Format.parse(request.getHeader("Accept"));
 	}
 
 	/**
@@ -245,17 +233,8 @@ public class RequestContext {
 	 * 
 	 * @return the requested output format
 	 */
-	public Format getFormat() {
-		return this.format;
-	}
-
-	/**
-	 * Returns the requested content encoding.
-	 * 
-	 * @return the requested content encoding
-	 */
-	public Encoding getEncoding() {
-		return this.encoding;
+	public Format[] getFormats() {
+		return this.formats;
 	}
 
 	/**

@@ -34,7 +34,7 @@ public class Ean8Generator extends DefaultBarcodeProvider {
 
 		if (checksum != provided) {
 			throw new GenerationException(ExceptionType.CHECKSUM, //
-					new Throwable("Expected checksum : " + checksum));
+					new Throwable("Expected checksum: " + checksum));
 		}
 	}
 }
