@@ -46,7 +46,7 @@ public class RequestContext {
 
 		public static Format[] parse(String accept) {
 			if (accept == null) {
-				return null;
+				return (new Format[] { Format.ANY });
 			}
 
 			// Loop each supported format
