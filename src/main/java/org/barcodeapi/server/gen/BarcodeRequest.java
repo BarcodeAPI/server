@@ -144,7 +144,7 @@ public class BarcodeRequest {
 		// Split target from options
 		int index = uri.indexOf('?');
 		String target = (index == -1) ? uri : uri.substring(0, index);
-		String options = (index == -1) ? null : uri.substring(index + 1);
+		String options = (index == -1) ? "" : uri.substring(index + 1);
 
 		// Remove leading [/api/] or [/]
 		target = target.substring(//
@@ -226,11 +226,10 @@ public class BarcodeRequest {
 		}
 
 		// Get and parse options
-		JSONObject opts = ((options != null) ? //
-				CodeUtils.parseOptions(type, options) : new JSONObject());
+		JSONObject opts = CodeUtils.parseOptions(type, options);
 
 		// Add back unparsed options
-		if (options != null && opts.length() == 0) {
+		if (options.length() > 0 && opts.length() == 0) {
 			target += ("?" + options);
 		}
 
