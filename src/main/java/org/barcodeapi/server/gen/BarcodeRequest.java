@@ -230,7 +230,9 @@ public class BarcodeRequest {
 				CodeUtils.parseOptions(type, options) : new JSONObject());
 
 		// Add back unparsed options
-		target += (opts.length() > 0) ? "" : ("?" + options);
+		if (options != null && opts.length() == 0) {
+			target += ("?" + options);
+		}
 
 		// Return the BarcodeRequest object
 		return new BarcodeRequest(type, target, opts);
