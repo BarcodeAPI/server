@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
+import org.barcodeapi.server.core.CodeType;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;
@@ -139,7 +140,7 @@ public class CodeUtils {
 	 * @param opts the options string
 	 * @return the parsed options
 	 */
-	public static JSONObject parseOptions(String opts) {
+	public static JSONObject parseOptions(CodeType type, String opts) {
 		LibMetrics.hitMethodRunCounter();
 
 		// Loop each supplied option
@@ -148,13 +149,14 @@ public class CodeUtils {
 
 			// Split on [key=value]
 			String[] kv = option.split("=");
-			if (kv[0].equals("")) {
-				continue;
-			}
 
-			// Add to option map
-			options.put(kv[0], //
-					(kv.length == 2) ? kv[1] : true);
+			// If supported key
+			if (type.getOptions().has(kv[0])) {
+
+				// Add to option map
+				options.put(kv[0], //
+						(kv.length == 2) ? kv[1] : true);
+			}
 		}
 
 		return options;
