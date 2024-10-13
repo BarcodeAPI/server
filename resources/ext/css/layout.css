@@ -69,6 +69,7 @@ body {
 .app-setup-options {
 	margin-top: 1.25em;
 	margin-left: 0.35em;
+	padding-bottom: 1.2em;
 }
 
 .app-options-link:after {
@@ -91,7 +92,7 @@ body {
 .app-barcode-options {
 	display: none;
 	grid-template-columns: 1fr 1fr 1fr;
-	margin-bottom: -1.5em;
+	margin-bottom: -1.0em;
 	margin-top: 0.5em;
 	padding: 0.25em;
 }
@@ -100,23 +101,18 @@ body {
 	display: grid;
 }
 
-.app-setup-bulk {
-	margin-top: 2.5rem;
-	margin-bottom: 2rem;
-}
+.app-setup-bulk,
+.app-setup-decode {}
 
 .notice {
 	padding-bottom: 1em;
+	padding-top: 2.25em;
 }
 
 .notice-limits {}
 
 .notice-type {}
 
-.notice-tokens {
-	padding-top: 0.65em;
-	font-size: 14px;
-}
 
 .barcode-text-input {
 	font-size: 24px;
@@ -213,6 +209,11 @@ body {
 	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%2076%2076%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20fill-opacity%3D%221%22%20stroke-width%3D%220.2%22%20stroke-linejoin%3D%22round%22%20d%3D%22M%2047.5282%2C42.9497L%2042.5784%2C38L%2047.5282%2C33.0502L%2044.9497%2C30.4718L%2040%2C35.4216L%2035.0502%2C30.4718L%2032.4718%2C33.0502L%2037.4216%2C38L%2032.4718%2C42.9497L%2035.0502%2C45.5282L%2040%2C40.5784L%2044.9497%2C45.5282L%2047.5282%2C42.9497%20Z%20M%2018.0147%2C41.5355L%2026.9646%2C50.4854C%2028.0683%2C51.589%2029%2C52%2031%2C52L%2052%2C52C%2054.7614%2C52%2057%2C49.7614%2057%2C47L%2057%2C29C%2057%2C26.2386%2054.7614%2C24%2052%2C24L%2031%2C24C%2029%2C24%2028.0683%2C24.4113%2026.9646%2C25.5149L%2018.0147%2C34.4645C%2016.0621%2C36.4171%2016.0621%2C39.5829%2018.0147%2C41.5355%20Z%20M%2031%2C49C%2030%2C49%2029.6048%2C48.8828%2029.086%2C48.3641L%2020.1361%2C39.4142C%2019.355%2C38.6332%2019.355%2C37.3669%2020.1361%2C36.5858L%2029.086%2C27.6362C%2029.6048%2C27.1175%2030%2C27%2031%2C27.0001L%2052%2C27.0001C%2053.1046%2C27.0001%2054%2C27.8955%2054%2C29.0001L%2054%2C47.0001C%2054%2C48.1046%2053.1046%2C49.0001%2052%2C49.0001L%2031%2C49%20Z%20%22%2F%3E%3C%2Fsvg%3E');
 }
 
+.icon-keyboard {
+	background-size: 24px 24px;
+	background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%20-32%20576%20576%22%20fill%3D%22%23ffffff%22%3E%3Cpath%20d%3D%22M528%2064H48C21.49%2064%200%2085.49%200%20112v288c0%2026.51%2021.49%2048%2048%2048h480c26.51%200%2048-21.49%2048-48V112c0-26.51-21.49-48-48-48zm8%20336c0%204.411-3.589%208-8%208H48c-4.411%200-8-3.589-8-8V112c0-4.411%203.589-8%208-8h480c4.411%200%208%203.589%208%208v288zM170%20270v-28c0-6.627-5.373-12-12-12h-28c-6.627%200-12%205.373-12%2012v28c0%206.627%205.373%2012%2012%2012h28c6.627%200%2012-5.373%2012-12zm96%200v-28c0-6.627-5.373-12-12-12h-28c-6.627%200-12%205.373-12%2012v28c0%206.627%205.373%2012%2012%2012h28c6.627%200%2012-5.373%2012-12zm96%200v-28c0-6.627-5.373-12-12-12h-28c-6.627%200-12%205.373-12%2012v28c0%206.627%205.373%2012%2012%2012h28c6.627%200%2012-5.373%2012-12zm96%200v-28c0-6.627-5.373-12-12-12h-28c-6.627%200-12%205.373-12%2012v28c0%206.627%205.373%2012%2012%2012h28c6.627%200%2012-5.373%2012-12zm-336%2082v-28c0-6.627-5.373-12-12-12H82c-6.627%200-12%205.373-12%2012v28c0%206.627%205.373%2012%2012%2012h28c6.627%200%2012-5.373%2012-12zm384%200v-28c0-6.627-5.373-12-12-12h-28c-6.627%200-12%205.373-12%2012v28c0%206.627%205.373%2012%2012%2012h28c6.627%200%2012-5.373%2012-12zM122%20188v-28c0-6.627-5.373-12-12-12H82c-6.627%200-12%205.373-12%2012v28c0%206.627%205.373%2012%2012%2012h28c6.627%200%2012-5.373%2012-12zm96%200v-28c0-6.627-5.373-12-12-12h-28c-6.627%200-12%205.373-12%2012v28c0%206.627%205.373%2012%2012%2012h28c6.627%200%2012-5.373%2012-12zm96%200v-28c0-6.627-5.373-12-12-12h-28c-6.627%200-12%205.373-12%2012v28c0%206.627%205.373%2012%2012%2012h28c6.627%200%2012-5.373%2012-12zm96%200v-28c0-6.627-5.373-12-12-12h-28c-6.627%200-12%205.373-12%2012v28c0%206.627%205.373%2012%2012%2012h28c6.627%200%2012-5.373%2012-12zm96%200v-28c0-6.627-5.373-12-12-12h-28c-6.627%200-12%205.373-12%2012v28c0%206.627%205.373%2012%2012%2012h28c6.627%200%2012-5.373%2012-12zm-98%20158v-16c0-6.627-5.373-12-12-12H180c-6.627%200-12%205.373-12%2012v16c0%206.627%205.373%2012%2012%2012h216c6.627%200%2012-5.373%2012-12z%22%2F%3E%3C%2Fsvg%3E');
+}
+
 .icon-chevron:after {
 	background-size: 12px 12px;
 	background-image: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%20304%20448%22%3E%3Cpath%20fill%3D%22%23000%22%20d%3D%22M276.75%20219.25l-185.5%20185.5c-6.25%206.25-16.25%206.25-22.5%200l-41.5-41.5c-6.25-6.25-6.25-16.25%200-22.5l132.75-132.75-132.75-132.75c-6.25-6.25-6.25-16.25%200-22.5l41.5-41.5c6.25-6.25%2016.25-6.25%2022.5%200l185.5%20185.5c6.25%206.25%206.25%2016.25%200%2022.5z%22%2F%3E%3C%2Fsvg%3E');
@@ -224,8 +225,14 @@ body {
 }
 
 .footer {
-	padding-top: 1em;
+	padding-top: 0.8em;
 	border-top: 2px solid #222;
+}
+
+.footer-tokens {
+	font-size: 13px;
+	margin-top: 1.35em;
+	margin-bottom: -0.2em;
 }
 
 .footer-about {
@@ -266,6 +273,7 @@ body {
 }
 
 .anim:hover:after {
+	margin-right: 0em;
 	padding-left: 0.85em;
 }
 
@@ -286,15 +294,6 @@ body {
 
 	.barcode-type-example img {
 		max-width: 240px;
-	}
-}
-
-/* Added below 450px */
-@media only screen and (max-width: 450px) {
-
-	.bulk-upload-form .col-xs-6 {
-		flex-basis: 100%;
-		max-width: 90%;
 	}
 }
 
@@ -355,6 +354,7 @@ body {
 	.app-setup-tokens,
 	.app-setup-options,
 	.app-setup-bulk,
+	.app-setup-decode,
 	.notice,
 	#tooltip {
 		display: none;
@@ -560,6 +560,10 @@ button[disabled] {
 	background-color: #ea4335;
 }
 
+.action-icon.action-keyboard:hover {
+	background-color: #3232c0;
+}
+
 .action-icon.action-email:hover {
 	background-color: #ea4335;
 }
@@ -608,6 +612,7 @@ a:hover {
 	position: relative;
 	top: 2px;
 	padding-left: 0.65em;
+	margin-right: 0.20em;
 
 	display: inline-block;
 	background-size: 8px 12px;
@@ -757,18 +762,27 @@ a:hover {
 
 /* /\ Documentation Page Specific /\ */
 
+
+/* \/ Decode Page Specific \/ */
+
+.decode-image-wrapper img {
+	max-width: 100%;
+	max-height: 350px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 12px;
+}
+
+/* /\ Decode Page Specific /\ */
+
+
 /* \/ Bulk Page Specific \/ */
 
 .bulk-barcodes {
 	margin-bottom: 4rem;
 }
 
-.bulk-barcodes p {
-	text-align: left;
-	margin-bottom: 2rem;
-}
-
-.bulk-barcodes p.small {
+.bulk-info p.small {
 	font-size: 11px;
 }
 
@@ -847,3 +861,37 @@ a:hover {
 }
 
 /* /\ Bulk Page Specific /\ */
+
+/* \/ App Keyboard Specific \/ */
+
+.keyboard-head {
+	padding-top: 0.8em;
+	padding-bottom: 1.2em;
+}
+
+.keyboard-head .button:hover {
+	background-color: #c020c0;
+}
+
+.keyboard-head .button {
+	padding: 0.2em;
+	margin-top: 0.2em;
+	margin-bottom: 0.2em;
+}
+
+.keyboard-main .button:hover {
+	background-color: #2e7bca;
+}
+
+.keyboard-main .button {
+	font-family: Consolas;
+	font-size: 12px;
+	padding: 0.5em;
+}
+
+/* /\ App Keyboard Specific /\ */
+
+.help-image {
+	max-width: 150px;
+	max-height: 150px;
+}

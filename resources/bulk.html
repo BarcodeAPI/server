@@ -47,6 +47,13 @@
 					barcode content. All other columns are optional parameters to
 					adjust each image.
 				</p>
+				<p>
+					Be sure to check the <a href="/types.html">types</a> page for additional details regarding the
+					available option parameters supported by each barcode type.
+				</p>
+			</div>
+
+			<div class="bulk-info col-xs-8">
 				<div class="text-file-table">
 					<div class="row center-xs middle-xs heading-text">
 						<div class="col-xs-3 default">Text</div>
@@ -86,13 +93,13 @@
 				</div>
 				<p class="small" id="optional_column_text">* Optional column</p>
 			</div>
-			<div class="col-xs-8 bulk-upload-form">
+
+			<div class="col-xs-8">
 				<form method="post" action="bulk/" enctype="multipart/form-data">
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-6">
-							<input type="file" name="csvFile" class="file-input" onclick="checkIfFileSelected()"
-								id="csvFile"> <label for="csvFile">Choose a
-								file</label>
+							<input type="file" id="csvFile" name="csvFile" class="file-input">
+							<label for="csvFile">Choose a file</label>
 						</div>
 						<div class="col-xs-6">
 							<button class="button" type="submit" id="generate-bc" disabled>Generate

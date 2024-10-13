@@ -7,6 +7,7 @@
  * User Interface App Options
  */
 const appState = {
+	'selected': false,
 	'current': false,
 	'drawerOpen': false,
 	'optionsOpen': false,
@@ -53,7 +54,6 @@ async function init() {
 
 	// Hide UI elements based on config
 	uiShowHide("app-setup-bulk", appDisplay.bulkPages);
-	uiShowHide("notice-type", appDisplay.helpType);
 
 	// Hide UI elements based on browser support
 	uiShowHide("action-copy", appFeatures.copyImage);
@@ -71,10 +71,14 @@ async function init() {
 
 	// Setup barcode action handler
 	uiAddListener("action-clear", actionClearInput);
+	uiAddListener("action-keyboard", actionShowKeyboard);
 	uiAddListener("action-print", actionPrintImage);
-	uiAddListener("action-url", actionCopyURL);
 	uiAddListener("action-copy", actionCopyImage);
+	uiAddListener("action-url", actionCopyURL);
 	uiAddListener("action-download", actionDownloadImage);
+
+	// Close the keyboard when navigating away
+	window.onbeforeunload = actionCloseKeyboard;
 }
 
 /**
@@ -165,6 +169,7 @@ function loadSelectedType() {
 
 	// Lookup in supported type map
 	const codeType = getType(hash);
+	appState.selected = codeType;
 
 	// Get element for selected hash
 	var selected = document.getElementById(//
@@ -179,6 +184,9 @@ function loadSelectedType() {
 	// Update text field regex
 	var text = document.getElementById("text");
 	text.setAttribute("pattern", (codeType) ? codeType.pattern : '.*');
+
+	// Show non-printing keyboard for supported formats
+	uiShowHide("action-keyboard", (codeType) ? codeType.nonprinting : false);
 
 	// Render options menu
 	renderOptions(codeType);
@@ -200,7 +208,8 @@ function renderOptions(type) {
 
 	// Determine if showing options
 	var showOptions = (type) && //
-		(appDisplay.renderOptions && (type.options.length > 0));
+		(appDisplay.renderOptions && //
+			Object.keys(type.options).length);
 
 	// Show / hide menu
 	uiShowHide("app-setup-options", showOptions);
@@ -368,7 +377,7 @@ function updateBarcodeImage(url) {
 
 		// Update learn more link
 		var link = document.getElementsByClassName("link-more")[0];
-		link.innerHTML = "Learn more about " + displayType + "!";
+		link.innerHTML = "Learn more about " + displayType + " barcodes!";
 		link.href = "/type.html#" + codeType;
 
 		// Update the image blob
@@ -521,6 +530,27 @@ function actionClearInput() {
 }
 
 /**
+ * Called when the special character keyboard should be shown.
+ */
+function actionShowKeyboard() {
+
+	var kbd = document.appKeyboard;
+	if (typeof kbd === 'undefined' || kbd.closed) {
+		kbd = createKeyboard();
+	}
+	kbd.focus();
+}
+
+/**
+ * Called when the special character keyboard should be closed.
+ */
+function actionCloseKeyboard() {
+	if (document.appKeyboard) {
+		document.appKeyboard.close();
+	}
+}
+
+/**
  * Called when a user requests the barcode be printed.
  */
 function actionPrintImage() {
@@ -588,6 +618,14 @@ function actionDownloadImage() {
 }
 
 /**
+ * Redirect the user to the nonprinting page.
+ */
+function actionNonprintingHelp() {
+
+	window.location = "/nonprinting.html";
+}
+
+/**
  * Get a barcode type object from a target..
  */
 function getType(code) {
@@ -609,6 +647,7 @@ function getType(code) {
 
 	return null;
 }
+
 
 /**
  * Set the selected barcode type.
@@ -678,4 +717,24 @@ function addTooltip(target, message) {
 var removeTooltip = function() {
 	document.body.removeChild(//
 		document.querySelector("#tooltip"));
+}
+
+/**
+ * Add a character to the current input text.
+ * 
+ * This is called by the Keyboard window.
+ */
+function addCharacter(text) {
+
+	document.getElementById("text").value += text;
+	delayUpdateBarcode();
+}
+
+/**
+ * Called when a new keyboard window should be created.
+ */
+function createKeyboard() {
+	document.appKeyboard = window.open("keyboard.html", "Keyboard",
+		"width=700px,height=425px,menubar=0,status=0,scrollbars=0");
+	return document.appKeyboard;
 }

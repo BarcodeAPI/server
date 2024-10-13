@@ -1,15 +1,16 @@
+//
+// BarcodeAPI.org
+// ui.js
+//
+
 /**
  * App Display Options
  */
 const appDisplay = {
-	'about': true,
-	'support': false,
-	'tokenCount': false,
 	'bulkPages': true,
+	'tokenCount': false,
 	'limitsNotice': false,
 	'renderOptions': false,
-	'helpType': true,
-	'helpManual': true,
 	'showHidden': false
 };
 
@@ -51,9 +52,7 @@ function initHeader() {
 
 	uiAddListener("header-logo", actionHome);
 	uiAddListener("action-email", actionContact);
-	if (appDisplay.support) {
-		uiAddListener("header-support", actionSupport)
-	}
+	uiAddListener("header-support", actionSupport)
 }
 
 /**
@@ -62,7 +61,6 @@ function initHeader() {
 function initNotice() {
 
 	uiShowHide("notice-limits", appDisplay.limitsNotice);
-	uiShowHide("notice-tokens", appDisplay.tokenCount);
 }
 
 /**
@@ -70,8 +68,7 @@ function initNotice() {
  */
 function initFooter() {
 
-	uiShowHide("footer-link", appDisplay.about);
-	uiShowHide("footer-docs", appDisplay.helpManual);
+	uiShowHide("footer-tokens", appDisplay.tokenCount);
 
 	uiAddListener("footer-docs-link", actionShowDocs);
 }
@@ -109,9 +106,10 @@ function actionShowDocs() {
  */
 function uiShowHide(elem, show) {
 	var obj = document.getElementsByClassName(elem)[0];
-	if (obj) {
-		obj.style.display = ((show) ? '' : 'none');
+	if (!obj) {
+		return;
 	}
+	obj.style.display = ((show) ? '' : 'none');
 }
 
 /**

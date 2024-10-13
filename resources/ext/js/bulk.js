@@ -2,6 +2,7 @@
 function init() {
 
 	document.getElementsByClassName("link-csv")[0].addEventListener('click', actionDownloadCSV);
+	document.getElementById("csvFile").addEventListener('change', checkIfFileSelected);
 }
 
 function actionDownloadCSV() {
@@ -20,11 +21,13 @@ function actionDownloadCSV() {
 	document.body.removeChild(a);
 }
 
-function checkIfFileSelected() {
+function checkIfFileSelected(obj) {
+
+	console.log(obj);
 
 	var submitButton = document.getElementById("generate-bc");
 
-	document.getElementById('csvFile').addEventListener('change', function() {
+	obj.addEventListener('change', function() {
 		if (this.value.length > 0) {
 			submitButton.removeAttribute("disabled");
 		} else {

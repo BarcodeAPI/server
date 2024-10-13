@@ -87,9 +87,12 @@
 				</div>
 
 				<div class="app-setup-bulk col-xs-12">
-					<h4>Need more barcodes?</h4>
-					<a href="/multi.html" class="text-link icon-chevron bulk-link anim">MULTIS GENERATOR</a><br />
-					<a href="/bulk.html" class="text-link icon-chevron bulk-link anim">BULK BARCODE GENERATOR</a>
+					<h4>More Barcode Tools!</h4>
+					<a href="/multi.html" class="text-link anim icon-chevron bulk-link">MULTI-LABEL GENERATOR</a>
+					<br />
+					<a href="/bulk.html" class="text-link anim icon-chevron bulk-link">BULK BARCODE GENERATOR</a>
+					<br />
+					<a href="/decode.html" class="text-link anim icon-chevron bulk-link">BARCODE IMAGE DECODER</a>
 				</div>
 			</div>
 
@@ -99,8 +102,11 @@
 						<input id="text" class="barcode-text-input pulse-bg" type="text" placeholder="TRY ME!"
 							autocomplete="off" maxlength="200" />
 					</div>
-					<div class="col-xs-2 middle-xs center-xs">
+					<div class="col-xs-1 middle-xs center-xs">
 						<div class="action-icon action-clear icon-clear"></div>
+					</div>
+					<div class="col-xs-1 middle-xs center-xs">
+						<div class="action-icon action-keyboard icon-keyboard"></div>
 					</div>
 				</div>
 
@@ -123,15 +129,15 @@
 			<div class="col-xs-6">
 				<div class="notice-limits">
 					<b>Important Update!</b><br />
-					<a href="/limits.html" class="text-link icon-chevron anim">Introducing Rate Limits</a>
-				</div>
-				<div class="notice-tokens">
-					Tokens Remaining:&nbsp;<span id="barcode_tokens"></span>
+					<a href="/limits.html" class="text-link anim icon-chevron">Introducing Rate Limits</a>
 				</div>
 			</div>
 
-			<div class="notice-type col-xs-6 end-xs">
-				<a class="text-link link-more"></a>
+			<div class="col-xs-6 end-xs">
+				<div class="notice-type">
+					<a class="text-link link-more anim icon-chevron"></a>
+
+				</div>
 			</div>
 		</div>
 
@@ -139,11 +145,14 @@
 			<div class="footer-about col-xs-12 col-sm-8">
 				Generate barcodes of nearly any type! Scan them in the web browser or download the images for free!
 				BarcodeAPI.org is an open source barcode server capable of providing a wide range of barcode formats
-				through a RESTful API.
-				<span class="footer-link">(&nbsp;<a href="/about.html">about</a>&nbsp;)</span>
+				through a RESTful API.&nbsp;<span class="footer-link">(&nbsp;<a
+						href="/about.html">about</a>&nbsp;)</span>
 			</div>
 			<div class="footer-docs col-xs-12 col-sm-4 center-xs end-sm">
 				<span class="footer-docs-link">User Manual</span>
+			</div>
+			<div class="footer-tokens col-xs-12 col-sm-4 center-xs start-sm">
+				Tokens Remaining:&nbsp;<span id="barcode_tokens"></span>
 			</div>
 		</div>
 	</div>

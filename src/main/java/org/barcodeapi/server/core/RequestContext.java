@@ -76,6 +76,8 @@ public class RequestContext {
 
 	private final String uri;
 
+	private final int body;
+
 	private final String origin;
 
 	private final String source;
@@ -112,6 +114,9 @@ public class RequestContext {
 
 		// Get the request URI
 		this.uri = request.getOriginalURI();
+
+		// Size of the request body
+		this.body = request.getContentLength();
 
 		// Get the origin
 		this.origin = request.getHeader("origin");
@@ -208,6 +213,26 @@ public class RequestContext {
 	 */
 	public String getUri() {
 		return this.uri;
+	}
+
+	/**
+	 * Returns if the request has additional content.
+	 * 
+	 * @return if the request has additional content
+	 */
+	public boolean hasBody() {
+
+		return (this.body > 0);
+	}
+
+	/**
+	 * Returns the length of the additional content.
+	 * 
+	 * @return the length of the additional content
+	 */
+	public int getBodySize() {
+
+		return this.body;
 	}
 
 	/**

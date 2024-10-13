@@ -73,6 +73,7 @@ public class WatchdogTask extends BackgroundTask {
 	}
 
 	private void updateJVMGCStatistics() {
+
 		// Update JVM garbage collection statistics
 		for (GarbageCollectorMXBean gc : ManagementFactory.getGarbageCollectorMXBeans()) {
 

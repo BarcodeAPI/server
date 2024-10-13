@@ -16,8 +16,9 @@ import org.barcodeapi.server.admin.SessionListHandler;
 import org.barcodeapi.server.admin.ShareListHandler;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.BulkHandler;
+import org.barcodeapi.server.api.DecodeHandler;
 import org.barcodeapi.server.api.InfoHandler;
-import org.barcodeapi.server.api.SessionDetailsHandler;
+import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.ShareHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.TypeHandler;
@@ -131,10 +132,11 @@ public class ServerLauncher {
 		// Setup rest handlers
 		initHandler("/api", BarcodeAPIHandler.class);
 		initHandler("/bulk", BulkHandler.class);
+		initHandler("/decode", DecodeHandler.class);
 		initHandler("/type", TypeHandler.class);
 		initHandler("/types", TypesHandler.class);
 		initHandler("/share", ShareHandler.class);
-		initHandler("/session", SessionDetailsHandler.class);
+		initHandler("/session", SessionHandler.class);
 		initHandler("/info", InfoHandler.class);
 
 		// Setup admin handlers

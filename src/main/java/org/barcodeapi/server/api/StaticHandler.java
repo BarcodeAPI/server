@@ -40,7 +40,6 @@ public class StaticHandler extends RestHandler {
 	@Override
 	public void _impl(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		super.handle(target, baseRequest, request, response);
 
 		// Calculate and set cache expiration time
 		response.setDateHeader("expires", //
