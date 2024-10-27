@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public class LimiterFlushHandler extends RestHandler {
 
 	public LimiterFlushHandler() {
-		super(true);
+		super(true, false, false);
 	}
 
 	@Override

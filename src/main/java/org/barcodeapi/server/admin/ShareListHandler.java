@@ -19,7 +19,7 @@ import org.json.JSONObject;
 public class ShareListHandler extends RestHandler {
 
 	public ShareListHandler() {
-		super(true);
+		super(true, false, false);
 	}
 
 	@Override

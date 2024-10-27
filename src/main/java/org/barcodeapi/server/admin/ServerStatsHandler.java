@@ -19,7 +19,7 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
 public class ServerStatsHandler extends RestHandler {
 
 	public ServerStatsHandler() {
-		super(true);
+		super(true, false, false);
 	}
 
 	@Override

@@ -19,7 +19,7 @@ import org.json.JSONObject;
 public class CacheFlushHandler extends RestHandler {
 
 	public CacheFlushHandler() {
-		super(true);
+		super(true, false, false);
 	}
 
 	@Override

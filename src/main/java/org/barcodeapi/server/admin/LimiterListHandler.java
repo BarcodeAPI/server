@@ -21,7 +21,7 @@ import org.json.JSONObject;
 public class LimiterListHandler extends RestHandler {
 
 	public LimiterListHandler() {
-		super(true);
+		super(true, false, false);
 	}
 
 	@Override
