@@ -114,8 +114,10 @@ public abstract class RestHandler extends AbstractHandler {
 		response.setHeader("Server-Node", serverName);
 		response.setHeader("Accept-Charset", "utf-8");
 
-		// Add session header
-		if (ctx.hasSession()) {
+		// Check if newly created session
+		if (ctx.hasNewSession()) {
+
+			// Add session token to response header
 			response.addCookie(ctx.getSession().getCookie());
 		}
 

@@ -21,8 +21,8 @@ public abstract class CachedObject implements Serializable {
 
 		this.accessCount = 0;
 		this.timeCreated = System.currentTimeMillis();
+		this.timeTouched = this.timeCreated;
 
-		this.touch();
 		this.setTimeout(60, TimeUnit.MINUTES);
 	}
 

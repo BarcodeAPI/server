@@ -297,4 +297,14 @@ public class RequestContext {
 	public CachedSession getSession() {
 		return this.session;
 	}
+
+	/**
+	 * Returns true if the session was newly created.
+	 * 
+	 * @return if the session was newly created
+	 */
+	public boolean hasNewSession() {
+		return (this.session != null) && //
+				(this.session.getAccessCount() == 1);
+	}
 }
