@@ -112,7 +112,8 @@ public class BarcodeRequest {
 	public static BarcodeRequest fromCSV(String[] record) throws GenerationException {
 
 		if (record == null || record.length == 0) {
-			throw new GenerationException(ExceptionType.EMPTY);
+			throw new GenerationException(ExceptionType.EMPTY, //
+					new Throwable("The request was empty."));
 		}
 
 		String data = record[0];
@@ -199,7 +200,8 @@ public class BarcodeRequest {
 		if (type == null || target == null || target.equals("")) {
 
 			// Fail on empty requests
-			throw new GenerationException(ExceptionType.EMPTY);
+			throw new GenerationException(ExceptionType.EMPTY, //
+					new Throwable("The request was empty."));
 		}
 
 		// Validate barcode pattern
@@ -216,7 +218,8 @@ public class BarcodeRequest {
 
 			// Fail if request matches blacklist entry
 			if (target.matches(blacklist.getString(x))) {
-				throw new GenerationException(ExceptionType.BLACKLIST);
+				throw new GenerationException(ExceptionType.BLACKLIST, //
+						new Throwable("The request was rejected."));
 			}
 		}
 

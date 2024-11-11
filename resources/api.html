@@ -41,6 +41,10 @@
 		<div class="help-entry row center-xs middle-xs">
 			<div class="col-sm-8 col-xs-12">
 				<h2>BarcodeAPI.org</h2>
+			</div>
+		</div>
+		<div class="help-entry row center-xs middle-xs">
+			<div class="col-sm-8 col-xs-12">
 				<p class="center-xs">
 					An intuitive and easy to use barcode generation API.
 				</p>
@@ -56,61 +60,58 @@
 					Join the many who rely on BarcodeAPI.org for their barcode needs.
 				</p>
 			</div>
-			<div class="col-sm-4 col-xs-12 row">
-				<div class="col-xs-2 end-xs">
-					<a href="#tokens">&sect;1</a>
+
+			<div class="col-sm-4 col-xs-8 center-xs end-sm row">
+
+				<div class="col-xs-12 start-xs">
+					<h3>Sections</h3>
 				</div>
-				<div class="col-xs-10 start-xs">
-					Tokens and Rate Limits
+				<div class="col-xs-12 start-xs">
+					<a class="toc-link" href="#tokens">
+						&sect;1 - Tokens and Rate Limits
+					</a>
 				</div>
 
-				<div class="col-xs-2 end-xs">
-					<a href="#usage">&sect;2</a>
-				</div>
-				<div class="col-xs-10 start-xs">
-					Basic API Usage
-				</div>
-
-				<div class="col-xs-2 end-xs">
-					<a href="#formats">&sect;3</a>
-				</div>
-				<div class="col-xs-10 start-xs">
-					Barcode Formats
+				<div class="col-xs-12 start-xs">
+					<a class="toc-link" href="#usage">
+						&sect;2 - Basic API Usage
+					</a>
 				</div>
 
-				<div class="col-xs-2 end-xs">
-					<a href="#custom">&sect;4</a>
-				</div>
-				<div class="col-xs-10 start-xs">
-					Barcode Customization
-				</div>
-
-				<div class="col-xs-2 end-xs">
-					<a href="#bulk">&sect;5</a>
-				</div>
-				<div class="col-xs-10 start-xs">
-					Bulk Barcode Generation
+				<div class="col-xs-12 start-xs">
+					<a class="toc-link" href="#formats">
+						&sect;3 - Barcode Formats
+					</a>
 				</div>
 
-				<div class="col-xs-2 end-xs">
-					<a href="#headers">&sect;6</a>
-				</div>
-				<div class="col-xs-10 start-xs">
-					Server Headers
-				</div>
-
-				<div class="col-xs-2 end-xs">
-					<a href="#session">&sect;7</a>
-				</div>
-				<div class="col-xs-10 start-xs">
-					User Session
+				<div class="col-xs-12 start-xs">
+					<a class="toc-link" href="#custom">
+						&sect;4 - Barcode Customization
+					</a>
 				</div>
 
-				<div class="col-xs-2 end-xs">
-					<a href="#support">&sect;8</a>
+				<div class="col-xs-12 start-xs">
+					<a class="toc-link" href="#bulk">
+						&sect;5 - Bulk Barcode Generation
+					</a>
 				</div>
-				<div class="col-xs-10 start-xs">
-					Technical Support
+
+				<div class="col-xs-12 start-xs">
+					<a class="toc-link" href="#headers">
+						&sect;6 - Response Headers
+					</a>
+				</div>
+
+				<div class="col-xs-12 start-xs">
+					<a class="toc-link" href="#session">
+						&sect;7 - User Session
+					</a>
+				</div>
+
+				<div class="col-xs-12 start-xs">
+					<a class="toc-link" href="#support">
+						&sect;8 - Technical Support
+					</a>
 				</div>
 			</div>
 		</div>
@@ -126,8 +127,7 @@
 					<br />
 					Our FREE tier should be sufficient for basic use, however some users may not find this limit
 					sufficient for their needs. Please visit <a href="/limits.html"
-						class="text-link anim icon-chevron">Rate
-						Limits</a> for additional details on our pricing plans.
+						class="text-link anim icon-chevron">Rate Limits</a> for additional details on our pricing plans.
 				</p>
 				<br />
 			</div>
@@ -240,8 +240,7 @@ fetch(url, { cache: "no-store" })
 				<p class="center-xs">
 					A detailed list of barcode formats available to be rendered by this server can be viewed at the
 					<a class="text-link anim icon-chevron" href="/types.html">Barcode Types</a> page. This page is a
-					graphical
-					representation of the [/types] API endpoint.
+					graphical representation of the [/types] API endpoint.
 					<br />
 					<br />
 					Each barcode type will provide it's token cost for both basic and custom barcodes generated in
@@ -304,9 +303,8 @@ fetch(url, { cache: "no-store" })
 				<h3>Options</h3>
 				<p class="center-xs">
 					Barcode options are simply added to each request as a GET parameter. Visit the <a
-						href="/types.html">types</a> page to view all supported barcode types and their available
-					option
-					parameters.
+						class="text-link anim icon-chevron" href="/types.html">types</a> page to view all supported
+					barcode types and their available option parameters.
 				</p>
 				<pre>
 /api/dm/test?fg=ff0000
@@ -317,8 +315,7 @@ fetch(url, { cache: "no-store" })
 				<h3>Control Characters</h3>
 				<p class="center-xs">
 					Some barcodes support the encoding of NonPrinting ASCII characters. With a supported barcode
-					type
-					selected, click to open the character keyboard which will assist in inserting non-printing
+					type selected, click to open the character keyboard which will assist in inserting non-printing
 					characters.
 					<br />
 					<br />
@@ -344,8 +341,7 @@ fetch(url, { cache: "no-store" })
 				<p class="center-xs">
 					Users wishing to generate a large number of barcodes may wish to use the Bulk Barcode generator.
 					This utility will allow the upload of a CSV containing the barcode requests, and will return a
-					ZIP
-					file containing each of the barcodes.
+					ZIP file containing each of the barcodes.
 					<br />
 					<br />
 					Visit <a href="/bulk.html" class="text-link anim icon-chevron">Bulk Generator</a>
@@ -368,7 +364,7 @@ fetch(url, { cache: "no-store" })
 		<a name="headers"></a><br />
 		<div class="help-entry row center-xs middle-xs">
 			<div class="col-xs-12">
-				<h2><a href="#headers">&sect;6</a>&nbsp;Server Headers</h2>
+				<h2><a href="#headers">&sect;6</a>&nbsp;Response Headers</h2>
 				<p class="center-xs">
 					The server makes a number of headers available which describe the result of the request.
 				</p>
@@ -404,6 +400,17 @@ $ curl --head https://barcodeapi.org/abc123
 Location: https://barcodeapi.org/api/auto/abc123
 					</pre>
 				</div>
+
+				<div>
+					<h3>Cache Control</h3>
+					<p class="start-xs">
+						In an attempt to minimize the number of requests, barcodes requested outside of the webapp
+						will have a cache expiration time set.
+					</p>
+					<pre class="example-code">
+Cache-Control: max-age=86400, public
+					</pre>
+				</div>
 			</div>
 
 			<div class="col-sm-6 col-xs-12">
@@ -420,25 +427,22 @@ X-RateLimit-Tokens: 2032.40
 					</pre>
 				</div>
 
-				<div>
-					<h3>Cache Control</h3>
-					<p class="start-xs">
-						In an attempt to minimize the number of requests, barcodes requested outside of the webapp
-						will have a cache expiration time set.
-					</p>
-					<pre class="example-code">
-Cache-Control: max-age=86400, public
-					</pre>
-				</div>
+
 
 				<div>
 					<h3>Error Headers</h3>
 					<p class="start-xs">
 						In the event of a render error, an additional header will be available containing details
-						about the exception.
+						about the exception. [X-Error-Message]
 					</p>
 					<pre class="example-code">
-X-Error-Message: (exception.toString())
+400	EMPTY		The request was empty.
+400	INVALID		Invalid data for selected code type.
+403	BLACKLIST	The request was rejected.
+409	CHECKSUM	Expected checksum: 0
+429	LIMITED		Client is rate limited, try again later.
+500	FAILED		Failed to render barcode.
+503	BUSY		Server is busy, please try again.
 					</pre>
 				</div>
 			</div>

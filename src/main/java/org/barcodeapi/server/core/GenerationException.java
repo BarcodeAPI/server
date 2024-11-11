@@ -21,8 +21,6 @@ public class GenerationException extends Exception {
 
 		BLACKLIST(403, "/128/$$@BLACKLIST$$@"),
 
-		FORMAT(406, "/128/$$@FORMAT$$@"),
-
 		CHECKSUM(409, "/128/$$@CHECKSUM$$@"),
 
 		LIMITED(429, "/128/$$@RATE$$@$$@LIMIT$$@"),
@@ -55,10 +53,6 @@ public class GenerationException extends Exception {
 	}
 
 	private final ExceptionType type;
-
-	public GenerationException(ExceptionType type) {
-		this(type, new Throwable(type.toString()));
-	}
 
 	public GenerationException(ExceptionType type, Throwable throwable) {
 		super(throwable);

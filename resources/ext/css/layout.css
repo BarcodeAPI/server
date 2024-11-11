@@ -760,6 +760,10 @@ a:hover {
 	text-align: left;
 }
 
+.toc-link {
+	text-decoration: none;
+}
+
 /* /\ Documentation Page Specific /\ */
 
 
@@ -777,6 +781,10 @@ a:hover {
 
 
 /* \/ Bulk Page Specific \/ */
+
+.hidden {
+	color: #00000000;
+}
 
 .bulk-barcodes {
 	margin-bottom: 4rem;

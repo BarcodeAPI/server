@@ -64,7 +64,8 @@ public class BarcodeAPIHandler extends RestHandler {
 			if (!c.getLimiter().spendTokens(request.getCost())) {
 
 				// Return rate limited barcode to user
-				throw new GenerationException(ExceptionType.LIMITED);
+				throw new GenerationException(ExceptionType.LIMITED, //
+						new Throwable("Client is rate limited, try again later."));
 			}
 
 			// Generate user requested barcode

@@ -1,5 +1,9 @@
 
+var submitButton;
+
 function init() {
+
+	submitButton = document.getElementById("generate-bc");
 
 	document.getElementsByClassName("link-csv")[0].addEventListener('click', actionDownloadCSV);
 	document.getElementById("csvFile").addEventListener('change', checkIfFileSelected);
@@ -23,17 +27,22 @@ function actionDownloadCSV() {
 
 function checkIfFileSelected(obj) {
 
-	console.log(obj);
+	const fileInput = obj.target;
+	const file = fileInput.files[0];
 
-	var submitButton = document.getElementById("generate-bc");
+	if (file) {
+		const fileName = file.name.toLowerCase();
+		const isCSV = fileName.endsWith('.csv');
 
-	obj.addEventListener('change', function() {
-		if (this.value.length > 0) {
+		if (isCSV) {
 			submitButton.removeAttribute("disabled");
 		} else {
-			submitButton.addAttribute("disabled");
+			submitButton.setAttribute("disabled", "true");
+			alert("Please select a CSV file.");
 		}
-	});
+	} else {
+		submitButton.setAttribute("disabled", "true");
+	}
 }
 
 var csvExample = [

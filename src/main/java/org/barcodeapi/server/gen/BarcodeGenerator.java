@@ -106,7 +106,8 @@ public class BarcodeGenerator {
 			LibMetrics.instance().hitCounter("render", "type", type, "busy");
 
 			// Failed if unable to get generator from pool
-			throw new GenerationException(ExceptionType.BUSY);
+			throw new GenerationException(ExceptionType.BUSY, //
+					new Throwable("Server is busy, please try again."));
 
 		} catch (Exception | Error e) {
 
@@ -115,7 +116,8 @@ public class BarcodeGenerator {
 			LibMetrics.instance().hitCounter("render", "type", type, "fail");
 
 			// Generation itself failed
-			throw new GenerationException(ExceptionType.FAILED);
+			throw new GenerationException(ExceptionType.FAILED, //
+					new Throwable("Failed to render barcode.", e));
 		} finally {
 
 			// Update global and engine counters
