@@ -126,32 +126,53 @@
 					<br />
 					<br />
 					Our FREE tier should be sufficient for basic use, however some users may not find this limit
-					sufficient for their needs. Please visit <a href="/limits.html"
-						class="text-link anim icon-chevron">Rate Limits</a> for additional details on our pricing plans.
-				</p>
-				<br />
-			</div>
-
-			<div class="col-sm-6 col-xs-12">
-				<b>Requesting a Token</b>
-				<p>
-					API tokens are granted to our paying customers and are used when demand exceedes our FREE tier.
-					<br />
-					<br />
-					To upgrade your account, visit <a href="/contracts.html" class="text-link anim icon-chevron">Usage
-						Contracts</a>
+					sufficient for their needs.
 				</p>
 			</div>
 
 			<div class="col-sm-6 col-xs-12">
-				<b>Using A Token</b>
-				<p>
-					If you have been issued an API token, it should be attached to each request as an Authorization
-					header.
-				<pre>
+				<div>
+					<b>Pricing Plans</b>
+					<p>
+						Visit <a href="/limits.html" class="text-link anim icon-chevron">Rate Limits</a> for additional
+						details on our pricing plans.
+					</p>
+				</div>
+				<div>
+					<b>IP-Based Rate Limiting</b>
+					<p>
+						Rate limiting is based on the IP address of the user requesting the barcode.
+						<br />
+						If you intend to gnerate a large number of barcode from a centeral location, API key is
+						required.<br />
+						If you embed the barcode in an application, and it is loaded by the end-user, API key not
+						required.
+					</p>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-xs-12">
+				<div>
+					<b>Requesting a Token</b>
+					<p>
+						API tokens are granted to our paying customers and are used when demand exceedes our FREE tier.
+						<br />
+						<br />
+						To upgrade your account, visit <a href="/contracts.html"
+							class="text-link anim icon-chevron">Usage
+							Contracts</a>
+					</p>
+				</div>
+				<div>
+					<b>Using A Token</b>
+					<p>
+						If you have been issued an API token, it should be attached to each request as the value of an
+						Authorization header.
+					<pre>
 Authorization: Token=xxxxxxxxxxxx
 					</pre>
-				</p>
+					</p>
+				</div>
 			</div>
 		</div>
 
@@ -238,9 +259,9 @@ fetch(url, { cache: "no-store" })
 			<div class="col-xs-8">
 				<h2><a href="#formats">&sect;3</a>&nbsp;Barcode Formats</h2>
 				<p class="center-xs">
-					A detailed list of barcode formats available to be rendered by this server can be viewed at the
-					<a class="text-link anim icon-chevron" href="/types.html">Barcode Types</a> page. This page is a
-					graphical representation of the [/types] API endpoint.
+					The BarcodeAPI server supports a number of barcode formats. A detailed list of these available
+					formats can be found at the <a class="text-link anim icon-chevron" href="/types.html">Barcode
+						Types</a> page.
 					<br />
 					<br />
 					Each barcode type will provide it's token cost for both basic and custom barcodes generated in
@@ -266,8 +287,7 @@ fetch(url, { cache: "no-store" })
 			<div class="col-sm-6 col-xs-12">
 				<b>Manual Type Selection</b>
 				<p class="start-xs">
-					&nbsp;&nbsp;A specific barcode type may be requested by using the type string in the request
-					URL.
+					&nbsp;&nbsp;A specific barcode type may be requested by using the type string in the request URL.
 					<br />
 					<a href="/api/128/abc123">/api/128/abc123</a>
 					<br />

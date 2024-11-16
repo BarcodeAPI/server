@@ -23,6 +23,7 @@ import org.barcodeapi.server.api.ShareHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.TypeHandler;
 import org.barcodeapi.server.api.TypesHandler;
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.RestHandler;
@@ -225,8 +226,23 @@ public class ServerLauncher {
 
 			// Run each task
 			LibLog._log("Running shutdown tasks.");
-			for (BackgroundTask task : tasks) {
-				task.run();
+
+			// Loop all caches
+			String[] caches = ObjectCache.getCacheNames();
+			for (int x = 0; x < caches.length; x++) {
+				try {
+
+					// Lookup the cache object
+					ObjectCache cache = ObjectCache.getCache(caches[x]);
+
+					// Save a snapshot and log it
+					int saved = cache.saveSnapshot();
+					LibLog._clogF("I2602", cache.getName(), saved);
+				} catch (IOException e) {
+
+					// Log snapshot failure
+					LibLog._clog("E2602", e);
+				}
 			}
 		}
 	};

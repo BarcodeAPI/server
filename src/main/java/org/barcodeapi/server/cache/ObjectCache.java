@@ -181,6 +181,12 @@ public class ObjectCache {
 		return cleared;
 	}
 
+	public static String[] getCacheNames() {
+
+		return caches.keySet().toArray(//
+				new String[caches.size()]);
+	}
+
 	public static synchronized ObjectCache getCache(String name) {
 
 		if (!caches.containsKey(name)) {

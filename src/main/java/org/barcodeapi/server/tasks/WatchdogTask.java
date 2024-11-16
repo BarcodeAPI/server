@@ -124,20 +124,10 @@ public class WatchdogTask extends BackgroundTask {
 
 	private void updateCacheStatistics() {
 
-		// Update size counters for app caches
-		String[] appCaches = new String[] { //
-				ObjectCache.CACHE_SESSIONS, //
-				ObjectCache.CACHE_IP, //
-				ObjectCache.CACHE_KEY, //
-				ObjectCache.CACHE_SHARE };
+		// Update size counters for all caches
+		String[] appCaches = ObjectCache.getCacheNames();
 
 		for (String cache : appCaches) {
-			getStats().setValue(ObjectCache//
-					.getCache(cache).count(), "cache", cache, "size");
-		}
-
-		// Update size counters for barcode caches
-		for (String cache : CodeTypes.inst().getTypes()) {
 			getStats().setValue(ObjectCache//
 					.getCache(cache).count(), "cache", cache, "size");
 		}
