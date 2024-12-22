@@ -52,12 +52,11 @@
 			"interval": 3600
 		}
 	],
-	"cacheDir": "./cache/",
 	"cache": {
+		"_snapshots": "./cache/",
 		"barcode": {
 			"life": 10080,
-			"shortLife": 240,
-			"client": 1440
+			"shortLife": 240
 		},
 		"session": {
 			"life": 20160,
@@ -75,6 +74,10 @@
 	"blacklist": [
 		"^_tstblk_$"
 	],
+	"client": {
+		"cacheStatic": 1440,
+		"cacheBarcode": 1440
+	},
 	"logins": {
 		"admin": "5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8"
 	},

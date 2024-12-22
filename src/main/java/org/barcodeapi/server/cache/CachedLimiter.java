@@ -1,8 +1,5 @@
 package org.barcodeapi.server.cache;
 
-import java.util.concurrent.TimeUnit;
-
-import org.barcodeapi.core.AppConfig;
 import org.json.JSONObject;
 
 /**
@@ -12,10 +9,7 @@ import org.json.JSONObject;
  */
 public class CachedLimiter extends CachedObject {
 
-	private static final long serialVersionUID = 1L;
-
-	private static final int LIMITER_LIFE = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("limiter").getInt("life");
+	private static final long serialVersionUID = 20241221L;
 
 	private static final double TOKENS_INITIAL = 0.5;
 
@@ -34,7 +28,7 @@ public class CachedLimiter extends CachedObject {
 	private double tokenSpend;
 
 	public CachedLimiter(boolean enforce, String caller, long requests) {
-		this.setStandardTimeout(LIMITER_LIFE, TimeUnit.MINUTES);
+		super("limiter");
 
 		this.enforce = enforce;
 		this.caller = caller;
@@ -156,7 +150,7 @@ public class CachedLimiter extends CachedObject {
 
 		synchronized (this) {
 
-			// If costs more
+			// If cost is more then have
 			if (count >= this.tokenCount) {
 
 				// Return based on enforcement
@@ -172,6 +166,11 @@ public class CachedLimiter extends CachedObject {
 		}
 	}
 
+	/**
+	 * Returns the rate limiter object as a JSON object.
+	 * 
+	 * @return the rate limiter object in JSON format
+	 */
 	public JSONObject asJSON() {
 
 		return (new JSONObject()//

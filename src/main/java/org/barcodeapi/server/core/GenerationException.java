@@ -12,7 +12,7 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class GenerationException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 20241123L;
 
 	public enum ExceptionType {
 		EMPTY(400, "/128/$$@EMPTY$$@"),

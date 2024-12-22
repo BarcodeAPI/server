@@ -1,9 +1,7 @@
 package org.barcodeapi.server.cache;
 
 import java.util.Base64;
-import java.util.concurrent.TimeUnit;
 
-import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.core.utils.CodeUtils;
 import org.json.JSONObject;
 
@@ -16,12 +14,6 @@ public class CachedBarcode extends CachedObject {
 
 	private static final long serialVersionUID = 20241123L;
 
-	private static final int OBJECT_LIFE_STD = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("barcode").getInt("life");
-
-	private static final int OBJECT_LIFE_SHORT = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("barcode").getInt("shortLife");
-
 	private final String type;
 	private final byte[] data;
 
@@ -30,6 +22,7 @@ public class CachedBarcode extends CachedObject {
 	private final String strEncoded;
 
 	public CachedBarcode(String type, String raw, byte[] data) {
+		super("barcode");
 
 		// Fail if null data
 		if (type == null || data == null) {
@@ -42,9 +35,6 @@ public class CachedBarcode extends CachedObject {
 		this.strRaw = raw;
 		this.strNice = CodeUtils.stripIllegal(raw);
 		this.strEncoded = CodeUtils.encodeURL(raw);
-
-		this.setStandardTimeout(OBJECT_LIFE_STD, TimeUnit.MINUTES);
-		this.setShortLivedTimeout(OBJECT_LIFE_SHORT, TimeUnit.MINUTES);
 	}
 
 	/**

@@ -3,6 +3,9 @@ package org.barcodeapi.server.cache;
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
+import org.barcodeapi.core.AppConfig;
+import org.json.JSONObject;
+
 /**
  * CachedObject.java
  * 
@@ -10,22 +13,26 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class CachedObject implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 20241221L;
 
 	private final long timeCreated;
 	private long timeTouched;
 	private long accessCount;
+
 	private long timeTimeout;
 	private long timeShortLived;
 
-	protected CachedObject() {
+	protected CachedObject(String type) {
 
 		this.accessCount = 0;
 		this.timeCreated = System.currentTimeMillis();
 		this.timeTouched = this.timeCreated;
 
-		this.setStandardTimeout(3, TimeUnit.HOURS);
-		this.setShortLivedTimeout(15, TimeUnit.MINUTES);
+		JSONObject config = AppConfig.get()//
+				.getJSONObject("cache").getJSONObject(type);
+
+		this.setStandardTimeout(config.getInt("life"), TimeUnit.MINUTES);
+		this.setShortLivedTimeout(config.getInt("shortLife"), TimeUnit.MINUTES);
 	}
 
 	/**
@@ -61,7 +68,8 @@ public abstract class CachedObject implements Serializable {
 	 * @return time object will expire
 	 */
 	public long getTimeExpires() {
-		return this.timeTouched + this.timeTimeout;
+		return (timeTouched + //
+				(isShortLived() ? timeShortLived : timeTimeout));
 	}
 
 	/**
@@ -120,5 +128,14 @@ public abstract class CachedObject implements Serializable {
 	 */
 	public boolean isExpired() {
 		return (System.currentTimeMillis() > getTimeExpires());
+	}
+
+	/**
+	 * Returns true if the cached object is short lived.
+	 * 
+	 * @return object is short lived
+	 */
+	public boolean isShortLived() {
+		return (accessCount < 3);
 	}
 }

@@ -3,11 +3,9 @@ package org.barcodeapi.server.cache;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.Cookie;
 
-import org.barcodeapi.core.AppConfig;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,19 +13,13 @@ import org.json.JSONObject;
  * CachedSession.java
  * 
  * A user session object allowing for the detailed tracking of individual user
- * usage activities across all handlers/
+ * usage activities across all handlers.
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class CachedSession extends CachedObject {
 
 	private static final long serialVersionUID = 20241123L;
-
-	private static final int OBJECT_LIFE_STD = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("session").getInt("life");
-
-	private static final int OBJECT_LIFE_SHORT = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("session").getInt("shortLife");
 
 	private final String key;
 
@@ -36,13 +28,11 @@ public class CachedSession extends CachedObject {
 	private final ConcurrentHashMap<String, Integer> sessionRequests;
 
 	public CachedSession() {
+		super("session");
 
 		this.key = UUID.randomUUID().toString();
 		this.cookie = new Cookie("session", this.key);
 		this.sessionRequests = new ConcurrentHashMap<String, Integer>();
-
-		this.setStandardTimeout(OBJECT_LIFE_STD, TimeUnit.MINUTES);
-		this.setShortLivedTimeout(OBJECT_LIFE_SHORT, TimeUnit.MINUTES);
 	}
 
 	/**
@@ -72,15 +62,19 @@ public class CachedSession extends CachedObject {
 	 * @param data
 	 */
 	public void hit(String data) {
-
 		this.touch();
+
+		// Check if first entry for key
 		if (!sessionRequests.containsKey(data)) {
 
+			// Set counter to 1
 			sessionRequests.put(data, 1);
 			return;
 		}
 
-		sessionRequests.put(data, sessionRequests.get(data) + 1);
+		// Get and increment counter
+		sessionRequests.put(data, //
+				(sessionRequests.get(data) + 1));
 	}
 
 	/**

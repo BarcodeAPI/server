@@ -25,7 +25,7 @@ import com.mclarkdev.tools.liblog.LibLog;
 public class BarcodeAPIHandler extends RestHandler {
 
 	private static final int CACHED_LIFE_MIN = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("barcode").getInt("client");
+			.getJSONObject("client").getInt("cacheBarcode");
 
 	private static final int CACHED_LIFE_SEC = (CACHED_LIFE_MIN * 60);
 
