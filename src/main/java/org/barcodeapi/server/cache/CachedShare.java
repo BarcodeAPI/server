@@ -34,7 +34,7 @@ public class CachedShare extends CachedObject {
 	 * @param requests
 	 */
 	public CachedShare(List<BarcodeRequest> requests) {
-		this.setTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
+		this.setStandardTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
 
 		// Turn requests into JSON array
 		JSONArray reqs = new JSONArray();

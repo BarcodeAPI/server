@@ -50,10 +50,14 @@ public class SessionHandler extends RestHandler {
 
 	protected void doGET(RequestContext c, HttpServletResponse r) throws IOException {
 
+		JSONObject userInfo = new JSONObject()//
+				.put("session", c.getSession().asJSON())//
+				.put("limiter", c.getLimiter().asJSON());
+
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setHeader("Content-Type", "application/json");
-		r.getOutputStream().println(c.getSession().encodeJSON());
+		r.getOutputStream().println(userInfo.toString(4));
 	}
 
 	protected void doDELETE(RequestContext c, HttpServletResponse r) throws IOException {

@@ -13,9 +13,10 @@ public abstract class CachedObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private final long timeCreated;
-	private long timeTimeout;
 	private long timeTouched;
 	private long accessCount;
+	private long timeTimeout;
+	private long timeShortLived;
 
 	protected CachedObject() {
 
@@ -23,17 +24,17 @@ public abstract class CachedObject implements Serializable {
 		this.timeCreated = System.currentTimeMillis();
 		this.timeTouched = this.timeCreated;
 
-		this.setTimeout(60, TimeUnit.MINUTES);
+		this.setStandardTimeout(3, TimeUnit.HOURS);
+		this.setShortLivedTimeout(15, TimeUnit.MINUTES);
 	}
 
 	/**
-	 * Returns the time the object will stay cached, after it's last access, until
-	 * it will be flushed.
+	 * Returns the number of time the object has been accessed.
 	 * 
-	 * @return object timeout
+	 * @return number of touches
 	 */
-	public long getTimeout() {
-		return this.timeTimeout;
+	public long getAccessCount() {
+		return accessCount;
 	}
 
 	/**
@@ -64,22 +65,42 @@ public abstract class CachedObject implements Serializable {
 	}
 
 	/**
+	 * Returns the time the object will stay cached, after it's last access, until
+	 * it will be flushed.
+	 * 
+	 * @return object timeout
+	 */
+	public long getStandardTimeout() {
+		return this.timeTimeout;
+	}
+
+	/**
 	 * Update the timeout of the object.
 	 * 
 	 * @param timeoutTime timeout time
 	 * @param timeoutUnit timeout time unit
 	 */
-	public void setTimeout(long timeoutTime, TimeUnit timeoutUnit) {
+	public void setStandardTimeout(long timeoutTime, TimeUnit timeoutUnit) {
 		this.timeTimeout = TimeUnit.MILLISECONDS.convert(timeoutTime, timeoutUnit);
 	}
 
 	/**
-	 * Returns the number of time the object has been accessed.
+	 * Returns the time the object will stay cached if determined to be short lived.
 	 * 
-	 * @return number of touches
+	 * @return object short lived timeout
 	 */
-	public long getAccessCount() {
-		return accessCount;
+	public long getShortLivedTimeout() {
+		return this.timeShortLived;
+	}
+
+	/**
+	 * Update the short lived timeout of the object.
+	 * 
+	 * @param timeoutTime
+	 * @param timeoutUnit
+	 */
+	public void setShortLivedTimeout(long timeoutTime, TimeUnit timeoutUnit) {
+		this.timeShortLived = TimeUnit.MILLISECONDS.convert(timeoutTime, timeoutUnit);
 	}
 
 	/**
@@ -98,6 +119,6 @@ public abstract class CachedObject implements Serializable {
 	 * @return object is expired
 	 */
 	public boolean isExpired() {
-		return ((timeTouched + timeTimeout) < System.currentTimeMillis());
+		return (System.currentTimeMillis() > getTimeExpires());
 	}
 }

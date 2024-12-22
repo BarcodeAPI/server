@@ -14,10 +14,13 @@ import org.json.JSONObject;
  */
 public class CachedBarcode extends CachedObject {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 20241123L;
 
-	private static final int OBJECT_LIFE = AppConfig.get()//
+	private static final int OBJECT_LIFE_STD = AppConfig.get()//
 			.getJSONObject("cache").getJSONObject("barcode").getInt("life");
+
+	private static final int OBJECT_LIFE_SHORT = AppConfig.get()//
+			.getJSONObject("cache").getJSONObject("barcode").getInt("shortLife");
 
 	private final String type;
 	private final byte[] data;
@@ -40,7 +43,8 @@ public class CachedBarcode extends CachedObject {
 		this.strNice = CodeUtils.stripIllegal(raw);
 		this.strEncoded = CodeUtils.encodeURL(raw);
 
-		this.setTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
+		this.setStandardTimeout(OBJECT_LIFE_STD, TimeUnit.MINUTES);
+		this.setShortLivedTimeout(OBJECT_LIFE_SHORT, TimeUnit.MINUTES);
 	}
 
 	/**

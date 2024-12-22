@@ -55,17 +55,21 @@
 	"cacheDir": "./cache/",
 	"cache": {
 		"barcode": {
-			"life": 4320,
+			"life": 10080,
+			"shortLife": 240,
 			"client": 1440
 		},
 		"session": {
-			"life": 10080
+			"life": 20160,
+			"shortLife": 60
 		},
 		"limiter": {
-			"life": 1440
+			"life": 4320,
+			"shortLife": 360
 		},
 		"share": {
-			"life": 10080
+			"life": 129600,
+			"shortLife": 240
 		}
 	},
 	"blacklist": [

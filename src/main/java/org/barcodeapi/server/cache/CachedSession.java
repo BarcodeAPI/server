@@ -21,10 +21,13 @@ import org.json.JSONObject;
  */
 public class CachedSession extends CachedObject {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 20241123L;
 
-	private static final int OBJECT_LIFE = AppConfig.get()//
+	private static final int OBJECT_LIFE_STD = AppConfig.get()//
 			.getJSONObject("cache").getJSONObject("session").getInt("life");
+
+	private static final int OBJECT_LIFE_SHORT = AppConfig.get()//
+			.getJSONObject("cache").getJSONObject("session").getInt("shortLife");
 
 	private final String key;
 
@@ -33,11 +36,13 @@ public class CachedSession extends CachedObject {
 	private final ConcurrentHashMap<String, Integer> sessionRequests;
 
 	public CachedSession() {
-		this.setTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
 
 		this.key = UUID.randomUUID().toString();
 		this.cookie = new Cookie("session", this.key);
 		this.sessionRequests = new ConcurrentHashMap<String, Integer>();
+
+		this.setStandardTimeout(OBJECT_LIFE_STD, TimeUnit.MINUTES);
+		this.setShortLivedTimeout(OBJECT_LIFE_SHORT, TimeUnit.MINUTES);
 	}
 
 	/**
@@ -83,7 +88,7 @@ public class CachedSession extends CachedObject {
 	 * 
 	 * @return the user session in JSON format
 	 */
-	public String encodeJSON() {
+	public JSONObject asJSON() {
 
 		int requestCount = 0;
 		JSONArray requests = new JSONArray();
@@ -98,10 +103,9 @@ public class CachedSession extends CachedObject {
 		return (new JSONObject()//
 				.put("key", getKey())//
 				.put("created", getTimeCreated())//
-				.put("last", getTimeLastTouched())//
 				.put("expires", getTimeExpires())//
+				.put("last", getTimeLastTouched())//
 				.put("count", requestCount)//
-				.put("requests", requests)//
-		).toString();
+				.put("requests", requests));
 	}
 }
