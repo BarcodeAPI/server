@@ -19,7 +19,7 @@ import org.json.JSONObject;
  */
 public class CachedSession extends CachedObject {
 
-	private static final long serialVersionUID = 20241123L;
+	private static final long serialVersionUID = 20241222L;
 
 	private final String key;
 
@@ -30,8 +30,14 @@ public class CachedSession extends CachedObject {
 	public CachedSession() {
 		super("session");
 
+		// Generate new random UUID
 		this.key = UUID.randomUUID().toString();
+
+		// Create user cookie
 		this.cookie = new Cookie("session", this.key);
+		this.cookie.setPath("/");
+
+		// Memory map for request history
 		this.sessionRequests = new ConcurrentHashMap<String, Integer>();
 	}
 

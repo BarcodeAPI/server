@@ -13,7 +13,7 @@ import org.json.JSONObject;
  */
 public abstract class CachedObject implements Serializable {
 
-	private static final long serialVersionUID = 20241221L;
+	private static final long serialVersionUID = 20241222L;
 
 	private final long timeCreated;
 	private long timeTouched;

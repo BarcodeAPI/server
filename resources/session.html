@@ -38,12 +38,44 @@
 			</div>
 		</div>
 
-		<div class="app row">
-			<div class="col-xs-12">
-				<button onclick="sessionDelete()">Delete</button>
+		<div class="row">
+
+			<div class="col-xs-6">
+				<h2>
+					User Session
+				</h2>
+				Session Key:&nbsp;<span id="session-key"></span>
+				<br />
+				Delete Session? <button onclick="sessionDelete()">Delete</button>
+				<br />
+				Created:&nbsp;<span id="session-created"></span>
+				<br />
+				Expires:&nbsp;<span id="session-expires"></span>
+				<br />
+				Count:&nbsp;<span id="session-count"></span>
+				<br />
+				Requests:<br />
+				<pre id="session-requests"></pre>
 			</div>
-			<div class="col-xs-12">
-				<pre id="session-data"></pre>
+
+			<div class="col-xs-6">
+				<h2>
+					Rate Limiter
+				</h2>
+				Caller:&nbsp;<span id="limiter-caller"></span>
+				<br />
+				Created:&nbsp;<span id="limiter-created"></span>
+				<br />
+				Expires:&nbsp;<span id="limiter-expires"></span>
+				<br />
+				Enforce:&nbsp;<span id="limiter-enforce"></span>
+				<br />
+				Tokens Spent:&nbsp;<span id="limiter-tokenSpend"></span>
+				<br />
+				Token Limit:&nbsp;<span id="limiter-tokenLimit"></span>
+				<br />
+				Token Count:&nbsp;<span id="limiter-tokenCount"></span>
+				<br />
 			</div>
 		</div>
 	</div>

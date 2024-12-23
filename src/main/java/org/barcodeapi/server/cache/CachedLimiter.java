@@ -9,7 +9,7 @@ import org.json.JSONObject;
  */
 public class CachedLimiter extends CachedObject {
 
-	private static final long serialVersionUID = 20241221L;
+	private static final long serialVersionUID = 20241222L;
 
 	private static final double TOKENS_INITIAL = 0.5;
 

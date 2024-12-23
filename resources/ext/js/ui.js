@@ -8,9 +8,9 @@
  */
 const appDisplay = {
 	'bulkPages': true,
-	'tokenCount': false,
-	'limitsNotice': false,
-	'renderOptions': false,
+	'tokenCount': true,
+	'limitsNotice': true,
+	'renderOptions': true,
 	'showHidden': false
 };
 
