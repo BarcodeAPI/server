@@ -738,6 +738,14 @@ a:hover {
 
 /* \/ Documentation Page Specific \/ */
 
+.help-toc-title {
+	padding-left: 12px;
+}
+
+.help-toc-table {
+	border-left: solid black;
+}
+
 .help-entry {
 	margin-top: 24px;
 }

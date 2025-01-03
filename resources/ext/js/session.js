@@ -15,18 +15,27 @@ function init() {
 function onLoadSession(data) {
 
 	document.getElementById("limiter-caller").innerHTML = data.limiter.caller;
-	document.getElementById("limiter-created").innerHTML = data.limiter.created;
-	document.getElementById("limiter-expires").innerHTML = data.limiter.expires;
+	document.getElementById("limiter-created").innerHTML = (new Date(data.limiter.created)).toJSON();
+	document.getElementById("limiter-expires").innerHTML = (new Date(data.limiter.expires)).toJSON();
 	document.getElementById("limiter-enforce").innerHTML = data.limiter.enforce;
 	document.getElementById("limiter-tokenSpend").innerHTML = data.limiter.tokenSpend;
 	document.getElementById("limiter-tokenLimit").innerHTML = data.limiter.tokenLimit;
-	document.getElementById("limiter-tokenCount").innerHTML = data.limiter.tokenCount;
+	document.getElementById("limiter-tokenCount").innerHTML = Number(data.limiter.tokenCount).toFixed(2);
 
 	document.getElementById("session-key").innerHTML = data.session.key;
-	document.getElementById("session-created").innerHTML = data.session.created;
-	document.getElementById("session-expires").innerHTML = data.session.expires;
+	document.getElementById("session-created").innerHTML = (new Date(data.session.created)).toJSON();
+	document.getElementById("session-expires").innerHTML = (new Date(data.session.expires)).toJSON();
 	document.getElementById("session-count").innerHTML = data.session.count;
-	document.getElementById("session-requests").innerHTML = JSON.stringify(data.session.requests, null, '\t');
+
+	var requests = "";
+	for (var r in data.session.requests) {
+		var d = data.session.requests[r];
+
+		requests += //
+			"<tr><td>" + d.text + "</td><td>" + d.hits + "</td></tr>";
+	}
+
+	document.getElementById("session-requests").innerHTML = requests;
 }
 
 function sessionDelete() {
