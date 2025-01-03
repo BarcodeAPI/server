@@ -197,17 +197,50 @@ Authorization: Token=xxxxxxxxxxxx
 
 			<div class="col-sm-6 col-xs-12">
 				<div>
+					<span class="example-code-title">HTML</span>
+					<pre class="example-code">
+&lt;img src="https://barcodeapi.org/api/auto/test" /&gt;
+					</pre>
+				</div>
+				<div>
+					<span class="example-code-title">JavaScript</span>
+					<pre class="example-code">
+let url = 'https://barcodeapi.org/api/auto/Try%20Me'
+fetch(url, { cache: "no-store" })
+  .then(response => {
+
+    var tokens = response.headers.get('X-RateLimit-Tokens');
+    console.log("Tokens remaining: " + tokens);
+
+    response.blob().then(blob => {
+      var img = document.createElement("img");
+      img.src = URL.createObjectURL(blob);
+      document.body.appendChild(img);
+    });
+});
+					</pre>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-xs-12">
+				<div>
 					<span class="example-code-title">curl</span>
 					<pre class="example-code">
 curl https://barcodeapi.org/api/A_Barcode &gt; test.png
-						</pre>
+					</pre>
+				</div>
+				<div>
+					<span class="example-code-title">wget</span>
+					<pre class="example-code">
+wget -o test.png https://barcodeapi.org/api/A_Barcode
+					</pre>
 				</div>
 				<div>
 					<span class="example-code-title">PowerShell</span>
 					<pre class="example-code">
 Invoke-WebRequest `
   https://barcodeapi.org/api/auto/test -OutFile test.png
-						</pre>
+					</pre>
 				</div>
 				<div>
 					<span class="example-code-title">Python</span>
@@ -219,39 +252,7 @@ url = 'https://barcodeapi.org/api/auto/Try%20Me'
 response = requests.get(url, stream=True)
 with open('test.png', 'wb') as out_file:
   shutil.copyfileobj(response.raw, out_file)
-						</pre>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-xs-12">
-				<div>
-					<span class="example-code-title">wget</span>
-					<pre class="example-code">
-wget -o test.png https://barcodeapi.org/api/A_Barcode
-						</pre>
-				</div>
-				<div>
-					<span class="example-code-title">HTML</span>
-					<pre class="example-code">
-&lt;img src="https://barcodeapi.org/api/auto/test" /&gt;
-						</pre>
-				</div>
-				<div>
-					<span class="example-code-title">JavaScript</span>
-					<pre class="example-code">
-let url = 'https://barcodeapi.org/api/auto/Try%20Me'
-fetch(url, { cache: "no-store" })
-  .then(response => {
-
-    var tokens = response.headers.get('x-ratelimit-tokens');
-    document.getElementById("token_count").innerHTML = tokens;
-
-    response.blob().then(blob => {
-      var imgBlob = URL.createObjectURL(blob);
-      document.getElementById('barcode_image').src = imgBlob;
-    });
-});
-						</pre>
+					</pre>
 				</div>
 			</div>
 		</div>
@@ -426,7 +427,11 @@ X-RateLimit-Tokens: 2032.40
 						webapp will have a cache expiration time set.
 					</p>
 					<pre class="example-code">
+$ curl --head https://barcodeapi.org/api/auto/abc123
+...
+Access-Control-Max-Age: 86400
 Cache-Control: max-age=86400, public
+Expires: Sat, 04 Jan 2025 06:57:14 GMT
 					</pre>
 				</div>
 			</div>
@@ -441,6 +446,7 @@ Cache-Control: max-age=86400, public
 					</p>
 					<pre class="example-code">
 $ curl --head https://barcodeapi.org/abc123
+HTTP/1.1 302 Found
 ...
 Location: https://barcodeapi.org/api/auto/abc123
 					</pre>
@@ -449,8 +455,19 @@ Location: https://barcodeapi.org/api/auto/abc123
 				<div>
 					<h3>Error Headers</h3>
 					<p class="start-xs">
-						&nbsp;&nbsp;In the event of a render error, an additional header will be available containing
-						details about the exception. [X-Error-Message]
+						&nbsp;&nbsp;In the event of a render error, an additional header [<span
+							class="text-link">X-Error-Message</span>] will be available containing details about the
+						exception.
+					</p>
+					<pre class="example-code">
+
+$ curl --head https://barcodeapi.org/api/8/00000009
+HTTP/1.1 409 Conflict
+...
+X-Error-Message: Expected checksum: 0
+					</pre>
+					<p>
+						Each type of application failure will result in a unique error code.
 					</p>
 					<pre class="example-code">
 400	EMPTY		The request was empty.
