@@ -61,7 +61,7 @@
 				</p>
 			</div>
 
-			<div class="col-sm-4 col-xs-8 center-xs end-sm row">
+			<div class="col-sm-4 col-xs-12 center-xs end-sm row">
 
 				<div class="col-xs-12 row help-toc-title">
 					<h3>Sections</h3>
@@ -106,7 +106,7 @@
 
 					<div class="col-xs-12 start-xs">
 						<a class="toc-link" href="#session">
-							&sect;7 - User Session
+							&sect;7 - Session Tracking
 						</a>
 					</div>
 
@@ -124,9 +124,9 @@
 			<div class="col-xs-11">
 				<h2><a href="#tokens">&sect;1</a>&nbsp;Tokens and Rate Limits</h2>
 				<p class="start-xs">
-					&nbsp;&nbsp;To ensure that we are able to provide the best service for all users, we have
-					implemented Rate Limiting and tiered pricing plans for our power users. Our FREE tier should be
-					sufficient for basic use, however some users may not find this limit sufficient for their needs.
+					&nbsp;&nbsp;To ensure optimal service for all users, we implement <b>rate limiting</b> and offer
+					tiered <b>pricing plans</b> for high-volume users. While the FREE tier should meet basic usage
+					needs, some users may require higher limits for larger volumes of barcode requests.
 				</p>
 			</div>
 			<br />
@@ -135,8 +135,8 @@
 				<div>
 					<b>Pricing Plans</b>
 					<p class="start-xs">
-						&nbsp;&nbsp;Power Users may wish to upgrade their contract for increased rate limits. Each plan
-						level is flexable and can accomodate any number of token requirements.
+						&nbsp;&nbsp;If you need higher rate limits, you can upgrade to one of our paid plans. Each plan
+						is flexible and can accommodate varying token usage levels to suit your needs.
 					</p>
 					<p>
 						For additional details, visit <a href="/limits.html" class="text-link anim icon-chevron">Rate
@@ -146,8 +146,8 @@
 				<div>
 					<b>Requesting a Token</b>
 					<p class="start-xs">
-						&nbsp;&nbsp;API tokens are granted to our paying customers and are used when demand exceedes our
-						FREE tier.
+						&nbsp;&nbsp;API tokens are used to manage your rate limits and are issued to paying customers.
+						These tokens ensure that your usage is tracked and that rate limits are properly enforced.
 					</p>
 					<p>
 						To upgrade your account, visit <a href="/contracts.html"
@@ -161,20 +161,25 @@
 				<div>
 					<b>IP-Based Rate Limiting</b>
 					<p class="start-xs">
-						&nbsp;&nbsp;Rate limiting is based on the IP address of the user requesting the barcode.
-						If you intend to gnerate a large number of barcode from a centeral location, API key is
-						required. If you embed the barcode in an application, and it is loaded by the end-user,
-						API key not required.
-						</pu>
+						&nbsp;&nbsp;Rate limits are enforced based on the IP address of the client making the request.
+						If you plan to generate a large number of barcodes from a central server or location, you will
+						need an API key to manage your rate limits effectively.
+					</p>
+
 				</div>
 				<div>
 					<b>Using A Token</b>
 					<p class="start-xs">
-						&nbsp;&nbsp;If you have been issued an API token, it should be attached to each request as the
-						value of an Authorization header.
+						&nbsp;&nbsp;If you have an API token, include it in the Authorization header with each request.
+						The token should be passed as follows:
 					<pre>
 Authorization: Token=xxxxxxxxxxxx
 					</pre>
+					</p>
+					<p class="start-xs">
+						<b>Note</b>: When embedding barcodes in an application accessed by end users, do not include the
+						API key in client-side requests. Rate limits will be managed at the IP level instead, so no API
+						key is needed for each user.
 					</p>
 				</div>
 			</div>
@@ -185,9 +190,9 @@ Authorization: Token=xxxxxxxxxxxx
 			<div class="col-xs-8">
 				<h2><a href="#usage">&sect;2</a>&nbsp;Basic API Usage</h2>
 				<p class="start-xs">
-					&nbsp;&nbsp;The server will generate a barcode for nearly any content passed to the API endpoint.
-					Based on a RESTful HTTP server, requests can be made using a web browser, on the command line, or a
-					number of other methods depending on the needs of your application.
+					&nbsp;&nbsp;The BarcodeAPI server can generate barcodes for virtually any content passed to the API
+					endpoint. As a RESTful HTTP service, you can make requests using a web browser, command line tools,
+					or other methods, depending on your application’s needs.
 				</p>
 			</div>
 
@@ -197,13 +202,22 @@ Authorization: Token=xxxxxxxxxxxx
 
 			<div class="col-sm-6 col-xs-12">
 				<div>
-					<span class="example-code-title">HTML</span>
+					<p class="start-xs">
+						<span class="example-code-title">HTML</span>
+						<br />
+						&nbsp;To embed a barcode in an HTML page:
+					</p>
 					<pre class="example-code">
 &lt;img src="https://barcodeapi.org/api/auto/test" /&gt;
 					</pre>
 				</div>
 				<div>
-					<span class="example-code-title">JavaScript</span>
+					<p class="start-xs">
+						<span class="example-code-title">JavaScript</span>
+						<br />
+						&nbsp;Use <b>fetch</b> to request a barcode and display it on the current page, while printing
+						the remaining token count to the console.
+					</p>
 					<pre class="example-code">
 let url = 'https://barcodeapi.org/api/auto/Try%20Me'
 fetch(url, { cache: "no-store" })
@@ -224,26 +238,42 @@ fetch(url, { cache: "no-store" })
 
 			<div class="col-sm-6 col-xs-12">
 				<div>
-					<span class="example-code-title">curl</span>
+					<p class="start-xs">
+						<span class="example-code-title">curl</span>
+						<br />
+						&nbsp;Request and save a barcode using curl
+					</p>
 					<pre class="example-code">
 curl https://barcodeapi.org/api/A_Barcode &gt; test.png
 					</pre>
 				</div>
 				<div>
-					<span class="example-code-title">wget</span>
+					<p class="start-xs">
+						<span class="example-code-title">wget</span>
+						<br />
+						&nbsp;Request and save a barcode using wget
+					</p>
 					<pre class="example-code">
 wget -o test.png https://barcodeapi.org/api/A_Barcode
 					</pre>
 				</div>
 				<div>
-					<span class="example-code-title">PowerShell</span>
+					<p class="start-xs">
+						<span class="example-code-title">PowerShell</span>
+						<br />
+						&nbsp;Request and save a barcode using PowerShell
+					</p>
 					<pre class="example-code">
 Invoke-WebRequest `
   https://barcodeapi.org/api/auto/test -OutFile test.png
 					</pre>
 				</div>
 				<div>
-					<span class="example-code-title">Python</span>
+					<p class="start-xs">
+						<span class="example-code-title">Python</span>
+						<br />
+						&nbsp;Request and save a barcode using Python
+					</p>
 					<pre class="example-code">
 import shutil
 import requests
@@ -262,10 +292,10 @@ with open('test.png', 'wb') as out_file:
 			<div class="col-xs-8">
 				<h2><a href="#formats">&sect;3</a>&nbsp;Barcode Formats</h2>
 				<p class="start-xs">
-					&nbsp;&nbsp;The BarcodeAPI server supports a number of barcode formats. A detailed list of these
-					available formats can be found at the <a class="text-link anim icon-chevron"
-						href="/types.html">Barcode Types</a> page. Each barcode type will provide it's token cost for
-					both basic and custom barcodes generated in the given format.
+					&nbsp;&nbsp;BarcodeAPI supports a wide range of barcode formats, allowing you to generate barcodes
+					for different use cases, such as inventory tracking, product labeling, or QR codes for marketing.
+					For a complete list of available formats, please refer to <a class="text-link anim icon-chevron"
+						href="/types.html">Barcode Types</a>
 				</p>
 			</div>
 
@@ -276,18 +306,20 @@ with open('test.png', 'wb') as out_file:
 			<div class="col-xs-12">
 				<h3>Type Selection</h3>
 				<p class="start-xs">
-					&nbsp;&nbsp;The API offers two types of barcode type selection, automatic or manual; users of the
-					web-based interface might prefer the barcode type be selected based on what they type, while direct
-					callers of the API might want to have control over which barcode format they will receive back from
-					the server.
+					&nbsp;&nbsp;You have two methods for selecting the barcode format: manual type selection and
+					automatic type detection. Each approach offers distinct benefits, with manual selection giving you
+					precise control over the format, while automatic detection offers convenience and flexibility by
+					letting the API choose the most appropriate format for your data.
 				</p>
 				<br />
 			</div>
 
-			<div class="col-sm-5 col-xs-12">
+			<div class="col-sm-6 col-xs-12">
 				<b>Manual Type Selection</b>
 				<p class="start-xs">
-					&nbsp;&nbsp;A specific barcode type may be requested by using the type string in the request URL.
+					&nbsp;&nbsp;If you know exactly which barcode format you need, you can specify it directly in the
+					URL. This gives you full control over the barcode type, ensuring that you get the format that best
+					fits your requirements.
 					<br />
 					<a href="/api/128/abc123">/api/128/abc123</a>
 					<br />
@@ -295,13 +327,12 @@ with open('test.png', 'wb') as out_file:
 				</p>
 			</div>
 
-			<div class="col-sm-5 col-xs-12">
+			<div class="col-sm-6 col-xs-12">
 				<b>Automatic Type Detection</b>
 				<p class="start-xs">
-					&nbsp;&nbsp;When calling the API endpoint without specifying an explicit code type the server
-					will make its best judgment as to which code type will be best suited for the supplied data.
-					<br />
-					<a href="/api/abc123">/api/abc123</a>
+					&nbsp;&nbsp;If you don’t want to specify a barcode format, you can let the API automatically
+					determine the best format based on the data you provide. The API will analyze the content and choose
+					the most suitable format.
 					<br />
 					<a href="/api/auto/abc123">/api/auto/abc123</a>
 				</p>
@@ -313,21 +344,25 @@ with open('test.png', 'wb') as out_file:
 			<div class="col-xs-12">
 				<h2><a href="#custom">&sect;4</a>&nbsp;Barcode Customization</h2>
 				<p class="start-xs">
-					&nbsp;&nbsp;Each barcode type provides a number of customization options that may be passed along
-					with the request. The supported options for each barcode can be viewed on the associated <a
-						href="/types.html" class="text-link anim icon-chevron">Types</a> page.
+					&nbsp;&nbsp;BarcodeAPI allows you to customize various aspects of your barcodes to fit your specific
+					needs. Whether you're adjusting the size, color, or other visual properties, the API provides a
+					range of customization options for each barcode type. For a full list of available options, check
+					the <a href="/types.html" class="text-link anim icon-chevron">Barcode Types</a> page.
 				</p>
 			</div>
 
 			<div class="col-sm-5 col-xs-12">
-				<h3>Options</h3>
+				<h3>Customization Options</h3>
 				<p class="start-xs">
-					&nbsp;&nbsp;Barcode options are simply added to each request as a GET parameter. Visit the <a
-						class="text-link anim icon-chevron" href="/types.html">types</a> page to view all supported
-					barcode types and their available option parameters.
+					&nbsp;&nbsp;Customization options are added to your request as GET parameters. By appending these
+					parameters to your request URL, you can modify the appearance and behavior of the generated barcode.
+					These options can include things like barcode foreground color, background color, height, width, and
+					more.
+					<br />
+					Example
 				</p>
 				<pre>
-/api/dm/test?fg=ff0000
+/api/qr/test?fg=ff0000&bg=ffffff&height=200
 				</pre>
 			</div>
 
@@ -408,19 +443,6 @@ Content-Disposition: filename=abc123.png
 				</div>
 
 				<div>
-					<h3>Rate Limit Headers</h3>
-					<p class="start-xs">
-						&nbsp;&nbsp;The server will add several headers related to the rate limit.
-					</p>
-					<pre class="example-code">
-$ curl --head https://barcodeapi.org/api/auto/abc123
-...
-X-RateLimit-Cost: 2
-X-RateLimit-Tokens: 2032.40
-					</pre>
-				</div>
-
-				<div>
 					<h3>Cache Control</h3>
 					<p class="start-xs">
 						&nbsp;&nbsp;In an attempt to minimize the number of requests, barcodes requested outside of the
@@ -432,6 +454,30 @@ $ curl --head https://barcodeapi.org/api/auto/abc123
 Access-Control-Max-Age: 86400
 Cache-Control: max-age=86400, public
 Expires: Sat, 04 Jan 2025 06:57:14 GMT
+					</pre>
+				</div>
+
+				<div>
+					<h3>Rate Limit Headers</h3>
+					<p class="start-xs">
+						&nbsp;&nbsp;The server will add several headers related to the rate limiter applied to the
+						client.
+					</p>
+					<pre class="example-code">
+$ curl --head https://barcodeapi.org/api/auto/abc123
+...
+X-RateLimit-Cost: 2
+X-RateLimit-Tokens: 2032.40
+					</pre>
+					<p class="start-xs">
+						Should a client become rate limited, requests will result in a 429. Users must wait until new
+						tokens are generated before additional requests will be served.
+					</p>
+					<pre class="example-code">
+$ curl --head https://barcodeapi.org/api/auto/abc123
+HTTP/1.1 429 Too Many Requests
+...
+X-Error-Message: Client is rate limited, try again later.
 					</pre>
 				</div>
 			</div>
@@ -485,7 +531,7 @@ X-Error-Message: Expected checksum: 0
 		<a name="session"></a><br />
 		<div class="help-entry row center-xs middle-xs">
 			<div class="col-xs-12">
-				<h2><a href="#session">&sect;7</a>&nbsp;User Session</h2>
+				<h2><a href="#session">&sect;7</a>&nbsp;Session Tracking</h2>
 				<p class="center-xs">
 					Users of the web interface are assigned a session token for basic history tracking.
 					<br />
