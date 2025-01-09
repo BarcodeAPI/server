@@ -25,6 +25,7 @@ public class CachedSession extends CachedObject {
 
 	private final Cookie cookie;
 
+	private final ConcurrentHashMap<String, Integer> sessionIPs;
 	private final ConcurrentHashMap<String, Integer> sessionRequests;
 
 	public CachedSession() {
@@ -37,7 +38,8 @@ public class CachedSession extends CachedObject {
 		this.cookie = new Cookie("session", this.key);
 		this.cookie.setPath("/");
 
-		// Memory map for request history
+		// Memory map for ip and request history
+		this.sessionIPs = new ConcurrentHashMap<String, Integer>();
 		this.sessionRequests = new ConcurrentHashMap<String, Integer>();
 	}
 
@@ -67,20 +69,16 @@ public class CachedSession extends CachedObject {
 	 * 
 	 * @param data
 	 */
-	public void hit(String data) {
+	public void hit(String ip, String data) {
 		this.touch();
 
-		// Check if first entry for key
-		if (!sessionRequests.containsKey(data)) {
+		// Count for IP
+		int countIP = sessionIPs.containsKey(ip) ? sessionIPs.get(ip) : 0;
+		sessionIPs.put(ip, (countIP + 1));
 
-			// Set counter to 1
-			sessionRequests.put(data, 1);
-			return;
-		}
-
-		// Get and increment counter
-		sessionRequests.put(data, //
-				(sessionRequests.get(data) + 1));
+		// Count for request
+		int countReq = sessionRequests.containsKey(data) ? sessionRequests.get(data) : 0;
+		sessionRequests.put(data, (countReq + 1));
 	}
 
 	/**
@@ -90,11 +88,17 @@ public class CachedSession extends CachedObject {
 	 */
 	public JSONObject asJSON() {
 
-		int requestCount = 0;
+		JSONArray addresses = new JSONArray();
+		for (Map.Entry<String, Integer> entry : sessionIPs.entrySet()) {
+
+			addresses.put(new JSONObject() //
+					.put("ip", entry.getKey())//
+					.put("hits", entry.getValue()));
+		}
+
 		JSONArray requests = new JSONArray();
 		for (Map.Entry<String, Integer> entry : sessionRequests.entrySet()) {
 
-			requestCount += entry.getValue();
 			requests.put(new JSONObject()//
 					.put("text", entry.getKey())//
 					.put("hits", entry.getValue()));
@@ -105,7 +109,8 @@ public class CachedSession extends CachedObject {
 				.put("created", getTimeCreated())//
 				.put("expires", getTimeExpires())//
 				.put("last", getTimeLastTouched())//
-				.put("count", requestCount)//
+				.put("count", getAccessCount())//
+				.put("addresses", addresses)//
 				.put("requests", requests));
 	}
 }

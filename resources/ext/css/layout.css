@@ -324,6 +324,7 @@ body {
 
 	.app-setup-types,
 	.footer-about,
+	.col-help-image,
 	.text-file-table .attribute div.optional,
 	.text-file-table .heading-text div.optional {
 		display: none;
@@ -766,10 +767,15 @@ a:hover {
 
 .example-code {
 	text-align: left;
+	overflow: scroll;
 }
 
 .toc-link {
 	text-decoration: none;
+}
+
+table {
+	width: 100%;
 }
 
 /* /\ Documentation Page Specific /\ */

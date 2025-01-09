@@ -154,7 +154,7 @@ public class RequestContext {
 
 		// Hit the session
 		if (this.session != null) {
-			session.hit(request.getOriginalURI().toString());
+			session.hit(ip, request.getOriginalURI().toString());
 		}
 
 		// Determine output format and encoding

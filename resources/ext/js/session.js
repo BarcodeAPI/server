@@ -27,6 +27,15 @@ function onLoadSession(data) {
 	document.getElementById("session-expires").innerHTML = (new Date(data.session.expires)).toJSON();
 	document.getElementById("session-count").innerHTML = data.session.count;
 
+	var addresses = "";
+	for (var a in data.session.addresses) {
+		var d = data.session.addresses[a];
+
+		addresses += //
+			"<tr><td>" + d.ip + "</td><td>" + d.hits + "</td></tr>";
+	}
+	document.getElementById("session-addresses").innerHTML = addresses;
+
 	var requests = "";
 	for (var r in data.session.requests) {
 		var d = data.session.requests[r];
@@ -34,7 +43,6 @@ function onLoadSession(data) {
 		requests += //
 			"<tr><td>" + d.text + "</td><td>" + d.hits + "</td></tr>";
 	}
-
 	document.getElementById("session-requests").innerHTML = requests;
 }
 

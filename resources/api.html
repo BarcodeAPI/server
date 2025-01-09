@@ -106,7 +106,7 @@
 
 					<div class="col-xs-12 start-xs">
 						<a class="toc-link" href="#session">
-							&sect;7 - Session Tracking
+							&sect;7 - User Session Info
 						</a>
 					</div>
 
@@ -120,7 +120,7 @@
 		</div>
 
 		<a name="tokens"></a><br />
-		<div class="help-entry row center-xs middle-xs">
+		<div class="help-entry row center-xs top-xs">
 			<div class="col-xs-11">
 				<h2><a href="#tokens">&sect;1</a>&nbsp;Tokens and Rate Limits</h2>
 				<p class="start-xs">
@@ -186,8 +186,8 @@ Authorization: Token=xxxxxxxxxxxx
 		</div>
 
 		<a name="usage"></a><br />
-		<div class="help-entry row center-xs middle-xs">
-			<div class="col-xs-8">
+		<div class="help-entry row center-xs top-xs">
+			<div class="col-sm-8 col-xs-12">
 				<h2><a href="#usage">&sect;2</a>&nbsp;Basic API Usage</h2>
 				<p class="start-xs">
 					&nbsp;&nbsp;The BarcodeAPI server can generate barcodes for virtually any content passed to the API
@@ -196,7 +196,7 @@ Authorization: Token=xxxxxxxxxxxx
 				</p>
 			</div>
 
-			<div class="col-xs-4">
+			<div class="col-sm-4 col-help-image">
 				<img class="help-image" src="/api/aztec/Aztec%20Barcode" />
 			</div>
 
@@ -288,8 +288,8 @@ with open('test.png', 'wb') as out_file:
 		</div>
 
 		<a name="formats"></a><br />
-		<div class="help-entry row center-xs middle-xs">
-			<div class="col-xs-8">
+		<div class="help-entry row center-xs top-xs">
+			<div class="col-sm-8 col-xs-12">
 				<h2><a href="#formats">&sect;3</a>&nbsp;Barcode Formats</h2>
 				<p class="start-xs">
 					&nbsp;&nbsp;BarcodeAPI supports a wide range of barcode formats, allowing you to generate barcodes
@@ -299,7 +299,7 @@ with open('test.png', 'wb') as out_file:
 				</p>
 			</div>
 
-			<div class="col-xs-4">
+			<div class="col-sm-4 col-help-image">
 				<img class="help-image" src="/api/qr/QR%20Barcode" />
 			</div>
 
@@ -340,7 +340,7 @@ with open('test.png', 'wb') as out_file:
 		</div>
 
 		<a name="custom"></a><br />
-		<div class="help-entry row center-xs middle-xs">
+		<div class="help-entry row center-xs top-xs">
 			<div class="col-xs-12">
 				<h2><a href="#custom">&sect;4</a>&nbsp;Barcode Customization</h2>
 				<p class="start-xs">
@@ -351,7 +351,7 @@ with open('test.png', 'wb') as out_file:
 				</p>
 			</div>
 
-			<div class="col-sm-5 col-xs-12">
+			<div class="col-sm-6 col-xs-12">
 				<h3>Customization Options</h3>
 				<p class="start-xs">
 					&nbsp;&nbsp;Customization options are added to your request as GET parameters. By appending these
@@ -366,7 +366,7 @@ with open('test.png', 'wb') as out_file:
 				</pre>
 			</div>
 
-			<div class="col-sm-5 col-xs-12">
+			<div class="col-sm-6 col-xs-12">
 				<h3>Control Characters</h3>
 				<p class="start-xs">
 					&nbsp;&nbsp;Some barcodes support the encoding of NonPrinting ASCII characters. With a supported
@@ -381,7 +381,7 @@ with open('test.png', 'wb') as out_file:
 
 
 		<a name="bulk"></a><br />
-		<div class="help-entry row center-xs middle-xs">
+		<div class="help-entry row center-xs top-xs">
 			<div class="col-xs-12">
 				<h2><a href="#bulk">&sect;5</a>&nbsp;Bulk Barcode Generation</h2>
 				<p class="center-xs">
@@ -417,7 +417,7 @@ with open('test.png', 'wb') as out_file:
 		</div>
 
 		<a name="headers"></a><br />
-		<div class="help-entry row center-xs middle-xs">
+		<div class="help-entry row center-xs top-xs">
 			<div class="col-xs-12">
 				<h2><a href="#headers">&sect;6</a>&nbsp;Response Headers</h2>
 				<p class="center-xs">
@@ -512,7 +512,7 @@ HTTP/1.1 409 Conflict
 ...
 X-Error-Message: Expected checksum: 0
 					</pre>
-					<p>
+					<p class="start-xs">
 						Each type of application failure will result in a unique error code.
 					</p>
 					<pre class="example-code">
@@ -531,9 +531,11 @@ X-Error-Message: Expected checksum: 0
 		<a name="session"></a><br />
 		<div class="help-entry row center-xs middle-xs">
 			<div class="col-xs-12">
-				<h2><a href="#session">&sect;7</a>&nbsp;Session Tracking</h2>
-				<p class="center-xs">
-					Users of the web interface are assigned a session token for basic history tracking.
+				<h2><a href="#session">&sect;7</a>&nbsp;User Session Info</h2>
+				<p class="start-xs">
+					Users of the web interface are assigned a session token for basic history tracking. By default, your
+					browser will pass this token along with each request. Sessions will generally expire several days
+					after last use, but may also be deleted from the server cache on request.
 					<br />
 					<br />
 					To view the details of your current session, visit <a href="/session.html"
