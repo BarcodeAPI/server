@@ -15,24 +15,23 @@ public abstract class CachedObject implements Serializable {
 
 	private static final long serialVersionUID = 20241222L;
 
-	private final long timeCreated;
-	private long timeTouched;
-	private long accessCount;
+	private static final JSONObject cachesConfig = //
+			AppConfig.get().getJSONObject("cache");
 
-	private long timeTimeout;
-	private long timeShortLived;
+	private final long timeCreated;
+	private long timeTouched, accessCount = 0;
+
+	private long timeTimeout, timeShortLived;
 
 	protected CachedObject(String type) {
 
-		this.accessCount = 0;
-		this.timeCreated = System.currentTimeMillis();
-		this.timeTouched = this.timeCreated;
+		// Object creation time
+		this.timeTouched = (this.timeCreated = System.currentTimeMillis());
 
-		JSONObject config = AppConfig.get()//
-				.getJSONObject("cache").getJSONObject(type);
-
-		this.setStandardTimeout(config.getInt("life"), TimeUnit.MINUTES);
-		this.setShortLivedTimeout(config.getInt("shortLife"), TimeUnit.MINUTES);
+		// Setup timeouts
+		JSONObject cacheConfig = cachesConfig.getJSONObject(type);
+		this.setStandardTimeout(cacheConfig.getInt("life"), TimeUnit.MINUTES);
+		this.setShortLivedTimeout(cacheConfig.getInt("shortLife"), TimeUnit.MINUTES);
 	}
 
 	/**

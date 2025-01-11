@@ -36,6 +36,7 @@ public class CachedSession extends CachedObject {
 
 		// Create user cookie
 		this.cookie = new Cookie("session", this.key);
+		this.cookie.setMaxAge((int) (getStandardTimeout() / 1000));
 		this.cookie.setPath("/");
 
 		// Memory map for ip and request history
