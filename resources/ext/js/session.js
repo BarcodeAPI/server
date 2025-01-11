@@ -36,14 +36,33 @@ function onLoadSession(data) {
 	}
 	document.getElementById("session-addresses").innerHTML = addresses;
 
-	var requests = "";
 	for (var r in data.session.requests) {
 		var d = data.session.requests[r];
 
-		requests += //
-			"<tr><td>" + d.text + "</td><td>" + d.hits + "</td></tr>";
+		if (d.text.match(/^\/api\/.*/)) {
+			addEntryAPI(d.text.substr(4), d.hits);
+			continue;
+		}
+
+		addEntryOther(d.text, d.hits);
+		continue;
 	}
-	document.getElementById("session-requests").innerHTML = requests;
+
+}
+
+function makeEntryRow(text, hits) {
+
+	return ("<tr><td>" + text + "</td><td>" + hits + "</td></tr>");
+}
+
+function addEntryAPI(text, hits) {
+
+	document.getElementById("session-requests-api").innerHTML += makeEntryRow(text, hits);
+}
+
+function addEntryOther(text, hits) {
+
+	document.getElementById("session-requests-other").innerHTML += makeEntryRow(text, hits);
 }
 
 function sessionDelete() {
