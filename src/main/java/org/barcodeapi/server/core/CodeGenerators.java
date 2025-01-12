@@ -37,7 +37,7 @@ public class CodeGenerators {
 	/**
 	 * A map of generation pools for all supported CodeTypes.
 	 */
-	private HashMap<String, LibObjectPooler<CodeGenerator>> generators = new HashMap<>();
+	private HashMap<CodeType, LibObjectPooler<CodeGenerator>> generators = new HashMap<>();
 
 	private CodeGenerators() {
 
@@ -51,7 +51,7 @@ public class CodeGenerators {
 				// Load type from config and setup pooler
 				String type = enabled.getString(x);
 				CodeType config = CodeTypes.inst().loadType(type);
-				generators.put(type, setupBarcodePooler(config));
+				generators.put(config, setupBarcodePooler(config));
 
 			} catch (Exception | Error e) {
 
@@ -85,7 +85,7 @@ public class CodeGenerators {
 	 * @param type type of pooler to get
 	 * @return the generation pool
 	 */
-	public LibObjectPooler<CodeGenerator> getGeneratorPool(String type) {
+	public LibObjectPooler<CodeGenerator> getGeneratorPool(CodeType type) {
 		LibMetrics.hitMethodRunCounter();
 
 		return generators.get(type);

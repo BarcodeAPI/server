@@ -3,6 +3,7 @@ package org.barcodeapi.server.cache;
 import java.util.Base64;
 
 import org.barcodeapi.core.utils.CodeUtils;
+import org.barcodeapi.server.core.CodeType;
 import org.json.JSONObject;
 
 /**
@@ -14,14 +15,14 @@ public class CachedBarcode extends CachedObject {
 
 	private static final long serialVersionUID = 20241222L;
 
-	private final String type;
+	private final CodeType type;
 	private final byte[] data;
 
 	private final String strRaw;
 	private final String strNice;
 	private final String strEncoded;
 
-	public CachedBarcode(String type, String raw, byte[] data) {
+	public CachedBarcode(CodeType type, String raw, byte[] data) {
 		super("barcode");
 
 		// Fail if null data
@@ -42,7 +43,7 @@ public class CachedBarcode extends CachedObject {
 	 * 
 	 * @return the name of the barcode type
 	 */
-	public String getBarcodeType() {
+	public CodeType getBarcodeType() {
 
 		return type;
 	}

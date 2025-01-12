@@ -4,6 +4,7 @@
 	"show": true,
 	"target": [
 		"usps",
+		"uspsmail",
 		"intelligent-mail"
 	],
 	"generator": ".USPSMailGenerator",

@@ -117,7 +117,7 @@ public class BarcodeAPIHandler extends RestHandler {
 		r.setHeader("Content-Length", Long.toString(bytes.length));
 
 		// Add the barcode type and detail headers
-		r.setHeader("X-Barcode-Type", barcode.getBarcodeType());
+		r.setHeader("X-Barcode-Type", barcode.getBarcodeType().getName());
 		r.setHeader("X-Barcode-Content", barcode.getBarcodeStringEncoded());
 
 		// Write the data to the stream

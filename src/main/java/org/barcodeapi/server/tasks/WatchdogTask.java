@@ -108,9 +108,10 @@ public class WatchdogTask extends BackgroundTask {
 		// Loop each type of barcode generator
 		for (String type : CodeTypes.inst().getTypes()) {
 
-			// Access generator pool
+			// Access barcode generator pool
 			LibObjectPooler<CodeGenerator> pool = //
-					CodeGenerators.getInstance().getGeneratorPool(type);
+					CodeGenerators.getInstance().getGeneratorPool(//
+							CodeTypes.inst().getType(type));
 
 			// Update counters for each generator pool
 			getStats().setValue(pool.getMaxAge(), "generators", type, "pool", "maxAge");

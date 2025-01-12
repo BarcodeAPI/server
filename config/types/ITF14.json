@@ -1,9 +1,10 @@
 {
 	"name": "ITF14",
-	"display": "ITF14",
+	"display": "ITF-14",
 	"show": true,
 	"target": [
 		"14",
+		"itf14",
 		"itf-14",
 		"scc-14",
 		"gtin"

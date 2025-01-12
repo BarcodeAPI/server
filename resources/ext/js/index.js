@@ -374,11 +374,12 @@ function updateBarcodeImage(url) {
 		// Update learn more link
 		var codeType = response.headers.get('x-barcode-type');
 		var displayType = codeType.replace("_", " ");
+		var linkType = codeType.replace("_", "");
 
 		// Update learn more link
 		var link = document.getElementsByClassName("link-more")[0];
 		link.innerHTML = "Learn more about " + displayType + " barcodes!";
-		link.href = "/type.html#" + codeType;
+		link.href = "/type.html#" + linkType;
 
 		// Update the image blob
 		response.blob().then(blob => {
