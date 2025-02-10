@@ -2,6 +2,7 @@
 	"name": "DataMatrix",
 	"display": "DataMatrix",
 	"show": true,
+	"cache": true,
 	"target": [
 		"dm",
 		"data-matrix",

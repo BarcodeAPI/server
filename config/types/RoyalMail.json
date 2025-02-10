@@ -2,6 +2,7 @@
 	"name": "RoyalMail",
 	"display": "Royal Mail",
 	"show": false,
+	"cache": true,
 	"target": [
 		"royal",
 		"royal-mail"

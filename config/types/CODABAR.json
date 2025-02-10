@@ -2,6 +2,7 @@
 	"name": "CODABAR",
 	"display": "CODABAR",
 	"show": true,
+	"cache": true,
 	"target": [
 		"codabar"
 	],

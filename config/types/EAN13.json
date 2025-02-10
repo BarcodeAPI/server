@@ -2,6 +2,7 @@
 	"name": "EAN13",
 	"display": "EAN 13",
 	"show": true,
+	"cache": true,
 	"target": [
 		"13",
 		"ean-13",

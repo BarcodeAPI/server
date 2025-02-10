@@ -2,6 +2,7 @@
 	"name": "UPC_E",
 	"display": "UPC E",
 	"show": true,
+	"cache": true,
 	"target": [
 		"e",
 		"upc-e",

@@ -19,6 +19,8 @@ public class CodeType {
 
 	private final boolean show;
 
+	private final boolean cache;
+
 	private final String generator;
 	private final int threads;
 
@@ -49,6 +51,9 @@ public class CodeType {
 
 		// show on web UI
 		this.show = config.getBoolean("show");
+
+		// enable caching
+		this.cache = config.getBoolean("cache");
 
 		// generator config
 		this.generator = (GEN_ROOT + config.getString("generator"));
@@ -101,6 +106,10 @@ public class CodeType {
 
 	public boolean getShowType() {
 		return show;
+	}
+
+	public boolean getCacheEnable() {
+		return cache;
 	}
 
 	public String getGeneratorClass() {

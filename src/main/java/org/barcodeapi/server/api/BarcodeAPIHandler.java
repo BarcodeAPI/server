@@ -84,7 +84,7 @@ public class BarcodeAPIHandler extends RestHandler {
 			r.setStatus(HttpServletResponse.SC_OK);
 
 			// Add cache headers
-			if (request.useCache()) {
+			if (CACHED_LIFE_MIN > 0) {
 				r.setDateHeader("Expires", //
 						(System.currentTimeMillis() + (CACHED_LIFE_MS)));
 				r.setHeader("Cache-Control", cacheControl);

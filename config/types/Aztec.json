@@ -2,6 +2,7 @@
 	"name": "Aztec",
 	"display": "Aztec",
 	"show": true,
+	"cache": true,
 	"target": [
 		"aztec"
 	],

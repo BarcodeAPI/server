@@ -2,6 +2,7 @@
 	"name": "QRCode",
 	"display": "QR Code",
 	"show": true,
+	"cache": true,
 	"target": [
 		"qr",
 		"qr-code",

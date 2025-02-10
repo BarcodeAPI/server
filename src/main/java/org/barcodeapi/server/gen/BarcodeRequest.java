@@ -20,10 +20,13 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
 public class BarcodeRequest {
 
 	private final CodeType type;
+
 	private final String data;
-	private final int cost;
-	private final boolean cached;
+	private final boolean complex;
 	private final JSONObject options;
+
+	private final boolean cached;
+	private final int cost;
 
 	private BarcodeRequest(CodeType type, String data, JSONObject options) {
 		LibMetrics.hitMethodRunCounter();
@@ -33,11 +36,12 @@ public class BarcodeRequest {
 		this.options = options;
 
 		// Use cache based on options and data length
-		this.cached = ((options.length() == 0) && (data.length() <= 48));
+		this.complex = ((options.length() > 0) || (data.length() >= 48));
+		this.cached = (type.getCacheEnable() && (!complex));
 
 		// Calculate the cost of the request
 		boolean free = (data.equals(type.getExample()));
-		int cost = (cached) ? type.getCostBasic() : type.getCostCustom();
+		int cost = (complex) ? type.getCostCustom() : type.getCostBasic();
 		this.cost = (free) ? 0 : cost;
 	}
 
