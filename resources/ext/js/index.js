@@ -53,7 +53,7 @@ async function init() {
 	loadBarcodeTypes();
 
 	// Hide UI elements based on config
-	uiShowHide("app-setup-bulk", appDisplay.bulkPages);
+	uiShowHide("app-setup-bulk", appConfig.bulkPages);
 
 	// Hide UI elements based on browser support
 	uiShowHide("action-copy", appFeatures.copyImage);
@@ -79,6 +79,9 @@ async function init() {
 
 	// Close the keyboard when navigating away
 	window.onbeforeunload = actionCloseKeyboard;
+
+	// Log tracking event
+	trackingEvent("app_main_load");
 }
 
 /**
@@ -125,7 +128,7 @@ function renderTypeSelection() {
 		var type = appState.types[t];
 
 		// Skip if not show
-		if (!type.show && !appDisplay.showHidden) {
+		if (!type.show && !appConfig.showHidden) {
 			continue;
 		}
 
@@ -199,6 +202,10 @@ function loadSelectedType() {
 
 	// Focus text input
 	text.focus();
+
+	// Log tracking event
+	trackingEvent("app_main_type", //
+		((codeType) ? { "type": codeType.name } : null));
 }
 
 function renderOptions(type) {
@@ -208,7 +215,7 @@ function renderOptions(type) {
 
 	// Determine if showing options
 	var showOptions = (type) && //
-		(appDisplay.renderOptions && //
+		(appConfig.renderOptions && //
 			Object.keys(type.options).length);
 
 	// Show / hide menu
@@ -386,6 +393,9 @@ function updateBarcodeImage(url) {
 			document.getElementById('barcode_output').src = URL.createObjectURL(blob);
 		});
 	});
+
+	// Log tracking event
+	trackingEvent("app_main_generate");
 }
 
 /**
@@ -516,7 +526,6 @@ function toggleShowRenderOptions() {
 
 	// Toggle render options dropdown state
 	showRenderMenu(!appState.optionsOpen);
-
 }
 
 /**
@@ -538,8 +547,12 @@ function actionShowKeyboard() {
 	var kbd = document.appKeyboard;
 	if (typeof kbd === 'undefined' || kbd.closed) {
 		kbd = createKeyboard();
+	} else {
+		kbd.focus();
 	}
-	kbd.focus();
+
+	// Log tracking event
+	trackingEvent("app_main_keyboard");
 }
 
 /**
@@ -562,6 +575,9 @@ function actionPrintImage() {
 	w.document.write(content);
 	w.print();
 	w.close();
+
+	// Log tracking event
+	trackingEvent("app_main_print");
 }
 
 /**
@@ -608,6 +624,9 @@ async function actionCopyImage() {
 		console.log("Failed to copy image.");
 		console.log(e);
 	}
+
+	// Log tracking event
+	trackingEvent("app_main_copy");
 }
 
 /**
@@ -616,6 +635,9 @@ async function actionCopyImage() {
 function actionDownloadImage() {
 
 	window.open(appState.current, '_blank');
+
+	// Log tracking event
+	trackingEvent("app_main_download")
 }
 
 /**

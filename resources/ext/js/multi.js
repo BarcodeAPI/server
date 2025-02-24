@@ -16,6 +16,9 @@ function init() {
 	var share = window.location.hash.substring(1);
 	((share) ? loadShare(share) : loadArgs());
 	document.getElementById("input").focus();
+
+	// Log tracking event
+	trackingEvent("app_multi_load");
 }
 
 /**
@@ -39,14 +42,15 @@ function loadShare(share) {
 function loadArgs() {
 	var root = window.location.href;
 	var start = root.indexOf("?");
-	if (start >= 0) {
-
-		// parse page arguments as barcodes to render
-		var params = root.substring(start + 1);
-		var requests = params.split("&");
-
-		renderRequests(requests);
+	if (start == 0) {
+		return;
 	}
+
+	// parse page arguments as barcodes to render
+	var params = root.substring(start + 1);
+	var requests = params.split("&");
+
+	renderRequests(requests);
 }
 
 /**
@@ -198,6 +202,9 @@ function multiShare() {
 		window.location = //
 			(window.location.pathname + '#' + shareCode);
 	});
+
+	// Log tracking event
+	trackingEvent("app_multi_share");
 }
 
 /**
@@ -218,4 +225,7 @@ function multiShareLegacy() {
  */
 function printPage() {
 	window.print();
+
+	// Log tracking event
+	trackingEvent("app_multi_print");
 }

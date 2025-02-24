@@ -25,6 +25,7 @@ function init() {
 		.then(response => {
 			return (response.status == 200) ? response.json() : false;
 		}).then(loadType);
+
 }
 
 function loadType(type) {
@@ -64,6 +65,9 @@ function loadType(type) {
 	info.querySelector(".type-checksum").innerHTML = (type.checksum ? "Yes" : "No");
 	info.querySelector(".type-nonprinting").innerHTML = (type.nonprinting ? "Yes" : "No");
 	info.querySelector(".type-options").innerHTML = buildOptions(type.options);
+
+	// Log tracking event
+	trackingEvent("app_type_load", { "type": type.name });
 }
 
 function buildOptions(options) {

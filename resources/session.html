@@ -55,8 +55,14 @@
 				</div>
 
 				<div class="col-xs-12 row">
-					Session Key:&nbsp;<span id="session-key"></span>
+					<div>
+						Session Key
+						<br />
+						<span id="session-key"></span>
+						<br /><br />
+					</div>
 				</div>
+
 				<div class="col-xs-12 row">
 					Created:&nbsp;<span id="session-created"></span>
 				</div>
@@ -65,19 +71,31 @@
 					Expires:&nbsp;<span id="session-expires"></span>
 				</div>
 
-				<div class="col-xs-12 row">
-					Request Count:&nbsp;<span id="session-count"></span>
-				</div>
+				<br />
 
 				<div class="col-xs-12 row">
-					IP Address History
+					Total Request Count:&nbsp;<span id="session-count"></span>
+				</div>
+
+				<br />
+
+				<div class="col-xs-12 row">
+					<h3>IP Address History</h3>
 				</div>
 
 				<div class="col-xs-12 row">
 					<table id="session-addresses"></table>
 				</div>
-			</div>
 
+				<div class="col-xs-12 row">
+					<h3>Server Request History</h3>
+				</div>
+
+				<div class="col-xs-12 row">
+					<table id="session-requests-other"></table>
+				</div>
+
+			</div>
 
 			<div class="col-sm-6 col-xs-12">
 
@@ -88,70 +106,66 @@
 							API Rate Limiter
 						</h2>
 					</div>
-
-					<div class="col-xs-12 row">
-						Caller:&nbsp;<span id="limiter-caller"></span>
-					</div>
-
-					<div class="col-xs-12 row">
-						Created:&nbsp;<span id="limiter-created"></span>
-					</div>
-
-					<div class="col-xs-12 row">
-						Expires:&nbsp;<span id="limiter-expires"></span>
-					</div>
-
-					<div class="col-xs-12 row">
-						Enforced:&nbsp;<span id="limiter-enforce"></span>
-					</div>
-
-					<div class="col-xs-12 row">
-						Tokens Spent:&nbsp;<span id="limiter-tokenSpend"></span>
-					</div>
-
-					<div class="col-xs-12 row">
-						Token Limit:&nbsp;<span id="limiter-tokenLimit"></span>
-					</div>
-
-					<div class="col-xs-12 row">
-						Token Count:&nbsp;<span id="limiter-tokenCount"></span>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-xs-12">
-				<div class="col-xs-12">
-					<h3>
-						Server Request History
-					</h3>
 				</div>
 
-				<div class="col-xs-12">
-					<table id="session-requests-other"></table>
+				<div class="col-xs-12 row">
+					<div>
+						Caller
+						<br />
+						<span id="limiter-caller"></span>
+						<br /><br />
+					</div>
 				</div>
-			</div>
 
-			<div class="col-sm-6 col-xs-12">
+				<div class="col-xs-12 row">
+					Created:&nbsp;<span id="limiter-created"></span>
+				</div>
+
+				<div class="col-xs-12 row">
+					Expires:&nbsp;<span id="limiter-expires"></span>
+				</div>
+
+				<br />
+
+				<div class="col-xs-12 row">
+					Enforced:&nbsp;<b><span id="limiter-enforce"></span></b>
+				</div>
+
+				<br />
+
+				<div class="col-xs-12 row">
+					Tokens Spent:&nbsp;<span id="limiter-tokenSpend"></span>
+				</div>
+
+				<div class="col-xs-12 row">
+					Token Limit:&nbsp;<span id="limiter-tokenLimit"></span>/day
+				</div>
+
+				<div class="col-xs-12 row">
+					Token Count:&nbsp;<span id="limiter-tokenCount"></span>
+				</div>
+
 				<div class="col-xs-12">
-					<h3>
-						API Request History
-					</h3>
+					<h3>API Request History</h3>
 				</div>
 
 				<div class="col-xs-12">
 					<table id="session-requests-api"></table>
 				</div>
 			</div>
-
-			<div class="col-xs-12">
-				<p>
-					Sessions are only used for basic history tracking and are not long lived. If you request for your
-					session to be deleted, a new token will immediately be issued. Sessions expire a short time after
-					they are last used. The natural deletion date of the session token is displayed above, unless
-					requests continue to be made.
-				</p>
-			</div>
 		</div>
+
+
+
+		<div class="col-xs-12">
+			<p>
+				Sessions are only used for basic history tracking and are not long lived. If you request for your
+				session to be deleted, a new token will immediately be issued. Sessions expire a short time after
+				they are last used. The natural deletion date of the session token is displayed above, unless
+				requests continue to be made.
+			</p>
+		</div>
+	</div>
 	</div>
 </body>
 

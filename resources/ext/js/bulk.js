@@ -7,6 +7,9 @@ function init() {
 
 	document.getElementsByClassName("link-csv")[0].addEventListener('click', actionDownloadCSV);
 	document.getElementById("csvFile").addEventListener('change', checkIfFileSelected);
+
+	// Log tracking event
+	trackingEvent("app_bulk_load");
 }
 
 function actionDownloadCSV() {
@@ -16,6 +19,7 @@ function actionDownloadCSV() {
 		blob += (csvExample[line] + "\n");
 	}
 
+	// Create download link
 	var file = new Blob([blob], { type: 'text/csv' });
 	var a = document.createElement("a");
 	a.href = URL.createObjectURL(file);
@@ -23,6 +27,9 @@ function actionDownloadCSV() {
 	document.body.appendChild(a);
 	a.click();
 	document.body.removeChild(a);
+
+	// Log tracking event
+	trackingEvent("app_bulk_example");
 }
 
 function checkIfFileSelected(obj) {

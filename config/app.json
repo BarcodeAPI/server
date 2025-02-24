@@ -44,7 +44,7 @@
 		{
 			"name": "Limiter Minting",
 			"impl": ".LimiterMintingTask",
-			"interval": 300
+			"interval": 60
 		},
 		{
 			"name": "Share Cleanup",
@@ -84,7 +84,7 @@
 	"limits": {
 		"enforce": true,
 		"ips": {
-			"__default": 10000,
+			"__default": 10080,
 			"127.0.0.1": -1
 		},
 		"keys": {

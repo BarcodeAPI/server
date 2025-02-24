@@ -18,6 +18,9 @@ function init() {
 
 	const clearButton = document.getElementById("decode-preview-clear");
 	clearButton.addEventListener("click", clearPreview);
+
+	// Log tracking event
+	trackingEvent("app_decode_load");
 }
 
 function handleFileSelection() {
@@ -107,4 +110,7 @@ function submitForDecode(e) {
 
 		console.error("Error during file upload:", error);
 	});
+
+	// Log tracking event
+	trackingEvent("app_decode_upload");
 }

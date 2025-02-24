@@ -10,34 +10,33 @@ function init() {
 		.then(response => {
 			return (response.status == 200) ? response.json() : false;
 		}).then(onLoadSession);
+	fetch("/limiter/")
+		.then(response => {
+			return (response.status == 200) ? response.json() : false;
+		}).then(onLoadLimiter);
+
+	// Log tracking event
+	trackingEvent("app_session_load");
 }
 
 function onLoadSession(data) {
 
-	document.getElementById("limiter-caller").innerHTML = data.limiter.caller;
-	document.getElementById("limiter-created").innerHTML = (new Date(data.limiter.created)).toJSON();
-	document.getElementById("limiter-expires").innerHTML = (new Date(data.limiter.expires)).toJSON();
-	document.getElementById("limiter-enforce").innerHTML = data.limiter.enforce;
-	document.getElementById("limiter-tokenSpend").innerHTML = data.limiter.tokenSpend;
-	document.getElementById("limiter-tokenLimit").innerHTML = data.limiter.tokenLimit;
-	document.getElementById("limiter-tokenCount").innerHTML = Number(data.limiter.tokenCount).toFixed(2);
-
-	document.getElementById("session-key").innerHTML = data.session.key;
-	document.getElementById("session-created").innerHTML = (new Date(data.session.created)).toJSON();
-	document.getElementById("session-expires").innerHTML = (new Date(data.session.expires)).toJSON();
-	document.getElementById("session-count").innerHTML = data.session.count;
+	document.getElementById("session-key").innerHTML = data.key;
+	document.getElementById("session-created").innerHTML = (new Date(data.created)).toJSON();
+	document.getElementById("session-expires").innerHTML = (new Date(data.expires)).toJSON();
+	document.getElementById("session-count").innerHTML = data.count;
 
 	var addresses = "";
-	for (var a in data.session.addresses) {
-		var d = data.session.addresses[a];
+	for (var a in data.addresses) {
+		var d = data.addresses[a];
 
 		addresses += //
 			"<tr><td>" + d.ip + "</td><td>" + d.hits + "</td></tr>";
 	}
 	document.getElementById("session-addresses").innerHTML = addresses;
 
-	for (var r in data.session.requests) {
-		var d = data.session.requests[r];
+	for (var r in data.requests) {
+		var d = data.requests[r];
 
 		if (d.text.match(/^\/api\/.*/)) {
 			addEntryAPI(d.text.substr(4), d.hits);
@@ -47,7 +46,16 @@ function onLoadSession(data) {
 		addEntryOther(d.text, d.hits);
 		continue;
 	}
+}
 
+function onLoadLimiter(data) {
+	document.getElementById("limiter-caller").innerHTML = data.caller;
+	document.getElementById("limiter-created").innerHTML = (new Date(data.created)).toJSON();
+	document.getElementById("limiter-expires").innerHTML = (new Date(data.expires)).toJSON();
+	document.getElementById("limiter-enforce").innerHTML = (data.enforce ? "Yes" : "No");
+	document.getElementById("limiter-tokenSpend").innerHTML = data.tokenSpend;
+	document.getElementById("limiter-tokenLimit").innerHTML = data.tokenLimit;
+	document.getElementById("limiter-tokenCount").innerHTML = Number(data.tokenCount).toFixed(2);
 }
 
 function makeEntryRow(text, hits) {

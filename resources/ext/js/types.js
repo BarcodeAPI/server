@@ -28,6 +28,9 @@ function init() {
 
 			return data;
 		}).then(loadTypes);
+
+	// Log tracking event
+	trackingEvent("app_types_load");
 }
 
 function loadTypes(data) {

@@ -3,15 +3,18 @@
 // ui.js
 //
 
+
 /**
  * App Display Options
  */
-const appDisplay = {
+const appConfig = {
 	'bulkPages': true,
 	'tokenCount': true,
 	'limitsNotice': true,
 	'renderOptions': true,
-	'showHidden': false
+	'showHidden': false,
+	'logEvents': false,
+	'trackingToken': false
 };
 
 /**
@@ -24,10 +27,18 @@ const appFeatures = {
 	'copyURL': window.isSecureContext
 }
 
+// Used by GTag
+const dataLayer = [];
+
 /**
  * Register handler to setup page when loaded.
  */
 window.addEventListener("load", function() {
+
+	// Check and load analytics
+	if (appConfig.trackingToken) {
+		initGTagTracking();
+	}
 
 	// Check and load header
 	if (document.getElementsByClassName("header")[0]) {
@@ -45,6 +56,19 @@ window.addEventListener("load", function() {
 	}
 });
 
+function initGTagTracking() {
+
+	var tag = appConfig.trackingToken;
+
+	gtag('js', new Date());
+	gtag('config', tag);
+
+	var gtagJS = document.createElement("script");
+	gtagJS.src = "https://www.googletagmanager.com/gtag/js?" + tag;
+	gtagJS.async = true;
+	document.head.appendChild(gtagJS);
+}
+
 /**
  * Initialize page header.
  */
@@ -60,7 +84,7 @@ function initHeader() {
  */
 function initNotice() {
 
-	uiShowHide("notice-limits", appDisplay.limitsNotice);
+	uiShowHide("notice-limits", appConfig.limitsNotice);
 }
 
 /**
@@ -68,7 +92,7 @@ function initNotice() {
  */
 function initFooter() {
 
-	uiShowHide("footer-tokens", appDisplay.tokenCount);
+	uiShowHide("footer-tokens", appConfig.tokenCount);
 
 	uiAddListener("footer-docs-link", actionShowDocs);
 }
@@ -116,9 +140,31 @@ function uiShowHide(elem, show) {
  * Add an event listener to a UI element.
  */
 function uiAddListener(elem, handler, event) {
-	event = (event) ? event : "click";
 	var obj = document.getElementsByClassName(elem)[0];
 	if (obj) {
+		event = (event) ? event : "click";
 		obj.addEventListener(event, handler);
 	}
+}
+
+/**
+ * Tracking event handler
+ */
+function trackingEvent(event, details) {
+	if (appConfig.logEvents) {
+		var msg = ("Event: " + event);
+		if (details) {
+			msg += (" :: " + JSON.stringify(details));
+		}
+		console.log(msg);
+	}
+
+	gtag("event", event, details);
+}
+
+/**
+ * GTag analytics handler
+ */
+function gtag() {
+	dataLayer.push(arguments);
 }

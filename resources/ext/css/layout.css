@@ -113,6 +113,10 @@ body {
 
 .notice-type {}
 
+.notice-enforced {
+	display: none;
+}
+
 
 .barcode-text-input {
 	font-size: 24px;

@@ -11,21 +11,21 @@ public class CachedLimiter extends CachedObject {
 
 	private static final long serialVersionUID = 20241222L;
 
-	private static final double TOKENS_INITIAL = 0.5;
+	private static final double _DAY = (24 * 60 * 60 * 1000);
 
 	private final boolean enforce;
 
 	private final String caller;
 
-	private final long tokenLimit;
-
-	private final double tokensPerMilli;
-
-	private long timeMinted;
+	private double tokenSpend;
 
 	private double tokenCount;
 
-	private double tokenSpend;
+	private final long tokenLimit;
+
+	private long timeMinted;
+
+	private final double tokensPerMilli;
 
 	public CachedLimiter(boolean enforce, String caller, long requests) {
 		super("limiter");
@@ -34,12 +34,11 @@ public class CachedLimiter extends CachedObject {
 		this.caller = caller;
 
 		this.tokenSpend = 0;
+		this.tokenCount = requests;
 		this.tokenLimit = requests;
 
 		this.timeMinted = System.currentTimeMillis();
-		this.tokensPerMilli = (requests > 0) ? //
-				((double) requests / (double) getStandardTimeout()) : 0;
-		this.tokenCount = (requests == -1) ? -1 : (requests * TOKENS_INITIAL);
+		this.tokensPerMilli = (requests > 0) ? ((double) requests / _DAY) : 0;
 	}
 
 	/**
@@ -151,7 +150,7 @@ public class CachedLimiter extends CachedObject {
 		synchronized (this) {
 
 			// If cost is more then have
-			if (count >= this.tokenCount) {
+			if (count > this.tokenCount) {
 
 				// Return based on enforcement
 				return (!isEnforced());

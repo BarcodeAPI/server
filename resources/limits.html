@@ -24,7 +24,7 @@
 	<script src="/ext/js/limits.js"></script>
 </head>
 
-<body onload="displayTokenCount()">
+<body>
 	<div class="wrapper container-fluid">
 
 		<div class="header row between-sm start-sm center-xs">
@@ -41,8 +41,14 @@
 		<div class="row center-xs middle-xs">
 			<div class="tokens col-xs-12">
 				<h2>Rate Limits</h2>
-				<div>
+				<div class="notice-remaining">
+					<b>Token Limit</b>:&nbsp;<span id="token_limit"></span>/day&nbsp<a class="text-link"
+						href="/session.html">&#10068;</a>
+					<br />
 					<b>Tokens Remaining</b>:&nbsp;<span id="token_count"></span>
+				</div>
+				<div class="notice-enforced">
+					<b>Note</b>:&nbsp;Rate limits are not enforced.
 				</div>
 			</div>
 		</div>
@@ -114,6 +120,10 @@
 				<br />
 				To upgrade your account, please visit <a href="/contracts.html"
 					class="text-link anim icon-chevron">Usage Contracts</a>
+				<br />
+				<br />
+				Additional user session cound be found at
+				<a href="/session.html" class="text-link anim icon-chevron">Session Info</a>
 			</div>
 		</div>
 	</div>
