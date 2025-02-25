@@ -3,8 +3,6 @@
 // api.js
 //
 
-var language = "en";
-
 window.onhashchange = function() {
 	location.reload();
 }

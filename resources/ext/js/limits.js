@@ -9,8 +9,11 @@ window.addEventListener("load", function() {
 				document.getElementsByClassName("notice-enforced")[0].style.display = 'block';
 			}
 
-			document.getElementById("token_count").innerHTML = data.tokenCount;
-			document.getElementById("token_limit").innerHTML = data.tokenLimit;
+			document.getElementById("token_count").innerHTML = //
+				((data.tokenCount == -1) ? "Unlimited" : data.tokenCount);
+
+			document.getElementById("token_limit").innerHTML = //
+				((data.tokenLimit == -1) ? "Unlimited" : data.tokenLimit);
 		});
 
 	// Log tracking event

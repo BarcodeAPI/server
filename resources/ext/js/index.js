@@ -526,6 +526,9 @@ function toggleShowRenderOptions() {
 
 	// Toggle render options dropdown state
 	showRenderMenu(!appState.optionsOpen);
+
+	// Log tracking event
+	trackingEvent("app_main_options");
 }
 
 /**

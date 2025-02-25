@@ -3,8 +3,6 @@
 // api.js
 //
 
-var language = "en";
-
 window.onhashchange = function() {
 	location.reload();
 }
@@ -42,6 +40,9 @@ function loadType(type) {
 
 	// Determine default target
 	var target = type.targets[0];
+
+	// Determine language	
+	var language = appConfig.userLanguage;
 
 	// Get the DOM template object
 	var info = document.getElementById("barcode-template");

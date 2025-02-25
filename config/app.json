@@ -82,9 +82,9 @@
 		"admin": "5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8"
 	},
 	"limits": {
-		"enforce": true,
+		"enforce": false,
 		"ips": {
-			"__default": 10080,
+			"__default": -1,
 			"127.0.0.1": -1
 		},
 		"keys": {

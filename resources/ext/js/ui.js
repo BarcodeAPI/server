@@ -14,7 +14,9 @@ const appConfig = {
 	'showTokenCount': false,
 	'showLimitsNotice': false,
 	'showRenderOptions': false,
-	'showHiddenTypes': false
+	'showHiddenTypes': false,
+
+	'userLanguage': 'en'
 };
 
 /**
