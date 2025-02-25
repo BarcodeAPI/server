@@ -1,10 +1,21 @@
-function displayTokenCount() {
-	fetch('/types/')
+window.addEventListener("load", function() {
+
+	fetch('/limiter/')
 		.then(response => {
-			return response.headers.get("x-ratelimit-tokens");
+			return response.json();
 		})
 		.then(data => {
-			var count = (data == -1) ? "Unlimited" : data;
-			document.getElementById("token_count").innerHTML = count;
+			if (!data.enforce) {
+				document.getElementsByClassName("notice-enforced")[0].style.display = 'block';
+			}
+
+			document.getElementById("token_count").innerHTML = //
+				((data.tokenCount == -1) ? "Unlimited" : data.tokenCount);
+
+			document.getElementById("token_limit").innerHTML = //
+				((data.tokenLimit == -1) ? "Unlimited" : data.tokenLimit);
 		});
-}
+
+	// Log tracking event
+	trackingEvent("app_limits_load");
+});

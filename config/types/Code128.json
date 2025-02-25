@@ -2,6 +2,7 @@
 	"name": "Code128",
 	"display": "Code 128",
 	"show": true,
+	"cache": true,
 	"target": [
 		"128",
 		"code-128",

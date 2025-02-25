@@ -2,8 +2,10 @@
 	"name": "USPSMail",
 	"display": "USPS Mail",
 	"show": true,
+	"cache": true,
 	"target": [
 		"usps",
+		"uspsmail",
 		"intelligent-mail"
 	],
 	"generator": ".USPSMailGenerator",

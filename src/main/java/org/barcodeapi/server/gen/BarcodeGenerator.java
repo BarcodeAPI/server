@@ -4,6 +4,7 @@ import org.barcodeapi.server.cache.CachedBarcode;
 import org.barcodeapi.server.cache.CachedObject;
 import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.CodeGenerators;
+import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 
@@ -38,7 +39,8 @@ public class BarcodeGenerator {
 		long start = System.currentTimeMillis();
 
 		// Get the render request data
-		String type = request.getType().getName();
+		CodeType type = request.getType();
+		String typeName = type.getName();
 		String data = request.getData();
 
 		// The barcode image object
@@ -49,7 +51,7 @@ public class BarcodeGenerator {
 
 			// Lookup image from cache
 			CachedObject obj = ObjectCache//
-					.getCache(type).get(data);
+					.getCache(typeName).get(data);
 
 			// Return if found
 			if (obj != null) {
@@ -70,7 +72,7 @@ public class BarcodeGenerator {
 
 			// Update global and engine counters
 			LibMetrics.instance().hitCounter("render", "count");
-			LibMetrics.instance().hitCounter("render", "type", type, "count");
+			LibMetrics.instance().hitCounter("render", "type", typeName, "count");
 
 			// Run implementation specific validations
 			generator.onValidateRequest(request);
@@ -80,21 +82,21 @@ public class BarcodeGenerator {
 
 			// Calculate run time and log generation
 			int time = (int) (System.currentTimeMillis() - start);
-			LibLog.clogF("barcode", "I0601", type, data, png.length, time);
+			LibLog.clogF("barcode", "I0601", typeName, data, png.length, time);
 
 			// Create the object to be cached
 			barcode = new CachedBarcode(type, data, png);
 
 			// Add to cache if allowed
 			if (request.useCache()) {
-				ObjectCache.getCache(type).put(data, barcode);
+				ObjectCache.getCache(typeName).put(data, barcode);
 			}
 
 		} catch (GenerationException e) {
 
 			// Update global and engine counters
 			LibMetrics.instance().hitCounter("render", "invalid");
-			LibMetrics.instance().hitCounter("render", "type", type, "invalid");
+			LibMetrics.instance().hitCounter("render", "type", typeName, "invalid");
 
 			// Pass it up
 			throw e;
@@ -103,25 +105,27 @@ public class BarcodeGenerator {
 
 			// Update global and engine counters
 			LibMetrics.instance().hitCounter("render", "busy");
-			LibMetrics.instance().hitCounter("render", "type", type, "busy");
+			LibMetrics.instance().hitCounter("render", "type", typeName, "busy");
 
 			// Failed if unable to get generator from pool
-			throw new GenerationException(ExceptionType.BUSY);
+			throw new GenerationException(ExceptionType.BUSY, //
+					new Throwable("Server is busy, please try again."));
 
 		} catch (Exception | Error e) {
 
 			// Update global and engine counters
 			LibMetrics.instance().hitCounter("render", "fail");
-			LibMetrics.instance().hitCounter("render", "type", type, "fail");
+			LibMetrics.instance().hitCounter("render", "type", typeName, "fail");
 
 			// Generation itself failed
-			throw new GenerationException(ExceptionType.FAILED);
+			throw new GenerationException(ExceptionType.FAILED, //
+					new Throwable("Failed to render barcode.", e));
 		} finally {
 
 			// Update global and engine counters
 			int time = (int) (System.currentTimeMillis() - start);
 			LibMetrics.instance().hitCounter(time, "render", "time");
-			LibMetrics.instance().hitCounter(time, "render", "type", type, "time");
+			LibMetrics.instance().hitCounter(time, "render", "type", typeName, "time");
 
 			// Release the generator back to the pool
 			if (generator != null) {

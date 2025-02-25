@@ -12,7 +12,7 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class GenerationException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 20241123L;
 
 	public enum ExceptionType {
 		EMPTY(400, "/128/$$@EMPTY$$@"),
@@ -20,8 +20,6 @@ public class GenerationException extends Exception {
 		INVALID(400, "/128/$$@INVALID$$@"),
 
 		BLACKLIST(403, "/128/$$@BLACKLIST$$@"),
-
-		FORMAT(406, "/128/$$@FORMAT$$@"),
 
 		CHECKSUM(409, "/128/$$@CHECKSUM$$@"),
 
@@ -55,10 +53,6 @@ public class GenerationException extends Exception {
 	}
 
 	private final ExceptionType type;
-
-	public GenerationException(ExceptionType type) {
-		this(type, new Throwable(type.toString()));
-	}
 
 	public GenerationException(ExceptionType type, Throwable throwable) {
 		super(throwable);

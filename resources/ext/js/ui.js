@@ -1,32 +1,55 @@
+//
+// BarcodeAPI.org
+// ui.js
+//
+
+
 /**
  * App Display Options
  */
-const appDisplay = {
-	'about': true,
-	'support': false,
-	'tokenCount': false,
-	'bulkPages': true,
-	'limitsNotice': false,
-	'renderOptions': false,
-	'helpType': true,
-	'helpManual': true,
-	'showHidden': false
+const appConfig = {
+	'showLinkBulk': true,
+	'showLinkMulti': true,
+	'showLinkDecode': false,
+	'showTokenCount': false,
+	'showLimitsNotice': false,
+	'showRenderOptions': false,
+	'showHiddenTypes': false,
+
+	'userLanguage': 'en'
 };
 
 /**
  * App Supported Features
  */
 const appFeatures = {
+
 	// Firefox unsupported
 	'copyImage': (navigator.userAgent.indexOf("Firefox") == -1),
+
 	// Must be secure context
-	'copyURL': window.isSecureContext
+	'copyURL': window.isSecureContext,
+
+	// Analytics event tracking
+	'eventTracking': {
+		'enabled': false,
+		'appToken': false,
+		'logEvents': false
+	}
 }
+
+// Used by GTag
+const dataLayer = [];
 
 /**
  * Register handler to setup page when loaded.
  */
 window.addEventListener("load", function() {
+
+	// Check and load analytics
+	if (appFeatures.eventTracking.enabled) {
+		initGTagTracking();
+	}
 
 	// Check and load header
 	if (document.getElementsByClassName("header")[0]) {
@@ -45,15 +68,29 @@ window.addEventListener("load", function() {
 });
 
 /**
+ * Initialize Google Analytics tracking.
+ */
+function initGTagTracking() {
+
+	var token = appFeatures.eventTracking.appToken;
+
+	gtag('js', new Date());
+	gtag('config', token);
+
+	var gtagJS = document.createElement("script");
+	gtagJS.src = "https://www.googletagmanager.com/gtag/js?" + token;
+	gtagJS.async = true;
+	document.head.appendChild(gtagJS);
+}
+
+/**
  * Initialize page header.
  */
 function initHeader() {
 
 	uiAddListener("header-logo", actionHome);
 	uiAddListener("action-email", actionContact);
-	if (appDisplay.support) {
-		uiAddListener("header-support", actionSupport)
-	}
+	uiAddListener("header-support", actionSupport)
 }
 
 /**
@@ -61,8 +98,7 @@ function initHeader() {
  */
 function initNotice() {
 
-	uiShowHide("notice-limits", appDisplay.limitsNotice);
-	uiShowHide("notice-tokens", appDisplay.tokenCount);
+	uiShowHide("notice-limits", appConfig.showLimitsNotice);
 }
 
 /**
@@ -70,8 +106,7 @@ function initNotice() {
  */
 function initFooter() {
 
-	uiShowHide("footer-link", appDisplay.about);
-	uiShowHide("footer-docs", appDisplay.helpManual);
+	uiShowHide("footer-tokens", appConfig.showTokenCount);
 
 	uiAddListener("footer-docs-link", actionShowDocs);
 }
@@ -109,18 +144,41 @@ function actionShowDocs() {
  */
 function uiShowHide(elem, show) {
 	var obj = document.getElementsByClassName(elem)[0];
-	if (obj) {
-		obj.style.display = ((show) ? '' : 'none');
+	if (!obj) {
+		return;
 	}
+	obj.style.display = ((show) ? '' : 'none');
 }
 
 /**
  * Add an event listener to a UI element.
  */
 function uiAddListener(elem, handler, event) {
-	event = (event) ? event : "click";
 	var obj = document.getElementsByClassName(elem)[0];
 	if (obj) {
+		event = (event) ? event : "click";
 		obj.addEventListener(event, handler);
 	}
+}
+
+/**
+ * Tracking event handler
+ */
+function trackingEvent(event, details) {
+	if (appFeatures.eventTracking.logEvents) {
+		var msg = ("Event: " + event);
+		if (details) {
+			msg += (" :: " + JSON.stringify(details));
+		}
+		console.log(msg);
+	}
+
+	gtag("event", event, details);
+}
+
+/**
+ * GTag analytics handler
+ */
+function gtag() {
+	dataLayer.push(arguments);
 }

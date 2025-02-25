@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public class ServerReloadHandler extends RestHandler {
 
 	public ServerReloadHandler() {
-		super(true);
+		super(true, false, false);
 	}
 
 	@Override

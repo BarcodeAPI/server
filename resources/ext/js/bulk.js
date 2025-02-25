@@ -1,7 +1,15 @@
 
+var submitButton;
+
 function init() {
 
+	submitButton = document.getElementById("generate-bc");
+
 	document.getElementsByClassName("link-csv")[0].addEventListener('click', actionDownloadCSV);
+	document.getElementById("csvFile").addEventListener('change', checkIfFileSelected);
+
+	// Log tracking event
+	trackingEvent("app_bulk_load");
 }
 
 function actionDownloadCSV() {
@@ -11,6 +19,7 @@ function actionDownloadCSV() {
 		blob += (csvExample[line] + "\n");
 	}
 
+	// Create download link
 	var file = new Blob([blob], { type: 'text/csv' });
 	var a = document.createElement("a");
 	a.href = URL.createObjectURL(file);
@@ -18,19 +27,29 @@ function actionDownloadCSV() {
 	document.body.appendChild(a);
 	a.click();
 	document.body.removeChild(a);
+
+	// Log tracking event
+	trackingEvent("app_bulk_example");
 }
 
-function checkIfFileSelected() {
+function checkIfFileSelected(obj) {
 
-	var submitButton = document.getElementById("generate-bc");
+	const fileInput = obj.target;
+	const file = fileInput.files[0];
 
-	document.getElementById('csvFile').addEventListener('change', function() {
-		if (this.value.length > 0) {
+	if (file) {
+		const fileName = file.name.toLowerCase();
+		const isCSV = fileName.endsWith('.csv');
+
+		if (isCSV) {
 			submitButton.removeAttribute("disabled");
 		} else {
-			submitButton.addAttribute("disabled");
+			submitButton.setAttribute("disabled", "true");
+			alert("Please select a CSV file.");
 		}
-	});
+	} else {
+		submitButton.setAttribute("disabled", "true");
+	}
 }
 
 var csvExample = [

@@ -1,5 +1,6 @@
 package org.barcodeapi.server.api;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.MultipartConfigElement;
@@ -23,12 +24,17 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class BulkHandler extends RestHandler {
 
+	private final File uploadDir;
+
 	public BulkHandler() {
 		super(
 				// Authentication not required
 				false,
 				// Use client rate limit
 				true);
+
+		this.uploadDir = new File("uploads", "bulk");
+		this.uploadDir.mkdirs();
 	}
 
 	@Override

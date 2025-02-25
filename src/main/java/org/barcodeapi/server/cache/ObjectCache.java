@@ -26,6 +26,9 @@ public class ObjectCache {
 	public static final String CACHE_SHARE = "MULTI-SHARE";
 	public static final String CACHE_SESSIONS = "sessions";
 
+	private static final String SNAPSHOT_DIR = AppConfig.get()//
+			.getJSONObject("cache").getString("_snapshots");
+
 	private static final LibMetrics stats = LibMetrics.instance();
 
 	private static final ConcurrentHashMap<String, ObjectCache> caches;
@@ -34,7 +37,7 @@ public class ObjectCache {
 
 	static {
 		caches = new ConcurrentHashMap<>();
-		cacheDir = new File(AppConfig.get().getString("cacheDir"));
+		cacheDir = new File(SNAPSHOT_DIR);
 	}
 
 	private final String name;
@@ -179,6 +182,12 @@ public class ObjectCache {
 			cache.clear();
 		}
 		return cleared;
+	}
+
+	public static String[] getCacheNames() {
+
+		return caches.keySet().toArray(//
+				new String[caches.size()]);
 	}
 
 	public static synchronized ObjectCache getCache(String name) {

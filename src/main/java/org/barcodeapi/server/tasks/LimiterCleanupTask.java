@@ -1,7 +1,5 @@
 package org.barcodeapi.server.tasks;
 
-import java.io.IOException;
-
 import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 
@@ -44,16 +42,5 @@ public class LimiterCleanupTask extends BackgroundTask {
 		// Remove expired objects and log current counts
 		int removed = cache.expireOldObjects(), active = cache.count();
 		LibLog._clogF("I2601", type, removed, active);
-
-		try {
-
-			// Save cache snapshot
-			int saved = cache.saveSnapshot();
-			LibLog._clogF("I2602", type, saved);
-		} catch (IOException e) {
-
-			// Log the failure
-			LibLog._clog("E2602", e);
-		}
 	}
 }

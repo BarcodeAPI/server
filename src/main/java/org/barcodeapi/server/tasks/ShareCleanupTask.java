@@ -1,7 +1,5 @@
 package org.barcodeapi.server.tasks;
 
-import java.io.IOException;
-
 import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 
@@ -30,16 +28,5 @@ public class ShareCleanupTask extends BackgroundTask {
 		// Cleanup Share cache
 		int removed = shares.expireOldObjects(), active = shares.count();
 		LibLog._clogF("I2611", removed, active);
-
-		try {
-
-			// Save cache snapshot
-			int saved = shares.saveSnapshot();
-			LibLog._clogF("I2602", shares.getName(), saved);
-		} catch (IOException e) {
-
-			// Log the failure
-			LibLog._clog("E2602", e);
-		}
 	}
 }

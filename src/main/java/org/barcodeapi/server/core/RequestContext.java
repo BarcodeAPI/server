@@ -76,6 +76,8 @@ public class RequestContext {
 
 	private final String uri;
 
+	private final int body;
+
 	private final String origin;
 
 	private final String source;
@@ -113,6 +115,9 @@ public class RequestContext {
 		// Get the request URI
 		this.uri = request.getOriginalURI();
 
+		// Size of the request body
+		this.body = request.getContentLength();
+
 		// Get the origin
 		this.origin = request.getHeader("origin");
 
@@ -149,7 +154,7 @@ public class RequestContext {
 
 		// Hit the session
 		if (this.session != null) {
-			session.hit(request.getOriginalURI().toString());
+			session.hit(ip, request.getOriginalURI().toString());
 		}
 
 		// Determine output format and encoding
@@ -208,6 +213,26 @@ public class RequestContext {
 	 */
 	public String getUri() {
 		return this.uri;
+	}
+
+	/**
+	 * Returns if the request has additional content.
+	 * 
+	 * @return if the request has additional content
+	 */
+	public boolean hasBody() {
+
+		return (this.body > 0);
+	}
+
+	/**
+	 * Returns the length of the additional content.
+	 * 
+	 * @return the length of the additional content
+	 */
+	public int getBodySize() {
+
+		return this.body;
 	}
 
 	/**
@@ -271,5 +296,15 @@ public class RequestContext {
 	 */
 	public CachedSession getSession() {
 		return this.session;
+	}
+
+	/**
+	 * Returns true if the session was newly created.
+	 * 
+	 * @return if the session was newly created
+	 */
+	public boolean hasNewSession() {
+		return (this.session != null) && //
+				(this.session.getAccessCount() == 1);
 	}
 }

@@ -1,9 +1,7 @@
 package org.barcodeapi.server.cache;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.gen.BarcodeRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,10 +15,7 @@ import com.mclarkdev.tools.libextras.LibExtrasHashes;
  */
 public class CachedShare extends CachedObject {
 
-	private static final long serialVersionUID = 1L;
-
-	private static final int OBJECT_LIFE = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("share").getInt("life");
+	private static final long serialVersionUID = 20241222L;
 
 	private final String data;
 
@@ -34,7 +29,7 @@ public class CachedShare extends CachedObject {
 	 * @param requests
 	 */
 	public CachedShare(List<BarcodeRequest> requests) {
-		this.setTimeout(OBJECT_LIFE, TimeUnit.MINUTES);
+		super("cache");
 
 		// Turn requests into JSON array
 		JSONArray reqs = new JSONArray();

@@ -2,6 +2,7 @@
 	"name": "EAN8",
 	"display": "EAN 8",
 	"show": true,
+	"cache": true,
 	"target": [
 		"8",
 		"ean-8",

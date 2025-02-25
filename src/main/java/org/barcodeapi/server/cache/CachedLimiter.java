@@ -1,8 +1,6 @@
 package org.barcodeapi.server.cache;
 
-import java.util.concurrent.TimeUnit;
-
-import org.barcodeapi.core.AppConfig;
+import org.json.JSONObject;
 
 /**
  * CachedLimiter.java
@@ -11,36 +9,36 @@ import org.barcodeapi.core.AppConfig;
  */
 public class CachedLimiter extends CachedObject {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 20241222L;
 
-	private static final int LIMITER_LIFE = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("limiter").getInt("life");
-
-	private static final double TOKENS_INITIAL = 0.5;
+	private static final double _DAY = (24 * 60 * 60 * 1000);
 
 	private final boolean enforce;
 
 	private final String caller;
 
-	private final long tokenLimit;
-
-	private final double tokensPerMilli;
-
-	private long timeMinted;
+	private double tokenSpend;
 
 	private double tokenCount;
 
+	private final long tokenLimit;
+
+	private long timeMinted;
+
+	private final double tokensPerMilli;
+
 	public CachedLimiter(boolean enforce, String caller, long requests) {
-		this.setTimeout(LIMITER_LIFE, TimeUnit.MINUTES);
+		super("limiter");
 
 		this.enforce = enforce;
 		this.caller = caller;
+
+		this.tokenSpend = 0;
+		this.tokenCount = requests;
 		this.tokenLimit = requests;
 
 		this.timeMinted = System.currentTimeMillis();
-		this.tokensPerMilli = (requests > 0) ? //
-				((double) requests / (double) getTimeout()) : 0;
-		this.tokenCount = (requests == -1) ? -1 : (requests * TOKENS_INITIAL);
+		this.tokensPerMilli = (requests > 0) ? ((double) requests / _DAY) : 0;
 	}
 
 	/**
@@ -57,7 +55,7 @@ public class CachedLimiter extends CachedObject {
 	 * 
 	 * @return rate limit
 	 */
-	public long getLimit() {
+	public long getTokenLimit() {
 		return tokenLimit;
 	}
 
@@ -121,10 +119,19 @@ public class CachedLimiter extends CachedObject {
 	/**
 	 * Returns the current number of tokens the caller has.
 	 * 
-	 * @return
+	 * @return number of tokens the caller has
 	 */
-	public double numTokens() {
+	public double getTokenCount() {
 		return tokenCount;
+	}
+
+	/**
+	 * Returns the number of tokens spent.
+	 * 
+	 * @return number of tokens spent
+	 */
+	public double getTokenSpend() {
+		return tokenSpend;
 	}
 
 	/**
@@ -136,24 +143,43 @@ public class CachedLimiter extends CachedObject {
 	public boolean spendTokens(double count) {
 
 		// Unlimited
-		if (tokenCount == -1) {
+		if (this.tokenCount == -1) {
 			return true;
 		}
 
 		synchronized (this) {
 
-			// If costs more
-			if (count >= tokenCount) {
+			// If cost is more then have
+			if (count > this.tokenCount) {
 
 				// Return based on enforcement
 				return (!isEnforced());
 			}
 
 			// Set new token count
-			this.tokenCount = (tokenCount - count);
+			this.tokenSpend += count;
+			this.tokenCount -= count;
 
 			// Return true if spent
 			return true;
 		}
+	}
+
+	/**
+	 * Returns the rate limiter object as a JSON object.
+	 * 
+	 * @return the rate limiter object in JSON format
+	 */
+	public JSONObject asJSON() {
+
+		return (new JSONObject()//
+				.put("caller", getCaller())//
+				.put("created", getTimeCreated())//
+				.put("expires", getTimeExpires())//
+				.put("last", getTimeLastTouched())//
+				.put("enforce", isEnforced())//
+				.put("tokenLimit", getTokenLimit())//
+				.put("tokenCount", getTokenCount())//
+				.put("tokenSpend", getTokenSpend()));
 	}
 }

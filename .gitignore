@@ -5,6 +5,7 @@ bin/
 target/
 cache/
 logs/
+uploads/
 resources/blacklist.conf
 cache/
 *.snap

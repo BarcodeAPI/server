@@ -26,7 +26,8 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class ShareHandler extends RestHandler {
 
-	private static final ObjectCache shareCache = ObjectCache.getCache(ObjectCache.CACHE_SHARE);
+	private static final ObjectCache shareCache = //
+			ObjectCache.getCache(ObjectCache.CACHE_SHARE);
 
 	public ShareHandler() {
 		super();

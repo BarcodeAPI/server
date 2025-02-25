@@ -2,6 +2,7 @@
 	"name": "Code39",
 	"display": "Code 39",
 	"show": true,
+	"cache": true,
 	"target": [
 		"39",
 		"code-39",

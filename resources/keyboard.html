@@ -1,0 +1,137 @@
+<html>
+
+<!--
+	keyboard.html
+	BarcodeAPI.org, 2017-2024
+ -->
+
+<head>
+	<title>Barcode Keyboard</title>
+
+	<link rel="icon" type="image/png" href="/ext/favicon.png" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="/ext/3p/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/ext/css/layout.css" />
+
+	<script src="/ext/js/keyboard.js"></script>
+</head>
+
+<body onload="init();">
+	<div class="container-fluid">
+		<div class="keyboard-head row center-xs middle-xs">
+			<div class="col-xs-10">
+				<b>Barcode character keyboard.</b>
+				<br />
+				Used to embed <i>non-printing</i> characters into barcodes.
+			</div>
+			<div class="col-xs-2">
+				<div class="col-xs-12 center-xs middle-xs">
+					<button class="button" onclick="_close()">Close</button>
+				</div>
+				<div class="col-xs-12 center-xs">
+					<button class="button" onclick="_help()">Help</button>
+				</div>
+			</div>
+		</div>
+		<div class="keyboard-main row center-xs middle-xs">
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$@">NUL<br />0x00</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$A">SOH<br />0x01</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$B">STX<br />0x02</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$C">ETX<br />0x03</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$D">EOT<br />0x04</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$E">ENQ<br />0x05</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$F">ACK<br />0x06</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$G">BEL<br />0x07</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$H">BS<br />0x08</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$I">TAB<br />0x09</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$J">LF<br />0x0A</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$K">VT<br />0x0B</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$L">FF<br />0x0C</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$M">CR<br />0x0D</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$N">SO<br />0x0E</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$O">SI<br />0x0F</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$P">DLE<br />0x10</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$Q">DC1<br />0x11</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$R">DC2<br />0x12</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$S">DC2<br />0x13</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$T">DC4<br />0x14</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$U">NAK<br />0x15</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$V">SYN<br />0x16</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$W">ETB<br />0x17</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$X">CAN<br />0x18</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$Y">EM<br />0x19</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$Z">SUB<br />0x1A</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$[">ESC<br />0x1B</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$\">FS<br />0x1C</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$]">GS<br />0x1D</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$^">RS<br />0x1E</button>
+			</div>
+			<div class="col-sm-1 col-xs-2">
+				<button class="button" value="$$_">US<br />0x1F</button>
+			</div>
+		</div>
+	</div>
+</body>

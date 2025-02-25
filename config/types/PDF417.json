@@ -2,6 +2,7 @@
 	"name": "PDF417",
 	"display": "PDF-417",
 	"show": true,
+	"cache": true,
 	"target": [
 		"417",
 		"pdf417",

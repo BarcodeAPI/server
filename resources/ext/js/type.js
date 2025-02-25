@@ -3,8 +3,6 @@
 // api.js
 //
 
-var language = "en";
-
 window.onhashchange = function() {
 	location.reload();
 }
@@ -25,6 +23,7 @@ function init() {
 		.then(response => {
 			return (response.status == 200) ? response.json() : false;
 		}).then(loadType);
+
 }
 
 function loadType(type) {
@@ -41,6 +40,9 @@ function loadType(type) {
 
 	// Determine default target
 	var target = type.targets[0];
+
+	// Determine language	
+	var language = appConfig.userLanguage;
 
 	// Get the DOM template object
 	var info = document.getElementById("barcode-template");
@@ -64,6 +66,9 @@ function loadType(type) {
 	info.querySelector(".type-checksum").innerHTML = (type.checksum ? "Yes" : "No");
 	info.querySelector(".type-nonprinting").innerHTML = (type.nonprinting ? "Yes" : "No");
 	info.querySelector(".type-options").innerHTML = buildOptions(type.options);
+
+	// Log tracking event
+	trackingEvent("app_type_load", { "type": type.name });
 }
 
 function buildOptions(options) {

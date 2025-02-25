@@ -1,0 +1,106 @@
+<html>
+
+<!--
+	bulk.html
+	BarcodeAPI.org, 2017-2024
+ -->
+
+<head>
+	<title>BarcodeAPI.org - Barcode Decoder</title>
+
+	<meta name="keywords"
+		content="barcode, barcode api, barcode app, barcode generator, download barcode, free barcodes, custom barcodes">
+	<meta name="description"
+		content="Free online barcode generator! Scan barcodes in the web browser or download the images for free!">
+
+	<link rel="icon" type="image/png" href="/ext/favicon.png" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="/ext/3p/flexboxgrid.min.css" />
+	<link rel="stylesheet" type="text/css" href="/ext/css/layout.css" />
+
+	<script src="/ext/js/ui.js"></script>
+	<script src="/ext/js/decode.js"></script>
+</head>
+
+<body onload="init();">
+	<div class="wrapper container-fluid">
+
+		<div class="header row between-sm start-sm center-xs">
+			<div class="header-logo start-sm center-xs col-xs-12 col-sm-5"></div>
+			<div class="header-contact col-sm-5 middle-xs end-xs">
+				<h4>
+					<div class="header-support">FEEDBACK &amp; SUPPORT</div>
+					<div class="header-email">support@barcodeapi.org</div>
+				</h4>
+				<div class="action-icon action-email icon-email"></div>
+			</div>
+		</div>
+
+		<div class="app row top-xs center-xs">
+			<div class="bulk-info col-8-xs top-xs center-xs">
+				<h2>Barcode Image Decoding</h2>
+				<p>
+					Upload an image containing a barcode!
+					<br />
+					We will do our best decoding it and return the text value.
+				</p>
+				<p>
+					Max size: 2MB or 2000px&sup2;
+				</p>
+			</div>
+
+			<div class="row col-xs-8 top-xs center-xs">
+				<div class="decode-image-wrapper col-xs-8">
+					<img id="decode-image-preview" class="center-xs" />
+				</div>
+			</div>
+
+			<div class="row col-xs-8 top-xs center-xs">
+				<div class="col-xs-4">
+					<input type="file" id="decode-image-select" name="decode-image-select" class="file-input">
+					<label for="decode-image-select">Choose an image</label>
+				</div>
+				<div class="col-xs-4">
+					<button class="button" id="decode-image-button" disabled>Decode Barcode</button>
+				</div>
+				<div class="col-xs-2">
+					<button class="button" id="decode-preview-clear">Clear</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="notice row start-xs between-xs middle-xs bottom-sm">
+			<div class="col-xs-6">
+				<div class="notice-limits">
+					<b>Important Update!</b><br />
+					<a href="/limits.html" class="text-link icon-chevron anim">Introducing Rate Limits</a>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="notice-experimental end-xs">
+					This is an experimental feature.
+					<br />
+					We reserve the right to disable it at any time.
+				</div>
+			</div>
+		</div>
+
+		<div class="footer row middle-xs start-sm center-xs">
+			<div class="footer-about col-xs-12 col-sm-8">
+				Generate barcodes of nearly any type! Scan them in the web browser or download the images for
+				free!
+				BarcodeAPI.org is an open source barcode server capable of providing a wide range of barcode
+				formats
+				through a RESTful API.
+				<span class="footer-link">(&nbsp;<a href="/about.html">about</a>&nbsp;)</span>
+			</div>
+			<div class="footer-docs col-xs-12 col-sm-4 center-xs end-sm">
+				<span class="footer-docs-link">User Manual</span>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

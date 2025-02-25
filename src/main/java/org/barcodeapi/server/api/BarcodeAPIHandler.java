@@ -25,7 +25,7 @@ import com.mclarkdev.tools.liblog.LibLog;
 public class BarcodeAPIHandler extends RestHandler {
 
 	private static final int CACHED_LIFE_MIN = AppConfig.get()//
-			.getJSONObject("cache").getJSONObject("barcode").getInt("client");
+			.getJSONObject("client").getInt("cacheBarcode");
 
 	private static final int CACHED_LIFE_SEC = (CACHED_LIFE_MIN * 60);
 
@@ -64,7 +64,8 @@ public class BarcodeAPIHandler extends RestHandler {
 			if (!c.getLimiter().spendTokens(request.getCost())) {
 
 				// Return rate limited barcode to user
-				throw new GenerationException(ExceptionType.LIMITED);
+				throw new GenerationException(ExceptionType.LIMITED, //
+						new Throwable("Client is rate limited, try again later."));
 			}
 
 			// Generate user requested barcode
@@ -83,7 +84,7 @@ public class BarcodeAPIHandler extends RestHandler {
 			r.setStatus(HttpServletResponse.SC_OK);
 
 			// Add cache headers
-			if (request.useCache()) {
+			if (CACHED_LIFE_MIN > 0) {
 				r.setDateHeader("Expires", //
 						(System.currentTimeMillis() + (CACHED_LIFE_MS)));
 				r.setHeader("Cache-Control", cacheControl);
@@ -116,7 +117,7 @@ public class BarcodeAPIHandler extends RestHandler {
 		r.setHeader("Content-Length", Long.toString(bytes.length));
 
 		// Add the barcode type and detail headers
-		r.setHeader("X-Barcode-Type", barcode.getBarcodeType());
+		r.setHeader("X-Barcode-Type", barcode.getBarcodeType().getName());
 		r.setHeader("X-Barcode-Content", barcode.getBarcodeStringEncoded());
 
 		// Write the data to the stream

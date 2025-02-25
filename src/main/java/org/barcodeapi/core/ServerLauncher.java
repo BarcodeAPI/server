@@ -16,12 +16,15 @@ import org.barcodeapi.server.admin.SessionListHandler;
 import org.barcodeapi.server.admin.ShareListHandler;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.BulkHandler;
+import org.barcodeapi.server.api.DecodeHandler;
 import org.barcodeapi.server.api.InfoHandler;
-import org.barcodeapi.server.api.SessionDetailsHandler;
+import org.barcodeapi.server.api.LimiterHandler;
+import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.ShareHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.TypeHandler;
 import org.barcodeapi.server.api.TypesHandler;
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.RestHandler;
@@ -131,10 +134,12 @@ public class ServerLauncher {
 		// Setup rest handlers
 		initHandler("/api", BarcodeAPIHandler.class);
 		initHandler("/bulk", BulkHandler.class);
+		initHandler("/decode", DecodeHandler.class);
 		initHandler("/type", TypeHandler.class);
 		initHandler("/types", TypesHandler.class);
 		initHandler("/share", ShareHandler.class);
-		initHandler("/session", SessionDetailsHandler.class);
+		initHandler("/limiter", LimiterHandler.class);
+		initHandler("/session", SessionHandler.class);
 		initHandler("/info", InfoHandler.class);
 
 		// Setup admin handlers
@@ -223,8 +228,23 @@ public class ServerLauncher {
 
 			// Run each task
 			LibLog._log("Running shutdown tasks.");
-			for (BackgroundTask task : tasks) {
-				task.run();
+
+			// Loop all caches
+			String[] caches = ObjectCache.getCacheNames();
+			for (int x = 0; x < caches.length; x++) {
+				try {
+
+					// Lookup the cache object
+					ObjectCache cache = ObjectCache.getCache(caches[x]);
+
+					// Save a snapshot and log it
+					int saved = cache.saveSnapshot();
+					LibLog._clogF("I2602", cache.getName(), saved);
+				} catch (IOException e) {
+
+					// Log snapshot failure
+					LibLog._clog("E2602", e);
+				}
 			}
 		}
 	};

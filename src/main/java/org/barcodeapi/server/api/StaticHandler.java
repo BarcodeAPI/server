@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.eclipse.jetty.server.Request;
@@ -19,10 +20,14 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
  */
 public class StaticHandler extends RestHandler {
 
-	private static final int CACHEsec = 604800;
+	private static final int CACHED_LIFE_MIN = AppConfig.get()//
+			.getJSONObject("client").getInt("cacheStatic");
 
-	private ResourceHandler resources = new ResourceHandler() {
-	};
+	private static final int CACHED_LIFE_SEC = (CACHED_LIFE_MIN * 60);
+
+	private static final int CACHED_LIFE_MS = (CACHED_LIFE_SEC * 1000);
+
+	private ResourceHandler resources = new ResourceHandler();
 
 	public StaticHandler(Server server) throws Exception {
 		super();
@@ -33,18 +38,17 @@ public class StaticHandler extends RestHandler {
 		resources.setResourceBase("resources");
 		resources.setRedirectWelcome(true);
 		resources.setWelcomeFiles(new String[] { "index.html" });
-		resources.setCacheControl(("max-age=" + CACHEsec));
+		resources.setCacheControl(("max-age=" + CACHED_LIFE_SEC));
 		resources.start();
 	}
 
 	@Override
 	public void _impl(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		super.handle(target, baseRequest, request, response);
 
 		// Calculate and set cache expiration time
 		response.setDateHeader("expires", //
-				(System.currentTimeMillis() + (CACHEsec * 1000)));
+				(System.currentTimeMillis() + CACHED_LIFE_MS));
 
 		// Call through to resources
 		baseRequest.setHandled(false);

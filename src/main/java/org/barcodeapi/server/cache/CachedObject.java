@@ -3,6 +3,9 @@ package org.barcodeapi.server.cache;
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
+import org.barcodeapi.core.AppConfig;
+import org.json.JSONObject;
+
 /**
  * CachedObject.java
  * 
@@ -10,30 +13,34 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class CachedObject implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 20241222L;
+
+	private static final JSONObject cachesConfig = //
+			AppConfig.get().getJSONObject("cache");
 
 	private final long timeCreated;
-	private long timeTimeout;
-	private long timeTouched;
-	private long accessCount;
+	private long timeTouched, accessCount = 0;
 
-	protected CachedObject() {
+	private long timeTimeout, timeShortLived;
 
-		this.accessCount = 0;
-		this.timeCreated = System.currentTimeMillis();
+	protected CachedObject(String type) {
 
-		this.touch();
-		this.setTimeout(60, TimeUnit.MINUTES);
+		// Object creation time
+		this.timeTouched = (this.timeCreated = System.currentTimeMillis());
+
+		// Setup timeouts
+		JSONObject cacheConfig = cachesConfig.getJSONObject(type);
+		this.setStandardTimeout(cacheConfig.getInt("life"), TimeUnit.MINUTES);
+		this.setShortLivedTimeout(cacheConfig.getInt("shortLife"), TimeUnit.MINUTES);
 	}
 
 	/**
-	 * Returns the time the object will stay cached, after it's last access, until
-	 * it will be flushed.
+	 * Returns the number of time the object has been accessed.
 	 * 
-	 * @return object timeout
+	 * @return number of touches
 	 */
-	public long getTimeout() {
-		return this.timeTimeout;
+	public long getAccessCount() {
+		return accessCount;
 	}
 
 	/**
@@ -60,7 +67,18 @@ public abstract class CachedObject implements Serializable {
 	 * @return time object will expire
 	 */
 	public long getTimeExpires() {
-		return this.timeTouched + this.timeTimeout;
+		return (timeTouched + //
+				(isShortLived() ? timeShortLived : timeTimeout));
+	}
+
+	/**
+	 * Returns the time the object will stay cached, after it's last access, until
+	 * it will be flushed.
+	 * 
+	 * @return object timeout
+	 */
+	public long getStandardTimeout() {
+		return this.timeTimeout;
 	}
 
 	/**
@@ -69,17 +87,27 @@ public abstract class CachedObject implements Serializable {
 	 * @param timeoutTime timeout time
 	 * @param timeoutUnit timeout time unit
 	 */
-	public void setTimeout(long timeoutTime, TimeUnit timeoutUnit) {
+	public void setStandardTimeout(long timeoutTime, TimeUnit timeoutUnit) {
 		this.timeTimeout = TimeUnit.MILLISECONDS.convert(timeoutTime, timeoutUnit);
 	}
 
 	/**
-	 * Returns the number of time the object has been accessed.
+	 * Returns the time the object will stay cached if determined to be short lived.
 	 * 
-	 * @return number of touches
+	 * @return object short lived timeout
 	 */
-	public long getAccessCount() {
-		return accessCount;
+	public long getShortLivedTimeout() {
+		return this.timeShortLived;
+	}
+
+	/**
+	 * Update the short lived timeout of the object.
+	 * 
+	 * @param timeoutTime
+	 * @param timeoutUnit
+	 */
+	public void setShortLivedTimeout(long timeoutTime, TimeUnit timeoutUnit) {
+		this.timeShortLived = TimeUnit.MILLISECONDS.convert(timeoutTime, timeoutUnit);
 	}
 
 	/**
@@ -98,6 +126,15 @@ public abstract class CachedObject implements Serializable {
 	 * @return object is expired
 	 */
 	public boolean isExpired() {
-		return ((timeTouched + timeTimeout) < System.currentTimeMillis());
+		return (System.currentTimeMillis() > getTimeExpires());
+	}
+
+	/**
+	 * Returns true if the cached object is short lived.
+	 * 
+	 * @return object is short lived
+	 */
+	public boolean isShortLived() {
+		return (accessCount < 3);
 	}
 }

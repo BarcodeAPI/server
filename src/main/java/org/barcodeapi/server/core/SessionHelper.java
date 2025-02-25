@@ -54,6 +54,19 @@ public class SessionHelper {
 	}
 
 	/**
+	 * Delete a user session from the cache.
+	 * 
+	 * @param sid the session id
+	 * @return session removed
+	 */
+	public static boolean deleteSession(String sid) {
+
+		CachedObject removed = ObjectCache.getCache(//
+				ObjectCache.CACHE_SESSIONS).remove(sid);
+		return (removed != null);
+	}
+
+	/**
 	 * Lookup a user session object for a given HTTP request.
 	 * 
 	 * @param request the raw request
