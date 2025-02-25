@@ -53,7 +53,12 @@ async function init() {
 	loadBarcodeTypes();
 
 	// Hide UI elements based on config
-	uiShowHide("app-setup-bulk", appConfig.bulkPages);
+	uiShowHide("app-setup-more", //
+		(appConfig.showLinkMulti || appConfig.showLinkBulk || appConfig.showLinkDecode));
+
+	uiShowHide("app-link-multi", appConfig.showLinkMulti);
+	uiShowHide("app-link-bulk", appConfig.showLinkBulk);
+	uiShowHide("app-link-decode", appConfig.showLinkDecode);
 
 	// Hide UI elements based on browser support
 	uiShowHide("action-copy", appFeatures.copyImage);
@@ -128,7 +133,7 @@ function renderTypeSelection() {
 		var type = appState.types[t];
 
 		// Skip if not show
-		if (!type.show && !appConfig.showHidden) {
+		if (!type.show && !appConfig.showHiddenTypes) {
 			continue;
 		}
 
@@ -215,16 +220,11 @@ function renderOptions(type) {
 
 	// Determine if showing options
 	var showOptions = (type) && //
-		(appConfig.renderOptions && //
+		(appConfig.showRenderOptions && //
 			Object.keys(type.options).length);
 
 	// Show / hide menu
 	uiShowHide("app-setup-options", showOptions);
-
-	if (showOptions) {
-
-		// Setup options
-	}
 }
 
 /**

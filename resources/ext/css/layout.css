@@ -101,8 +101,8 @@ body {
 	display: grid;
 }
 
-.app-setup-bulk,
-.app-setup-decode {}
+.app-setup-more,
+.app-link-decode {}
 
 .notice {
 	padding-bottom: 1em;
@@ -358,8 +358,8 @@ body {
 	.header-contact,
 	.app-setup-tokens,
 	.app-setup-options,
-	.app-setup-bulk,
-	.app-setup-decode,
+	.app-setup-more,
+	.action-keyboard,
 	.notice,
 	#tooltip {
 		display: none;

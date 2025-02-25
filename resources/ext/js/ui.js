@@ -8,23 +8,32 @@
  * App Display Options
  */
 const appConfig = {
-	'bulkPages': true,
-	'tokenCount': true,
-	'limitsNotice': true,
-	'renderOptions': true,
-	'showHidden': false,
-	'logEvents': false,
-	'trackingToken': false
+	'showLinkBulk': true,
+	'showLinkMulti': true,
+	'showLinkDecode': false,
+	'showTokenCount': false,
+	'showLimitsNotice': false,
+	'showRenderOptions': false,
+	'showHiddenTypes': false
 };
 
 /**
  * App Supported Features
  */
 const appFeatures = {
+
 	// Firefox unsupported
 	'copyImage': (navigator.userAgent.indexOf("Firefox") == -1),
+
 	// Must be secure context
-	'copyURL': window.isSecureContext
+	'copyURL': window.isSecureContext,
+
+	// Analytics event tracking
+	'eventTracking': {
+		'enabled': false,
+		'appToken': false,
+		'logEvents': false
+	}
 }
 
 // Used by GTag
@@ -36,7 +45,7 @@ const dataLayer = [];
 window.addEventListener("load", function() {
 
 	// Check and load analytics
-	if (appConfig.trackingToken) {
+	if (appFeatures.eventTracking.enabled) {
 		initGTagTracking();
 	}
 
@@ -56,15 +65,18 @@ window.addEventListener("load", function() {
 	}
 });
 
+/**
+ * Initialize Google Analytics tracking.
+ */
 function initGTagTracking() {
 
-	var tag = appConfig.trackingToken;
+	var token = appFeatures.eventTracking.appToken;
 
 	gtag('js', new Date());
-	gtag('config', tag);
+	gtag('config', token);
 
 	var gtagJS = document.createElement("script");
-	gtagJS.src = "https://www.googletagmanager.com/gtag/js?" + tag;
+	gtagJS.src = "https://www.googletagmanager.com/gtag/js?" + token;
 	gtagJS.async = true;
 	document.head.appendChild(gtagJS);
 }
@@ -84,7 +96,7 @@ function initHeader() {
  */
 function initNotice() {
 
-	uiShowHide("notice-limits", appConfig.limitsNotice);
+	uiShowHide("notice-limits", appConfig.showLimitsNotice);
 }
 
 /**
@@ -92,7 +104,7 @@ function initNotice() {
  */
 function initFooter() {
 
-	uiShowHide("footer-tokens", appConfig.tokenCount);
+	uiShowHide("footer-tokens", appConfig.showTokenCount);
 
 	uiAddListener("footer-docs-link", actionShowDocs);
 }
@@ -151,7 +163,7 @@ function uiAddListener(elem, handler, event) {
  * Tracking event handler
  */
 function trackingEvent(event, details) {
-	if (appConfig.logEvents) {
+	if (appFeatures.eventTracking.logEvents) {
 		var msg = ("Event: " + event);
 		if (details) {
 			msg += (" :: " + JSON.stringify(details));
