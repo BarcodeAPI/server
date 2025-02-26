@@ -39,7 +39,7 @@ const appFeatures = {
 }
 
 // Used by GTag
-const dataLayer = [];
+window.dataLayer = [];
 
 /**
  * Register handler to setup page when loaded.
@@ -180,5 +180,5 @@ function trackingEvent(event, details) {
  * GTag analytics handler
  */
 function gtag() {
-	dataLayer.push(arguments);
+	window.dataLayer.push(arguments);
 }
