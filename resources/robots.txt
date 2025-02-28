@@ -3,11 +3,14 @@ Allow: /about.html
 Allow: /api.html
 Allow: /bulk.html
 Allow: /contracts.html
+Allow: /decode.html
 Allow: /index.html
+Allow: /license.html
 Allow: /limits.html
 Allow: /nonprinting.html
 Allow: /support.html
 Allow: /types.html
 Disallow: /multi.html
 Disallow: /type.html
+Disallow: /session.html
 Disallow: /api/

@@ -1,8 +1,10 @@
 //
-// BarcodeAPI.org
+// BarcodeAPI.org, 2017-2025
 // ui.js
 //
 
+// Time page load began
+const timeStart = new Date();
 
 /**
  * App Display Options
@@ -31,15 +33,12 @@ const appFeatures = {
 	'copyURL': window.isSecureContext,
 
 	// Analytics event tracking
-	'eventTracking': {
+	'matomoTracking': {
 		'enabled': false,
-		'appToken': false,
-		'logEvents': false
+		'server': "",
+		'appID': ""
 	}
 }
-
-// Used by GTag
-window.dataLayer = [];
 
 /**
  * Register handler to setup page when loaded.
@@ -47,8 +46,8 @@ window.dataLayer = [];
 window.addEventListener("load", function() {
 
 	// Check and load analytics
-	if (appFeatures.eventTracking.enabled) {
-		initGTagTracking();
+	if (appFeatures.matomoTracking.enabled) {
+		initAnalytics();
 	}
 
 	// Check and load header
@@ -68,19 +67,22 @@ window.addEventListener("load", function() {
 });
 
 /**
- * Initialize Google Analytics tracking.
+ * Initialize analytics tracking.
  */
-function initGTagTracking() {
+function initAnalytics() {
 
-	var token = appFeatures.eventTracking.appToken;
+	var u = appFeatures.matomoTracking.server;
 
-	gtag('js', new Date());
-	gtag('config', token);
+	var _paq = window._paq = window._paq || [];
+	_paq.push(['trackPageView']);
+	_paq.push(['enableLinkTracking']);
+	_paq.push(['setTrackerUrl', u + 'matomo.php']);
+	_paq.push(['setSiteId', appFeatures.matomoTracking.appID]);
 
-	var gtagJS = document.createElement("script");
-	gtagJS.src = "https://www.googletagmanager.com/gtag/js?" + token;
-	gtagJS.async = true;
-	document.head.appendChild(gtagJS);
+	var js = document.createElement("script");
+	js.src = u + 'matomo.js';
+	js.async = true;
+	document.head.appendChild(js);
 }
 
 /**
@@ -164,21 +166,8 @@ function uiAddListener(elem, handler, event) {
 /**
  * Tracking event handler
  */
-function trackingEvent(event, details) {
-	if (appFeatures.eventTracking.logEvents) {
-		var msg = ("Event: " + event);
-		if (details) {
-			msg += (" :: " + JSON.stringify(details));
-		}
-		console.log(msg);
-	}
+function trackingEvent(category, action, event, value) {
 
-	gtag("event", event, details);
-}
-
-/**
- * GTag analytics handler
- */
-function gtag() {
-	window.dataLayer.push(arguments);
+	// Push to matomo
+	window._paq.push(['trackEvent', category, action, event, value]);
 }

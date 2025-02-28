@@ -1,6 +1,6 @@
 //
-// BarcodeAPI.org
-// decode.js
+// BarcodeAPI.org, 2017-2025
+// decode.js // decode.html
 //
 
 // 2MB max upload file size
@@ -20,7 +20,8 @@ function init() {
 	clearButton.addEventListener("click", clearPreview);
 
 	// Log tracking event
-	trackingEvent("app_decode_load");
+	var setupMillis = ((new Date()) - timeStart);
+	trackingEvent("AppEvents", "AppLoad", "Decode", setupMillis);
 }
 
 function handleFileSelection() {
@@ -66,6 +67,9 @@ function previewImage(file) {
 		img.style.display = 'block';
 	};
 	reader.readAsDataURL(file);
+
+	// Log tracking event
+	trackingEvent("Decode", "Preview");
 }
 
 function clearPreview() {
@@ -112,5 +116,5 @@ function submitForDecode(e) {
 	});
 
 	// Log tracking event
-	trackingEvent("app_decode_upload");
+	trackingEvent("Decode", "Upload");
 }
