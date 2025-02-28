@@ -29,7 +29,7 @@ public class CachedShare extends CachedObject {
 	 * @param requests
 	 */
 	public CachedShare(List<BarcodeRequest> requests) {
-		super("cache");
+		super("share");
 
 		// Turn requests into JSON array
 		JSONArray reqs = new JSONArray();
