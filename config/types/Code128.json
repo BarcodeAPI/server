@@ -20,7 +20,7 @@
 	"example": "Try Me!",
 	"pattern": {
 		"auto": "^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$",
-		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,36}$"
+		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,48}$"
 	},
 	"description": {
 		"en": "A medium densisty alphanumeric barcode with a larger character set."
