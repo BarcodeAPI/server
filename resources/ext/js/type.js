@@ -1,6 +1,6 @@
 //
-// BarcodeAPI.org
-// api.js
+// BarcodeAPI.org, 2017-2025
+// type.js // type.html
 //
 
 window.onhashchange = function() {
@@ -23,7 +23,6 @@ function init() {
 		.then(response => {
 			return (response.status == 200) ? response.json() : false;
 		}).then(loadType);
-
 }
 
 function loadType(type) {
@@ -68,7 +67,8 @@ function loadType(type) {
 	info.querySelector(".type-options").innerHTML = buildOptions(type.options);
 
 	// Log tracking event
-	trackingEvent("app_type_load", { "type": type.name });
+	var setupMillis = ((new Date()) - timeStart);
+	trackingEvent("AppEvents", "AppLoad", "Type", setupMillis);
 }
 
 function buildOptions(options) {

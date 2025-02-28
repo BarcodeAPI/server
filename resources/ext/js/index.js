@@ -1,6 +1,6 @@
 //
-// BarcodeAPI.org
-// index.js
+// BarcodeAPI.org, 2017-2025
+// index.js // index.html
 //
 
 /**
@@ -86,7 +86,8 @@ async function init() {
 	window.onbeforeunload = actionCloseKeyboard;
 
 	// Log tracking event
-	trackingEvent("app_main_load");
+	var setupMillis = ((new Date()) - timeStart);
+	trackingEvent("AppEvents", "AppLoad", "Main", setupMillis);
 }
 
 /**
@@ -209,8 +210,8 @@ function loadSelectedType() {
 	text.focus();
 
 	// Log tracking event
-	trackingEvent("app_main_type", //
-		((codeType) ? { "type": codeType.name } : null));
+	trackingEvent("AppMain", "TypeChange", //
+		(codeType) ? codeType.name : "Auto");
 }
 
 function renderOptions(type) {
@@ -371,31 +372,32 @@ function updateBarcodeImage(url) {
 	}
 
 	// Request the image
-	fetch(url, options).then(response => {
+	fetch(url, options)
+		.then(response => {
 
-		// Upate token count if not cached
-		var tokens = response.headers.get('x-ratelimit-tokens');
-		tokens = (tokens == -1) ? "Unlimited" : tokens;
-		document.getElementById("barcode_tokens").innerHTML = tokens;
+			// Upate token count if not cached
+			var tokens = response.headers.get('x-ratelimit-tokens');
+			tokens = (tokens == -1) ? "Unlimited" : tokens;
+			document.getElementById("barcode_tokens").innerHTML = tokens;
 
-		// Update learn more link
-		var codeType = response.headers.get('x-barcode-type');
-		var displayType = codeType.replace("_", " ");
-		var linkType = codeType.replace("_", "");
+			// Update learn more link
+			var codeType = response.headers.get('x-barcode-type');
+			var displayType = codeType.replace("_", " ");
+			var linkType = codeType.replace("_", "");
 
-		// Update learn more link
-		var link = document.getElementsByClassName("link-more")[0];
-		link.innerHTML = "Learn more about " + displayType + " barcodes!";
-		link.href = "/type.html#" + linkType;
+			// Update learn more link
+			var link = document.getElementsByClassName("link-more")[0];
+			link.innerHTML = "Learn more about " + displayType + " barcodes!";
+			link.href = "/type.html#" + linkType;
 
-		// Update the image blob
-		response.blob().then(blob => {
-			document.getElementById('barcode_output').src = URL.createObjectURL(blob);
+			// Update the image blob
+			response.blob().then(blob => {
+				document.getElementById('barcode_output').src = URL.createObjectURL(blob);
+			});
 		});
-	});
 
 	// Log tracking event
-	trackingEvent("app_main_generate");
+	trackingEvent("AppMain", "Generate");
 }
 
 /**
@@ -524,11 +526,17 @@ function showRenderMenu(show) {
  */
 function toggleShowRenderOptions() {
 
-	// Toggle render options dropdown state
-	showRenderMenu(!appState.optionsOpen);
+	// Determine opposite state
+	var stateNew = !appState.optionsOpen;
 
-	// Log tracking event
-	trackingEvent("app_main_options");
+	// Set new state
+	showRenderMenu(stateNew);
+
+	if (stateNew) {
+
+		// Log tracking event
+		trackingEvent("AppMain", "Options");
+	}
 }
 
 /**
@@ -555,7 +563,7 @@ function actionShowKeyboard() {
 	}
 
 	// Log tracking event
-	trackingEvent("app_main_keyboard");
+	trackingEvent("AppMain", "Keyboard");
 }
 
 /**
@@ -580,7 +588,7 @@ function actionPrintImage() {
 	w.close();
 
 	// Log tracking event
-	trackingEvent("app_main_print");
+	trackingEvent("AppMain", "Print");
 }
 
 /**
@@ -629,7 +637,7 @@ async function actionCopyImage() {
 	}
 
 	// Log tracking event
-	trackingEvent("app_main_copy");
+	trackingEvent("AppMain", "Copy");
 }
 
 /**
@@ -640,7 +648,7 @@ function actionDownloadImage() {
 	window.open(appState.current, '_blank');
 
 	// Log tracking event
-	trackingEvent("app_main_download")
+	trackingEvent("AppMain", "Download");
 }
 
 /**

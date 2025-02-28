@@ -1,6 +1,6 @@
 //
-// BarcodeAPI.org
-// keyboard.js
+// BarcodeAPI.org, 2017-2025
+// keyboard.js // keyboard.html
 //
 
 function init() {

@@ -1,6 +1,6 @@
 //
-// BarcodeAPI.org
-// session.js
+// BarcodeAPI.org, 2017-2025
+// session.js // session.html
 //
 
 function init() {
@@ -16,7 +16,8 @@ function init() {
 		}).then(onLoadLimiter);
 
 	// Log tracking event
-	trackingEvent("app_session_load");
+	var setupMillis = ((new Date()) - timeStart);
+	trackingEvent("AppEvents", "AppLoad", "Session", setupMillis);
 }
 
 function onLoadSession(data) {

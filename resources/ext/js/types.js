@@ -1,6 +1,6 @@
 //
-// BarcodeAPI.org
-// api.js
+// BarcodeAPI.org, 2017-2025
+// types.js // types.html
 //
 
 window.onhashchange = function() {
@@ -26,9 +26,6 @@ function init() {
 
 			return data;
 		}).then(loadTypes);
-
-	// Log tracking event
-	trackingEvent("app_types_load");
 }
 
 function loadTypes(data) {
@@ -38,6 +35,10 @@ function loadTypes(data) {
 	}
 
 	delTemplate();
+
+	// Log tracking event
+	var setupMillis = ((new Date()) - timeStart);
+	trackingEvent("AppEvents", "AppLoad", "Types", setupMillis);
 }
 
 function addType(type) {

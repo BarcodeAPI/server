@@ -2,7 +2,7 @@
 
 <!--
 	bulk.html
-	BarcodeAPI.org, 2017-2024
+	BarcodeAPI.org, 2017-2025
  -->
 
 <head>
@@ -93,7 +93,7 @@
 			</div>
 
 			<div class="col-xs-8">
-				<form method="post" action="bulk/" enctype="multipart/form-data">
+				<form method="post" onsubmit="onUpload(event);" action="bulk/" enctype="multipart/form-data">
 					<div class="row center-xs middle-xs">
 						<div class="col-xs-6">
 							<input type="file" id="csvFile" name="csvFile" class="file-input">

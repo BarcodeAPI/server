@@ -1,7 +1,8 @@
 //
-// BarcodeAPI.org
-// multi.js
+// BarcodeAPI.org, 2017-2025
+// multi.js // multi.html
 //
+
 
 var index = false;
 var barcodes = false;
@@ -18,7 +19,8 @@ function init() {
 	document.getElementById("input").focus();
 
 	// Log tracking event
-	trackingEvent("app_multi_load");
+	var setupMillis = ((new Date()) - timeStart);
+	trackingEvent("AppEvents", "AppLoad", "Multi", setupMillis);
 }
 
 /**
@@ -31,8 +33,12 @@ function loadShare(share) {
 			return response.json();
 		})
 		.then(function(data) {
-			renderRequests(//
-				JSON.parse(data.data));
+
+			// Parse and render the response list
+			renderRequests(JSON.parse(data.data));
+
+			// Log tracking event
+			trackingEvent("Multi", "Load", "Share", share);
 		});
 }
 
@@ -80,6 +86,10 @@ function addFromInput() {
 		addFromText(inStr[x]);
 	}
 
+	// Log tracking event
+	trackingEvent("Multi", "Add");
+
+	// Clear and focus input
 	input.value = "";
 	input.focus();
 }
@@ -204,20 +214,7 @@ function multiShare() {
 	});
 
 	// Log tracking event
-	trackingEvent("app_multi_share");
-}
-
-/**
- * Get URL for requests. (legacy share)
- */
-function multiShareLegacy() {
-
-	var url = "/multi.html?";
-	for (var x in barcodes) {
-		document.getElementById("barcodes").innerHTML = "";
-		url += barcodes[x] + "&";
-	}
-	window.location = url;
+	trackingEvent("Multi", "Share");
 }
 
 /**
@@ -227,5 +224,5 @@ function printPage() {
 	window.print();
 
 	// Log tracking event
-	trackingEvent("app_multi_print");
+	trackingEvent("Multi", "Print");
 }

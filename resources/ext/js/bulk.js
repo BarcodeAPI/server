@@ -1,3 +1,7 @@
+//
+// BarcodeAPI.org, 2017-2025
+// bulk.js // bulk.html
+//
 
 var submitButton;
 
@@ -9,7 +13,8 @@ function init() {
 	document.getElementById("csvFile").addEventListener('change', checkIfFileSelected);
 
 	// Log tracking event
-	trackingEvent("app_bulk_load");
+	var setupMillis = ((new Date()) - timeStart);
+	trackingEvent("AppEvents", "AppLoad", "Bulk", setupMillis);
 }
 
 function actionDownloadCSV() {
@@ -29,7 +34,7 @@ function actionDownloadCSV() {
 	document.body.removeChild(a);
 
 	// Log tracking event
-	trackingEvent("app_bulk_example");
+	trackingEvent("Bulk", "Download", "Example");
 }
 
 function checkIfFileSelected(obj) {
@@ -50,6 +55,14 @@ function checkIfFileSelected(obj) {
 	} else {
 		submitButton.setAttribute("disabled", "true");
 	}
+}
+
+function onUpload(e) {
+
+	// Log tracking event
+	trackingEvent("Bulk", "Upload");
+
+	return false;
 }
 
 var csvExample = [

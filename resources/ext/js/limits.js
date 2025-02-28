@@ -1,3 +1,8 @@
+//
+// BarcodeAPI.org, 2017-2025
+// limits.js // limits.html
+//
+
 window.addEventListener("load", function() {
 
 	fetch('/limiter/')
@@ -14,8 +19,9 @@ window.addEventListener("load", function() {
 
 			document.getElementById("token_limit").innerHTML = //
 				((data.tokenLimit == -1) ? "Unlimited" : data.tokenLimit);
-		});
 
-	// Log tracking event
-	trackingEvent("app_limits_load");
+			// Log tracking event
+			var setupMillis = ((new Date()) - timeStart);
+			trackingEvent("AppEvents", "AppLoad", "Limits", setupMillis);
+		});
 });
