@@ -68,11 +68,14 @@ public class BarcodeGenerator {
 		try {
 
 			// Get a generator from the pool
-			generator = pool.getWait();
+			generator = pool.getWait(750);
 
 			// Update global and engine counters
 			LibMetrics.instance().hitCounter("render", "count");
 			LibMetrics.instance().hitCounter("render", "type", typeName, "count");
+			if (request.isComplex()) {
+				LibMetrics.instance().hitCounter("render", "type", typeName, "complex");
+			}
 
 			// Run implementation specific validations
 			generator.onValidateRequest(request);

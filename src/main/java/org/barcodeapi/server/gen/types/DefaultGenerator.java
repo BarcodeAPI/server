@@ -1,7 +1,7 @@
 package org.barcodeapi.server.gen.types;
 
 import org.barcodeapi.server.core.CodeType;
-import org.barcodeapi.server.gen.impl.DefaultBarcodeProvider;
+import org.barcodeapi.server.gen.impl.DefaultBarcode4JProvider;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
 
 /**
@@ -9,7 +9,7 @@ import org.krysalis.barcode4j.impl.code128.Code128Bean;
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
-public class DefaultGenerator extends DefaultBarcodeProvider {
+public class DefaultGenerator extends DefaultBarcode4JProvider {
 
 	public DefaultGenerator(CodeType codeType) {
 

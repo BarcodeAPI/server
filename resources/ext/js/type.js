@@ -65,6 +65,7 @@ function loadType(type) {
 	info.querySelector(".type-checksum").innerHTML = (type.checksum ? "Yes" : "No");
 	info.querySelector(".type-nonprinting").innerHTML = (type.nonprinting ? "Yes" : "No");
 	info.querySelector(".type-options").innerHTML = buildOptions(type.options);
+	info.querySelector(".type-options-string").innerHTML = buildOptionsString(type.options);
 
 	// Log tracking event
 	var setupMillis = ((new Date()) - timeStart);
@@ -76,6 +77,15 @@ function buildOptions(options) {
 	var response = "";
 	for (var x in options) {
 		response += (x + "=" + options[x].default + "<br/>");
+	}
+	return response;
+}
+
+function buildOptionsString(options) {
+
+	var response = "?";
+	for (var x in options) {
+		response += (x + "=" + options[x].default + "&");
 	}
 	return response;
 }

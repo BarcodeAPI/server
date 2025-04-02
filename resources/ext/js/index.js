@@ -33,8 +33,8 @@ const appOptions = {
 		'hrt': 'bottom'
 	},
 	'trim': {
-		'before': (window.localStorage.getItem("trimBefore") != "false"),
-		'after': (window.localStorage.getItem("trimAfter") != "false")
+		'before': false,
+		'after': false
 	}
 };
 
@@ -48,6 +48,10 @@ async function init() {
 
 	// Load previously configured API key
 	appOptions.apiKey = window.localStorage.getItem("apiKey");
+
+	// Load trim options if previously set
+	appOptions.trim.before = (window.localStorage.getItem("trimBefore") != "false");
+	appOptions.trim.after = (window.localStorage.getItem("trimAfter") != "false");
 
 	// Load supported types
 	loadBarcodeTypes();
@@ -193,6 +197,7 @@ function loadSelectedType() {
 	// Update text field regex
 	var text = document.getElementById("text");
 	text.setAttribute("pattern", (codeType) ? codeType.pattern : '.*');
+	text.setAttribute("placeholder", (codeType) ? codeType.example : "Try Me...");
 
 	// Show non-printing keyboard for supported formats
 	uiShowHide("action-keyboard", (codeType) ? codeType.nonprinting : false);
@@ -208,10 +213,6 @@ function loadSelectedType() {
 
 	// Focus text input
 	text.focus();
-
-	// Log tracking event
-	trackingEvent("AppMain", "TypeChange", //
-		(codeType) ? codeType.name : "Auto");
 }
 
 function renderOptions(type) {
@@ -690,6 +691,10 @@ function setType(type) {
 
 	location.replace('#' + type);
 	showTypesMenu(false);
+
+	// Log tracking event
+	trackingEvent("AppMain", "TypeChange", //
+		(codeType) ? codeType.name : "Auto");
 }
 
 /**

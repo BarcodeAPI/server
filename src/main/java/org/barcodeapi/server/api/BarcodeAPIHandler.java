@@ -106,6 +106,9 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// Replace barcode with failure barcode
 			barcode = e.getExceptionType().getBarcodeImage();
+		} catch (Exception | Error e) {
+
+			e.printStackTrace();
 		} finally {
 
 			// Get barcode data if not already set
