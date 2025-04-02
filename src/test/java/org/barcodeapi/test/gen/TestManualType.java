@@ -6,6 +6,21 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TestManualType extends ServerTestBase {
+	
+	@Test
+	public void testManualType_AprilTag() {
+		
+		apiGet("april/tag36h10:0");
+		
+		Assert.assertEquals("Response Code",  //
+				HttpStatus.OK_200, getResponseCode());
+		
+		Assert.assertEquals("Code Type", //
+				"AprilTag", getHeader("X-Barcode-Type"));
+		
+		Assert.assertEquals("Code Data", //
+				encode("tag36h10:0"), getHeader("X-Barcode-Content"));
+	}
 
 	@Test
 	public void testManualType_Aztec() {
