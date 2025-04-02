@@ -14,15 +14,17 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public abstract class DefaultZXingProvider extends CodeGenerator {
 
 	private final Writer generator;
 
-	public DefaultZXingProvider(CodeType codeType, Writer bean) {
+	private final BarcodeFormat format;
+
+	public DefaultZXingProvider(CodeType codeType, BarcodeFormat format, Writer bean) {
 		super(codeType);
 
+		this.format = format;
 		this.generator = bean;
 	}
 
@@ -40,19 +42,19 @@ public abstract class DefaultZXingProvider extends CodeGenerator {
 		int qz = options.optInt("qz", //
 				(Integer) defaults.getOrDefault("qz", 4));
 
-		String correction = options.optString("correction", //
-				(String) defaults.getOrDefault("correction", "M"));
+		// String correction = options.optString("correction", //
+		// (String) defaults.getOrDefault("correction", "M"));
 
 		Map<EncodeHintType, Object> hintsMap = new HashMap<>();
-	//	hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
-	//	hintsMap.put(EncodeHintType.ERROR_CORRECTION, //
-	//			ErrorCorrectionLevel.valueOf(correction));
+		// hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
+		// hintsMap.put(EncodeHintType.ERROR_CORRECTION, //
+		// ErrorCorrectionLevel.valueOf(correction));
 		hintsMap.put(EncodeHintType.MARGIN, qz);
 
 		synchronized (generator) {
 
 			BitMatrix bitMatrix = generator.encode(//
-					request.getData(), BarcodeFormat.QR_CODE, size, size, hintsMap);
+					request.getData(), format, size, size, hintsMap);
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			MatrixToImageWriter.writeToStream(bitMatrix, "png", out);

@@ -3,6 +3,7 @@ package org.barcodeapi.server.gen.types;
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.impl.DefaultZXingProvider;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.aztec.AztecWriter;
 
 /**
@@ -15,6 +16,6 @@ public class AztecGenerator extends DefaultZXingProvider {
 	public AztecGenerator(CodeType codeType) {
 
 		// Setup Aztec generator
-		super(codeType, new AztecWriter());
+		super(codeType, BarcodeFormat.AZTEC, new AztecWriter());
 	}
 }

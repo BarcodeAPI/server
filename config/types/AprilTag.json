@@ -1,7 +1,7 @@
 {
 	"name": "AprilTag",
 	"display": "April Tag",
-	"show": true,
+	"show": false,
 	"cache": true,
 	"target": [
 		"april",
