@@ -3,6 +3,7 @@ package org.barcodeapi.server.gen.types;
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.impl.DefaultZXingProvider;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 /**
@@ -15,6 +16,6 @@ public class QRCodeGenerator extends DefaultZXingProvider {
 	public QRCodeGenerator(CodeType codeType) {
 
 		// Setup QR generator
-		super(codeType, new QRCodeWriter());
+		super(codeType, BarcodeFormat.QR_CODE, new QRCodeWriter());
 	}
 }
