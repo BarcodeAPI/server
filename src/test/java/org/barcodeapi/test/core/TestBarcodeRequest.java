@@ -17,7 +17,7 @@ public class TestBarcodeRequest extends ServerTestBase {
 		} catch (GenerationException e) {
 
 			Assert.assertEquals("Failure Reason", //
-					e.getExceptionType(), GenerationException.ExceptionType.EMPTY);
+					GenerationException.ExceptionType.EMPTY, e.getExceptionType());
 		}
 	}
 
@@ -30,7 +30,7 @@ public class TestBarcodeRequest extends ServerTestBase {
 		} catch (GenerationException e) {
 
 			Assert.assertEquals("Failure Reason", //
-					e.getExceptionType(), GenerationException.ExceptionType.INVALID);
+					GenerationException.ExceptionType.INVALID, e.getExceptionType());
 		}
 	}
 
@@ -43,10 +43,10 @@ public class TestBarcodeRequest extends ServerTestBase {
 		} catch (GenerationException e) {
 
 			Assert.assertEquals("Failure Reason", //
-					e.getExceptionType(), GenerationException.ExceptionType.BLACKLIST);
+					GenerationException.ExceptionType.BLACKLIST, e.getExceptionType());
 		}
 	}
-	
+
 	@Test
 	public void testBarcodeRequest_TestCodeType_Auto() {
 
@@ -55,20 +55,20 @@ public class TestBarcodeRequest extends ServerTestBase {
 					.fromURI("/api/auto/barcode_test");
 
 			Assert.assertEquals("Request Type", //
-					r.getType().getName(), "Code128");
+					"Code128", r.getType().getName());
 
 			Assert.assertEquals("Request Data", //
-					r.getData(), "barcode_test");
+					"barcode_test", r.getData());
 
 			Assert.assertEquals("Request Options", //
-					r.getOptions().length(), 0);
+					0, r.getOptions().length());
 
 		} catch (GenerationException e) {
 
 			Assert.fail(e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testBarcodeRequest_TestCodeType_Code39() {
 
@@ -77,13 +77,13 @@ public class TestBarcodeRequest extends ServerTestBase {
 					.fromURI("/api/39/BARCODE");
 
 			Assert.assertEquals("Request Type", //
-					r.getType().getName(), "Code39");
+					"Code39", r.getType().getName());
 
 			Assert.assertEquals("Request Data", //
-					r.getData(), "BARCODE");
+					"BARCODE", r.getData());
 
 			Assert.assertEquals("Request Options", //
-					r.getOptions().length(), 0);
+					0, r.getOptions().length());
 
 		} catch (GenerationException e) {
 
@@ -99,13 +99,13 @@ public class TestBarcodeRequest extends ServerTestBase {
 					.fromURI("/api/128/barcode_test");
 
 			Assert.assertEquals("Request Type", //
-					r.getType().getName(), "Code128");
+					"Code128", r.getType().getName());
 
 			Assert.assertEquals("Request Data", //
-					r.getData(), "barcode_test");
+					"barcode_test", r.getData());
 
 			Assert.assertEquals("Request Options", //
-					r.getOptions().length(), 0);
+					0, r.getOptions().length());
 
 		} catch (GenerationException e) {
 
@@ -121,19 +121,19 @@ public class TestBarcodeRequest extends ServerTestBase {
 					.fromURI("/api/128/barcode_test?bg=ffffff&fg=000000");
 
 			Assert.assertEquals("Request Type", //
-					r.getType().getName(), "Code128");
+					"Code128", r.getType().getName());
 
 			Assert.assertEquals("Request Data", //
-					r.getData(), "barcode_test");
+					"barcode_test", r.getData());
 
 			Assert.assertEquals("Request Options", //
-					r.getOptions().length(), 2);
+					2, r.getOptions().length());
 
 			Assert.assertEquals("Request Options (FG)", //
-					r.getOptions().getString("fg"), "000000");
+					"000000", r.getOptions().getString("fg"));
 
 			Assert.assertEquals("Request Options (BG)", //
-					r.getOptions().getString("bg"), "ffffff");
+					"ffffff", r.getOptions().getString("bg"));
 
 		} catch (GenerationException e) {
 
