@@ -139,6 +139,11 @@ public class ObjectCache {
 		synchronized (cache) {
 
 			count = cache.size();
+			if (count == 0) {
+				return 0;
+			}
+
+			// write cache to disk
 			str.writeObject(cache);
 		}
 

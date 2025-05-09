@@ -37,9 +37,14 @@ public class CacheDumpHandler extends RestHandler {
 			ObjectCache cache = ObjectCache.getCache(type);
 			for (Map.Entry<String, CachedObject> entry : cache.raw().entrySet()) {
 
+				CachedObject obj = entry.getValue();
+
 				entries.put(new JSONObject()//
 						.put("text", entry.getKey())//
-						.put("hits", entry.getValue().getAccessCount()));
+						.put("hits", obj.getAccessCount())//
+						.put("created", obj.getTimeCreated())//
+						.put("expires", obj.getTimeExpires())//
+						.put("shortLived", obj.isShortLived()));
 			}
 
 			// Add to master element

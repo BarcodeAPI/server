@@ -23,9 +23,9 @@ public class BarcodeRequest {
 
 	private final String data;
 	private final boolean complex;
-	private final JSONObject options;
-
 	private final boolean cached;
+	private final boolean download;
+	private final JSONObject options;
 	private final int cost;
 
 	private BarcodeRequest(CodeType type, String data, JSONObject options) {
@@ -38,6 +38,9 @@ public class BarcodeRequest {
 		// Use cache based on options and data length
 		this.complex = ((options.length() > 0) || (data.length() >= 48));
 		this.cached = (type.getCacheEnable() && (!complex));
+
+		// User requested download
+		this.download = options.getBoolean("download");
 
 		// Calculate the cost of the request
 		boolean free = (data.equals(type.getExample()) && (!complex));
@@ -91,6 +94,15 @@ public class BarcodeRequest {
 	}
 
 	/**
+	 * Returns true if server should force a download.
+	 * 
+	 * @return true if force downloading
+	 */
+	public boolean forceDownload() {
+		return download;
+	}
+
+	/**
 	 * Returns a map of options used to generate the barcode.
 	 * 
 	 * @return a map of request options
@@ -108,7 +120,7 @@ public class BarcodeRequest {
 
 		String opts = "";
 		for (String key : getOptions().keySet()) {
-			opts += (key + '=' + getOptions().getString(key) + '&');
+			opts += String.format("%s=%s&", key, getOptions().getString(key));
 		}
 
 		return String.format("/api/%s/%s?%s", //
