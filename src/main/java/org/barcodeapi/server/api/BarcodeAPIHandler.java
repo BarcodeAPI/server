@@ -77,6 +77,7 @@ public class BarcodeAPIHandler extends RestHandler {
 					// Encode data as JSON
 					format = f;
 					bytes = barcode.encodeJSON().getBytes();
+					break;
 				}
 			}
 

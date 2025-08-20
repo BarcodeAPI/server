@@ -27,10 +27,7 @@ public class LimiterMintingTask extends BackgroundTask {
 		double tokensMinted = 0;
 
 		// Mint tokens for IP cache
-		tokensMinted += mintTokens(ObjectCache.CACHE_IP);
-
-		// Mint tokens for Key cache
-		tokensMinted += mintTokens(ObjectCache.CACHE_KEY);
+		tokensMinted += mintTokens(ObjectCache.CACHE_LIMITERS);
 
 		// Log number of tokens minted
 		LibLog._clogF("I2621", tokensMinted);

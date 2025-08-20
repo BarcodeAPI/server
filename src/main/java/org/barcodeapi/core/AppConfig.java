@@ -19,13 +19,6 @@ public class AppConfig {
 	private static JSONObject appConfig;
 
 	static {
-		reload();
-	}
-
-	/**
-	 * Reloads cached configuration from file on disk.
-	 */
-	public static void reload() {
 		try {
 			File confFile = new File("config", "app.json");
 			String raw = LibExtrasStreams.readFile(confFile);

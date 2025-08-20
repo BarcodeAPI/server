@@ -4,34 +4,35 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.core.AppConfig;
+import org.barcodeapi.server.cache.SubscriberCache;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * ServerReloadHandler.java
+ * SubscriberReloadHandler.java
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
-public class ServerReloadHandler extends RestHandler {
+public class SubscriberReloadHandler extends RestHandler {
 
-	public ServerReloadHandler() {
+	public SubscriberReloadHandler() {
 		super(true, false, false);
 	}
 
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
-		// Reload config
-		AppConfig.reload();
-
+		// Reload the subscribers list
+		SubscriberCache.reload();
+		
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setHeader("Content-Type", "application/json");
 		r.getOutputStream().println((new JSONObject()//
-				.put("message", "config reloaded")//
+				.put("code", 200)//
+				.put("message", "users reloaded")//
 		).toString());
 	}
 }

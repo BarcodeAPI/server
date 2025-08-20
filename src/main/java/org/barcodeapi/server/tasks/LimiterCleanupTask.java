@@ -23,10 +23,7 @@ public class LimiterCleanupTask extends BackgroundTask {
 	public void onRun() {
 
 		// Clean IP limiter cache
-		cleanLimiterCache(ObjectCache.CACHE_IP);
-
-		// Clean Key limiter cache
-		cleanLimiterCache(ObjectCache.CACHE_KEY);
+		cleanLimiterCache(ObjectCache.CACHE_LIMITERS);
 	}
 
 	/**

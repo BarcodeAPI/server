@@ -21,10 +21,9 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
  */
 public class ObjectCache {
 
-	public static final String CACHE_IP = "LIMITS-IP";
-	public static final String CACHE_KEY = "LIMITS-KEY";
-	public static final String CACHE_SHARE = "MULTI-SHARE";
-	public static final String CACHE_SESSIONS = "sessions";
+	public static final String CACHE_SHARE = "_shares";
+	public static final String CACHE_SESSIONS = "_sessions";
+	public static final String CACHE_LIMITERS = "_limiters";
 
 	private static final String SNAPSHOT_DIR = AppConfig.get()//
 			.getJSONObject("cache").getString("_snapshots");
