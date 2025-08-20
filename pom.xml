@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>liblog</artifactId>
-			<version>1.6.2</version>
+			<version>1.6.4</version>
 		</dependency>
 
 		<dependency>
