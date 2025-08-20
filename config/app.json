@@ -73,7 +73,7 @@
 	},
 	"limits": {
 		"enforce": false,
-		"default": 15000
+		"default": 10000
 	},
 	"blacklist": [
 		"^_tstblk_$"
