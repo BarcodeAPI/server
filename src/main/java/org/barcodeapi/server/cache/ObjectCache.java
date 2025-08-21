@@ -118,7 +118,7 @@ public class ObjectCache {
 		return cache.remove(key);
 	}
 
-	public int saveSnapshot() throws IOException {
+	public int saveSnapshot() {
 
 		// Make directory
 		if (!cacheDir.exists()) {
@@ -130,26 +130,47 @@ public class ObjectCache {
 			cacheFile.delete();
 		}
 
-		// Open file output streams
-		FileOutputStream st = new FileOutputStream(cacheFile);
-		ObjectOutputStream str = new ObjectOutputStream(st);
+		FileOutputStream fileStream = null;
+		ObjectOutputStream objStream = null;
 
-		int count;
-		synchronized (cache) {
+		try {
 
-			count = cache.size();
-			if (count == 0) {
-				return 0;
+			// Open file / object output streams
+			fileStream = new FileOutputStream(cacheFile);
+			objStream = new ObjectOutputStream(fileStream);
+
+			int count;
+			synchronized (cache) {
+
+				count = cache.size();
+				if (count == 0) {
+					return 0;
+				}
+
+				// write cache to disk
+				objStream.writeObject(cache);
 			}
 
-			// write cache to disk
-			str.writeObject(cache);
+			return count;
+		} catch (IOException ex) {
+			return 0;
+		} finally {
+
+			try {
+				// close object stream
+				if (objStream != null) {
+					objStream.close();
+				}
+			} catch (IOException e) {
+			}
+			try {
+				// close file stream
+				if (fileStream != null) {
+					fileStream.close();
+				}
+			} catch (IOException e) {
+			}
 		}
-
-		str.close();
-		st.close();
-
-		return count;
 	}
 
 	@SuppressWarnings("unchecked")

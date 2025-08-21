@@ -1,7 +1,7 @@
 {
 	"name": "USPSMail",
 	"display": "USPS Mail",
-	"show": true,
+	"show": false,
 	"cache": true,
 	"target": [
 		"usps",

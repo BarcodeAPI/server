@@ -153,7 +153,7 @@ function renderTypeSelection() {
 		addTooltip(node, appState.types[t].description[appOptions.language]);
 
 		// Add to menu
-		menu.appendChild(node);
+		menu.insertBefore(node, menu.children[1]);
 	}
 }
 
@@ -188,8 +188,12 @@ function loadSelectedType() {
 	var selected = document.getElementById(//
 		"type-" + ((codeType) ? codeType.name : "auto"));
 
-	// Mark selected item as active
-	selected.classList.add("active");
+	// If not hidden
+	if (selected) {
+
+		// Mark selected item as active
+		selected.classList.add("active");
+	}
 
 	// Update type dropdown selection
 	document.getElementById("app-setup-type-picker").innerHTML = (codeType) ? codeType.display : 'Auto';
@@ -693,6 +697,7 @@ function setType(type) {
 	showTypesMenu(false);
 
 	// Log tracking event
+	var codeType = getType(type);
 	trackingEvent("AppMain", "TypeChange", //
 		(codeType) ? codeType.name : "Auto");
 }

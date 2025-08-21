@@ -40,7 +40,7 @@ public class BarcodeRequest {
 		this.cached = (type.getCacheEnable() && (!complex));
 
 		// User requested download
-		this.download = options.getBoolean("download");
+		this.download = options.optBoolean("download", false);
 
 		// Calculate the cost of the request
 		boolean free = (data.equals(type.getExample()) && (!complex));

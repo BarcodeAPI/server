@@ -458,6 +458,7 @@ body {
 	margin: 5px 5px 5px 0;
 	cursor: pointer;
 	transition: all 0.2s ease-in-out;
+	text-decoration: none;
 }
 
 .app-setup-types a:hover,

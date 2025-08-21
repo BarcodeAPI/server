@@ -228,29 +228,14 @@ public class ServerLauncher {
 
 		public void run() {
 
-			// Run each task
-			LibLog._log("Running shutdown tasks.");
+			// Save snapshot of shares cache
+			ObjectCache.getCache(ObjectCache.CACHE_SHARE).saveSnapshot();
 
-			try {
-				// Save snapshot of shares cache
-				ObjectCache.getCache(ObjectCache.CACHE_SHARE).saveSnapshot();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			// Save snapshot of limiters cache
+			ObjectCache.getCache(ObjectCache.CACHE_LIMITERS).saveSnapshot();
 
-			try {
-				// Save snapshot of limiters cache
-				ObjectCache.getCache(ObjectCache.CACHE_LIMITERS).saveSnapshot();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				// Save snapshot of sessions cache
-				ObjectCache.getCache(ObjectCache.CACHE_SESSIONS).saveSnapshot();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			// Save snapshot of sessions cache
+			ObjectCache.getCache(ObjectCache.CACHE_SESSIONS).saveSnapshot();
 		}
 	};
 
