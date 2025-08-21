@@ -48,7 +48,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		BarcodeRequest request = null;
 		CachedBarcode barcode = null;
-		Format format = Format.PNG;
+		Format format = null;
 		byte[] bytes = null;
 
 		try {
@@ -71,12 +71,33 @@ public class BarcodeAPIHandler extends RestHandler {
 			// Generate user requested barcode
 			barcode = BarcodeGenerator.requestBarcode(request);
 
-			// Determine output format
-			for (Format f : c.getFormats()) {
-				if (f.equals(Format.JSON)) {
-					// Encode data as JSON
-					format = f;
+			// Determine output format based on request
+			for (Format formatRequested : c.getFormats()) {
+
+				// Check if JSON
+				if (formatRequested.equals(Format.JSON)) {
+
+					// Output as JSON encoded (base64)
+					format = formatRequested;
 					bytes = barcode.encodeJSON().getBytes();
+					break;
+				}
+
+				// Check if PNG
+				if (formatRequested.equals(Format.PNG)) {
+
+					// Output as PNG image
+					format = Format.PNG;
+					bytes = barcode.getBarcodeData();
+					break;
+				}
+
+				// Check if HTML
+				if (formatRequested.equals(Format.HTML)) {
+
+					// Output as HTML page
+					format = Format.HTML;
+					bytes = barcode.encodeHTML().getBytes();
 					break;
 				}
 			}
@@ -107,13 +128,11 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// Replace barcode with failure barcode
 			barcode = e.getExceptionType().getBarcodeImage();
+			format = Format.PNG;
+			bytes = barcode.getBarcodeData();
 		} catch (Exception | Error e) {
 
 			e.printStackTrace();
-		} finally {
-
-			// Get barcode data if not already set
-			bytes = ((bytes == null) ? barcode.getBarcodeData() : bytes);
 		}
 
 		// Add content headers type and length

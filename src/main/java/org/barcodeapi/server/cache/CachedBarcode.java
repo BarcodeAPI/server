@@ -118,9 +118,15 @@ public class CachedBarcode extends CachedObject {
 	public String encodeJSON() {
 
 		return (new JSONObject()//
-				.put("type", getBarcodeType())//
+				.put("text", getBarcodeStringRaw())//
+				.put("type", getBarcodeType().getName())//
 				.put("encoded", getBarcodeStringEncoded())//
 				.put("base64", encodeBase64())//
 		).toString();
+	}
+
+	public String encodeHTML() {
+		return String.format("<html><body><img src='/api/%s/%s'/></body><html>", //
+				getBarcodeType().getTargets()[0], getBarcodeStringEncoded());
 	}
 }
