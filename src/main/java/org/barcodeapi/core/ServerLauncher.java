@@ -9,16 +9,17 @@ import org.barcodeapi.server.admin.CacheDumpHandler;
 import org.barcodeapi.server.admin.CacheFlushHandler;
 import org.barcodeapi.server.admin.LimiterFlushHandler;
 import org.barcodeapi.server.admin.LimiterListHandler;
-import org.barcodeapi.server.admin.ServerReloadHandler;
 import org.barcodeapi.server.admin.ServerStatsHandler;
 import org.barcodeapi.server.admin.SessionFlushHandler;
 import org.barcodeapi.server.admin.SessionListHandler;
 import org.barcodeapi.server.admin.ShareListHandler;
+import org.barcodeapi.server.admin.SubscriberReloadHandler;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.BulkHandler;
 import org.barcodeapi.server.api.DecodeHandler;
 import org.barcodeapi.server.api.InfoHandler;
 import org.barcodeapi.server.api.LimiterHandler;
+import org.barcodeapi.server.api.PlansHandler;
 import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.ShareHandler;
 import org.barcodeapi.server.api.StaticHandler;
@@ -40,7 +41,7 @@ import org.json.JSONObject;
 
 import com.mclarkdev.tools.libargs.LibArgs;
 import com.mclarkdev.tools.liblog.LibLog;
-import com.mclarkdev.tools.libloggelf.LibLogGELF;
+import com.mclarkdev.tools.libloggelf.lib.LibLogGELFLogWriter;
 
 /**
  * ServerLauncher.java
@@ -55,7 +56,7 @@ public class ServerLauncher {
 
 	static {
 		LibLog._logF("Runtime ID: %s", ServerRuntime.getRuntimeID());
-		LibLog._logF("Network Logging: %s", LibLogGELF.enabled());
+		LibLog.cfg().registerLogger(LibLogGELFLogWriter.class);
 	}
 
 	// The Jetty server and it's handlers
@@ -81,7 +82,7 @@ public class ServerLauncher {
 
 		// Load localized message codes
 		LibLog._logF("Loading Language Pack: %s", lang);
-		LibLog.loadStrings(ServerLauncher.class.getResourceAsStream(//
+		LibLog.cfg().loadStrings(ServerLauncher.class.getResourceAsStream(//
 				String.format("/strings/codes.%s.properties", lang)));
 	}
 
@@ -141,16 +142,17 @@ public class ServerLauncher {
 		initHandler("/limiter", LimiterHandler.class);
 		initHandler("/session", SessionHandler.class);
 		initHandler("/info", InfoHandler.class);
+		initHandler("/plans", PlansHandler.class);
 
 		// Setup admin handlers
 		initHandler("/admin/share/list", ShareListHandler.class);
 		initHandler("/admin/cache/dump", CacheDumpHandler.class);
 		initHandler("/admin/cache/flush", CacheFlushHandler.class);
+		initHandler("/admin/user/reload", SubscriberReloadHandler.class);
 		initHandler("/admin/limiter/list", LimiterListHandler.class);
 		initHandler("/admin/limiter/flush", LimiterFlushHandler.class);
 		initHandler("/admin/session/list", SessionListHandler.class);
 		initHandler("/admin/session/flush", SessionFlushHandler.class);
-		initHandler("/admin/server/reload", ServerReloadHandler.class);
 
 		// Server Stats
 		initHandler("/server/stats", ServerStatsHandler.class);
@@ -229,22 +231,25 @@ public class ServerLauncher {
 			// Run each task
 			LibLog._log("Running shutdown tasks.");
 
-			// Loop all caches
-			String[] caches = ObjectCache.getCacheNames();
-			for (int x = 0; x < caches.length; x++) {
-				try {
+			try {
+				// Save snapshot of shares cache
+				ObjectCache.getCache(ObjectCache.CACHE_SHARE).saveSnapshot();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-					// Lookup the cache object
-					ObjectCache cache = ObjectCache.getCache(caches[x]);
+			try {
+				// Save snapshot of limiters cache
+				ObjectCache.getCache(ObjectCache.CACHE_LIMITERS).saveSnapshot();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-					// Save a snapshot and log it
-					int saved = cache.saveSnapshot();
-					LibLog._clogF("I2602", cache.getName(), saved);
-				} catch (IOException e) {
-
-					// Log snapshot failure
-					LibLog._clog("E2602", e);
-				}
+			try {
+				// Save snapshot of sessions cache
+				ObjectCache.getCache(ObjectCache.CACHE_SESSIONS).saveSnapshot();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	};

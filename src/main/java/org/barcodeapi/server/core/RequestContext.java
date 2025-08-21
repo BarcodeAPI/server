@@ -6,6 +6,8 @@ import java.util.List;
 import org.barcodeapi.server.cache.CachedLimiter;
 import org.barcodeapi.server.cache.CachedSession;
 import org.barcodeapi.server.cache.LimiterCache;
+import org.barcodeapi.server.cache.Subscriber;
+import org.barcodeapi.server.cache.SubscriberCache;
 import org.eclipse.jetty.server.Request;
 
 /**
@@ -84,7 +86,9 @@ public class RequestContext {
 
 	private final Format[] formats;
 
-	private final String user;
+	private final String admin;
+
+	private final Subscriber subscriber;
 
 	private final CachedLimiter limiter;
 	private final CachedSession session;
@@ -125,27 +129,34 @@ public class RequestContext {
 		String ref = request.getHeader("Referer");
 		this.source = (ref != null) ? ref : "API";
 
-		String user = null;
-		CachedLimiter limiter = null;
+		// Determine the associated subscriber by IP
+		Subscriber user = null;
 
-		String auth = request.getHeader("Authorization");
+		String admin = null;
+		String authStr = request.getHeader("Authorization");
 
-		if (auth != null) {
-			if (auth.startsWith("Basic")) {
-				auth = auth.substring(6);
-				user = SessionHelper.validateUser(auth);
+		if (authStr != null) {
+			if (authStr.startsWith("Basic")) {
+				authStr = authStr.substring(6);
+				admin = SessionHelper.validateUser(authStr);
 			} else //
-			if (auth.startsWith("Token")) {
-				auth = auth.substring(6);
-				limiter = LimiterCache.getByKey(auth);
+			if (authStr.startsWith("Token")) {
+				authStr = authStr.substring(6);
+				user = SubscriberCache.getByKey(authStr);
 			}
 		}
 
-		// Set user if logged in
-		this.user = user;
+		// Lookup user based on IP
+		if(user == null) {
+			user = SubscriberCache.getByIP(ip);
+		}
 
-		// Check for null limiter and update based on IP address
-		this.limiter = (limiter != null) ? limiter : LimiterCache.getByIp(ip);
+		// User ID based on customer association or IP
+		String userID = (user != null) ? user.getCustomer() : ip;
+		
+		this.admin = admin;
+		this.subscriber = user;
+		this.limiter = LimiterCache.getLimiter(user, userID);
 
 		// Get user session info
 		CachedSession tmpSession = SessionHelper.getSession(request);
@@ -267,8 +278,8 @@ public class RequestContext {
 	 * 
 	 * @return the user currently logged in
 	 */
-	public String getUser() {
-		return this.user;
+	public String getAdmin() {
+		return this.admin;
 	}
 
 	/**
@@ -287,6 +298,15 @@ public class RequestContext {
 	 */
 	public boolean hasSession() {
 		return (this.session != null);
+	}
+
+	/**
+	 * Returns the subscriber of the request.
+	 * 
+	 * @return the subscriber of the request
+	 */
+	public Subscriber getSubscriber() {
+		return this.subscriber;
 	}
 
 	/**

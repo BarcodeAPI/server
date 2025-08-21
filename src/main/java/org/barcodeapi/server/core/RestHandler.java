@@ -122,7 +122,7 @@ public abstract class RestHandler extends AbstractHandler {
 		}
 
 		// Authenticate the user if required
-		if (apiAuthRequired && (ctx.getUser() == null)) {
+		if (apiAuthRequired && (ctx.getAdmin() == null)) {
 
 			getStats().hitCounter("request", "authfail");
 			getStats().hitCounter("request", "target", _NAME, "authfail");

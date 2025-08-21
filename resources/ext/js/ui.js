@@ -15,7 +15,7 @@ const appConfig = {
 	'showLinkDecode': false,
 	'showTokenCount': false,
 	'showLimitsNotice': false,
-	'showRenderOptions': false,
+	'showRenderOptions': true,
 	'showHiddenTypes': false,
 
 	'userLanguage': 'en'
@@ -167,7 +167,11 @@ function uiAddListener(elem, handler, event) {
  * Tracking event handler
  */
 function trackingEvent(category, action, event, value) {
+	
+	// Check if Matomo enabled
+	if (appFeatures.matomoTracking.enabled) {
 
-	// Push to matomo
-	window._paq.push(['trackEvent', category, action, event, value]);
+		// Push to Matomo
+		window._paq.push(['trackEvent', category, action, event, value]);
+	}
 }

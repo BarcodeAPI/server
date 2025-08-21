@@ -109,13 +109,13 @@
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>liblog</artifactId>
-			<version>1.5.1</version>
+			<version>1.6.4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>libloggelf</artifactId>
-			<version>1.5.1</version>
+			<version>1.6.2</version>
 		</dependency>
 
 		<dependency>

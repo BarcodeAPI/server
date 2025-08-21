@@ -77,33 +77,25 @@ public class CachedLimiter extends CachedObject {
 	 * @return number of tokens minter
 	 */
 	public double mintTokens() {
-
-		// Unlimited
 		if (tokenCount == -1) {
 			return 0;
 		}
 
 		synchronized (this) {
-
-			// Calculate time since last request
 			long timeNow = System.currentTimeMillis();
-			long timeSinceLastMint = (timeNow - getTimeLastMinted());
+			double oldCount = tokenCount;
 
-			// Generate new tokens based on user delay
-			double tokensMinted = (timeSinceLastMint * this.tokensPerMilli);
+			double minted = (timeNow - timeMinted) * tokensPerMilli;
 
-			// Add minted count to existing count
-			double newTokenCount = (this.tokenCount + tokensMinted);
+			// new count, capped at limit
+			double newCount = Math.min(tokenLimit, (oldCount + minted));
 
-			// Cap maximum number of tokens
-			newTokenCount = ((newTokenCount > this.tokenLimit) ? this.tokenLimit : newTokenCount);
+			// update limiter
+			tokenCount = newCount;
+			timeMinted = timeNow;
 
-			// Update the token count
-			this.timeMinted = timeNow;
-			this.tokenCount = newTokenCount;
-
-			// Return tokens minted
-			return tokensMinted;
+			// return number of tokens added
+			return (newCount - oldCount);
 		}
 	}
 

@@ -1,11 +1,11 @@
 .classpath
 .project
 .settings/
-bin/
-target/
-cache/
-logs/
-uploads/
+/bin/
+/target/
+/cache/
+/logs/
+/uploads/
 resources/blacklist.conf
-cache/
+/cache/
 *.snap

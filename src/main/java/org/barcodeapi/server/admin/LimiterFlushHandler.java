@@ -24,13 +24,9 @@ public class LimiterFlushHandler extends RestHandler {
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
-		boolean flushed = false;
-		String ip = c.getRequest().getParameter("ip");
-		String key = c.getRequest().getParameter("key");
-
 		// Check & flush caches
-		flushed = flushed && flush(ObjectCache.CACHE_KEY, key);
-		flushed = flushed && flush(ObjectCache.CACHE_IP, ip);
+		String id = c.getRequest().getParameter("id");
+		boolean flushed = flush(ObjectCache.CACHE_LIMITERS, id);
 
 		if (!flushed) {
 
@@ -39,7 +35,7 @@ public class LimiterFlushHandler extends RestHandler {
 			r.setHeader("Content-Type", "application/json");
 			r.getOutputStream().println((new JSONObject()//
 					.put("code", 400)//
-					.put("message", "limiter not set (key|ip)")//
+					.put("message", "limiter not found")//
 			).toString());
 			return;
 		}
