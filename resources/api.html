@@ -144,15 +144,11 @@
 					</p>
 				</div>
 				<div>
-					<b>Requesting a Token</b>
+					<b>API Keys</b>
 					<p class="start-xs">
-						&nbsp;&nbsp;API tokens are used to manage your rate limits and are issued to paying customers.
-						These tokens ensure that your usage is tracked and that rate limits are properly enforced.
-					</p>
-					<p>
-						To upgrade your account, visit <a href="/contracts.html"
-							class="text-link anim icon-chevron">Usage
-							Contracts</a>
+						&nbsp;&nbsp;This key should be included in your requests when numerous IP addresses will be
+						making requests
+						to the API.
 					</p>
 				</div>
 			</div>
@@ -168,9 +164,9 @@
 
 				</div>
 				<div>
-					<b>Using A Token</b>
+					<b>Using An API Key</b>
 					<p class="start-xs">
-						&nbsp;&nbsp;If you have an API token, include it in the Authorization header with each request.
+						&nbsp;&nbsp;If you have an API key, include it in the Authorization header with each request.
 						The token should be passed as follows:
 					<pre>
 Authorization: Token=xxxxxxxxxxxx
@@ -234,26 +230,32 @@ fetch(url, { cache: "no-store" })
 });
 					</pre>
 				</div>
+				<div>
+					<p class="start-xs">
+						<span class="example-code-title">Excel</span>
+						<br />
+						&nbsp;Render barcode images directly into Excel, referencing data fields in the table!
+					</p>
+					<pre class="example-code">
+Using:	https://barcodeapi.org/api/
+Config:	fg=ff0000&bg=0000ff
+Barcode Text	Type
+TryMe	128	=IMAGE(B1&B4&"/"&A4&"?"&B2)
+TryMe	qr	=IMAGE(B1&B5&"/"&A5&"?"&B2)
+TryMe	dm	=IMAGE(B1&B6&"/"&A6&"?"&B2)
+					</pre>
+				</div>
 			</div>
 
 			<div class="col-sm-6 col-xs-12">
 				<div>
 					<p class="start-xs">
-						<span class="example-code-title">curl</span>
+						<span class="example-code-title">curl / wget</span>
 						<br />
-						&nbsp;Request and save a barcode using curl
+						&nbsp;Request and save a barcode using curl or wget
 					</p>
 					<pre class="example-code">
 curl https://barcodeapi.org/api/A_Barcode &gt; test.png
-					</pre>
-				</div>
-				<div>
-					<p class="start-xs">
-						<span class="example-code-title">wget</span>
-						<br />
-						&nbsp;Request and save a barcode using wget
-					</p>
-					<pre class="example-code">
 wget -o test.png https://barcodeapi.org/api/A_Barcode
 					</pre>
 				</div>
@@ -549,9 +551,7 @@ X-Error-Message: Expected checksum: 0
 			<div class="col-xs-12">
 				<h2><a href="#support">&sect;8</a>&nbsp;Technical Support</h2>
 				<p class="center-xs">
-					Did we miss something?
-					<br />
-					Please send us an email.
+					Still need help? Please send us an email.
 					<br />
 					We will respond as soon as possible.
 					<br />
