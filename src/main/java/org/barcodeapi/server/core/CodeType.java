@@ -1,5 +1,7 @@
 package org.barcodeapi.server.core;
 
+import java.util.HashMap;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -41,6 +43,8 @@ public class CodeType {
 	private final JSONObject wiki;
 
 	private final JSONObject options;
+
+	private final HashMap<String, Object> defaults;
 
 	private CodeType(JSONObject config) {
 		this.config = config;
@@ -89,10 +93,15 @@ public class CodeType {
 
 		// get available options
 		this.options = config.getJSONObject("options");
+
+		this.defaults = new HashMap<>();
+		for (String optionName : options.keySet()) {
+			this.defaults.put(optionName, //
+					options.getJSONObject(optionName).get("default"));
+		}
 	}
 
 	public JSONObject getConfig() {
-
 		return config;
 	}
 
@@ -166,6 +175,10 @@ public class CodeType {
 
 	public JSONObject getOptions() {
 		return options;
+	}
+
+	public HashMap<String, Object> getDefaults() {
+		return defaults;
 	}
 
 	public static CodeType fromJSON(JSONObject conf) {

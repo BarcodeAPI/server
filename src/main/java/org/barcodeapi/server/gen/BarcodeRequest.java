@@ -40,7 +40,7 @@ public class BarcodeRequest {
 		this.cached = (type.getCacheEnable() && (!complex));
 
 		// Calculate the cost of the request
-		boolean free = (data.equals(type.getExample()));
+		boolean free = (data.equals(type.getExample()) && (!complex));
 		int cost = (complex) ? type.getCostCustom() : type.getCostBasic();
 		this.cost = (free) ? 0 : cost;
 	}
@@ -61,6 +61,15 @@ public class BarcodeRequest {
 	 */
 	public String getData() {
 		return data;
+	}
+
+	/**
+	 * Returns true if the barcode is complex.
+	 * 
+	 * @return the barcode is complex
+	 */
+	public boolean isComplex() {
+		return complex;
 	}
 
 	/**

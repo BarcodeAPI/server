@@ -143,6 +143,11 @@ public class CodeUtils {
 	public static JSONObject parseOptions(CodeType type, String opts) {
 		LibMetrics.hitMethodRunCounter();
 
+		// No options if blank
+		if (opts.isBlank()) {
+			return (new JSONObject());
+		}
+
 		// Loop each supplied option
 		JSONObject options = new JSONObject();
 		for (String option : opts.split("&")) {
@@ -150,10 +155,20 @@ public class CodeUtils {
 			// Split on [key=value]
 			String[] kv = option.split("=");
 
-			// If supported key
-			if (type.getOptions().has(kv[0])) {
+			String _key = kv[0].toLowerCase();
+			String _val = kv[1].toLowerCase();
 
-				// Add to option map
+			// If supported key
+			if (type.getOptions().has(_key)) {
+
+				// Skip if default
+				if (String.valueOf(//
+						type.getDefaults().get(_key))//
+						.equals(_val)) {
+					continue;
+				}
+
+				// Add to render option map
 				options.put(kv[0], //
 						(kv.length == 2) ? kv[1] : true);
 			}

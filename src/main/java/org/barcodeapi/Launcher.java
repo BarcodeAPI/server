@@ -1,6 +1,7 @@
 package org.barcodeapi;
 
 import org.barcodeapi.core.ServerLauncher;
+import org.json.JSONObject;
 
 /**
  * Launcher.java

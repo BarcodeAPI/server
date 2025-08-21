@@ -55,7 +55,7 @@ public class GenerationException extends Exception {
 	private final ExceptionType type;
 
 	public GenerationException(ExceptionType type, Throwable throwable) {
-		super(throwable);
+		super(throwable.getCause() != null ? throwable.getCause() : throwable);
 
 		this.type = type;
 	}

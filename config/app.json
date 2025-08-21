@@ -13,7 +13,8 @@
 		"DataMatrix",
 		"PDF417",
 		"USPSMail",
-		"RoyalMail"
+		"RoyalMail",
+		"AprilTag"
 	],
 	"tasks": [
 		{
