@@ -147,13 +147,13 @@ public class RequestContext {
 		}
 
 		// Lookup user based on IP
-		if(user == null) {
+		if (user == null) {
 			user = SubscriberCache.getByIP(ip);
 		}
 
 		// User ID based on customer association or IP
 		String userID = (user != null) ? user.getCustomer() : ip;
-		
+
 		this.admin = admin;
 		this.subscriber = user;
 		this.limiter = LimiterCache.getLimiter(user, userID);
@@ -163,13 +163,13 @@ public class RequestContext {
 		this.session = (tmpSession != null) ? tmpSession : //
 				((createSession) ? SessionHelper.createSession() : null);
 
+		// Determine output format and encoding
+		this.formats = Format.parse(request.getHeader("Accept"));
+
 		// Hit the session
 		if (this.session != null) {
 			session.hit(ip, request.getOriginalURI().toString());
 		}
-
-		// Determine output format and encoding
-		this.formats = Format.parse(request.getHeader("Accept"));
 	}
 
 	/**

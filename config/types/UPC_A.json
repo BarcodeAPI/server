@@ -2,6 +2,7 @@
 	"name": "UPC_A",
 	"display": "UPC A",
 	"show": true,
+	"decode": true,
 	"cache": true,
 	"target": [
 		"a",

@@ -74,30 +74,27 @@ public class BarcodeAPIHandler extends RestHandler {
 			// Determine output format based on request
 			for (Format formatRequested : c.getFormats()) {
 
-				// Check if JSON
-				if (formatRequested.equals(Format.JSON)) {
+				switch (formatRequested) {
 
+				case JSON:
 					// Output as JSON encoded (base64)
 					format = formatRequested;
 					bytes = barcode.encodeJSON().getBytes();
 					break;
-				}
 
-				// Check if PNG
-				if (formatRequested.equals(Format.PNG)) {
-
-					// Output as PNG image
-					format = Format.PNG;
-					bytes = barcode.getBarcodeData();
-					break;
-				}
-
-				// Check if HTML
-				if (formatRequested.equals(Format.HTML)) {
-
+				case TEXT:
+				case HTML:
 					// Output as HTML page
 					format = Format.HTML;
 					bytes = barcode.encodeHTML().getBytes();
+					break;
+
+				case ANY:
+				case PNG:
+				default:
+					// Output as PNG image
+					format = Format.PNG;
+					bytes = barcode.getBarcodeData();
 					break;
 				}
 			}

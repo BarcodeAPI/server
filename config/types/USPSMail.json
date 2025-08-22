@@ -2,6 +2,7 @@
 	"name": "USPSMail",
 	"display": "USPS Mail",
 	"show": false,
+	"decode": false,
 	"cache": true,
 	"target": [
 		"usps",

@@ -176,7 +176,7 @@ public abstract class RestHandler extends AbstractHandler {
 	}
 
 	/**
-	 * The implemented logic to run on execution of the handler..
+	 * The implemented logic to run on execution of the handler.
 	 * 
 	 * @param ctx      the request context
 	 * @param response the server response

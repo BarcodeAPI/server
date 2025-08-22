@@ -21,6 +21,8 @@ public class CodeType {
 
 	private final boolean show;
 
+	private final boolean decode;
+
 	private final boolean cache;
 
 	private final String generator;
@@ -55,6 +57,9 @@ public class CodeType {
 
 		// show on web UI
 		this.show = config.getBoolean("show");
+
+		// is decoding supported
+		this.decode = config.getBoolean("decode");
 
 		// enable caching
 		this.cache = config.getBoolean("cache");
@@ -115,6 +120,10 @@ public class CodeType {
 
 	public boolean getShowType() {
 		return show;
+	}
+
+	public boolean getDecodeSupported() {
+		return decode;
 	}
 
 	public boolean getCacheEnable() {
@@ -191,6 +200,7 @@ public class CodeType {
 				.put("name", type.getName())//
 				.put("display", type.getDisplayName())//
 				.put("show", type.getShowType())//
+				.put("decode", type.getDecodeSupported())//
 				.put("pattern", type.getPatternExtended())//
 				.put("example", type.getExample())//
 				.put("checksum", type.enforceChecksum())//

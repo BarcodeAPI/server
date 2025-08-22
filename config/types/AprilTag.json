@@ -2,6 +2,7 @@
 	"name": "AprilTag",
 	"display": "April Tag",
 	"show": false,
+	"decode": false,
 	"cache": true,
 	"target": [
 		"april",

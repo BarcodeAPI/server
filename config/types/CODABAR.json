@@ -2,6 +2,7 @@
 	"name": "CODABAR",
 	"display": "CODABAR",
 	"show": true,
+	"decode": false,
 	"cache": true,
 	"target": [
 		"codabar"

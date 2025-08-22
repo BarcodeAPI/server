@@ -12,7 +12,6 @@ window.addEventListener("load", function() {
 			return response.json();
 		})
 		.then(data => {
-			console.log(data);
 			for (var x in data) {
 				if (data[x].nonprinting) {
 					addSupported(data[x]);
