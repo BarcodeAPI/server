@@ -7,11 +7,14 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.barcodeapi.core.ServerLauncher;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 
 public abstract class ServerTestBase {
@@ -22,6 +25,8 @@ public abstract class ServerTestBase {
 	protected static URI serverUri;
 
 	protected static ServerLauncher apiServer;
+
+	private Map<String, String> urlHeaders;
 
 	private HttpURLConnection urlConnection;
 
@@ -47,6 +52,12 @@ public abstract class ServerTestBase {
 		}
 	}
 
+	@Before
+	public void setupHeaders() {
+
+		urlHeaders = new HashMap<>();
+	}
+
 	protected String encode(String data) {
 
 		try {
@@ -56,6 +67,10 @@ public abstract class ServerTestBase {
 
 			return null;
 		}
+	}
+
+	protected Map<String, String> headers() {
+		return urlHeaders;
 	}
 
 	protected void apiGet(String path) {
@@ -86,8 +101,14 @@ public abstract class ServerTestBase {
 
 			URL url = serverUri.resolve(path).toURL();
 			urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.connect();
 
+			// Add test request headers
+			for (Map.Entry<String, String> entry : urlHeaders.entrySet()) {
+				urlConnection.setRequestProperty(entry.getKey(), entry.getValue());
+			}
+
+			// Connect and get response
+			urlConnection.connect();
 			responseCode = urlConnection.getResponseCode();
 
 			if (responseCode == HttpStatus.OK_200) {
