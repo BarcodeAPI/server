@@ -5,6 +5,11 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * TestAutoType.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ */
 public class TestAutoType extends ServerTestBase {
 	
 	@Test

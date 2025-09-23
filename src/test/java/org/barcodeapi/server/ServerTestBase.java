@@ -1,8 +1,6 @@
 package org.barcodeapi.server;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -12,11 +10,19 @@ import java.util.Map;
 
 import org.barcodeapi.core.ServerLauncher;
 import org.eclipse.jetty.http.HttpStatus;
+import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+import com.mclarkdev.tools.libextras.LibExtrasStreams;
+
+/**
+ * ServerTestBase.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ */
 public abstract class ServerTestBase {
 
 	private static final String SERVER_HOST = "127.0.0.1";
@@ -32,7 +38,7 @@ public abstract class ServerTestBase {
 
 	private int responseCode;
 
-	private BufferedReader response;
+	private InputStream response;
 
 	@BeforeClass
 	public static void startServer() {
@@ -41,12 +47,13 @@ public abstract class ServerTestBase {
 
 		try {
 
-			apiServer = new ServerLauncher(new String[] { "--port", SERVER_PORT });
+			apiServer = new ServerLauncher(//
+					new String[] { "--port", SERVER_PORT, "--config", "apptest" });
 			apiServer.launch();
 
 			serverUri = new URI(String.format("http://%s:%s", SERVER_HOST, SERVER_PORT));
 
-		} catch (Exception e) {
+		} catch (Exception | Error e) {
 
 			Assert.fail("Failed to initialize server.");
 		}
@@ -58,6 +65,11 @@ public abstract class ServerTestBase {
 		urlHeaders = new HashMap<>();
 	}
 
+	protected void setHeader(String key, String val) {
+
+		urlHeaders.put(key, val);
+	}
+
 	protected String encode(String data) {
 
 		try {
@@ -65,12 +77,10 @@ public abstract class ServerTestBase {
 			return URLEncoder.encode(data, "UTF-8");
 		} catch (Exception e) {
 
+			e.printStackTrace(System.err);
+			Assert.fail("Failed encoding data.");
 			return null;
 		}
-	}
-
-	protected Map<String, String> headers() {
-		return urlHeaders;
 	}
 
 	protected void apiGet(String path) {
@@ -79,30 +89,39 @@ public abstract class ServerTestBase {
 
 	protected void apiGet(String path, String args) {
 
-		try {
-
-			String encoded = URLEncoder.encode(path, "UTF-8");
-			String request = "/api/" + encoded;
-			if (args != null) {
-				request += ('?' + args);
-			}
-			serverGet(request);
-
-		} catch (UnsupportedEncodingException e) {
-
-			e.printStackTrace(System.err);
-			Assert.fail("IOException.");
+		String request = "/api/" + encode(path);
+		if (args != null) {
+			request += ('?' + args);
 		}
+
+		serverGet(request);
 	}
 
 	protected void serverGet(String path) {
 
+		request("GET", path);
+	}
+
+	protected void serverPost(String path) {
+
+		request("POST", path);
+	}
+
+	protected void serverDelete(String path) {
+
+		request("DELETE", path);
+	}
+
+	protected void request(String method, String path) {
+
 		try {
 
+			// Build the URL and open the connection
 			URL url = serverUri.resolve(path).toURL();
 			urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection.setRequestMethod(method);
 
-			// Add test request headers
+			// Add request headers for the test
 			for (Map.Entry<String, String> entry : urlHeaders.entrySet()) {
 				urlConnection.setRequestProperty(entry.getKey(), entry.getValue());
 			}
@@ -111,14 +130,16 @@ public abstract class ServerTestBase {
 			urlConnection.connect();
 			responseCode = urlConnection.getResponseCode();
 
+			// Check for 200 response code
 			if (responseCode == HttpStatus.OK_200) {
-				response = new BufferedReader(//
-						new InputStreamReader(urlConnection.getInputStream()));
+				response = urlConnection.getInputStream();
 			}
-		} catch (Exception e) {
 
+		} catch (Exception | Error e) {
+
+			// Print the exception and fail
 			e.printStackTrace(System.err);
-			Assert.fail("IOException.");
+			Assert.fail("Exception in request.");
 		}
 	}
 
@@ -132,9 +153,24 @@ public abstract class ServerTestBase {
 		return urlConnection.getHeaderField(header);
 	}
 
-	protected BufferedReader getResponse() {
+	protected InputStream getResponse() {
 
 		return response;
+	}
+
+	protected JSONObject getResponseAsJSON() {
+
+		try {
+
+			return new JSONObject(//
+					LibExtrasStreams.readStream(getResponse()));
+
+		} catch (Exception | Error e) {
+
+			e.printStackTrace(System.err);
+			Assert.fail("Exception processing response.");
+			return null;
+		}
 	}
 
 	@AfterClass

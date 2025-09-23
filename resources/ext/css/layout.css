@@ -14,6 +14,8 @@ body {
 .wrapper {
 	padding: 20px 30px;
 	max-width: 1080px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .header {
@@ -380,6 +382,31 @@ body {
 		display: block;
 	}
 }
+
+.pad-top-8 {
+	padding-top: 8px;
+}
+
+.pad-top-16 {
+	padding-top: 16px;
+}
+
+.pad-top-24 {
+	padding-top: 24px;
+}
+
+.pad-bottom-8 {
+	padding-bottom: 8px;
+}
+
+.pad-bottom-16 {
+	padding-bottom: 16px;
+}
+
+.pad-bottom-24 {
+	padding-bottom: 24px;
+}
+
 
 /* \/ Text Field Focus Animation \/ */
 
@@ -772,7 +799,7 @@ a:hover {
 
 .example-code {
 	text-align: left;
-	overflow: scroll;
+	overflow: hidden;
 }
 
 .toc-link {

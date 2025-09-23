@@ -78,4 +78,22 @@ public abstract class DefaultBarcode4JProvider extends CodeGenerator {
 
 		return bytes;
 	}
+	
+//	
+//	@Override
+//	public void onValidateRequest(BarcodeRequest request) throws GenerationException {
+//		String data = request.getData();
+//
+//		if (data.length() == 12) {
+//			return;
+//		}
+//
+//		int provided = (data.charAt(data.length() - 1) - '0');
+//		int checksum = CodeUtils.calculateChecksum(data, 13);
+//
+//		if (checksum != provided) {
+//			throw new GenerationException(ExceptionType.CHECKSUM, //
+//					new Throwable("Expected checksum: " + checksum));
+//		}
+//	}
 }

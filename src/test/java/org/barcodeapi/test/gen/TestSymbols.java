@@ -6,6 +6,11 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+/**
+ * TestSymbols.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ */
 public class TestSymbols extends ServerTestBase {
 
 	@Test

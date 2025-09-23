@@ -77,9 +77,6 @@ public class BarcodeGenerator {
 				LibMetrics.instance().hitCounter("render", "type", typeName, "complex");
 			}
 
-			// Run implementation specific validations
-			generator.onValidateRequest(request);
-
 			// Render new image and get the bytes
 			byte[] png = generator.onRender(request);
 

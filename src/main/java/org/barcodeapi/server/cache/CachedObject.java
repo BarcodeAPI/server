@@ -3,7 +3,8 @@ package org.barcodeapi.server.cache;
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
-import org.barcodeapi.core.AppConfig;
+import org.barcodeapi.core.Config;
+import org.barcodeapi.core.Config.Cfg;
 import org.json.JSONObject;
 
 /**
@@ -16,7 +17,7 @@ public abstract class CachedObject implements Serializable {
 	private static final long serialVersionUID = 20241222L;
 
 	private static final JSONObject cachesConfig = //
-			AppConfig.get().getJSONObject("cache");
+			Config.get(Cfg.App).getJSONObject("cache");
 
 	private final long timeCreated;
 	private long timeTouched, accessCount = 0;

@@ -5,6 +5,11 @@ import org.barcodeapi.server.core.GenerationException;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * TestBlacklist.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ */
 public class TestBlacklist extends ServerTestBase {
 
 	@Test

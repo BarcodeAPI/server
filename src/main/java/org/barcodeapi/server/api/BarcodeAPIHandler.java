@@ -4,8 +4,10 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.core.AppConfig;
+import org.barcodeapi.core.Config;
+import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.cache.CachedBarcode;
+import org.barcodeapi.server.cache.CachedLimiter;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.core.RequestContext;
@@ -13,7 +15,6 @@ import org.barcodeapi.server.core.RequestContext.Format;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.gen.BarcodeGenerator;
 import org.barcodeapi.server.gen.BarcodeRequest;
-import org.json.JSONException;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
@@ -24,7 +25,7 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class BarcodeAPIHandler extends RestHandler {
 
-	private static final int CACHED_LIFE_MIN = AppConfig.get()//
+	private static final int CACHED_LIFE_MIN = Config.get(Cfg.App)//
 			.getJSONObject("client").getInt("cacheBarcode");
 
 	private static final int CACHED_LIFE_SEC = (CACHED_LIFE_MIN * 60);
@@ -44,12 +45,15 @@ public class BarcodeAPIHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws IOException {
 
 		BarcodeRequest request = null;
 		CachedBarcode barcode = null;
 		Format format = null;
 		byte[] bytes = null;
+
+		double tokenSpend = 0;
+		CachedLimiter limiter = c.getLimiter();
 
 		try {
 
@@ -60,8 +64,9 @@ public class BarcodeAPIHandler extends RestHandler {
 			r.setHeader("X-RateLimit-Cost", //
 					Integer.toString(request.getCost()));
 
-			// Try to spend tokens
-			if (!c.getLimiter().spendTokens(request.getCost())) {
+			// Try to spend the tokens
+			tokenSpend = request.getCost();
+			if (!limiter.checkBalance(tokenSpend)) {
 
 				// Return rate limited barcode to user
 				throw new GenerationException(ExceptionType.LIMITED, //
@@ -123,14 +128,22 @@ public class BarcodeAPIHandler extends RestHandler {
 			r.setStatus(e.getExceptionType().getStatusCode());
 			r.setHeader("X-Error-Message", e.getCause().getMessage());
 
+			// Spend tokens to discourage abuse
+			tokenSpend = 0.5;
+
 			// Replace barcode with failure barcode
 			barcode = e.getExceptionType().getBarcodeImage();
-			format = Format.PNG;
 			bytes = barcode.getBarcodeData();
+			format = Format.PNG;
 		} catch (Exception | Error e) {
 
 			e.printStackTrace();
 		}
+
+		// Advise current token spend and count
+		limiter.spendTokens(tokenSpend);
+		r.setHeader("X-RateLimit-Cost", Double.toString(tokenSpend));
+		r.setHeader("X-RateLimit-Tokens", limiter.getTokenCountStr());
 
 		// Add content headers type and length
 		r.setHeader("Content-Type", format.getMime());

@@ -1,14 +1,13 @@
 package org.barcodeapi.server.cache;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.barcodeapi.core.Config;
+import org.barcodeapi.core.Config.Cfg;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.mclarkdev.tools.libextras.LibExtrasStreams;
 import com.mclarkdev.tools.liblog.LibLog;
 
 public class SubscriberCache {
@@ -35,20 +34,12 @@ public class SubscriberCache {
 		subscribersByIP.clear();
 		subscribersByKey.clear();
 
-		String rawCfg;
+		// Load subscribers, force reload
+		JSONArray users = Config//
+				.get(Cfg.Subscribers, true)//
+				.getJSONArray("subscribers");
 
-		try {
-			// Load subscribers from disk
-			rawCfg = LibExtrasStreams.readFile(//
-					new File("config", "subscribers.json"));
-		} catch (IOException e) {
-			return;
-		}
-
-		// Parse string as JSON
-		JSONArray users = new JSONArray(rawCfg);
-
-		// Load and loop all subscribers
+		// Loop and cache all subscribers
 		Subscriber subscriber;
 		for (int x = 0; x < users.length(); x++) {
 

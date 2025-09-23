@@ -1,12 +1,10 @@
 package org.barcodeapi.server.gen;
 
-import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.core.TypeSelector;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.liblog.LibLog;
@@ -15,13 +13,14 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
 /**
  * BarcodeRequest.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
  */
 public class BarcodeRequest {
 
 	private final CodeType type;
 
 	private final String data;
+	private final int checksum;
 	private final boolean complex;
 	private final boolean cached;
 	private final boolean download;
@@ -33,9 +32,12 @@ public class BarcodeRequest {
 
 		this.type = type;
 		this.data = data;
-		this.options = options;
+
+		this.checksum = type.enforceChecksum() ? //
+				CodeUtils.calculateChecksum(data, 0) : -1;
 
 		// Use cache based on options and data length
+		this.options = options;
 		this.complex = ((options.length() > 0) || (data.length() >= 48));
 		this.cached = (type.getCacheEnable() && (!complex));
 
@@ -238,14 +240,10 @@ public class BarcodeRequest {
 		}
 
 		// Match against blacklist entries
-		JSONArray blacklist = AppConfig.get().getJSONArray("blacklist");
-		for (int x = 0; x < blacklist.length(); x++) {
+		if (CodeUtils.isBlacklisted(target)) {
 
-			// Fail if request matches blacklist entry
-			if (target.matches(blacklist.getString(x))) {
-				throw new GenerationException(ExceptionType.BLACKLIST, //
-						new Throwable("The request was rejected."));
-			}
+			throw new GenerationException(ExceptionType.BLACKLIST, //
+					new Throwable("The request was rejected."));
 		}
 
 		// Parse control characters

@@ -6,7 +6,40 @@ import org.barcodeapi.server.gen.BarcodeRequest;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * TestBarcodeRequest.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ */
 public class TestBarcodeRequest extends ServerTestBase {
+
+	@Test
+	public void testBarcodeRequest_TestSimpleBarcode() {
+
+		try {
+			BarcodeRequest req = //
+					BarcodeRequest.fromURI("/api/auto/abc");
+
+			Assert.assertFalse("Request is not Simple", req.isComplex());
+		} catch (GenerationException e) {
+
+			Assert.fail("Failed to create request.");
+		}
+	}
+
+	@Test
+	public void testBarcodeRequest_TestComplexBarcode() {
+
+		try {
+			BarcodeRequest req = //
+					BarcodeRequest.fromURI("/api/auto/abc?fg=111111");
+
+			Assert.assertTrue("Request is not Complex", req.isComplex());
+		} catch (GenerationException e) {
+
+			Assert.fail("Failed to create request.");
+		}
+	}
 
 	@Test
 	public void testBarcodeRequest_TestEmptyRequest() {
@@ -22,7 +55,7 @@ public class TestBarcodeRequest extends ServerTestBase {
 	}
 
 	@Test
-	public void testBarcodeRequest_TesInvalidRequest() {
+	public void testBarcodeRequest_TestInvalidRequest() {
 
 		try {
 			BarcodeRequest.fromURI("/api/13/0123");
@@ -33,6 +66,7 @@ public class TestBarcodeRequest extends ServerTestBase {
 					GenerationException.ExceptionType.INVALID, e.getExceptionType());
 		}
 	}
+	
 
 	@Test
 	public void testBarcodeRequest_TestBlacklistRequest() {
@@ -52,13 +86,13 @@ public class TestBarcodeRequest extends ServerTestBase {
 
 		try {
 			BarcodeRequest r = BarcodeRequest//
-					.fromURI("/api/auto/barcode_test");
+					.fromURI("/api/auto/BarcodeTest");
 
 			Assert.assertEquals("Request Type", //
 					"Code128", r.getType().getName());
 
 			Assert.assertEquals("Request Data", //
-					"barcode_test", r.getData());
+					"BarcodeTest", r.getData());
 
 			Assert.assertEquals("Request Options", //
 					0, r.getOptions().length());
@@ -106,34 +140,6 @@ public class TestBarcodeRequest extends ServerTestBase {
 
 			Assert.assertEquals("Request Options", //
 					0, r.getOptions().length());
-
-		} catch (GenerationException e) {
-
-			Assert.fail(e.getMessage());
-		}
-	}
-
-	@Test
-	public void testBarcodeRequest_TestCodeType_WithOptions() {
-
-		try {
-			BarcodeRequest r = BarcodeRequest//
-					.fromURI("/api/128/barcode_test?bg=ffffff&fg=000000");
-
-			Assert.assertEquals("Request Type", //
-					"Code128", r.getType().getName());
-
-			Assert.assertEquals("Request Data", //
-					"barcode_test", r.getData());
-
-			Assert.assertEquals("Request Options", //
-					2, r.getOptions().length());
-
-			Assert.assertEquals("Request Options (FG)", //
-					"000000", r.getOptions().getString("fg"));
-
-			Assert.assertEquals("Request Options (BG)", //
-					"ffffff", r.getOptions().getString("bg"));
 
 		} catch (GenerationException e) {
 

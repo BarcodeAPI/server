@@ -1,6 +1,7 @@
 package org.barcodeapi.server.cache;
 
-import org.barcodeapi.core.AppConfig;
+import org.barcodeapi.core.Config;
+import org.barcodeapi.core.Config.Cfg;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;
@@ -12,33 +13,45 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
  */
 public class LimiterCache {
 
-	private static final JSONObject LIMITS_CONFIG = AppConfig.get().getJSONObject("limits");
-
-	private static final int DEFLIMIT_RATE = LIMITS_CONFIG.getInt("default");
-	private static final boolean DEFLIMIT_ENFORCE = LIMITS_CONFIG.getBoolean("enforce");
+	// Default values for new limiters
+	private static final int DEFLIMIT_RATE;
+	private static final boolean DEFLIMIT_ENFORCE;
 
 	// Local instance of the limiters cache
-	private static final ObjectCache LIMITERS = ObjectCache.getCache(ObjectCache.CACHE_LIMITERS);
+	private static final ObjectCache _LIMITERS;
+
+	static {
+
+		// Load plan from configuration
+		JSONObject freePlan = Config//
+				.get(Cfg.Plans).getJSONObject("free");
+
+		// Free plan defaults
+		DEFLIMIT_RATE = freePlan.getInt("limit");
+		DEFLIMIT_ENFORCE = freePlan.getBoolean("enforce");
+
+		// Get the limiter cache
+		_LIMITERS = ObjectCache.getCache(ObjectCache.CACHE_LIMITERS);
+	}
 
 	public static CachedLimiter getLimiter(Subscriber sub, String userID) {
 		LibMetrics.hitMethodRunCounter();
 
-		CachedLimiter limiter;
-
 		// Determine if limiter exists
-		if (LIMITERS.has(userID)) {
+		CachedLimiter limiter;
+		if (_LIMITERS.has(userID)) {
 
 			// Get the existing limiter from the cache
-			limiter = (CachedLimiter) LIMITERS.get(userID);
+			limiter = (CachedLimiter) _LIMITERS.get(userID);
 		} else {
 
 			// Determine enforce / limits for the new limiter
 			int limit = (sub != null) ? sub.getLimit() : DEFLIMIT_RATE;
-			boolean enforce = (sub != null) ? sub.getEnforce() : DEFLIMIT_ENFORCE;
+			boolean enforce = (sub != null) ? sub.isEnforced() : DEFLIMIT_ENFORCE;
 
 			// Create a new limiter and add it to the cache
 			limiter = new CachedLimiter(enforce, userID, limit);
-			LIMITERS.put(userID, limiter);
+			_LIMITERS.put(userID, limiter);
 		}
 
 		// Return the limiter

@@ -15,7 +15,7 @@ window.addEventListener("load", function() {
 			}
 
 			document.getElementById("token_count").innerHTML = //
-				((data.tokenCount == -1) ? "Unlimited" : data.tokenCount);
+				((data.tokenCount == -1) ? "Unlimited" : data.tokenCount.toFixed(2));
 
 			document.getElementById("token_limit").innerHTML = //
 				((data.tokenLimit == -1) ? "Unlimited" : data.tokenLimit);

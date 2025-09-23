@@ -6,7 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.core.AppConfig;
+import org.barcodeapi.core.Config;
+import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.eclipse.jetty.server.Request;
@@ -20,7 +21,7 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
  */
 public class StaticHandler extends RestHandler {
 
-	private static final int CACHED_LIFE_MIN = AppConfig.get()//
+	private static final int CACHED_LIFE_MIN = Config.get(Cfg.App)//
 			.getJSONObject("client").getInt("cacheStatic");
 
 	private static final int CACHED_LIFE_SEC = (CACHED_LIFE_MIN * 60);

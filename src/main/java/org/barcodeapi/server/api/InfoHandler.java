@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.barcodeapi.core.Config;
 import org.barcodeapi.core.ServerRuntime;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
@@ -31,6 +32,7 @@ public class InfoHandler extends RestHandler {
 				.put("uptime", ServerRuntime.getTimeRunning())//
 				.put("hostname", ServerRuntime.getHostname())//
 				.put("version", ServerRuntime.getVersion())//
+				.put("dist", Config.dist())//
 		).toString());
 	}
 }

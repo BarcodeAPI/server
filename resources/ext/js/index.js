@@ -17,7 +17,7 @@ const appState = {
 const appOptions = {
 	'language': 'en',
 	'apiKey': false,
-	'genDelay': 415,
+	'genDelay': 500,
 	'default': {
 		'colorFG': "000000",
 		'colorBG': "FFFFFF",

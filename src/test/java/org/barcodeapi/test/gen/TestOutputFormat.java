@@ -5,6 +5,11 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * TestOutputFormat.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ */
 public class TestOutputFormat extends ServerTestBase {
 
 	@Test
@@ -22,7 +27,9 @@ public class TestOutputFormat extends ServerTestBase {
 	@Test
 	public void testOutputFormat_JSON() {
 
-		headers().put("Accept", "application/json");
+		// Preconditions, set request header
+		setHeader("Accept", "application/json");
+
 		apiGet("$12.34");
 
 		Assert.assertEquals("Response Code", //
@@ -35,7 +42,9 @@ public class TestOutputFormat extends ServerTestBase {
 	@Test
 	public void testOutputFormat_HTML() {
 
-		headers().put("Accept", "text/html");
+		// Preconditions, set request header
+		setHeader("Accept", "text/html");
+
 		apiGet("$12.34");
 
 		Assert.assertEquals("Response Code", //
@@ -48,7 +57,9 @@ public class TestOutputFormat extends ServerTestBase {
 	@Test
 	public void testOutputFormat_PNG() {
 
-		headers().put("Accept", "image/png");
+		// Preconditions, set request header
+		setHeader("Accept", "image/png");
+
 		apiGet("$12.34");
 
 		Assert.assertEquals("Response Code", //

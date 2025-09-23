@@ -64,8 +64,10 @@ public class CodeType {
 		// enable caching
 		this.cache = config.getBoolean("cache");
 
-		// generator config
+		// generator java class
 		this.generator = (GEN_ROOT + config.getString("generator"));
+
+		// max threads to use
 		this.threads = config.getInt("threads");
 
 		// get barcode patterns
@@ -76,7 +78,7 @@ public class CodeType {
 		// supports checksums
 		this.checksum = config.getBoolean("checksum");
 
-		// has nonprinting support
+		// has non-printing character support
 		this.nonprinting = config.getBoolean("nonprinting");
 
 		// setup list of targets
@@ -99,6 +101,7 @@ public class CodeType {
 		// get available options
 		this.options = config.getJSONObject("options");
 
+		// parse format defaults
 		this.defaults = new HashMap<>();
 		for (String optionName : options.keySet()) {
 			this.defaults.put(optionName, //
@@ -195,7 +198,7 @@ public class CodeType {
 		return new CodeType(conf);
 	}
 
-	public static JSONObject toJSON(CodeType type) {
+	public static final JSONObject toJSON(CodeType type) {
 		return new JSONObject()//
 				.put("name", type.getName())//
 				.put("display", type.getDisplayName())//

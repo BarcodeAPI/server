@@ -12,9 +12,9 @@ const timeStart = new Date();
 const appConfig = {
 	'showLinkBulk': true,
 	'showLinkMulti': true,
-	'showLinkDecode': false,
-	'showTokenCount': false,
-	'showLimitsNotice': false,
+	'showLinkDecode': true,
+	'showTokenCount': true,
+	'showLimitsNotice': true,
 	'showRenderOptions': true,
 	'showHiddenTypes': false,
 	'userLanguage': 'en'

@@ -5,6 +5,11 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * TestServerTypeHandler.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ */
 public class TestServerTypeHandler extends ServerTestBase {
 
 	@Test
