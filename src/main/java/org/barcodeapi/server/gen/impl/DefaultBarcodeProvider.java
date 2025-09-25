@@ -18,6 +18,11 @@ public abstract class DefaultBarcodeProvider extends CodeGenerator {
 		this.generator = bean;
 	}
 
+	protected AbstractBarcodeBean getBean() {
+
+		return this.generator;
+	}
+
 	@Override
 	public byte[] onRender(BarcodeRequest request) throws Exception {
 

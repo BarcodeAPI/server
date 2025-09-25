@@ -20,8 +20,8 @@
 	"nonprinting": false,
 	"example": "123456789012",
 	"pattern": {
-		"auto": "^(?=.*0)[0-9]{12}$",
-		"extended": "^(?=.*0)[0-9]{11,12}$"
+		"auto": "^[0-9]{12}$",
+		"extended": "^[0-9]{11,12}$"
 	},
 	"description": {
 		"en": "A universally recognized 12 digit barcode. Encodes manufacturer, product / variant, and store use codes."
