@@ -20,7 +20,7 @@
 	"example": "1234567890128",
 	"pattern": {
 		"auto": "^[0-9]{13}$",
-		"extended": "^[0-9]{12,13}$"
+		"extended": "^[0-9]{12,13}(\\+(([0-9]{2})|([0-9]{5}))){0,1}$"
 	},
 	"description": {
 		"en": "A globally recognized product identification code. Encodes manufacturer, product / variant, and store use codes."
