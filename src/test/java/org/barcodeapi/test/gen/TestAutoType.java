@@ -5,7 +5,27 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * TestAutoType.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ */
 public class TestAutoType extends ServerTestBase {
+	
+	@Test
+	public void testAutoType_AprilTag() {
+		
+		apiGet("tag36h10:0");
+		
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"AprilTag", getHeader("X-Barcode-Type"));
+
+		Assert.assertEquals("Code Data", //
+				encode("tag36h10:0"), getHeader("X-Barcode-Content"));
+	}
 
 	@Test
 	public void testAutoType_Codabar() {

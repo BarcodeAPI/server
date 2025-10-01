@@ -1,0 +1,28 @@
+{
+	"subscribers": [
+		{
+			"customer": "AppTest",
+			"subscribed": 1735693200000,
+			"active": true,
+			"enforce": true,
+			"limit": 1000,
+			"batch": 100,
+			"ips": [],
+			"keys": [
+				"appTest"
+			]
+		},
+		{
+			"customer": "BarcodeAPI.org",
+			"subscribed": 1735693200000,
+			"active": true,
+			"enforce": false,
+			"limit": -1,
+			"batch": 500,
+			"ips": [
+				"127.0.0.1"
+			],
+			"keys": []
+		}
+	]
+}

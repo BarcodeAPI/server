@@ -5,6 +5,11 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * TestServerRoot.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ */
 public class TestServerRoot extends ServerTestBase {
 
 	@Test
@@ -15,7 +20,8 @@ public class TestServerRoot extends ServerTestBase {
 		Assert.assertEquals("Response Code", //
 				HttpStatus.FOUND_302, getResponseCode());
 
-		// TODO Assert redirect to /index.html
+		Assert.assertTrue("Redirect", //
+				getHeader("Location").endsWith("/index.html"));
 	}
 
 	@Test
@@ -48,6 +54,7 @@ public class TestServerRoot extends ServerTestBase {
 		Assert.assertEquals("Response Code", //
 				HttpStatus.FOUND_302, getResponseCode());
 
-		// TODO Assert redirect to /api/auto/unknown.html
+		Assert.assertTrue("Redirect", //
+				getHeader("Location").endsWith("/api/auto/unknown.html"));
 	}
 }

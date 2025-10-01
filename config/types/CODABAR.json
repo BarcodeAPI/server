@@ -2,6 +2,7 @@
 	"name": "CODABAR",
 	"display": "CODABAR",
 	"show": true,
+	"decode": false,
 	"cache": true,
 	"target": [
 		"codabar"
@@ -13,7 +14,7 @@
 		"basic": 1,
 		"custom": 3
 	},
-	"checksum": false,
+	"checkdigit": 0,
 	"nonprinting": false,
 	"example": "1234567890",
 	"pattern": {

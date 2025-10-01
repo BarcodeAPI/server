@@ -2,6 +2,7 @@
 	"name": "Code128",
 	"display": "Code 128",
 	"show": true,
+	"decode": true,
 	"cache": true,
 	"target": [
 		"128",
@@ -15,11 +16,11 @@
 		"basic": 2,
 		"custom": 3
 	},
-	"checksum": false,
+	"checkdigit": 0,
 	"nonprinting": true,
 	"example": "Try Me!",
 	"pattern": {
-		"auto": "^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$",
+		"auto": "^[ !#$()*.\\/0-9=?A-Za-z~]{1,12}$",
 		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,48}$"
 	},
 	"description": {

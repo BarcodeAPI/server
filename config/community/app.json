@@ -13,7 +13,8 @@
 		"DataMatrix",
 		"PDF417",
 		"USPSMail",
-		"RoyalMail"
+		"RoyalMail",
+		"AprilTag"
 	],
 	"tasks": [
 		{
@@ -44,7 +45,7 @@
 		{
 			"name": "Limiter Minting",
 			"impl": ".LimiterMintingTask",
-			"interval": 60
+			"interval": 600
 		},
 		{
 			"name": "Share Cleanup",
@@ -71,50 +72,8 @@
 			"shortLife": 360
 		}
 	},
-	"limits": {
-		"enforce": false,
-		"default": 10000
-	},
-	"blacklist": [
-		"^_tstblk_$"
-	],
 	"client": {
 		"cacheStatic": 1440,
 		"cacheBarcode": 1440
-	},
-	"plans": [
-		{
-			"name": "Pro Tier",
-			"description": "Starting at 25,000 tokens per day.",
-			"support": "Basic technical support.",
-			"price": [
-				{
-					"name": "$15/mo",
-					"link": false
-				},
-				{
-					"name": "$150/yr",
-					"link": false
-				}
-			]
-		},
-		{
-			"name": "Enterprise",
-			"description": "Starting at 125,000 tokens per day.",
-			"support": "Priority support, 24/7.",
-			"price": [
-				{
-					"name": "$75/mo",
-					"link": false
-				},
-				{
-					"name": "$750/yr",
-					"link": false
-				}
-			]
-		}
-	],
-	"logins": {
-		"admin": "5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8"
 	}
 }

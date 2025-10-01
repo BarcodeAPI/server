@@ -1,12 +1,10 @@
 package org.barcodeapi.server.gen;
 
-import org.barcodeapi.core.AppConfig;
 import org.barcodeapi.core.utils.CodeUtils;
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.core.TypeSelector;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.liblog.LibLog;
@@ -15,7 +13,7 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
 /**
  * BarcodeRequest.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
  */
 public class BarcodeRequest {
 
@@ -23,9 +21,9 @@ public class BarcodeRequest {
 
 	private final String data;
 	private final boolean complex;
-	private final JSONObject options;
-
 	private final boolean cached;
+	private final boolean download;
+	private final JSONObject options;
 	private final int cost;
 
 	private BarcodeRequest(CodeType type, String data, JSONObject options) {
@@ -33,14 +31,17 @@ public class BarcodeRequest {
 
 		this.type = type;
 		this.data = data;
-		this.options = options;
 
 		// Use cache based on options and data length
+		this.options = options;
 		this.complex = ((options.length() > 0) || (data.length() >= 48));
 		this.cached = (type.getCacheEnable() && (!complex));
 
+		// User requested download
+		this.download = options.optBoolean("download", false);
+
 		// Calculate the cost of the request
-		boolean free = (data.equals(type.getExample()));
+		boolean free = (data.equals(type.getExample()) && (!complex));
 		int cost = (complex) ? type.getCostCustom() : type.getCostBasic();
 		this.cost = (free) ? 0 : cost;
 	}
@@ -64,6 +65,15 @@ public class BarcodeRequest {
 	}
 
 	/**
+	 * Returns true if the barcode is complex.
+	 * 
+	 * @return the barcode is complex
+	 */
+	public boolean isComplex() {
+		return complex;
+	}
+
+	/**
 	 * Returns the token cost for the request.
 	 * 
 	 * @return the barcode token cost
@@ -79,6 +89,15 @@ public class BarcodeRequest {
 	 */
 	public boolean useCache() {
 		return cached;
+	}
+
+	/**
+	 * Returns true if server should force a download.
+	 * 
+	 * @return true if force downloading
+	 */
+	public boolean forceDownload() {
+		return download;
 	}
 
 	/**
@@ -99,7 +118,7 @@ public class BarcodeRequest {
 
 		String opts = "";
 		for (String key : getOptions().keySet()) {
-			opts += (key + '=' + getOptions().getString(key) + '&');
+			opts += String.format("%s=%s&", key, getOptions().getString(key));
 		}
 
 		return String.format("/api/%s/%s?%s", //
@@ -216,15 +235,19 @@ public class BarcodeRequest {
 					new Throwable("Invalid data for selected code type."));
 		}
 
-		// Match against blacklist entries
-		JSONArray blacklist = AppConfig.get().getJSONArray("blacklist");
-		for (int x = 0; x < blacklist.length(); x++) {
+		// Check for broken URL schemas
+		if (target.matches("^(https?):/[^/].*")) {
 
-			// Fail if request matches blacklist entry
-			if (target.matches(blacklist.getString(x))) {
-				throw new GenerationException(ExceptionType.BLACKLIST, //
-						new Throwable("The request was rejected."));
-			}
+			// Fix the missing double slash
+			target = target.replaceFirst(":/", "://");
+		}
+
+		// Match against blacklist entries
+		if (CodeUtils.isBlacklisted(target)) {
+
+			// Fail if request is blacklisted
+			throw new GenerationException(ExceptionType.BLACKLIST, //
+					new Throwable("The request was rejected. Contact support."));
 		}
 
 		// Parse control characters
@@ -232,7 +255,31 @@ public class BarcodeRequest {
 			target = CodeUtils.parseControlChars(target);
 		}
 
-		// Get and parse options
+		// Parse checksum character
+		if (type.enforceChecksum()) {
+
+			// Calculate the expected checksum value for the data
+			int expected = CodeUtils.calculateChecksum(type.getCheckDigit(), target);
+
+			// Check if digit needs to be added
+			if (target.length() < type.getCheckDigit()) {
+
+				LibLog._logF("Request is missing check digit, adding %d", expected);
+				target = (target + expected);
+
+			} else if (target.length() >= type.getCheckDigit()) {
+
+				// Check if check digit is as expected
+				if ((target.charAt(type.getCheckDigit() - 1) - '0') != expected) {
+
+					// Fail if actual check digit is different then expected
+					throw new GenerationException(ExceptionType.CHECKSUM, //
+							new Throwable(String.format("Invalid checksum: expected %d", expected)));
+				}
+			}
+		}
+
+		// Get and parse request options
 		JSONObject opts = CodeUtils.parseOptions(type, options);
 
 		// Add back unparsed options
@@ -240,7 +287,7 @@ public class BarcodeRequest {
 			target += ("?" + options);
 		}
 
-		// Return the BarcodeRequest object
+		// Return the assembled BarcodeRequest object
 		return new BarcodeRequest(type, target, opts);
 	}
 }

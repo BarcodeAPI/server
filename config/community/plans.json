@@ -1,0 +1,10 @@
+{
+	"free": {
+		"limit": -1,
+		"enforce": false,
+		"batch": 5000,
+		"description": "Self hosted community server.",
+		"support": "Contact server admin for details."
+	},
+	"paid": []
+}

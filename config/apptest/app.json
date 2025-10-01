@@ -1,0 +1,44 @@
+{
+	"types": [
+		"UPC_E",
+		"UPC_A",
+		"EAN8",
+		"EAN13",
+		"CODABAR",
+		"ITF14",
+		"Code39",
+		"Code128",
+		"Aztec",
+		"QRCode",
+		"DataMatrix",
+		"PDF417",
+		"USPSMail",
+		"RoyalMail",
+		"AprilTag"
+	],
+	"tasks": [],
+	"cache": {
+		"_snapshots": "./cache/",
+		"barcode": {
+			"life": 10080,
+			"shortLife": 240
+		},
+		"session": {
+			"life": 20160,
+			"shortLife": 60
+		},
+		"limiter": {
+			"life": 4320,
+			"shortLife": 360
+		},
+		"share": {
+			"life": 129600,
+			"shortLife": 360
+		}
+	},
+	"client": {
+		"cacheStatic": 1440,
+		"cacheBarcode": 1440
+	}
+}
+

@@ -1,7 +1,8 @@
 {
 	"name": "USPSMail",
 	"display": "USPS Mail",
-	"show": true,
+	"show": false,
+	"decode": false,
 	"cache": true,
 	"target": [
 		"usps",
@@ -15,7 +16,7 @@
 		"basic": 1,
 		"custom": 2
 	},
-	"checksum": false,
+	"checkdigit": 0,
 	"nonprinting": false,
 	"example": "0123456709498765432101234567891",
 	"pattern": {

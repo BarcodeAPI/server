@@ -4,7 +4,8 @@ import java.util.Base64;
 
 import javax.servlet.http.Cookie;
 
-import org.barcodeapi.core.AppConfig;
+import org.barcodeapi.core.Config;
+import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.cache.CachedObject;
 import org.barcodeapi.server.cache.CachedSession;
 import org.barcodeapi.server.cache.ObjectCache;
@@ -19,6 +20,8 @@ import com.mclarkdev.tools.libextras.LibExtrasHashes;
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class SessionHelper {
+
+	private static final JSONObject _admins = Config.get(Cfg.Admins);
 
 	/**
 	 * Returns a user session object for the provided session key.
@@ -75,19 +78,20 @@ public class SessionHelper {
 	public static CachedSession getSession(Request request) {
 
 		// Get existing user session
-		CachedSession session = null;
-		if (request.getCookies() != null) {
-			for (Cookie cookie : request.getCookies()) {
-				if (cookie.getName().equals("session")) {
-					if ((session = //
-							getSession(cookie.getValue())) != null) {
-						break;
-					}
-				}
+		if (request.getCookies() == null) {
+			return null;
+		}
+
+		String sessionKey = null;
+		for (Cookie cookie : request.getCookies()) {
+			if (cookie.getName().equals("session")) {
+				sessionKey = cookie.getValue();
+				break;
 			}
 		}
 
-		return session;
+		// Lookup session if key found, else return null
+		return (sessionKey != null) ? getSession(sessionKey) : null;
 	}
 
 	/**
@@ -131,7 +135,6 @@ public class SessionHelper {
 		String passHash = LibExtrasHashes.sumSHA256(pWord.getBytes());
 
 		// Check if login exists in app config and return
-		JSONObject logins = AppConfig.get().getJSONObject("logins");
-		return (passHash.equals(logins.optString(uName)) ? uName : null);
+		return (passHash.equals(_admins.optString(uName)) ? uName : null);
 	}
 }

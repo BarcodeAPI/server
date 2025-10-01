@@ -14,6 +14,8 @@ body {
 .wrapper {
 	padding: 20px 30px;
 	max-width: 1080px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .header {
@@ -381,6 +383,31 @@ body {
 	}
 }
 
+.pad-top-8 {
+	padding-top: 8px;
+}
+
+.pad-top-16 {
+	padding-top: 16px;
+}
+
+.pad-top-24 {
+	padding-top: 24px;
+}
+
+.pad-bottom-8 {
+	padding-bottom: 8px;
+}
+
+.pad-bottom-16 {
+	padding-bottom: 16px;
+}
+
+.pad-bottom-24 {
+	padding-bottom: 24px;
+}
+
+
 /* \/ Text Field Focus Animation \/ */
 
 .pulse-bg {
@@ -458,6 +485,7 @@ body {
 	margin: 5px 5px 5px 0;
 	cursor: pointer;
 	transition: all 0.2s ease-in-out;
+	text-decoration: none;
 }
 
 .app-setup-types a:hover,
@@ -561,6 +589,8 @@ button[disabled] {
 	background-color: #999;
 }
 
+/* \/ Input Action Buttons \/ */
+
 .action-icon.action-clear:hover {
 	background-color: #ea4335;
 }
@@ -573,9 +603,9 @@ button[disabled] {
 	background-color: #ea4335;
 }
 
-.action-icon.action-download:hover {
-	background-color: #3232c0;
-}
+/* /\ Input Action Buttons /\ */
+
+/* \/ Barcode Quick Links \/ */
 
 .action-icon.action-print:hover {
 	background-color: #3232c0;
@@ -589,7 +619,11 @@ button[disabled] {
 	background-color: #3232c0;
 }
 
-/* /\ Icon Action Buttons /\ */
+.action-icon.action-download:hover {
+	background-color: #3232c0;
+}
+
+/* /\ Barcode Quick Links /\ */
 
 /* \/ Text Links \/ */
 
@@ -659,6 +693,7 @@ a:hover {
 /* \/ Rate Limit Plan Info \/ */
 
 .plan-overview {
+	display: none;
 	padding-top: 0.5em;
 }
 
@@ -771,7 +806,7 @@ a:hover {
 
 .example-code {
 	text-align: left;
-	overflow: scroll;
+	overflow: hidden;
 }
 
 .toc-link {

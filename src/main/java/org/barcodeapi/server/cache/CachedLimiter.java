@@ -91,8 +91,8 @@ public class CachedLimiter extends CachedObject {
 			double newCount = Math.min(tokenLimit, (oldCount + minted));
 
 			// update limiter
-			tokenCount = newCount;
-			timeMinted = timeNow;
+			this.tokenCount = newCount;
+			this.timeMinted = timeNow;
 
 			// return number of tokens added
 			return (newCount - oldCount);
@@ -118,6 +118,24 @@ public class CachedLimiter extends CachedObject {
 	}
 
 	/**
+	 * Returns the current number of tokens the caller has.
+	 * 
+	 * @return number of tokens the caller has
+	 */
+	public String getTokenCountStr() {
+		return String.format("%.2f", tokenCount);
+	}
+
+	/**
+	 * Returns true if limiter is unlimited.
+	 * 
+	 * @return true if limiter is unlimited
+	 */
+	public boolean isUnlimited() {
+		return (tokenCount == -1);
+	}
+
+	/**
 	 * Returns the number of tokens spent.
 	 * 
 	 * @return number of tokens spent
@@ -126,31 +144,48 @@ public class CachedLimiter extends CachedObject {
 		return tokenSpend;
 	}
 
+	public boolean checkBalance(double cost) {
+
+		// We have tokens and cost is more then we have
+		if ((this.tokenCount > 0) && (cost > this.tokenCount)) {
+
+			// Return based on enforcement
+			return (!isEnforced());
+		}
+
+		// Balance allows spend
+		return true;
+	}
+
 	/**
 	 * Spend a number of tokens.
 	 * 
-	 * @param count number of tokens to spend
+	 * @param cost number of tokens to spend
 	 * @return token spend successful
 	 */
-	public boolean spendTokens(double count) {
+	public boolean spendTokens(double cost) {
 
-		// Unlimited
-		if (this.tokenCount == -1) {
+		// Fail if spending negative
+		if (cost < 0) {
+			throw new IllegalArgumentException(//
+					"Token count cannot be less then 0.");
+		}
+
+		// Allow if unlimited balance
+		if (isUnlimited()) {
 			return true;
 		}
 
 		synchronized (this) {
 
-			// If cost is more then have
-			if (count > this.tokenCount) {
-
-				// Return based on enforcement
-				return (!isEnforced());
+			// Check existing balance
+			if (!checkBalance(cost)) {
+				return false;
 			}
 
-			// Set new token count
-			this.tokenSpend += count;
-			this.tokenCount -= count;
+			// Set new token counts
+			this.tokenSpend += cost;
+			this.tokenCount -= cost;
 
 			// Return true if spent
 			return true;
@@ -174,4 +209,5 @@ public class CachedLimiter extends CachedObject {
 				.put("tokenCount", getTokenCount())//
 				.put("tokenSpend", getTokenSpend()));
 	}
+
 }
