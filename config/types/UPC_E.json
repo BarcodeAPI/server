@@ -2,25 +2,26 @@
 	"name": "UPC_E",
 	"display": "UPC E",
 	"show": true,
+	"decode": true,
 	"cache": true,
 	"target": [
 		"e",
 		"upc-e",
 		"upce"
 	],
-	"generator": ".Ean8Generator",
+	"generator": ".UPCEGenerator",
 	"threads": 2,
 	"priority": 98,
 	"cost": {
 		"basic": 1,
 		"custom": 3
 	},
-	"checksum": true,
+	"checkdigit": 8,
 	"nonprinting": false,
 	"example": "01023459",
 	"pattern": {
-		"auto": "^(?=.*0)[0-9]{8}$",
-		"extended": "^(?=.*0)[0-9]{7,8}$"
+		"auto": "^(0|1)[0-9]{7}$",
+		"extended": "^(0|1)[0-9]{6,7}(\\+(([0-9]{2})|([0-9]{5}))){0,1}$"
 	},
 	"description": {
 		"en": "A compact version of UPC-A, removing unneeded '0's."

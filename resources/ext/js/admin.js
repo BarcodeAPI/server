@@ -15,9 +15,10 @@ function loadInfo() {
 
 function onLoadInfo(info) {
 
-	// display hostname and version
+	// display hostname, version, dist
 	document.getElementById("appHost").innerHTML = info.hostname;
 	document.getElementById("appVersion").innerHTML = info.version;
+	document.getElementById("appDist").innerHTML = info.dist;
 
 	// calculate uptime	in HH:MM
 	var sinceH = Math.floor((info.uptime / 1000 / 60 / 60)).toFixed(0);

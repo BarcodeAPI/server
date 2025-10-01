@@ -2,6 +2,7 @@
 	"name": "QRCode",
 	"display": "QR Code",
 	"show": true,
+	"decode": true,
 	"cache": true,
 	"target": [
 		"qr",
@@ -15,7 +16,7 @@
 		"basic": 3,
 		"custom": 3
 	},
-	"checksum": false,
+	"checkdigit": 0,
 	"nonprinting": true,
 	"example": "QR Barcode",
 	"pattern": {

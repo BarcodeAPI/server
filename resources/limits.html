@@ -47,9 +47,6 @@
 					<br />
 					<b>Tokens Remaining</b>:&nbsp;<span id="token_count"></span>
 				</div>
-				<div class="notice-enforced">
-					<br /><b>Note</b>:&nbsp;Rate limits are not enforced.
-				</div>
 			</div>
 		</div>
 
@@ -58,64 +55,46 @@
 				Unlock the full potential of BarcodeAPI.org with our API pricing plans!
 				<br />
 				<br />
-				Our 10,000 token per day <b>FREE</b> plan should be sufficient for most users.
+				Our <span class="free-limit"></span> token per day
+				<b>FREE</b> plan should be sufficient for most users.
 				<br />
 				<br />
 				For more information about tokens, check out the <a href="/api.html"
 					class="text-link anim icon-chevron">API Docs</a>
 			</div>
+			<div class="notice-enforced">
+				<br /><b>Note</b>:&nbsp;Rate limits are not currently enforced.
+			</div>
 		</div>
 
-		<div class="help-entry row center-xs middle-xs">
+		<div class="help-entry row center-xs middle-xs pad-top-24">
 			<div class="plan-free col-sm-6 col-xs-12">
 				<h2>Free Tier</h2>
 				<div>
 					<b>ALWAYS FREE</b>
-					<br />
-					<br />
-					Up to 10,000 tokens per day
-					<br />
-					<br />
-					Limited user support
+					<br /><br />
+					<span class="free-details"></span>
+					<br /><br />
+					<span class="free-support"></span>
 				</div>
 			</div>
 		</div>
 
-		<div class="row center-xs middle-xs">
-			<div class="plan-pro col-sm-6 col-xs-12">
-				<h2>Pro Tier</h2>
-				<div>
-					<b>$15/mo || $150/yr</b>
-					<br />
-					<br />
-					Starting at 25,000 tokens per day
-					<br />
-					+$5/mo for each additional 10k
-					<br />
-					<br />
-					Basic technical support.
-				</div>
-			</div>
-			<div class="plan-expert col-sm-6 col-xs-12">
-				<h2>Enterprise</h2>
-				<div>
-					<b>$75/mo || $150/yr</b>
-					<br />
-					<br />
-					Starting at 125,000 tokens per day
-					<br />
-					+$10/mo for each additional 25k
-					<br />
-					<br />
-					Priority support, 24/7.
-				</div>
+		<div class="row center-xs middle-xs pad-top-24" id="user-plans">
+			<div id="plan-template" class="plan-pro col-sm-6 col-xs-12">
+				<h2><span class="plan-name"></span></h2>
+				<b><span class="plan-prices"></span></b>
+				<br /><br />
+				<span class="plan-details"></span>
+				<br /><br />
+				<span class="plan-support"></span>
 			</div>
 		</div>
 
 		<br />
 		<br />
 
-		<div class="row center-xs middle-xs">
+		<div class="row center-xs middle-xs pad-top-24">
 			<div class="plan-links col-xs-12">
 				Additional user session cound be found at <a href="/session.html"
 					class="text-link anim icon-chevron">Session Info</a>

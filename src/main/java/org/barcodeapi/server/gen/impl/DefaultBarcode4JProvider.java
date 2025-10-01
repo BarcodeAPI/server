@@ -1,5 +1,7 @@
 package org.barcodeapi.server.gen.impl;
 
+import java.util.HashMap;
+
 import org.barcodeapi.server.core.CodeType;
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.BarcodeRequest;
@@ -8,11 +10,11 @@ import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.AbstractBarcodeBean;
 
-public abstract class DefaultBarcodeProvider extends CodeGenerator {
+public abstract class DefaultBarcode4JProvider extends CodeGenerator {
 
 	private final AbstractBarcodeBean generator;
 
-	public DefaultBarcodeProvider(CodeType codeType, AbstractBarcodeBean bean) {
+	public DefaultBarcode4JProvider(CodeType codeType, AbstractBarcodeBean bean) {
 		super(codeType);
 
 		this.generator = bean;
@@ -28,32 +30,35 @@ public abstract class DefaultBarcodeProvider extends CodeGenerator {
 
 		JSONObject options = request.getOptions();
 
+		HashMap<String, Object> defaults = //
+				request.getType().getDefaults();
+
 		int dpi = options.optInt("dpi", //
-				(Integer) getDefaults().getOrDefault("dpi", 150));
+				(Integer) defaults.getOrDefault("dpi", 100));
 
 		int module = options.optInt("module", //
-				(Integer) getDefaults().getOrDefault("module", 4));
+				(Integer) defaults.getOrDefault("module", 10));
 
 		int qz = options.optInt("qz", //
-				(Integer) getDefaults().getOrDefault("qz", 4));
+				(Integer) defaults.getOrDefault("qz", 3));
 
 		int height = options.optInt("height", //
-				(Integer) getDefaults().getOrDefault("height", 22));
+				(Integer) defaults.getOrDefault("height", 22));
 
 		int font = options.optInt("font", //
-				(Integer) getDefaults().getOrDefault("font", 5));
+				(Integer) defaults.getOrDefault("font", 5));
 
 		String text = options.optString("text", //
-				(String) getDefaults().getOrDefault("text", "bottom"));
+				(String) defaults.getOrDefault("text", "bottom"));
 
 		String pattern = options.optString("pattern", //
-				(String) getDefaults().getOrDefault("pattern", "_"));
+				(String) defaults.getOrDefault("pattern", "_"));
 
 		String colorFG = options.optString("fg", //
-				(String) getDefaults().getOrDefault("fg", "000000"));
+				(String) defaults.getOrDefault("fg", "000000"));
 
 		String colorBG = options.optString("bg", //
-				(String) getDefaults().getOrDefault("bg", "ffffff"));
+				(String) defaults.getOrDefault("bg", "ffffff"));
 
 		byte[] bytes;
 		synchronized (generator) {

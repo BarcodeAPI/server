@@ -1,28 +1,12 @@
 package org.barcodeapi.test.gen.types;
 
 import org.barcodeapi.server.ServerTestBase;
-import org.barcodeapi.server.core.GenerationException;
+import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestEan13 extends ServerTestBase {
-
-	@Test
-	public void testEan13_12Nums() {
-
-		apiGet("13/123456789012");
-
-		Assert.assertEquals("Response Code", //
-				HttpStatus.OK_200, getResponseCode());
-
-		Assert.assertEquals("Code Type", //
-				"EAN13", getHeader("X-Barcode-Type"));
-
-		Assert.assertEquals("Code Data", //
-				"123456789012", getHeader("X-Barcode-Content"));
-	}
 
 	@Test
 	public void testEan13_13Nums() {
@@ -40,12 +24,31 @@ public class TestEan13 extends ServerTestBase {
 	}
 
 	@Test
+	public void testEan13_12Nums() {
+
+		apiGet("13/123456789012");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"EAN13", getHeader("X-Barcode-Type"));
+
+		// Checksum is filled in
+		Assert.assertEquals("Code Data", //
+				"1234567890128", getHeader("X-Barcode-Content"));
+	}
+
+	@Test
 	public void testEan13_13NumsInvalidChecksum() throws Exception {
 
 		apiGet("13/1234567890123");
 
 		Assert.assertEquals("Response Code", //
-				GenerationException.ExceptionType.CHECKSUM.getStatusCode(), getResponseCode());
+				ExceptionType.CHECKSUM.getStatusCode(), getResponseCode());
+
+		Assert.assertEquals("Error Message", //
+				"Invalid checksum: expected 8", getHeader("X-Error-Message"));
 	}
 
 	@Test
@@ -54,7 +57,10 @@ public class TestEan13 extends ServerTestBase {
 		apiGet("13/12345678901");
 
 		Assert.assertEquals("Response Code", //
-				HttpStatus.BAD_REQUEST_400, getResponseCode());
+				ExceptionType.INVALID.getStatusCode(), getResponseCode());
+
+		Assert.assertEquals("Response Message", //
+				"Invalid data for selected code type.", getHeader("X-Error-Message"));
 	}
 
 	@Test
@@ -63,7 +69,10 @@ public class TestEan13 extends ServerTestBase {
 		apiGet("13/12345678901234");
 
 		Assert.assertEquals("Response Code", //
-				HttpStatus.BAD_REQUEST_400, getResponseCode());
+				ExceptionType.INVALID.getStatusCode(), getResponseCode());
+
+		Assert.assertEquals("Response Message", //
+				"Invalid data for selected code type.", getHeader("X-Error-Message"));
 	}
 
 	@Test
@@ -72,7 +81,10 @@ public class TestEan13 extends ServerTestBase {
 		apiGet("13/123456789O123");
 
 		Assert.assertEquals("Response Code", //
-				HttpStatus.BAD_REQUEST_400, getResponseCode());
+				ExceptionType.INVALID.getStatusCode(), getResponseCode());
+
+		Assert.assertEquals("Response Message", //
+				"Invalid data for selected code type.", getHeader("X-Error-Message"));
 	}
 
 	@Test
@@ -81,16 +93,21 @@ public class TestEan13 extends ServerTestBase {
 		apiGet("13/!@");
 
 		Assert.assertEquals("Response Code", //
-				HttpStatus.BAD_REQUEST_400, getResponseCode());
+				ExceptionType.INVALID.getStatusCode(), getResponseCode());
+
+		Assert.assertEquals("Response Message", //
+				"Invalid data for selected code type.", getHeader("X-Error-Message"));
 	}
 
 	@Test
-	@Ignore
 	public void testEan13_WithUnicode() throws Exception {
 
 		apiGet("13/Ω");
 
 		Assert.assertEquals("Response Code", //
-				HttpStatus.BAD_REQUEST_400, getResponseCode());
+				ExceptionType.INVALID.getStatusCode(), getResponseCode());
+
+		Assert.assertEquals("Response Message", //
+				"Invalid data for selected code type.", getHeader("X-Error-Message"));
 	}
 }

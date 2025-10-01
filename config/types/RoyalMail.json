@@ -2,6 +2,7 @@
 	"name": "RoyalMail",
 	"display": "Royal Mail",
 	"show": false,
+	"decode": false,
 	"cache": true,
 	"target": [
 		"royal",
@@ -14,7 +15,7 @@
 		"basic": 1,
 		"custom": 1
 	},
-	"checksum": false,
+	"checkdigit": 0,
 	"nonprinting": false,
 	"example": "11212345612345678",
 	"pattern": {

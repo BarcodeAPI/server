@@ -1,5 +1,7 @@
 package org.barcodeapi.server.core;
 
+import java.util.HashMap;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,6 +21,8 @@ public class CodeType {
 
 	private final boolean show;
 
+	private final boolean decode;
+
 	private final boolean cache;
 
 	private final String generator;
@@ -28,7 +32,7 @@ public class CodeType {
 	private final String patternA;
 	private final String patternE;
 
-	private final boolean checksum;
+	private final int checkdigit;
 	private final boolean nonprinting;
 
 	private final String[] targets;
@@ -42,6 +46,8 @@ public class CodeType {
 
 	private final JSONObject options;
 
+	private final HashMap<String, Object> defaults;
+
 	private CodeType(JSONObject config) {
 		this.config = config;
 
@@ -52,11 +58,16 @@ public class CodeType {
 		// show on web UI
 		this.show = config.getBoolean("show");
 
+		// is decoding supported
+		this.decode = config.getBoolean("decode");
+
 		// enable caching
 		this.cache = config.getBoolean("cache");
 
-		// generator config
+		// generator java class
 		this.generator = (GEN_ROOT + config.getString("generator"));
+
+		// max threads to use
 		this.threads = config.getInt("threads");
 
 		// get barcode patterns
@@ -65,9 +76,9 @@ public class CodeType {
 		this.patternE = config.getJSONObject("pattern").getString("extended");
 
 		// supports checksums
-		this.checksum = config.getBoolean("checksum");
+		this.checkdigit = config.getInt("checkdigit");
 
-		// has nonprinting support
+		// has non-printing character support
 		this.nonprinting = config.getBoolean("nonprinting");
 
 		// setup list of targets
@@ -89,10 +100,16 @@ public class CodeType {
 
 		// get available options
 		this.options = config.getJSONObject("options");
+
+		// parse format defaults
+		this.defaults = new HashMap<>();
+		for (String optionName : options.keySet()) {
+			this.defaults.put(optionName, //
+					options.getJSONObject(optionName).get("default"));
+		}
 	}
 
 	public JSONObject getConfig() {
-
 		return config;
 	}
 
@@ -106,6 +123,10 @@ public class CodeType {
 
 	public boolean getShowType() {
 		return show;
+	}
+
+	public boolean getDecodeSupported() {
+		return decode;
 	}
 
 	public boolean getCacheEnable() {
@@ -132,8 +153,12 @@ public class CodeType {
 		return patternE;
 	}
 
+	public int getCheckDigit() {
+		return checkdigit;
+	}
+
 	public boolean enforceChecksum() {
-		return checksum;
+		return (checkdigit > 0);
 	}
 
 	public boolean getAllowNonprinting() {
@@ -168,16 +193,21 @@ public class CodeType {
 		return options;
 	}
 
+	public HashMap<String, Object> getDefaults() {
+		return defaults;
+	}
+
 	public static CodeType fromJSON(JSONObject conf) {
 
 		return new CodeType(conf);
 	}
 
-	public static JSONObject toJSON(CodeType type) {
+	public static final JSONObject toJSON(CodeType type) {
 		return new JSONObject()//
 				.put("name", type.getName())//
 				.put("display", type.getDisplayName())//
 				.put("show", type.getShowType())//
+				.put("decode", type.getDecodeSupported())//
 				.put("pattern", type.getPatternExtended())//
 				.put("example", type.getExample())//
 				.put("checksum", type.enforceChecksum())//

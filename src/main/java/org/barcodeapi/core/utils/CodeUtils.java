@@ -4,7 +4,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
+import org.barcodeapi.core.Config;
+import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.core.CodeType;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;
@@ -15,6 +18,30 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class CodeUtils {
+
+	private static final String[] blacklist;
+
+	static {
+		JSONArray asJSON = Config.get(Cfg.Blacklist).getJSONArray("blacklist");
+		blacklist = new String[asJSON.length()];
+		for (int x = 0; x < asJSON.length(); x++) {
+			blacklist[x] = asJSON.getString(x);
+		}
+	}
+
+	public static boolean isBlacklisted(String data) {
+
+		// Loop each blacklist item
+		for (String entry : blacklist) {
+
+			// Check if string is blacklisted
+			if (data.matches(entry)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	/**
 	 * Converts a data string into a string containing control characters; Any
@@ -56,13 +83,13 @@ public class CodeUtils {
 	 * @param count the number of digits
 	 * @return the checksum value
 	 */
-	public static int calculateEanChecksum(String data, int count) {
+	public static int calculateChecksum(int checkDigit, String data) {
 		LibMetrics.hitMethodRunCounter();
 
 		int sum0, sum1 = sum0 = 0;
-		for (int x = count; x > 1; x--) {
+		for (int x = checkDigit; x > 1; x--) {
 
-			int digit = Character.getNumericValue(data.charAt(count - x));
+			int digit = Character.getNumericValue(data.charAt(checkDigit - x));
 
 			if (x % 2 == 0) {
 				sum1 += (3 * digit);
@@ -143,6 +170,11 @@ public class CodeUtils {
 	public static JSONObject parseOptions(CodeType type, String opts) {
 		LibMetrics.hitMethodRunCounter();
 
+		// No options if blank
+		if (opts.isBlank()) {
+			return (new JSONObject());
+		}
+
 		// Loop each supplied option
 		JSONObject options = new JSONObject();
 		for (String option : opts.split("&")) {
@@ -150,12 +182,25 @@ public class CodeUtils {
 			// Split on [key=value]
 			String[] kv = option.split("=");
 
-			// If supported key
-			if (type.getOptions().has(kv[0])) {
+			// Key is first part
+			String _key = kv[0].toLowerCase();
 
-				// Add to option map
-				options.put(kv[0], //
-						(kv.length == 2) ? kv[1] : true);
+			// Value is second (optional) part
+			String _val = (kv.length == 2) ? //
+					kv[1].toLowerCase() : "true";
+
+			// Check if supported by type
+			if (type.getOptions().has(_key)) {
+
+				// Skip if default
+				if (String.valueOf(//
+						type.getDefaults().get(_key))//
+						.equals(_val)) {
+					continue;
+				}
+
+				// Add to render option map
+				options.put(_key, _val);
 			}
 		}
 

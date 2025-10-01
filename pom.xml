@@ -50,6 +50,7 @@
 	</build>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
@@ -72,6 +73,12 @@
 			<groupId>com.google.zxing</groupId>
 			<artifactId>javase</artifactId>
 			<version>3.5.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mclarkdev.tools</groupId>
+			<artifactId>libapriltag</artifactId>
+			<version>1.5.0</version>
 		</dependency>
 
 		<dependency>

@@ -3,6 +3,7 @@ package org.barcodeapi.server.core;
 import java.io.IOException;
 import java.net.InetAddress;
 
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +17,7 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
 /**
  * RestHandler.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
  */
 public abstract class RestHandler extends AbstractHandler {
 
@@ -32,12 +33,14 @@ public abstract class RestHandler extends AbstractHandler {
 
 	private final boolean createSessions;
 
+	private boolean enableMultipart = false;
+
 	public RestHandler() {
 		this(false, false, true);
 	}
 
-	public RestHandler(boolean autoRequired) {
-		this(autoRequired, false, true);
+	public RestHandler(boolean authRequired) {
+		this(authRequired, false, true);
 	}
 
 	public RestHandler(boolean authRequired, boolean rateLimited) {
@@ -79,6 +82,14 @@ public abstract class RestHandler extends AbstractHandler {
 		return createSessions;
 	}
 
+	public void enableMultipart(boolean enable) {
+		this.enableMultipart = enable;
+	}
+
+	public boolean multipartEnabled() {
+		return enableMultipart;
+	}
+
 	public void _impl(String target, Request baseRequest, HttpServletRequest request, //
 			HttpServletResponse response) throws IOException, ServletException {
 	}
@@ -92,15 +103,17 @@ public abstract class RestHandler extends AbstractHandler {
 		// Hit the counters
 		getStats().hitCounter("request", "count");
 		getStats().hitCounter("request", "method", ctx.getMethod());
+		getStats().hitCounter("request", "secure", (ctx.isSecure() ? "yes" : "no"));
 		getStats().hitCounter("request", "target", _NAME, "count");
 		getStats().hitCounter("request", "target", _NAME, "method", ctx.getMethod());
 
 		// Skip if already handled
-		if (!baseRequest.isHandled()) {
-			baseRequest.setHandled(true);
-		} else {
+		if (baseRequest.isHandled()) {
 			return;
 		}
+
+		// Set as handled by us
+		baseRequest.setHandled(true);
 
 		// Log the request
 		LibLog.clogF("request", //
@@ -148,6 +161,14 @@ public abstract class RestHandler extends AbstractHandler {
 			return;
 		}
 
+		// Setup accept multi-part
+		if (enableMultipart) {
+			baseRequest.setAttribute(Request.MULTIPART_CONFIG_ELEMENT, new MultipartConfigElement("./"));
+			if (!baseRequest.getContentType().startsWith("multipart/")) {
+				return;
+			}
+		}
+
 		try {
 
 			// Run raw implementation overrides
@@ -176,7 +197,7 @@ public abstract class RestHandler extends AbstractHandler {
 	}
 
 	/**
-	 * The implemented logic to run on execution of the handler..
+	 * The implemented logic to run on execution of the handler.
 	 * 
 	 * @param ctx      the request context
 	 * @param response the server response

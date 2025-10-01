@@ -26,7 +26,7 @@ public class SubscriberReloadHandler extends RestHandler {
 
 		// Reload the subscribers list
 		SubscriberCache.reload();
-		
+
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setHeader("Content-Type", "application/json");

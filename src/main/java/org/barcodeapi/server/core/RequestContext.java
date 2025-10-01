@@ -8,6 +8,7 @@ import org.barcodeapi.server.cache.CachedSession;
 import org.barcodeapi.server.cache.LimiterCache;
 import org.barcodeapi.server.cache.Subscriber;
 import org.barcodeapi.server.cache.SubscriberCache;
+import org.eclipse.jetty.http.HttpURI;
 import org.eclipse.jetty.server.Request;
 
 /**
@@ -74,17 +75,19 @@ public class RequestContext {
 	private final String ip;
 	private final String fwd;
 
+	private final boolean secure;
+
 	private final String method;
 
 	private final String uri;
+
+	private final Format[] formats;
 
 	private final int body;
 
 	private final String origin;
 
 	private final String source;
-
-	private final Format[] formats;
 
 	private final String admin;
 
@@ -99,12 +102,6 @@ public class RequestContext {
 		// Request time
 		this.ts = System.currentTimeMillis();
 
-		// Update scheme is via proxy
-		String proto = request.getHeader("X-Forwarded-Proto");
-		if (proto != null) {
-			request.getMetaData().getURI().setScheme(proto);
-		}
-
 		// Get origin IP address / proxy
 		String ip = request.getRemoteAddr();
 		String fwd = request.getHeader("X-Forwarded-For");
@@ -113,11 +110,23 @@ public class RequestContext {
 		this.fwd = (fwd == null) ? null : ip;
 		this.ip = (fwd == null) ? ip : fwd;
 
+		// Update scheme if via proxy
+		HttpURI uri = request.getMetaData().getURI();
+		String proto = request.getHeader("X-Forwarded-Proto");
+		uri.setScheme(proto != null ? proto : "http");
+
+		// The request is secure to the client
+		this.secure = uri.getScheme().equals("https");
+
 		// The request method
 		this.method = request.getMethod();
 
 		// Get the request URI
 		this.uri = request.getOriginalURI();
+
+		// Determine output format and encoding
+		this.formats = Format.parse(//
+				request.getHeader("Accept"));
 
 		// Size of the request body
 		this.body = request.getContentLength();
@@ -132,6 +141,7 @@ public class RequestContext {
 		// Determine the associated subscriber by IP
 		Subscriber user = null;
 
+		// Check if authenticating with login or API key
 		String admin = null;
 		String authStr = request.getHeader("Authorization");
 
@@ -147,29 +157,26 @@ public class RequestContext {
 		}
 
 		// Lookup user based on IP
-		if(user == null) {
+		if (user == null) {
 			user = SubscriberCache.getByIP(ip);
 		}
 
 		// User ID based on customer association or IP
 		String userID = (user != null) ? user.getCustomer() : ip;
-		
+
 		this.admin = admin;
 		this.subscriber = user;
 		this.limiter = LimiterCache.getLimiter(user, userID);
 
 		// Get user session info
-		CachedSession tmpSession = SessionHelper.getSession(request);
-		this.session = (tmpSession != null) ? tmpSession : //
+		CachedSession userSession = SessionHelper.getSession(request);
+		this.session = (userSession != null) ? userSession : //
 				((createSession) ? SessionHelper.createSession() : null);
 
-		// Hit the session
+		// Hit the session if it exists
 		if (this.session != null) {
 			session.hit(ip, request.getOriginalURI().toString());
 		}
-
-		// Determine output format and encoding
-		this.formats = Format.parse(request.getHeader("Accept"));
 	}
 
 	/**
@@ -209,6 +216,15 @@ public class RequestContext {
 	}
 
 	/**
+	 * Returns true if the request is secure to the client.
+	 * 
+	 * @return the request is secure to the client
+	 */
+	public boolean isSecure() {
+		return this.secure;
+	}
+
+	/**
 	 * Returns the method for the request.
 	 * 
 	 * @return the method for the request
@@ -224,6 +240,15 @@ public class RequestContext {
 	 */
 	public String getUri() {
 		return this.uri;
+	}
+
+	/**
+	 * Returns the requested output format.
+	 * 
+	 * @return the requested output format
+	 */
+	public Format[] getFormats() {
+		return this.formats;
 	}
 
 	/**
@@ -262,15 +287,6 @@ public class RequestContext {
 	 */
 	public String getSource() {
 		return this.source;
-	}
-
-	/**
-	 * Returns the requested output format.
-	 * 
-	 * @return the requested output format
-	 */
-	public Format[] getFormats() {
-		return this.formats;
 	}
 
 	/**

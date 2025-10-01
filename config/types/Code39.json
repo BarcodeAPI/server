@@ -2,6 +2,7 @@
 	"name": "Code39",
 	"display": "Code 39",
 	"show": true,
+	"decode": true,
 	"cache": true,
 	"target": [
 		"39",
@@ -15,7 +16,7 @@
 		"basic": 2,
 		"custom": 3
 	},
-	"checksum": false,
+	"checkdigit": 0,
 	"nonprinting": false,
 	"example": "TRY 39",
 	"pattern": {

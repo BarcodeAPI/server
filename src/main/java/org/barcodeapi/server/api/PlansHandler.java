@@ -4,11 +4,12 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.core.AppConfig;
+import org.barcodeapi.core.Config;
+import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
-import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * PlansHandler.java
@@ -17,8 +18,7 @@ import org.json.JSONException;
  */
 public class PlansHandler extends RestHandler {
 
-	private static final JSONArray plansInfo = //
-			AppConfig.get().getJSONArray("plans");
+	private static final JSONObject plansInfo = Config.get(Cfg.Plans);
 
 	public PlansHandler() {
 		super();

@@ -1,0 +1,41 @@
+{
+	"name": "AprilTag",
+	"display": "April Tag",
+	"show": false,
+	"decode": false,
+	"cache": true,
+	"target": [
+		"april",
+		"apriltag"
+	],
+	"generator": ".AprilTagGenerator",
+	"threads": 2,
+	"priority": 65,
+	"cost": {
+		"basic": 1,
+		"custom": 1
+	},
+	"checkdigit": 0,
+	"nonprinting": false,
+	"example": "tag36h11:0",
+	"pattern": {
+		"auto": "^tag.*:[0-9]{1,5}$",
+		"extended": "^tag.*:[0-9]{1,5}$"
+	},
+	"description": {
+		"en": "AprilTag.\n\nSupported types:\ntag16h5\ntag25h9\ntag36h9\ntag36h10\ntag36h11\ntagCircle21h7\ntagCircle49h12\ntagCustom48h\ntagStandard41h12\ntagStandard52h13\n\nCall as: /api/april/$type:$id"
+	},
+	"wiki": {
+		"en": "https://github.com/AprilRobotics/apriltag"
+	},
+	"options": {
+		"scale": {
+			"name": "Scale",
+			"type": "number",
+			"default": 8,
+			"min": 1,
+			"max": 20,
+			"step": 1
+		}
+	}
+}

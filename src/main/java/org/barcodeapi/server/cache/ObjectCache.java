@@ -9,7 +9,8 @@ import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.barcodeapi.core.AppConfig;
+import org.barcodeapi.core.Config;
+import org.barcodeapi.core.Config.Cfg;
 
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
@@ -25,7 +26,7 @@ public class ObjectCache {
 	public static final String CACHE_SESSIONS = "_sessions";
 	public static final String CACHE_LIMITERS = "_limiters";
 
-	private static final String SNAPSHOT_DIR = AppConfig.get()//
+	private static final String SNAPSHOT_DIR = Config.get(Cfg.App)//
 			.getJSONObject("cache").getString("_snapshots");
 
 	private static final LibMetrics stats = LibMetrics.instance();
@@ -42,18 +43,19 @@ public class ObjectCache {
 	private final String name;
 	private final File cacheFile;
 
-	private final ConcurrentHashMap<String, CachedObject> cache;
+	private final Map<String, CachedObject> cache;
 
 	public ObjectCache(String name) {
 
 		this.name = name;
 		this.cacheFile = new File(cacheDir, //
-				String.format("cache-%s.snap", name));
+				String.format("cache-%s.snapshot", name));
 
-		ConcurrentHashMap<String, CachedObject> c = loadSnapshot();
-		c = (c != null) ? c : new ConcurrentHashMap<String, CachedObject>();
+		// Attempt to load existing snapshot from disk
+		ConcurrentHashMap<String, CachedObject> snapshot = loadSnapshot();
 
-		this.cache = c;
+		// Cache as snapshot, or create new cache
+		this.cache = (snapshot != null) ? snapshot : new ConcurrentHashMap<>();
 	}
 
 	public String getName() {
@@ -61,7 +63,8 @@ public class ObjectCache {
 		return name;
 	}
 
-	public ConcurrentHashMap<String, CachedObject> raw() {
+	public Map<String, CachedObject> raw() {
+
 		return cache;
 	}
 
@@ -118,7 +121,7 @@ public class ObjectCache {
 		return cache.remove(key);
 	}
 
-	public int saveSnapshot() throws IOException {
+	public int saveSnapshot() {
 
 		// Make directory
 		if (!cacheDir.exists()) {
@@ -130,26 +133,53 @@ public class ObjectCache {
 			cacheFile.delete();
 		}
 
-		// Open file output streams
-		FileOutputStream st = new FileOutputStream(cacheFile);
-		ObjectOutputStream str = new ObjectOutputStream(st);
+		FileOutputStream fileStream = null;
+		ObjectOutputStream objStream = null;
 
-		int count;
-		synchronized (cache) {
+		try {
 
-			count = cache.size();
-			str.writeObject(cache);
+			// Open file / object output streams
+			fileStream = new FileOutputStream(cacheFile);
+			objStream = new ObjectOutputStream(fileStream);
+
+			int count;
+			synchronized (cache) {
+
+				count = cache.size();
+				if (count == 0) {
+					return 0;
+				}
+
+				// write cache to disk
+				objStream.writeObject(cache);
+			}
+
+			return count;
+		} catch (IOException ex) {
+			return 0;
+		} finally {
+
+			try {
+				// close object stream
+				if (objStream != null) {
+					objStream.close();
+				}
+			} catch (IOException e) {
+			}
+			try {
+				// close file stream
+				if (fileStream != null) {
+					fileStream.close();
+				}
+			} catch (IOException e) {
+			}
 		}
-
-		str.close();
-		st.close();
-
-		return count;
 	}
 
 	@SuppressWarnings("unchecked")
 	private ConcurrentHashMap<String, CachedObject> loadSnapshot() {
 
+		// Skip if not exists
 		if (!cacheFile.exists()) {
 			return null;
 		}
@@ -162,7 +192,7 @@ public class ObjectCache {
 			// Read the cache file as a map
 			c = ((ConcurrentHashMap<String, CachedObject>) str.readObject());
 
-		} catch (Exception e) {
+		} catch (Error | Exception e) {
 
 			// Log the failure
 			LibLog._clog("E2603", e);

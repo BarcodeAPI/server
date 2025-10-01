@@ -2,6 +2,7 @@
 	"name": "EAN13",
 	"display": "EAN 13",
 	"show": true,
+	"decode": true,
 	"cache": true,
 	"target": [
 		"13",
@@ -15,7 +16,7 @@
 		"basic": 1,
 		"custom": 2
 	},
-	"checksum": true,
+	"checkdigit": 13,
 	"nonprinting": false,
 	"example": "1234567890128",
 	"pattern": {

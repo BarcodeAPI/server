@@ -20,6 +20,8 @@ import com.mclarkdev.tools.libobjectpooler.LibObjectPoolerException;
  */
 public class BarcodeGenerator {
 
+	private static final LibMetrics stats = LibMetrics.instance();
+
 	private static final CodeGenerators generators = CodeGenerators.getInstance();
 
 	private BarcodeGenerator() {
@@ -42,6 +44,7 @@ public class BarcodeGenerator {
 		CodeType type = request.getType();
 		String typeName = type.getName();
 		String data = request.getData();
+		boolean cplx = request.isComplex();
 
 		// The barcode image object
 		CachedBarcode barcode = null;
@@ -68,14 +71,12 @@ public class BarcodeGenerator {
 		try {
 
 			// Get a generator from the pool
-			generator = pool.getWait();
+			generator = pool.getWait(750);
 
 			// Update global and engine counters
-			LibMetrics.instance().hitCounter("render", "count");
-			LibMetrics.instance().hitCounter("render", "type", typeName, "count");
-
-			// Run implementation specific validations
-			generator.onValidateRequest(request);
+			stats.hitCounter("render", "count");
+			stats.hitCounter("render", "type", typeName, "count");
+			stats.hitCounter("render", "type", typeName, "complex", (cplx ? "yes" : "no"));
 
 			// Render new image and get the bytes
 			byte[] png = generator.onRender(request);
@@ -95,8 +96,8 @@ public class BarcodeGenerator {
 		} catch (GenerationException e) {
 
 			// Update global and engine counters
-			LibMetrics.instance().hitCounter("render", "invalid");
-			LibMetrics.instance().hitCounter("render", "type", typeName, "invalid");
+			stats.hitCounter("render", "invalid");
+			stats.hitCounter("render", "type", typeName, "invalid");
 
 			// Pass it up
 			throw e;
@@ -104,8 +105,8 @@ public class BarcodeGenerator {
 		} catch (LibObjectPoolerException e) {
 
 			// Update global and engine counters
-			LibMetrics.instance().hitCounter("render", "busy");
-			LibMetrics.instance().hitCounter("render", "type", typeName, "busy");
+			stats.hitCounter("render", "busy");
+			stats.hitCounter("render", "type", typeName, "busy");
 
 			// Failed if unable to get generator from pool
 			throw new GenerationException(ExceptionType.BUSY, //
@@ -114,8 +115,8 @@ public class BarcodeGenerator {
 		} catch (Exception | Error e) {
 
 			// Update global and engine counters
-			LibMetrics.instance().hitCounter("render", "fail");
-			LibMetrics.instance().hitCounter("render", "type", typeName, "fail");
+			stats.hitCounter("render", "fail");
+			stats.hitCounter("render", "type", typeName, "fail");
 
 			// Generation itself failed
 			throw new GenerationException(ExceptionType.FAILED, //
@@ -124,8 +125,8 @@ public class BarcodeGenerator {
 
 			// Update global and engine counters
 			int time = (int) (System.currentTimeMillis() - start);
-			LibMetrics.instance().hitCounter(time, "render", "time");
-			LibMetrics.instance().hitCounter(time, "render", "type", typeName, "time");
+			stats.hitCounter(time, "render", "time");
+			stats.hitCounter(time, "render", "type", typeName, "time");
 
 			// Release the generator back to the pool
 			if (generator != null) {

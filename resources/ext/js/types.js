@@ -56,9 +56,12 @@ function addType(type) {
 	info.querySelector(".type-cost-basic").innerHTML = type.costBasic;
 	info.querySelector(".type-cost-custom").innerHTML = type.costCustom;
 
+	var homeLink = ("index.html#" + target);
+	info.querySelector(".type-gen").href = homeLink;
+
 	var moreLink = ("type.html#" + target);
-	info.querySelector(".type-example-link").href = moreLink;
 	info.querySelector(".type-more").href = moreLink;
+	info.querySelector(".type-example-link").href = moreLink;
 
 	document.getElementById("barcode-types").append(info);
 }

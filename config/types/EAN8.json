@@ -2,6 +2,7 @@
 	"name": "EAN8",
 	"display": "EAN 8",
 	"show": true,
+	"decode": true,
 	"cache": true,
 	"target": [
 		"8",
@@ -15,12 +16,12 @@
 		"basic": 1,
 		"custom": 2
 	},
-	"checksum": true,
+	"checkdigit": 8,
 	"nonprinting": false,
 	"example": "01234565",
 	"pattern": {
 		"auto": "^[0-9]{8}$",
-		"extended": "^[0-9]{7,8}$"
+		"extended": "^[0-9]{7,8}(\\+(([0-9]{2})|([0-9]{5}))){0,1}$"
 	},
 	"description": {
 		"en": "Derived from the longer EAN-13 UPC code. For smaller packages."

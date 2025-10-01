@@ -1,0 +1,27 @@
+{
+	"free": {
+		"limit": 1000,
+		"enforce": true,
+		"batch": 25,
+		"description": "System Test: Up to 1,000 tokens per day.",
+		"support": "Not safe for Humans."
+	},
+	"paid": [
+		{
+			"name": "AppTest Subscribers",
+			"description": "System Test: More tokens for paying users.",
+			"support": "Application is provided as-is.",
+			"price": [
+				{
+					"name": "$10/mo",
+					"link": false
+				},
+				{
+					"name": "$100/yr",
+					"link": false
+				}
+			]
+		}
+	]
+}
+

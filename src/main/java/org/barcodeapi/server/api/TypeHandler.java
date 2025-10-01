@@ -19,11 +19,14 @@ import org.json.JSONException;
  */
 public class TypeHandler extends RestHandler {
 
+	// Static map of JSON responses
 	private static final HashMap<CodeType, String> asJSON;
 
 	static {
 		asJSON = new HashMap<>();
 		CodeTypes types = CodeTypes.inst();
+
+		// Convert each type to JSON, and cache
 		for (String type : types.getTypes()) {
 			CodeType t = types.getType(type);
 			asJSON.put(t, CodeType.toJSON(t).toString());

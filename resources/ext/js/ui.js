@@ -1,6 +1,6 @@
 //
 // BarcodeAPI.org, 2017-2025
-// ui.js
+// ui.js (Community)
 //
 
 // Time page load began
@@ -12,12 +12,11 @@ const timeStart = new Date();
 const appConfig = {
 	'showLinkBulk': true,
 	'showLinkMulti': true,
-	'showLinkDecode': false,
+	'showLinkDecode': true,
 	'showTokenCount': false,
 	'showLimitsNotice': false,
 	'showRenderOptions': true,
-	'showHiddenTypes': false,
-
+	'showHiddenTypes': true,
 	'userLanguage': 'en'
 };
 
@@ -27,7 +26,7 @@ const appConfig = {
 const appFeatures = {
 
 	// Firefox unsupported
-	'copyImage': (navigator.userAgent.indexOf("Firefox") == -1),
+	'copyImage': false,
 
 	// Must be secure context
 	'copyURL': window.isSecureContext,
@@ -167,11 +166,9 @@ function uiAddListener(elem, handler, event) {
  * Tracking event handler
  */
 function trackingEvent(category, action, event, value) {
-	
-	// Check if Matomo enabled
-	if (appFeatures.matomoTracking.enabled) {
 
-		// Push to Matomo
+	// Check if enabled and push to matomo
+	if (appFeatures.matomoTracking.enabled) {
 		window._paq.push(['trackEvent', category, action, event, value]);
 	}
 }

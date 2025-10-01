@@ -1,7 +1,7 @@
 package org.barcodeapi.server.gen.types;
 
 import org.barcodeapi.server.core.CodeType;
-import org.barcodeapi.server.gen.impl.DefaultBarcodeProvider;
+import org.barcodeapi.server.gen.impl.DefaultBarcode4JProvider;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
 
 /**
@@ -9,7 +9,7 @@ import org.krysalis.barcode4j.impl.code39.Code39Bean;
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
-public class Code39Generator extends DefaultBarcodeProvider {
+public class Code39Generator extends DefaultBarcode4JProvider {
 
 	public Code39Generator(CodeType codeType) {
 

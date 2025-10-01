@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.admin.CacheDumpHandler;
 import org.barcodeapi.server.admin.CacheFlushHandler;
 import org.barcodeapi.server.admin.LimiterFlushHandler;
@@ -84,6 +85,9 @@ public class ServerLauncher {
 		LibLog._logF("Loading Language Pack: %s", lang);
 		LibLog.cfg().loadStrings(ServerLauncher.class.getResourceAsStream(//
 				String.format("/strings/codes.%s.properties", lang)));
+
+		// Log config distribution being used
+		LibLog._logF("Config Dist: " + Config.dist());
 	}
 
 	/**
@@ -187,7 +191,7 @@ public class ServerLauncher {
 	private void initSystemTasks() {
 
 		final String TASK_ROOT = "org.barcodeapi.server.tasks";
-		JSONArray taskList = AppConfig.get().getJSONArray("tasks");
+		JSONArray taskList = Config.get(Cfg.App).getJSONArray("tasks");
 
 		tasks = new ArrayList<>();
 		for (int x = 0; x < taskList.length(); x++) {
@@ -228,29 +232,14 @@ public class ServerLauncher {
 
 		public void run() {
 
-			// Run each task
-			LibLog._log("Running shutdown tasks.");
+			// Save snapshot of shares cache
+			ObjectCache.getCache(ObjectCache.CACHE_SHARE).saveSnapshot();
 
-			try {
-				// Save snapshot of shares cache
-				ObjectCache.getCache(ObjectCache.CACHE_SHARE).saveSnapshot();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			// Save snapshot of limiters cache
+			ObjectCache.getCache(ObjectCache.CACHE_LIMITERS).saveSnapshot();
 
-			try {
-				// Save snapshot of limiters cache
-				ObjectCache.getCache(ObjectCache.CACHE_LIMITERS).saveSnapshot();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				// Save snapshot of sessions cache
-				ObjectCache.getCache(ObjectCache.CACHE_SESSIONS).saveSnapshot();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			// Save snapshot of sessions cache
+			ObjectCache.getCache(ObjectCache.CACHE_SESSIONS).saveSnapshot();
 		}
 	};
 
@@ -278,6 +267,11 @@ public class ServerLauncher {
 	 * @throws Exception
 	 */
 	public boolean stop() {
+
+		// Skip if not exists
+		if (server == null) {
+			return false;
+		}
 
 		try {
 

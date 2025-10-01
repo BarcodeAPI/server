@@ -18,6 +18,7 @@ public class Subscriber {
 	private final boolean active;
 	private final boolean enforce;
 	private final int limit;
+	private final int batch;
 
 	private final JSONArray ips;
 	private final JSONArray keys;
@@ -29,6 +30,7 @@ public class Subscriber {
 		this.active = def.getBoolean("active");
 		this.enforce = def.getBoolean("enforce");
 		this.limit = def.getInt("limit");
+		this.batch = def.getInt("batch");
 		this.ips = def.getJSONArray("ips");
 		this.keys = def.getJSONArray("keys");
 	}
@@ -45,12 +47,16 @@ public class Subscriber {
 		return this.active;
 	}
 
-	public boolean getEnforce() {
+	public boolean isEnforced() {
 		return this.enforce;
 	}
 
 	public int getLimit() {
 		return this.limit;
+	}
+
+	public int getMaxBatch() {
+		return this.batch;
 	}
 
 	public JSONArray getIPs() {
@@ -72,8 +78,9 @@ public class Subscriber {
 				.put("customer", getCustomer())//
 				.put("subscribed", getSubscribed())//
 				.put("active", getActive())//
-				.put("enforce", getEnforce())//
+				.put("enforce", isEnforced())//
 				.put("limit", getLimit())//
+				.put("batch", getMaxBatch())//
 				.put("ips", getIPs())//
 				.put("keys", getKeys());
 	}

@@ -17,7 +17,7 @@ const appState = {
 const appOptions = {
 	'language': 'en',
 	'apiKey': false,
-	'genDelay': 415,
+	'genDelay': 500,
 	'default': {
 		'colorFG': "000000",
 		'colorBG': "FFFFFF",
@@ -33,8 +33,8 @@ const appOptions = {
 		'hrt': 'bottom'
 	},
 	'trim': {
-		'before': (window.localStorage.getItem("trimBefore") != "false"),
-		'after': (window.localStorage.getItem("trimAfter") != "false")
+		'before': false,
+		'after': false
 	}
 };
 
@@ -48,6 +48,10 @@ async function init() {
 
 	// Load previously configured API key
 	appOptions.apiKey = window.localStorage.getItem("apiKey");
+
+	// Load trim options if previously set
+	appOptions.trim.before = (window.localStorage.getItem("trimBefore") != "false");
+	appOptions.trim.after = (window.localStorage.getItem("trimAfter") != "false");
 
 	// Load supported types
 	loadBarcodeTypes();
@@ -74,12 +78,14 @@ async function init() {
 	uiAddListener("app-options-link", toggleShowRenderOptions);
 	uiAddListener("barcode-text-input", checkInput, 'keyup');
 
-	// Setup barcode action handler
+	// Setup input action handler
 	uiAddListener("action-clear", actionClearInput);
 	uiAddListener("action-keyboard", actionShowKeyboard);
+
+	// Setup barcode quick links
 	uiAddListener("action-print", actionPrintImage);
-	uiAddListener("action-copy", actionCopyImage);
 	uiAddListener("action-url", actionCopyURL);
+	uiAddListener("action-copy", actionCopyImage);
 	uiAddListener("action-download", actionDownloadImage);
 
 	// Close the keyboard when navigating away
@@ -149,7 +155,7 @@ function renderTypeSelection() {
 		addTooltip(node, appState.types[t].description[appOptions.language]);
 
 		// Add to menu
-		menu.appendChild(node);
+		menu.insertBefore(node, menu.children[1]);
 	}
 }
 
@@ -184,8 +190,12 @@ function loadSelectedType() {
 	var selected = document.getElementById(//
 		"type-" + ((codeType) ? codeType.name : "auto"));
 
-	// Mark selected item as active
-	selected.classList.add("active");
+	// If not hidden
+	if (selected) {
+
+		// Mark selected item as active
+		selected.classList.add("active");
+	}
 
 	// Update type dropdown selection
 	document.getElementById("app-setup-type-picker").innerHTML = (codeType) ? codeType.display : 'Auto';
@@ -193,6 +203,7 @@ function loadSelectedType() {
 	// Update text field regex
 	var text = document.getElementById("text");
 	text.setAttribute("pattern", (codeType) ? codeType.pattern : '.*');
+	text.setAttribute("placeholder", (codeType) ? codeType.example : "Try Me...");
 
 	// Show non-printing keyboard for supported formats
 	uiShowHide("action-keyboard", (codeType) ? codeType.nonprinting : false);
@@ -208,10 +219,6 @@ function loadSelectedType() {
 
 	// Focus text input
 	text.focus();
-
-	// Log tracking event
-	trackingEvent("AppMain", "TypeChange", //
-		(codeType) ? codeType.name : "Auto");
 }
 
 function renderOptions(type) {
@@ -690,6 +697,11 @@ function setType(type) {
 
 	location.replace('#' + type);
 	showTypesMenu(false);
+
+	// Log tracking event
+	var codeType = getType(type);
+	trackingEvent("AppMain", "TypeChange", //
+		(codeType) ? codeType.name : "Auto");
 }
 
 /**

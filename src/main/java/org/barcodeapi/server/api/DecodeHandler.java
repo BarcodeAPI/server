@@ -37,9 +37,9 @@ public class DecodeHandler extends RestHandler {
 
 	// Upload size dimensions
 	private static final int IMAGE_WIDTH_MIN = 32;
-	private static final int IMAGE_WIDTH_MAX = 2000;
+	private static final int IMAGE_WIDTH_MAX = 2400;
 	private static final int IMAGE_HEIGHT_MIN = 32;
-	private static final int IMAGE_HEIGHT_MAX = 2000;
+	private static final int IMAGE_HEIGHT_MAX = 2400;
 
 	private final File uploadDir;
 

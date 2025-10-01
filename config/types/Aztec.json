@@ -2,6 +2,7 @@
 	"name": "Aztec",
 	"display": "Aztec",
 	"show": true,
+	"decode": true,
 	"cache": true,
 	"target": [
 		"aztec"
@@ -13,7 +14,7 @@
 		"basic": 3,
 		"custom": 3
 	},
-	"checksum": false,
+	"checkdigit": 0,
 	"nonprinting": true,
 	"example": "Aztec Barcode",
 	"pattern": {
