@@ -37,12 +37,15 @@ public class LimiterCache {
 	public static CachedLimiter getLimiter(Subscriber sub, String address) {
 		LibMetrics.hitMethodRunCounter();
 
+		// User ID is customer or address
+		String userID = (sub != null) ? sub.getCustomer() : address;
+
 		// Determine if limiter exists
 		CachedLimiter limiter;
-		if (_LIMITERS.has(address)) {
+		if (_LIMITERS.has(userID)) {
 
 			// Get the existing limiter from the cache
-			limiter = (CachedLimiter) _LIMITERS.get(address);
+			limiter = (CachedLimiter) _LIMITERS.get(userID);
 		} else {
 
 			// Determine enforce / limits for the new limiter
@@ -50,8 +53,8 @@ public class LimiterCache {
 			boolean enforce = (sub != null) ? sub.isEnforced() : DEFLIMIT_ENFORCE;
 
 			// Create a new limiter and add it to the cache
-			limiter = new CachedLimiter(enforce, address, limit);
-			_LIMITERS.put(address, limiter);
+			limiter = new CachedLimiter(enforce, userID, limit);
+			_LIMITERS.put(userID, limiter);
 		}
 
 		// Return the limiter
