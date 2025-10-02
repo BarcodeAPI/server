@@ -161,12 +161,9 @@ public class RequestContext {
 			user = SubscriberCache.getByIP(ip);
 		}
 
-		// User ID based on customer association or IP
-		String userID = (user != null) ? user.getCustomer() : ip;
-
 		this.admin = admin;
 		this.subscriber = user;
-		this.limiter = LimiterCache.getLimiter(user, userID);
+		this.limiter = LimiterCache.getLimiter(user, ip);
 
 		// Get user session info
 		CachedSession userSession = SessionHelper.getSession(request);
