@@ -48,7 +48,7 @@ function loadType(type) {
 	info.setAttribute("id", "barcode-type-" + target);
 
 	// Update example link
-	var link = ("/api/" + target + "/" + type.example);
+	var link = ("/api/" + target + "/" + type.example[0]);
 	info.querySelector(".type-example").src = link;
 
 	// Update type basic details

@@ -18,7 +18,9 @@
 	},
 	"checkdigit": 0,
 	"nonprinting": false,
-	"example": "TRY 39",
+	"example": [
+		"TRY 39"
+	],
 	"pattern": {
 		"auto": "^[A-Z0-9 $.\\/]{1,12}$",
 		"extended": "^[A-Z*0-9 \\-$%.\\/+]{1,30}$"

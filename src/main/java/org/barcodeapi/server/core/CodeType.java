@@ -40,7 +40,7 @@ public class CodeType {
 	private final int costBasic;
 	private final int costCustom;
 
-	private final String example;
+	private final String[] examples;
 	private final JSONObject description;
 	private final JSONObject wiki;
 
@@ -88,13 +88,19 @@ public class CodeType {
 			this.targets[x] = target.getString(x);
 		}
 
+		// setup list of examples
+		JSONArray example = config.getJSONArray("example");
+		this.examples = new String[example.length()];
+		for (int x = 0; x < example.length(); x++) {
+			this.examples[x] = example.getString(x);
+		}
+
 		// get barcode costs
 		JSONObject costs = config.getJSONObject("cost");
 		this.costBasic = costs.getInt("basic");
 		this.costCustom = costs.getInt("custom");
 
-		// get example and description
-		this.example = config.getString("example");
+		// get description and wiki link
 		this.description = config.getJSONObject("description");
 		this.wiki = config.getJSONObject("wiki");
 
@@ -177,8 +183,8 @@ public class CodeType {
 		return costCustom;
 	}
 
-	public String getExample() {
-		return example;
+	public String[] getExample() {
+		return examples;
 	}
 
 	public JSONObject getDescription() {

@@ -6,6 +6,6 @@
 /cache/
 /logs/
 /uploads/
-resources/blacklist.conf
 /cache/
+/config/production/
 *.snap

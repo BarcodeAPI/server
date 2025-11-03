@@ -20,7 +20,9 @@
 	},
 	"checkdigit": 0,
 	"nonprinting": false,
-	"example": "98765432109213",
+	"example": [
+		"98765432109213"
+	],
 	"pattern": {
 		"auto": "",
 		"extended": "^[0-9]{14}$"

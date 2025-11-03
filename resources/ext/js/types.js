@@ -9,7 +9,7 @@ window.onhashchange = function() {
 
 function init() {
 
-	fetch('/types/')
+	fetch('/type/')
 		.then(response => {
 			return response.json();
 		}).then((data) => {
@@ -48,7 +48,7 @@ function addType(type) {
 	var info = document.getElementById("barcode-template").cloneNode(true);
 	info.setAttribute("id", "barcode-type-" + target);
 
-	var link = ("/api/" + target + "/" + type.example);
+	var link = ("/api/" + target + "/" + type.example[0]);
 	info.querySelector(".type-example").src = link;
 
 	info.querySelector(".type-name").innerHTML = type.display;

@@ -18,7 +18,10 @@
 	},
 	"checkdigit": 0,
 	"nonprinting": true,
-	"example": "Try Me!",
+	"example": [
+		"Try Me!",
+		"ABCD-1234"
+	],
 	"pattern": {
 		"auto": "^[ !#$()*.\\/0-9=?A-Za-z~]{1,12}$",
 		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,48}$"

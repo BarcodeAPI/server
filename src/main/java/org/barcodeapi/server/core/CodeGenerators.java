@@ -1,5 +1,8 @@
 package org.barcodeapi.server.core;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.barcodeapi.core.Config;
@@ -42,6 +45,7 @@ public class CodeGenerators {
 
 	private CodeGenerators() {
 
+		// Load all enabled code types
 		JSONArray enabled = Config.get(Cfg.App).getJSONArray("types");
 
 		// Loop all enabled types
