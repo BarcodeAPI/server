@@ -6,6 +6,6 @@
 /cache/
 /logs/
 /uploads/
-resources/types.json
 /cache/
+/config/production/
 *.snap
