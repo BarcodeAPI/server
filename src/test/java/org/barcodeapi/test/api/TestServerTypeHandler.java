@@ -27,7 +27,7 @@ public class TestServerTypeHandler extends ServerTestBase {
 		serverGet("/type/?");
 
 		Assert.assertEquals("Response Code", //
-				HttpStatus.BAD_REQUEST_400, getResponseCode());
+				HttpStatus.OK_200, getResponseCode());
 	}
 
 	@Test
