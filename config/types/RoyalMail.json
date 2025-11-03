@@ -17,7 +17,9 @@
 	},
 	"checkdigit": 0,
 	"nonprinting": false,
-	"example": "11212345612345678",
+	"example": [
+		"11212345612345678"
+	],
 	"pattern": {
 		"auto": "^[0-9]{1,32}$",
 		"extended": "^[0-9]{1,32}$"

@@ -7,7 +7,7 @@ window.addEventListener("load", function() {
 
 	document.supported = document.getElementById("types_supported");
 
-	fetch('/types/')
+	fetch('/type/')
 		.then(response => {
 			return response.json();
 		})

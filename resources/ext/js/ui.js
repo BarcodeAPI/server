@@ -12,11 +12,11 @@ const timeStart = new Date();
 const appConfig = {
 	'showLinkBulk': true,
 	'showLinkMulti': true,
-	'showLinkDecode': true,
+	'showLinkDecode': false,
 	'showTokenCount': false,
 	'showLimitsNotice': false,
 	'showRenderOptions': true,
-	'showHiddenTypes': true,
+	'showHiddenTypes': false,
 	'userLanguage': 'en'
 };
 

@@ -30,8 +30,8 @@
 		<div class="header row between-sm start-sm center-xs">
 			<div class="header-logo start-sm center-xs col-xs-12 col-sm-5"></div>
 			<div class="header-contact col-sm-5 middle-xs end-xs">
-				<h4>
-					<div class="header-support">FEEDBACK &amp; SUPPORT</div>
+				<h4 class="header-support">
+					<div>FEEDBACK &amp; SUPPORT</div>
 					<div class="header-email">support@barcodeapi.org</div>
 				</h4>
 				<div class="action-icon action-email icon-email"></div>
@@ -47,27 +47,23 @@
 					<br />
 					<b>Tokens Remaining</b>:&nbsp;<span id="token_count"></span>
 				</div>
+				<div class="notice-enforced pad-top-24">
+					<b>Note</b>:&nbsp;Rate limits are not currently enforced.
+				</div>
 			</div>
 		</div>
 
-		<div class="help-entry row center-xs middle-xs">
+		<div class="row center-xs middle-xs">
 			<div class="plan-overview col-xs-12">
 				Unlock the full potential of BarcodeAPI.org with our API pricing plans!
 				<br />
 				<br />
 				Our <span class="free-limit"></span> token per day
 				<b>FREE</b> plan should be sufficient for most users.
-				<br />
-				<br />
-				For more information about tokens, check out the <a href="/api.html"
-					class="text-link anim icon-chevron">API Docs</a>
-			</div>
-			<div class="notice-enforced">
-				<br /><b>Note</b>:&nbsp;Rate limits are not currently enforced.
 			</div>
 		</div>
 
-		<div class="help-entry row center-xs middle-xs pad-top-24">
+		<div class="row center-xs middle-xs help-entry">
 			<div class="plan-free col-sm-6 col-xs-12">
 				<h2>Free Tier</h2>
 				<div>
@@ -80,7 +76,7 @@
 			</div>
 		</div>
 
-		<div class="row center-xs middle-xs pad-top-24" id="user-plans">
+		<div class="row center-xs middle-xs help-entry" id="user-plans">
 			<div id="plan-template" class="plan-pro col-sm-6 col-xs-12">
 				<h2><span class="plan-name"></span></h2>
 				<b><span class="plan-prices"></span></b>
@@ -91,13 +87,18 @@
 			</div>
 		</div>
 
-		<br />
-		<br />
-
-		<div class="row center-xs middle-xs pad-top-24">
+		<div class="row center-xs middle-xs pad-top-30">
 			<div class="plan-links col-xs-12">
-				Additional user session cound be found at <a href="/session.html"
+				For more information about tokens, check out the <a href="/api.html"
+					class="text-link anim icon-chevron">API Docs</a>
+				<br />
+				<br />
+				Additional user session details can be found at <a href="/session.html"
 					class="text-link anim icon-chevron">Session Info</a>
+			</div>
+
+			<div class="notice-abusers">
+				<br /><b>Note</b>:&nbsp;Abusers of the API will be IP banned. (<a href="abuse.html">More</a>)
 			</div>
 		</div>
 	</div>

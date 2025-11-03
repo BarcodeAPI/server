@@ -1,12 +1,12 @@
 <html>
 
 <!--
-	types.html
+	limits.html
 	BarcodeAPI.org, 2017-2025
  -->
 
 <head>
-	<title>BarcodeAPI.org - Barcode Types</title>
+	<title>BarcodeAPI.org - Rate Limits</title>
 
 	<meta name="keywords"
 		content="barcode, barcode api, barcode app, barcode generator, download barcode, free barcodes, custom barcodes">
@@ -21,10 +21,10 @@
 	<link rel="stylesheet" type="text/css" href="/ext/css/layout.css" />
 
 	<script src="/ext/js/ui.js"></script>
-	<script src="/ext/js/types.js"></script>
+	<script src="/ext/js/abuse.js"></script>
 </head>
 
-<body onload="init();">
+<body>
 	<div class="wrapper container-fluid">
 
 		<div class="header row between-sm start-sm center-xs">
@@ -39,40 +39,10 @@
 		</div>
 
 		<div class="row center-xs middle-xs">
-			<div class="col-xs-12">
-				<h2>Barcode Types</h2>
-				<br />
-				The following barcode types are supported by the server.
-				<br />
-				<br />
-				View our <a href="/api.html" class="text-link anim icon-chevron">User Manual</a> for additional
-				information.
-				<br />
-				<br />
-				Click a barcode format to learn more.
-			</div>
-		</div>
-
-		<div id="barcode-types">
-			<div class="row center-xs middle-xs barcode-template" id="barcode-template">
-				<div class="col-xs-6 center-sm start-xs barcode-type-info">
-					<span class="type-name">-</span>
-					<br />
-					<br />
-					Cost:&nbsp;<span class="type-cost-basic">!</span>-<span class="type-cost-custom">!</span>
-					<br />
-					Target:&nbsp;<span class="type-target">-</span>
-					<br />
-					<br />
-					<a class="text-link type-gen anim icon-chevron">Generate Now</a>
-					<br/>
-					<a class="text-link type-more anim icon-chevron">More Details</a>
-				</div>
-
-				<div class="col-xs-6 barcode-type-example">
-					<a class="type-example-link">
-						<img class="type-example" src="" />
-					</a>
+			<div class="tokens col-xs-12">
+				<h2>API Abuse</h2>
+				<div class="abuse-info">
+					Abusers will be IP banned.
 				</div>
 			</div>
 		</div>

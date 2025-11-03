@@ -20,7 +20,9 @@
 	},
 	"checkdigit": 0,
 	"nonprinting": true,
-	"example": "Data Matrix Barcode",
+	"example": [
+		"Data Matrix Barcode"
+	],
 	"pattern": {
 		"auto": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,2335}$",
 		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,2335}$"

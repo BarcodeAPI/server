@@ -16,7 +16,9 @@
 	},
 	"checkdigit": 0,
 	"nonprinting": true,
-	"example": "Aztec Barcode",
+	"example": [
+		"Aztec Barcode"
+	],
 	"pattern": {
 		"auto": "^[ !#$()*.\\/0-9=?A-Z_a-z~]{1,16}$",
 		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]+$"

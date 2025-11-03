@@ -25,7 +25,6 @@ import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.ShareHandler;
 import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.api.TypeHandler;
-import org.barcodeapi.server.api.TypesHandler;
 import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeGenerators;
@@ -141,7 +140,6 @@ public class ServerLauncher {
 		initHandler("/bulk", BulkHandler.class);
 		initHandler("/decode", DecodeHandler.class);
 		initHandler("/type", TypeHandler.class);
-		initHandler("/types", TypesHandler.class);
 		initHandler("/share", ShareHandler.class);
 		initHandler("/limiter", LimiterHandler.class);
 		initHandler("/session", SessionHandler.class);
@@ -167,6 +165,7 @@ public class ServerLauncher {
 		resourceHandler.setHandler(new StaticHandler(server));
 		resourceHandler.setContextPath("/");
 		handlers.addHandler(resourceHandler);
+
 	}
 
 	/**

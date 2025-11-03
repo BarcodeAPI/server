@@ -47,4 +47,10 @@ public class TestMiscCustomer extends ServerTestBase {
 		Assert.assertEquals("Code Format", //
 				"image/png;charset=utf-8", getHeader("Content-Type"));
 	}
+	
+	@Test
+	public void testMiscCustomer_MACAddress() {
+		
+		apiGet("aa:11:bb:22:cc:33");
+	}
 }

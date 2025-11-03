@@ -15,6 +15,7 @@ function init() {
 		.then(data => {
 			if (!data.enforce) {
 				document.getElementsByClassName("notice-enforced")[0].style.display = 'block';
+				document.getElementsByClassName("notice-abusers")[0].style.display = 'none';
 			}
 
 			document.getElementById("token_count").innerHTML = //

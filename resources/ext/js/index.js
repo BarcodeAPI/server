@@ -97,12 +97,12 @@ async function init() {
 }
 
 /**
- * Calls the /types/ endpoint to load all supported formats.
+ * Calls the /type/ endpoint to load all supported formats.
  */
 async function loadBarcodeTypes() {
 
-	// Fetch /types/ endpoint
-	const url = location.origin + "/types/";
+	// Fetch /type/ endpoint
+	const url = location.origin + "/type/";
 	appState.types = await fetch(url)
 		.then((response) => {
 			return response.json();
@@ -110,10 +110,10 @@ async function loadBarcodeTypes() {
 
 			data.sort((a, b) => {
 				if (a.name < b.name) {
-					return -1;
+					return 1;
 				}
 				if (a.name > b.name) {
-					return 1;
+					return -1;
 				}
 				return 0;
 			});
@@ -203,7 +203,7 @@ function loadSelectedType() {
 	// Update text field regex
 	var text = document.getElementById("text");
 	text.setAttribute("pattern", (codeType) ? codeType.pattern : '.*');
-	text.setAttribute("placeholder", (codeType) ? codeType.example : "Try Me...");
+	text.setAttribute("placeholder", (codeType) ? codeType.example[0] : "Try Me...");
 
 	// Show non-printing keyboard for supported formats
 	uiShowHide("action-keyboard", (codeType) ? codeType.nonprinting : false);
@@ -313,7 +313,7 @@ function buildBarcodeURL() {
 
 	// Set default text
 	if (text === "") {
-		text = (codeType == null) ? "Try Me!" : codeType.example;
+		text = (codeType == null) ? "Try Me!" : codeType.example[0];
 	}
 
 	// Check trimming 

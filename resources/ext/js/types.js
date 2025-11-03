@@ -9,7 +9,7 @@ window.onhashchange = function() {
 
 function init() {
 
-	fetch('/types/')
+	fetch('/type/')
 		.then(response => {
 			return response.json();
 		}).then((data) => {

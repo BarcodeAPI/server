@@ -1,0 +1,79 @@
+{
+	"types": [
+		"UPC_E",
+		"UPC_A",
+		"EAN8",
+		"EAN13",
+		"CODABAR",
+		"ITF14",
+		"Code39",
+		"Code128",
+		"Aztec",
+		"QRCode",
+		"DataMatrix",
+		"PDF417",
+		"USPSMail",
+		"RoyalMail",
+		"AprilTag"
+	],
+	"tasks": [
+		{
+			"name": "Watchdog",
+			"impl": ".WatchdogTask",
+			"interval": 15
+		},
+		{
+			"name": "Stats",
+			"impl": ".StatsDumpTask",
+			"interval": 300
+		},
+		{
+			"name": "Session Cleanup",
+			"impl": ".SessionCleanupTask",
+			"interval": 1800
+		},
+		{
+			"name": "Barcode Cleanup",
+			"impl": ".BarcodeCleanupTask",
+			"interval": 3600
+		},
+		{
+			"name": "Limiter Cleanup",
+			"impl": ".LimiterCleanupTask",
+			"interval": 3600
+		},
+		{
+			"name": "Limiter Minting",
+			"impl": ".LimiterMintingTask",
+			"interval": 60
+		},
+		{
+			"name": "Share Cleanup",
+			"impl": ".ShareCleanupTask",
+			"interval": 3600
+		}
+	],
+	"cache": {
+		"_snapshots": "./cache/",
+		"barcode": {
+			"life": 10080,
+			"shortLife": 240
+		},
+		"session": {
+			"life": 20160,
+			"shortLife": 60
+		},
+		"limiter": {
+			"life": 4320,
+			"shortLife": 360
+		},
+		"share": {
+			"life": 129600,
+			"shortLife": 360
+		}
+	},
+	"client": {
+		"cacheStatic": 1440,
+		"cacheBarcode": 1440
+	}
+}

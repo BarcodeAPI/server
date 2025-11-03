@@ -18,7 +18,9 @@
 	},
 	"checkdigit": 0,
 	"nonprinting": true,
-	"example": "QR Barcode",
+	"example": [
+		"QR Barcode"
+	],
 	"pattern": {
 		"auto": "^.{1,64}$",
 		"extended": "^.{1,65535}$"

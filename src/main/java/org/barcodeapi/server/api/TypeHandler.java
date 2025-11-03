@@ -10,7 +10,9 @@ import org.barcodeapi.server.core.CodeTypes;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.barcodeapi.server.core.TypeSelector;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * TypeHandler.java
@@ -20,17 +22,26 @@ import org.json.JSONException;
 public class TypeHandler extends RestHandler {
 
 	// Static map of JSON responses
-	private static final HashMap<CodeType, String> asJSON;
+	private static final HashMap<CodeType, String> typesConfig;
+
+	private static final String typesComplete;
 
 	static {
-		asJSON = new HashMap<>();
+		typesConfig = new HashMap<>();
 		CodeTypes types = CodeTypes.inst();
 
 		// Convert each type to JSON, and cache
+		JSONArray complete = new JSONArray();
 		for (String type : types.getTypes()) {
 			CodeType t = types.getType(type);
-			asJSON.put(t, CodeType.toJSON(t).toString());
+			JSONObject details = CodeType.toJSON(t);
+
+			complete.put(details);
+
+			typesConfig.put(t, details.toString());
 		}
+
+		typesComplete = complete.toString();
 	}
 
 	public TypeHandler() {
@@ -40,9 +51,21 @@ public class TypeHandler extends RestHandler {
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
+		// Check for user requested type string
 		String typeStr = c.getRequest().getParameter("type");
+		if (typeStr == null || typeStr.trim().equals("")) {
+
+			// Print all types response to client
+			r.setStatus(HttpServletResponse.SC_OK);
+			r.setHeader("Content-Type", "application/json");
+			r.getOutputStream().println(typesComplete);
+			return;
+		}
+
+		// Lookup requested type string
 		CodeType type = TypeSelector.getTypeFromString(typeStr);
 
+		// Fail if type not found
 		if (type == null) {
 
 			// Print error to client
@@ -50,9 +73,9 @@ public class TypeHandler extends RestHandler {
 			return;
 		}
 
-		// Print response to client
+		// Print single type response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setHeader("Content-Type", "application/json");
-		r.getOutputStream().println(asJSON.get(type));
+		r.getOutputStream().println(typesConfig.get(type));
 	}
 }
