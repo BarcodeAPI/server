@@ -97,8 +97,8 @@ public class SessionHelper {
 	/**
 	 * Validate a user based on the provided Authentication string.
 	 * 
-	 * @param request
-	 * @return
+	 * @param basicAuth BasicAuth encoded string
+	 * @return valid user name or null or no user found
 	 */
 	public static String validateUser(String basicAuth) {
 
@@ -131,10 +131,18 @@ public class SessionHelper {
 		String uName = decoded.substring(0, split);
 		String pWord = decoded.substring(split + 1);
 
-		// Calculate the expected password hash
-		String passHash = LibExtrasHashes.sumSHA256(pWord.getBytes());
+		// Check if requested user exists
+		if (!(_admins.has(uName))) {
 
-		// Check if login exists in app config and return
-		return (passHash.equals(_admins.optString(uName)) ? uName : null);
+			// Fail if user not found
+			return null;
+		}
+
+		// Determine actual and expected password hashes
+		String passHashActual = LibExtrasHashes.sumSHA256(pWord.getBytes());
+		String passHashExpected = _admins.getString(uName).toUpperCase();
+
+		// Check if actual pass hash matches expected pass hash
+		return (passHashActual.equals(passHashExpected) ? uName : null);
 	}
 }
