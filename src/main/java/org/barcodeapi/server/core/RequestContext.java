@@ -108,7 +108,7 @@ public class RequestContext {
 
 		// Swap with header if via proxy
 		this.fwd = (fwd == null) ? null : ip;
-		this.ip = (fwd == null) ? ip : fwd;
+		this.ip = ip = (fwd == null) ? ip : fwd;
 
 		// Update scheme if via proxy
 		HttpURI uri = request.getMetaData().getURI();
