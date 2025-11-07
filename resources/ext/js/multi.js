@@ -48,7 +48,7 @@ function loadShare(share) {
 function loadArgs() {
 	var root = window.location.href;
 	var start = root.indexOf("?");
-	if (start == 0) {
+	if (start <= 0) {
 		return;
 	}
 
