@@ -66,7 +66,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// Try to spend the tokens
 			tokenSpend = request.getCost();
-			if (!limiter.checkBalance(tokenSpend)) {
+			if (!limiter.allowSpend(tokenSpend)) {
 
 				// Return rate limited barcode to user
 				throw new GenerationException(ExceptionType.LIMITED, //

@@ -40,12 +40,16 @@ public class BarcodeRequest {
 		// User requested download
 		this.download = options.optBoolean("download", false);
 
-		// Calculate the cost of the request
+		// Determine if request is a free example
 		boolean isExample = false;
 		for (String example : type.getExample()) {
-			isExample = example.equals(data);
+			if (example.equals(data)) {
+				isExample = true;
+				break;
+			}
 		}
 
+		// Determine the cost of the request
 		boolean free = (isExample && (!complex));
 		int cost = (complex) ? type.getCostCustom() : type.getCostBasic();
 		this.cost = (free) ? 0 : cost;

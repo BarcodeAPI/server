@@ -132,7 +132,7 @@ public class CachedLimiter extends CachedObject {
 	 * @return true if limiter is unlimited
 	 */
 	public boolean isUnlimited() {
-		return (tokenCount == -1);
+		return ((tokenCount == -1) || !isEnforced());
 	}
 
 	/**
@@ -144,17 +144,10 @@ public class CachedLimiter extends CachedObject {
 		return tokenSpend;
 	}
 
-	public boolean checkBalance(double cost) {
+	public boolean allowSpend(double cost) {
 
-		// We have tokens and cost is more then we have
-		if ((this.tokenCount > 0) && (cost > this.tokenCount)) {
-
-			// Return based on enforcement
-			return (!isEnforced());
-		}
-
-		// Balance allows spend
-		return true;
+		// Allow if unlimited, or balance exceeds cost
+		return (isUnlimited() || this.tokenCount > cost);
 	}
 
 	/**
@@ -171,21 +164,20 @@ public class CachedLimiter extends CachedObject {
 					"Token count cannot be less then 0.");
 		}
 
-		// Allow if unlimited balance
-		if (isUnlimited()) {
-			return true;
-		}
-
 		synchronized (this) {
 
-			// Check existing balance
-			if (!checkBalance(cost)) {
+			// Check if balance allows spend
+			if (!allowSpend(cost)) {
 				return false;
+			}
+
+			// Spend the tokens if not unlimited
+			if (!isUnlimited()) {
+				this.tokenCount -= cost;
 			}
 
 			// Set new token counts
 			this.tokenSpend += cost;
-			this.tokenCount -= cost;
 
 			// Return true if spent
 			return true;
