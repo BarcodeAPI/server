@@ -341,10 +341,9 @@ function buildBarcodeURL() {
 	// The API target
 	var url = //
 		location.origin + //
-		"/api" + //
-		"/" + type + //
-		"/" + encodeURIComponent(text) + //
-		"?" + buildOptionsString();
+		"/api/" + type + "/" + //
+		encodeURIComponent(text) + //
+		buildOptionsString();
 
 	return url;
 }
@@ -457,7 +456,7 @@ function delayUpdateBarcode() {
  */
 function buildOptionsString() {
 
-	var options = "";
+	var options = "?";
 
 	// Override Color (FG)
 	if (appOptions.render.colorFG != appOptions.default.colorFG) {
@@ -484,7 +483,7 @@ function buildOptionsString() {
 		options += "&text=" + appOptions.render.hrt;
 	}
 
-	return options;
+	return (options.length > 1) ? options : "";
 }
 
 /**
