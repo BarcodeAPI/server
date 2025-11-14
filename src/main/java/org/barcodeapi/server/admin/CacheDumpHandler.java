@@ -53,7 +53,7 @@ public class CacheDumpHandler extends RestHandler {
 
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
-		r.setHeader("Content-Type", "application/json");
+		r.setContentType("application/json");
 		r.setHeader("Content-Disposition", "attachment, filename=cache.json");
 		r.getOutputStream().println((new JSONObject()//
 				.put("code", 200)//

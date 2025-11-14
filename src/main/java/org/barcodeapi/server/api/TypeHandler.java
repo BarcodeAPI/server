@@ -57,7 +57,7 @@ public class TypeHandler extends RestHandler {
 
 			// Print all types response to client
 			r.setStatus(HttpServletResponse.SC_OK);
-			r.setHeader("Content-Type", "application/json");
+			r.setContentType("application/json");
 			r.getOutputStream().println(typesComplete);
 			return;
 		}
@@ -75,7 +75,7 @@ public class TypeHandler extends RestHandler {
 
 		// Print single type response to client
 		r.setStatus(HttpServletResponse.SC_OK);
-		r.setHeader("Content-Type", "application/json");
+		r.setContentType("application/json");
 		r.getOutputStream().println(typesConfig.get(type));
 	}
 }

@@ -27,7 +27,7 @@ public class InfoHandler extends RestHandler {
 
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
-		r.setHeader("Content-Type", "application/json");
+		r.setContentType("application/json");	
 		r.getOutputStream().println((new JSONObject()//
 				.put("uptime", ServerRuntime.getTimeRunning())//
 				.put("hostname", ServerRuntime.getHostname())//

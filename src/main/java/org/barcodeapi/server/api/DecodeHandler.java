@@ -116,7 +116,7 @@ public class DecodeHandler extends RestHandler {
 
 			// Send response to client
 			r.setStatus(HttpServletResponse.SC_OK);
-			r.setHeader("Content-Type", "application/json");
+			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject() //
 					.put("code", 200)//
 					.put("text", text)//
@@ -127,7 +127,7 @@ public class DecodeHandler extends RestHandler {
 
 			// Send error to client
 			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			r.setHeader("Content-Type", "application/json");
+			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject() //
 					.put("code", 400)//
 					.put("message", "no barcode found")//
@@ -136,7 +136,7 @@ public class DecodeHandler extends RestHandler {
 
 			// Send error to client
 			r.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			r.setHeader("Content-Type", "application/json");
+			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject() //
 					.put("code", 500)//
 					.put("text", "decode failed")//

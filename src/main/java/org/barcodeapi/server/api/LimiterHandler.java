@@ -24,7 +24,7 @@ public class LimiterHandler extends RestHandler {
 
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
-		r.setHeader("Content-Type", "application/json");
+		r.setContentType("application/json");
 		r.getOutputStream().println(//
 				c.getLimiter().asJSON().toString(4));
 	}

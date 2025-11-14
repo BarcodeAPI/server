@@ -48,7 +48,7 @@ public class ShareHandler extends RestHandler {
 		default:
 			// Print error to client
 			r.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-			r.setHeader("Content-Type", "application/json");
+			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject() //
 					.put("code", 405)//
 					.put("message", "method not allowed")//
@@ -74,7 +74,7 @@ public class ShareHandler extends RestHandler {
 
 		if (obj == null) {
 			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			r.setHeader("Content-Type", "application/json");
+			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject() //
 					.put("code", 400)//
 					.put("message", "share not found")//
@@ -87,7 +87,7 @@ public class ShareHandler extends RestHandler {
 
 		// Print share data to the client
 		r.setStatus(HttpServletResponse.SC_OK);
-		r.setHeader("Content-Type", "application/json");
+		r.setContentType("application/json");
 		r.getOutputStream().println(shareData);
 	}
 
@@ -117,7 +117,7 @@ public class ShareHandler extends RestHandler {
 
 			// Print failure to client
 			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			r.setHeader("Content-Type", "application/json");
+			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject() //
 					.put("code", 400)//
 					.put("message", "invalid share data")//
@@ -149,7 +149,7 @@ public class ShareHandler extends RestHandler {
 
 		// Print share key to the client
 		r.setStatus(HttpServletResponse.SC_OK);
-		r.setHeader("Content-Type", "text/plain");
+		r.setContentType("application/json");
 		r.getOutputStream().println(share.getHash());
 	}
 }

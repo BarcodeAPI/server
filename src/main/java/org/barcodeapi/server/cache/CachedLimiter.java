@@ -91,8 +91,8 @@ public class CachedLimiter extends CachedObject {
 			double newCount = Math.min(tokenLimit, (oldCount + minted));
 
 			// update limiter
-			this.tokenCount = newCount;
-			this.timeMinted = timeNow;
+			tokenCount = newCount;
+			timeMinted = timeNow;
 
 			// return number of tokens added
 			return (newCount - oldCount);
@@ -153,7 +153,7 @@ public class CachedLimiter extends CachedObject {
 	public boolean allowSpend(double cost) {
 
 		// Allow if balance exceeds cost, unlimited, or not enforced
-		return ((this.tokenCount > cost) || isUnlimited() || !isEnforced());
+		return ((tokenCount > cost) || isUnlimited() || !isEnforced());
 	}
 
 	/**
@@ -167,26 +167,32 @@ public class CachedLimiter extends CachedObject {
 		// Fail if spending negative
 		if (cost < 0) {
 			throw new IllegalArgumentException(//
-					"Token count cannot be less then 0.");
+					"Token cost cannot be negative.");
 		}
 
 		synchronized (this) {
 
-			// Check if balance allows spend
-			if (!allowSpend(cost)) {
-				return false;
+			// Unlimited token balance
+			if (tokenCount == -1) {
+				tokenSpend += cost;
+				return true;
 			}
 
-			// Spend the tokens if not unlimited
-			if (!isUnlimited()) {
-				this.tokenCount -= cost;
+			// Limiter has tokens, spend them
+			if (tokenCount >= cost) {
+				tokenSpend += cost;
+				tokenCount -= cost;
+				return true;
 			}
 
-			// Set new token counts
-			this.tokenSpend += cost;
+			// Limiter out of tokens, not enforced
+			if (!isEnforced()) {
+				tokenSpend += cost;
+				return true;
+			}
 
-			// Return true if spent
-			return true;
+			// Rate limit reached
+			return false;
 		}
 	}
 

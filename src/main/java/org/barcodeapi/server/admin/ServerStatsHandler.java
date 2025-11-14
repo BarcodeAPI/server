@@ -34,7 +34,7 @@ public class ServerStatsHandler extends RestHandler {
 
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
-		r.setHeader("Content-Type", "application/json");
+		r.setContentType("application/json");
 		r.getOutputStream().println(stats.toString());
 	}
 }

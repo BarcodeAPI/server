@@ -31,7 +31,7 @@ public class SessionHandler extends RestHandler {
 
 		if (!c.hasSession()) {
 			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			r.setHeader("Content-Type", "application/json");
+			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject() //
 					.put("code", 400)//
 					.put("message", "no session in request")//
@@ -58,7 +58,7 @@ public class SessionHandler extends RestHandler {
 
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
-		r.setHeader("Content-Type", "application/json");
+		r.setContentType("application/json");
 		r.getOutputStream().println(//
 				c.getSession().asJSON().toString(4));
 	}

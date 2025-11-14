@@ -102,7 +102,7 @@ public class BulkHandler extends RestHandler {
 			}
 
 			// Response headers for file download
-			r.setHeader("Content-Type", "application/zip");
+			r.setContentType("application/zip");
 			r.setHeader("Content-Disposition", "filename=barcodes.zip");
 
 			// Advise current token spend and count
@@ -119,7 +119,7 @@ public class BulkHandler extends RestHandler {
 
 			// Print error to client
 			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			r.setHeader("Content-Type", "application/json");
+			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject() //
 					.put("code", 400)//
 					.put("message", "failed to process bulk request")//
@@ -129,7 +129,7 @@ public class BulkHandler extends RestHandler {
 
 			// Print unknown failure to client
 			r.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			r.setHeader("Content-Type", "application/json");
+			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject() //
 					.put("code", 500)//
 					.put("message", "unknown error")//

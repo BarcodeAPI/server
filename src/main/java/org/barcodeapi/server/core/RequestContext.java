@@ -1,5 +1,7 @@
 package org.barcodeapi.server.core;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,10 +120,10 @@ public class RequestContext {
 		// The request is secure to the client
 		this.secure = uri.getScheme().equals("https");
 
-		// The request method
+		// The requested method
 		this.method = request.getMethod();
 
-		// Get the request URI
+		// The requested URI
 		this.uri = request.getOriginalURI();
 
 		// Determine output format and encoding
@@ -132,11 +134,7 @@ public class RequestContext {
 		this.body = request.getContentLength();
 
 		// Get the origin
-		this.origin = request.getHeader("origin");
-
-		// Get source of the request
-		String ref = request.getHeader("Referer");
-		this.source = (ref != null) ? ref : "API";
+		this.origin = request.getHeader("Origin");
 
 		// Determine the associated subscriber by IP
 		Subscriber user = null;
@@ -146,13 +144,30 @@ public class RequestContext {
 		String authStr = request.getHeader("Authorization");
 
 		if (authStr != null) {
+
+			// Lookup user by admin login
 			if (authStr.startsWith("Basic")) {
 				authStr = authStr.substring(6);
 				admin = SessionHelper.validateUser(authStr);
 			} else //
+
+			// Lookup user by API key
 			if (authStr.startsWith("Token")) {
 				authStr = authStr.substring(6);
 				user = SubscriberCache.getByKey(authStr);
+			}
+		}
+
+		// Determine the source of the request
+		String ref = request.getHeader("Referer");
+		this.source = (ref != null) ? ref : "API";
+
+		// Lookup user based on application
+		if (user == null && ref != null) {
+			try {
+				user = SubscriberCache.getByApp(//
+						(new URI(ref)).getHost());
+			} catch (URISyntaxException ignored) {
 			}
 		}
 
@@ -161,11 +176,12 @@ public class RequestContext {
 			user = SubscriberCache.getByIP(ip);
 		}
 
+		// Assign resolved user info to the context
 		this.admin = admin;
 		this.subscriber = user;
 		this.limiter = LimiterCache.getLimiter(user, ip);
 
-		// Get user session info
+		// Lookup or create new user session context
 		CachedSession userSession = SessionHelper.getSession(request);
 		this.session = (userSession != null) ? userSession : //
 				((createSession) ? SessionHelper.createSession() : null);
@@ -278,9 +294,9 @@ public class RequestContext {
 	}
 
 	/**
-	 * Returns the source for the request.
+	 * Returns the source of the request.
 	 * 
-	 * @return the source for the request
+	 * @return the source of the request
 	 */
 	public String getSource() {
 		return this.source;

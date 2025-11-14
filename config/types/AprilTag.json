@@ -18,7 +18,8 @@
 	"checkdigit": 0,
 	"nonprinting": false,
 	"example": [
-		"tag36h11:0"
+		"tag36h11:0",
+		"tag16h5:0"
 	],
 	"pattern": {
 		"auto": "^tag.*:[0-9]{1,5}$",

@@ -22,17 +22,26 @@ public class Subscriber {
 
 	private final JSONArray ips;
 	private final JSONArray keys;
+	private final JSONArray apps;
 
 	public Subscriber(JSONObject def) {
 
+		// Basic subscriber details
 		this.customer = def.getString("customer");
 		this.subscribed = def.getLong("subscribed");
+
+		// Account active / enforced
 		this.active = def.getBoolean("active");
 		this.enforce = def.getBoolean("enforce");
+
+		// Account limits
 		this.limit = def.getInt("limit");
 		this.batch = def.getInt("batch");
-		this.ips = def.getJSONArray("ips");
-		this.keys = def.getJSONArray("keys");
+
+		// Account associations
+		this.ips = def.optJSONArray("ips", new JSONArray());
+		this.keys = def.optJSONArray("keys", new JSONArray());
+		this.apps = def.optJSONArray("apps", new JSONArray());
 	}
 
 	public String getCustomer() {
@@ -67,10 +76,14 @@ public class Subscriber {
 		return this.keys;
 	}
 
+	public JSONArray getApps() {
+		return this.apps;
+	}
+
 	/**
-	 * Returns the user session as a JSON object.
+	 * Returns the subscriber info as a JSON object.
 	 * 
-	 * @return the user session in JSON format
+	 * @return the subscriber info in JSON format
 	 */
 	public JSONObject asJSON() {
 

@@ -3,6 +3,7 @@ package org.barcodeapi.server.gen.impl;
 import java.util.HashMap;
 
 import org.barcodeapi.server.core.CodeType;
+import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.BarcodeRequest;
 import org.barcodeapi.server.gen.CodeGenerator;

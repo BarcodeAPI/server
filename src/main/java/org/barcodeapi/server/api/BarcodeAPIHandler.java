@@ -83,7 +83,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 				case JSON:
 					// Output as JSON encoded (base64)
-					format = formatRequested;
+					format = Format.JSON;
 					bytes = barcode.encodeJSON().getBytes();
 					break;
 
@@ -121,8 +121,10 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		} catch (GenerationException e) {
 
-			// Log the generation failure
-			LibLog._clogF("E6009", c.getUri(), e.getMessage());
+			// Log the generation failure (if not empty)
+			if (!(e.getExceptionType() == ExceptionType.EMPTY)) {
+				LibLog._clogF("E6009", c.getUri(), e.getMessage());
+			}
 
 			// Set status headers for failure
 			r.setStatus(e.getExceptionType().getStatusCode());
@@ -133,8 +135,10 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// Replace barcode with failure barcode
 			barcode = e.getExceptionType().getBarcodeImage();
-			bytes = barcode.getBarcodeData();
+
+			// Assign output fields
 			format = Format.PNG;
+			bytes = barcode.getBarcodeData();
 		} catch (Exception | Error e) {
 
 			LibLog._log("Unhandled exception!", e);
@@ -146,8 +150,9 @@ public class BarcodeAPIHandler extends RestHandler {
 		r.setHeader("X-RateLimit-Tokens", limiter.getTokenCountStr());
 
 		// Add content headers type and length
-		r.setHeader("Content-Type", format.getMime());
-		r.setHeader("Content-Length", Long.toString(bytes.length));
+		r.setContentType(format.getMime());
+		r.setHeader("Content-Length", //
+				Long.toString(bytes.length));
 
 		// Add the barcode type and detail headers
 		r.setHeader("X-Barcode-Type", barcode.getBarcodeType().getName());

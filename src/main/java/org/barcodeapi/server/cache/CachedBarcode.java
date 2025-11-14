@@ -125,8 +125,13 @@ public class CachedBarcode extends CachedObject {
 		).toString();
 	}
 
+	/**
+	 * Returns an HTML page with the barcode embedded as Base-64.
+	 * 
+	 * @return barcode in an HTML format page
+	 */
 	public String encodeHTML() {
-		return String.format("<html><body><img src='/api/%s/%s'/></body><html>", //
-				getBarcodeType().getTargets()[0], getBarcodeStringEncoded());
+		return String.format(//
+				"<html><body><img src='data:image/png;base64,%s'/></body><html>", encodeBase64());
 	}
 }

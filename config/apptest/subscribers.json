@@ -10,7 +10,8 @@
 			"ips": [],
 			"keys": [
 				"appTest"
-			]
+			],
+			"apps": []
 		},
 		{
 			"customer": "BarcodeAPI.org",
@@ -22,7 +23,8 @@
 			"ips": [
 				"127.0.0.1"
 			],
-			"keys": []
+			"keys": [],
+			"apps": []
 		}
 	]
 }

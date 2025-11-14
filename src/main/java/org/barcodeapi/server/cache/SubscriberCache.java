@@ -15,11 +15,13 @@ public class SubscriberCache {
 	private static final Map<String, Subscriber> subscribersByName;
 	private static final Map<String, Subscriber> subscribersByIP;
 	private static final Map<String, Subscriber> subscribersByKey;
+	private static final Map<String, Subscriber> subscribersByApp;
 
 	static {
 		subscribersByName = new ConcurrentHashMap<>();
 		subscribersByIP = new ConcurrentHashMap<>();
 		subscribersByKey = new ConcurrentHashMap<>();
+		subscribersByApp = new ConcurrentHashMap<>();
 
 		reload();
 	}
@@ -33,6 +35,7 @@ public class SubscriberCache {
 		subscribersByName.clear();
 		subscribersByIP.clear();
 		subscribersByKey.clear();
+		subscribersByApp.clear();
 
 		// Load subscribers, force reload
 		JSONArray users = Config//
@@ -77,6 +80,12 @@ public class SubscriberCache {
 			for (int y = 0; y < keys.length(); y++) {
 				subscribersByKey.put(keys.getString(y), subscriber);
 			}
+
+			// Map Customer Applications
+			JSONArray apps = subscriber.getApps();
+			for (int y = 0; y < apps.length(); y++) {
+				subscribersByApp.put(apps.getString(y), subscriber);
+			}
 		}
 	}
 
@@ -84,7 +93,7 @@ public class SubscriberCache {
 	 * Lookup a subscriber by customer name.
 	 * 
 	 * @param name name of the customer
-	 * @return the subscriber info
+	 * @return the subscriber info or null
 	 */
 	public static Subscriber getByName(String name) {
 		return subscribersByName.get(name);
@@ -94,7 +103,7 @@ public class SubscriberCache {
 	 * Lookup a subscriber by API key.
 	 * 
 	 * @param key the API key
-	 * @return the subscriber info
+	 * @return the subscriber info or null
 	 */
 	public static Subscriber getByKey(String key) {
 		return subscribersByKey.get(key);
@@ -104,9 +113,19 @@ public class SubscriberCache {
 	 * Lookup a subscriber by IP address.
 	 * 
 	 * @param ip the IP address
-	 * @return the subscriber info
+	 * @return the subscriber info or null
 	 */
 	public static Subscriber getByIP(String ip) {
 		return subscribersByIP.get(ip);
+	}
+
+	/**
+	 * Lookup a subscriber by the referring application.
+	 * 
+	 * @param app the application address
+	 * @return the subscriber info or null
+	 */
+	public static Subscriber getByApp(String app) {
+		return subscribersByApp.get(app);
 	}
 }
