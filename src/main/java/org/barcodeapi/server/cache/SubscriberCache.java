@@ -47,17 +47,17 @@ public class SubscriberCache {
 		for (int x = 0; x < users.length(); x++) {
 
 			// Get the subscriber definition from the array
-			JSONObject rawSub = users.getJSONObject(x);
+			JSONObject subInfo = users.getJSONObject(x);
 
 			try {
 
 				// Load the subscriber info
-				subscriber = new Subscriber(rawSub);
+				subscriber = new Subscriber(subInfo);
 			} catch (Exception | Error e) {
 
 				// Log if failed to load subscriber
 				LibLog._log("Failed to load subscriber.", e);
-				LibLog._logF("Subscriber: %s", rawSub);
+				LibLog._logF("Subscriber: %s", subInfo.toString());
 				continue;
 			}
 
@@ -67,24 +67,28 @@ public class SubscriberCache {
 			}
 
 			// Map of Customer Names
-			subscribersByName.put(subscriber.getCustomer(), subscriber);
+			subscribersByName.put(//
+					subscriber.getCustomer(), subscriber);
 
 			// Map Customer IPs
-			JSONArray ips = subscriber.getIPs();
-			for (int y = 0; y < ips.length(); y++) {
-				subscribersByIP.put(ips.getString(y), subscriber);
+			JSONArray subIps = subscriber.getIPs();
+			for (int y = 0; y < subIps.length(); y++) {
+				subscribersByIP.put(//
+						subIps.getString(y), subscriber);
 			}
 
 			// Map Customer Keys
-			JSONArray keys = subscriber.getKeys();
-			for (int y = 0; y < keys.length(); y++) {
-				subscribersByKey.put(keys.getString(y), subscriber);
+			JSONArray subKeys = subscriber.getKeys();
+			for (int y = 0; y < subKeys.length(); y++) {
+				subscribersByKey.put(//
+						subKeys.getString(y), subscriber);
 			}
 
 			// Map Customer Applications
-			JSONArray apps = subscriber.getApps();
-			for (int y = 0; y < apps.length(); y++) {
-				subscribersByApp.put(apps.getString(y), subscriber);
+			JSONArray subApps = subscriber.getApps();
+			for (int y = 0; y < subApps.length(); y++) {
+				subscribersByApp.put(//
+						subApps.getString(y), subscriber);
 			}
 		}
 	}

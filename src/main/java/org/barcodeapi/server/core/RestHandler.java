@@ -137,6 +137,7 @@ public abstract class RestHandler extends AbstractHandler {
 		// Authenticate the user if required
 		if (apiAuthRequired && (ctx.getAdmin() == null)) {
 
+			// Send user unauthorized with login realm
 			getStats().hitCounter("request", "authfail");
 			getStats().hitCounter("request", "target", _NAME, "authfail");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

@@ -77,7 +77,9 @@ public class CachedLimiter extends CachedObject {
 	 * @return number of tokens minter
 	 */
 	public double mintTokens() {
-		if (tokenCount == -1) {
+
+		// Skip if already at limit, or unlimited
+		if ((tokenCount == tokenLimit) || (tokenCount == -1)) {
 			return 0;
 		}
 
