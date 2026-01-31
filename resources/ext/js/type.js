@@ -47,9 +47,17 @@ function loadType(type) {
 	var info = document.getElementById("barcode-template");
 	info.setAttribute("id", "barcode-type-" + target);
 
-	// Update example link
-	var link = ("/api/" + target + "/" + type.example[0]);
-	info.querySelector(".type-example").src = link;
+	// Render each of the examples
+	for (var x in type.example) {
+
+		// Create the image element
+		var example = document.createElement("img");
+		example.src = ("/api/" + target + "/" + type.example[x]);
+
+		// Add it to the examples block
+		info.querySelector(".barcode-type-example").appendChild(example);
+	}
+
 
 	// Update type basic details
 	info.querySelector(".type-name").innerHTML = type.display;
@@ -58,7 +66,6 @@ function loadType(type) {
 	info.querySelector(".type-cost-custom").innerHTML = type.costCustom;
 
 	// Update type extended details
-	info.querySelector(".type-example-link").href = "index.html#" + target;
 	info.querySelector(".type-format").innerHTML = type.pattern;
 	info.querySelector(".type-description").innerHTML = type.description[language];
 	info.querySelector(".type-wiki").href = type.wiki[language];

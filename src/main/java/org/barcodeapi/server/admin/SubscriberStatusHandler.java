@@ -4,48 +4,35 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.server.cache.LimiterCache;
+import org.barcodeapi.server.cache.SubscriberCache;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * LimiterFlushHandler.java
+ * SubscriberReloadHandler.java
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
-public class LimiterFlushHandler extends RestHandler {
+public class SubscriberStatusHandler extends RestHandler {
 
-	public LimiterFlushHandler() {
+	public SubscriberStatusHandler() {
 		super(true, false, false);
 	}
 
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
-		// Check & flush caches
-		String id = c.getRequest().getParameter("id");
-		boolean flushed = LimiterCache.flushLimiter(id);
-
-		if (!flushed) {
-
-			// Print failure to client
-			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			r.setContentType("application/json");
-			r.getOutputStream().println((new JSONObject()//
-					.put("code", 400)//
-					.put("message", "limiter not found")//
-			).toString());
-			return;
-		}
+		// Reload the subscribers list
+		SubscriberCache.reload();
 
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setContentType("application/json");
 		r.getOutputStream().println((new JSONObject()//
 				.put("code", 200)//
-				.put("message", "limiter flushed")//
+				.put("message", "users reloaded")//
 		).toString());
 	}
 }

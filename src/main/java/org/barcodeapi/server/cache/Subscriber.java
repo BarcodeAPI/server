@@ -95,6 +95,7 @@ public class Subscriber {
 				.put("limit", getLimit())//
 				.put("batch", getMaxBatch())//
 				.put("ips", getIPs())//
-				.put("keys", getKeys());
+				.put("keys", getKeys())//
+				.put("apps", getApps());
 	}
 }

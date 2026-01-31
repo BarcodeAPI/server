@@ -165,7 +165,6 @@ public class ServerLauncher {
 		resourceHandler.setHandler(new StaticHandler(server));
 		resourceHandler.setContextPath("/");
 		handlers.addHandler(resourceHandler);
-
 	}
 
 	/**

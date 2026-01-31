@@ -60,4 +60,15 @@ public class LimiterCache {
 		// Return the limiter
 		return limiter;
 	}
+
+	public static boolean flushLimiter(String limiter) {
+		LibMetrics.hitMethodRunCounter();
+
+		if (!_LIMITERS.has(limiter)) {
+			return false;
+		}
+
+		_LIMITERS.remove(limiter);
+		return true;
+	}
 }
