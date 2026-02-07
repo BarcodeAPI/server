@@ -42,6 +42,17 @@ public class CachedLimiter extends CachedObject {
 	}
 
 	/**
+	 * Short lived and can be cleaned if token balance is full.
+	 * 
+	 * @return the object is short lived
+	 */
+
+	@Override
+	public boolean isShortLived() {
+		return (tokenCount == tokenLimit);
+	}
+
+	/**
 	 * Returns the caller associated with the limiter.
 	 * 
 	 * @return caller
