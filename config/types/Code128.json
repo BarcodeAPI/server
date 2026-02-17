@@ -13,21 +13,24 @@
 	"threads": 2,
 	"priority": 65,
 	"cost": {
-		"basic": 2,
-		"custom": 3
+		"base": 1.250,
+		"char": 0.065,
+		"mult": 1.350
 	},
 	"checkdigit": 0,
 	"nonprinting": true,
 	"example": [
 		"Try Me!",
-		"ABCD-1234"
+		"ABCD-1234",
+		"With Color?fg=ff0000",
+		"NoLabel?text=none"
 	],
 	"pattern": {
 		"auto": "^[ !#$()*.\\/0-9=?A-Za-z~]{1,12}$",
 		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,48}$"
 	},
 	"description": {
-		"en": "A medium densisty alphanumeric barcode with a larger character set."
+		"en": "A medium densisty alphanumeric barcode with a larger character set when compared to CODE39."
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/Code_128"
@@ -39,7 +42,10 @@
 			"default": 150,
 			"min": 50,
 			"max": 300,
-			"step": 10
+			"step": 10,
+			"description": {
+				"en" : "The pixel density of the resultimg image."
+			}
 		},
 		"module": {
 			"name": "Module",

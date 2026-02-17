@@ -24,7 +24,7 @@ public class BarcodeRequest {
 	private final boolean cached;
 	private final boolean download;
 	private final JSONObject options;
-	private final int cost;
+	private final double cost;
 
 	private BarcodeRequest(CodeType type, String data, JSONObject options) {
 		LibMetrics.hitMethodRunCounter();
@@ -49,10 +49,21 @@ public class BarcodeRequest {
 			}
 		}
 
-		// Determine the cost of the request
-		boolean free = (isExample && (!complex));
-		int cost = (complex) ? type.getCostCustom() : type.getCostBasic();
-		this.cost = (free) ? 0 : cost;
+		double tokens = 0;
+		if (!isExample) {
+
+			// Determine the cost of the request
+			tokens = type.getCostBase() + //
+					(data.length() * type.getCostPerChar());
+
+			// Multiplier for custom requests
+			if (options.length() > 0) {
+				tokens *= type.getCostMultiplier();
+			}
+		}
+
+		// Assign the request cost
+		this.cost = tokens;
 	}
 
 	/**
@@ -87,7 +98,7 @@ public class BarcodeRequest {
 	 * 
 	 * @return the barcode token cost
 	 */
-	public int getCost() {
+	public double getCost() {
 		return cost;
 	}
 

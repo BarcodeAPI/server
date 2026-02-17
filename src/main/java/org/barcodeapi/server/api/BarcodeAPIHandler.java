@@ -62,7 +62,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// Send token cost to user
 			r.setHeader("X-RateLimit-Cost", //
-					Integer.toString(request.getCost()));
+					Double.toString(request.getCost()));
 
 			// Try to spend the tokens
 			tokenSpend = request.getCost();

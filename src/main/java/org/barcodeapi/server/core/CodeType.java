@@ -37,8 +37,9 @@ public class CodeType {
 
 	private final String[] targets;
 
-	private final int costBasic;
-	private final int costCustom;
+	private final double costBase;
+	private final double costChar;
+	private final double costMult;
 
 	private final String[] examples;
 	private final JSONObject description;
@@ -97,8 +98,9 @@ public class CodeType {
 
 		// get barcode costs
 		JSONObject costs = config.getJSONObject("cost");
-		this.costBasic = costs.getInt("basic");
-		this.costCustom = costs.getInt("custom");
+		this.costBase = costs.getDouble("base");
+		this.costChar = costs.getDouble("char");
+		this.costMult = costs.getDouble("mult");
 
 		// get description and wiki link
 		this.description = config.getJSONObject("description");
@@ -175,12 +177,16 @@ public class CodeType {
 		return targets;
 	}
 
-	public int getCostBasic() {
-		return costBasic;
+	public double getCostBase() {
+		return costBase;
 	}
 
-	public int getCostCustom() {
-		return costCustom;
+	public double getCostPerChar() {
+		return costChar;
+	}
+
+	public double getCostMultiplier() {
+		return costMult;
 	}
 
 	public String[] getExample() {
@@ -218,11 +224,13 @@ public class CodeType {
 				.put("example", type.getExample())//
 				.put("checksum", type.enforceChecksum())//
 				.put("nonprinting", type.getAllowNonprinting())//
-				.put("costBasic", type.getCostBasic())//
-				.put("costCustom", type.getCostCustom())//
 				.put("targets", new JSONArray(type.getTargets()))//
 				.put("description", type.getDescription())//
 				.put("wiki", type.getWiki())//
-				.put("options", type.getOptions());
+				.put("options", type.getOptions())//
+				.put("cost", new JSONObject() //
+						.put("base", type.getCostBase())//
+						.put("char", type.getCostPerChar())//
+						.put("mult", type.getCostMultiplier()));
 	}
 }

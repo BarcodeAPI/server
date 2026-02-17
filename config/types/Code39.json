@@ -13,8 +13,9 @@
 	"threads": 2,
 	"priority": 68,
 	"cost": {
-		"basic": 2,
-		"custom": 3
+		"base": 0.800,
+		"char": 0.040,
+		"mult": 1.200
 	},
 	"checkdigit": 0,
 	"nonprinting": false,
@@ -26,7 +27,7 @@
 		"extended": "^[A-Z*0-9 \\-$%.\\/+]{1,30}$"
 	},
 	"description": {
-		"en": "A basic alphanumeric barcode. Uppercase letters and numbers only."
+		"en": "A basic alphanumeric barcode. Supports numbers and uppercase letters only."
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/Code_39"
@@ -99,6 +100,11 @@
 			"type": "text",
 			"default": "000000",
 			"pattern": "[0-9A-F]{6}"
+		},
+		"download": {
+			"name": "Download",
+			"type": "bool",
+			"default": true
 		}
 	}
 }
