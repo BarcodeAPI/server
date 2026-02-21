@@ -7,6 +7,7 @@
 		"CODABAR",
 		"ITF14",
 		"Code39",
+		"Code93",
 		"Code128",
 		"Aztec",
 		"QRCode",

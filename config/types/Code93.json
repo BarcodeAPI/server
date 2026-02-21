@@ -1,0 +1,37 @@
+{
+	"name": "Code93",
+	"display": "Code 93",
+	"show": false,
+	"decode": true,
+	"cache": true,
+	"target": [
+		"93",
+		"code-93",
+		"code93"
+	],
+	"generator": ".Code93Generator",
+	"threads": 2,
+	"priority": 90,
+	"cost": {
+		"base": 0.800,
+		"char": 0.040,
+		"mult": 1.200
+	},
+	"checkdigit": 0,
+	"nonprinting": false,
+	"example": [
+		"TRY 93"
+	],
+	"pattern": {
+		"auto": "^[A-Z0-9 $.\\/]{1,12}$",
+		"extended": "^[A-Z*0-9 \\-$%.\\/+]{1,30}$"
+	},
+	"description": {
+		"en": ""
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/Code_93"
+	},
+	"options": {
+	}
+}
