@@ -189,7 +189,7 @@ public class CodeType {
 		return costMult;
 	}
 
-	public String[] getExample() {
+	public String[] getExamples() {
 		return examples;
 	}
 
@@ -221,7 +221,7 @@ public class CodeType {
 				.put("show", type.getShowType())//
 				.put("decode", type.getDecodeSupported())//
 				.put("pattern", type.getPatternExtended())//
-				.put("example", type.getExample())//
+				.put("examples", type.getExamples())//
 				.put("checksum", type.enforceChecksum())//
 				.put("nonprinting", type.getAllowNonprinting())//
 				.put("targets", new JSONArray(type.getTargets()))//

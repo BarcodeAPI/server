@@ -42,7 +42,7 @@ public class BarcodeRequest {
 
 		// Determine if request is a free example
 		boolean isExample = false;
-		for (String example : type.getExample()) {
+		for (String example : type.getExamples()) {
 			if (example.equals(data)) {
 				isExample = true;
 				break;

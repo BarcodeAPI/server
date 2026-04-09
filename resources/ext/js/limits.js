@@ -18,13 +18,15 @@ function init() {
 				document.getElementsByClassName("notice-abusers")[0].style.display = 'none';
 			}
 
+			// Update user token count
 			document.getElementById("token_count").innerHTML = //
-				((data.tokenCount == -1) ? "Unlimited" : data.tokenCount.toFixed(2));
+				((data.tokens.count == -1) ? "Unlimited" : data.tokens.count.toFixed(2));
 
+			// Update user token limit
 			document.getElementById("token_limit").innerHTML = //
-				((data.tokenLimit == -1) ? "Unlimited" : data.tokenLimit);
+				((data.tokens.limit == -1) ? "Unlimited" : data.tokens.limit);
 
-			// Log tracking event
+			// Log app load tracking event
 			var setupMillis = ((new Date()) - timeStart);
 			trackingEvent("AppEvents", "AppLoad", "Limits", setupMillis);
 		});
@@ -37,8 +39,10 @@ function init() {
 		.then(data => {
 
 			// Add free plan details
-			document.querySelector(".free-details").innerHTML = data.free.description;
-			document.querySelector(".free-support").innerHTML = data.free.support;
+			document.querySelector(".free-details").innerHTML = //
+				data.free.description.replaceAll("\n", "<br/>");
+			document.querySelector(".free-support").innerHTML = //
+				data.free.support.replaceAll("\n", "<br/>");
 
 			// Check if has paid plans
 			if (data.paid.length > 0) {
@@ -70,6 +74,7 @@ function addPlan(plan) {
 
 	var planPrices = document.createElement("span");
 
+	// Loop each of the paid plans
 	for (option in plan.price) {
 
 		if (option > 0) {
@@ -89,11 +94,14 @@ function addPlan(plan) {
 		planPrices.appendChild(priceInfo);
 	}
 
+	// Add plan price, description, and support information
 	info.querySelector(".plan-prices").appendChild(planPrices);
+	info.querySelector(".plan-details").innerHTML = //
+		plan.description.replaceAll("\n", "<br/>");
+	info.querySelector(".plan-support").innerHTML = //
+		plan.support.replaceAll("\n", "<br/>");
 
-	info.querySelector(".plan-details").innerHTML = plan.description;
-	info.querySelector(".plan-support").innerHTML = plan.support;
-
+	// Add the info block to the DOM
 	document.getElementById("user-plans").append(info);
 }
 

@@ -203,7 +203,7 @@ function loadSelectedType() {
 	// Update text field regex
 	var text = document.getElementById("text");
 	text.setAttribute("pattern", (codeType) ? codeType.pattern : '.*');
-	text.setAttribute("placeholder", (codeType) ? codeType.example[0] : "Try Me...");
+	text.setAttribute("placeholder", (codeType) ? codeType.examples[0] : "Try Me...");
 
 	// Show non-printing keyboard for supported formats
 	uiShowHide("action-keyboard", (codeType) ? codeType.nonprinting : false);
@@ -313,7 +313,7 @@ function buildBarcodeURL() {
 
 	// Set default text
 	if (text === "") {
-		text = (codeType == null) ? "Try Me!" : codeType.example[0];
+		text = (codeType == null) ? "Try Me!" : codeType.examples[0];
 	}
 
 	// Check trimming 

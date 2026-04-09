@@ -52,7 +52,7 @@ public class Subscriber {
 		return this.subscribed;
 	}
 
-	public boolean getActive() {
+	public boolean isActive() {
 		return this.active;
 	}
 
@@ -90,7 +90,7 @@ public class Subscriber {
 		return new JSONObject() //
 				.put("customer", getCustomer())//
 				.put("subscribed", getSubscribed())//
-				.put("active", getActive())//
+				.put("active", isActive())//
 				.put("enforce", isEnforced())//
 				.put("limit", getLimit())//
 				.put("batch", getMaxBatch())//

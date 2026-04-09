@@ -62,7 +62,7 @@ public class SubscriberCache {
 			}
 
 			// Skip if inactive
-			if (!subscriber.getActive()) {
+			if (!subscriber.isActive()) {
 				continue;
 			}
 

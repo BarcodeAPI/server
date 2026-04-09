@@ -23,8 +23,8 @@ function init() {
 function onLoadSession(data) {
 
 	document.getElementById("session-key").innerHTML = data.key;
-	document.getElementById("session-created").innerHTML = (new Date(data.created)).toJSON();
-	document.getElementById("session-expires").innerHTML = (new Date(data.expires)).toJSON();
+	document.getElementById("session-created").innerHTML = (new Date(data.time.created)).toJSON();
+	document.getElementById("session-expires").innerHTML = (new Date(data.time.expires)).toJSON();
 	document.getElementById("session-count").innerHTML = data.count;
 
 	var addresses = "";
@@ -51,12 +51,13 @@ function onLoadSession(data) {
 
 function onLoadLimiter(data) {
 	document.getElementById("limiter-caller").innerHTML = data.caller;
-	document.getElementById("limiter-created").innerHTML = (new Date(data.created)).toJSON();
-	document.getElementById("limiter-expires").innerHTML = (new Date(data.expires)).toJSON();
+	document.getElementById("limiter-created").innerHTML = (new Date(data.time.created)).toJSON();
+	document.getElementById("limiter-expires").innerHTML = (new Date(data.time.expires)).toJSON();
 	document.getElementById("limiter-enforce").innerHTML = (data.enforce ? "Yes" : "No");
-	document.getElementById("limiter-tokenSpend").innerHTML = data.tokenSpend;
-	document.getElementById("limiter-tokenLimit").innerHTML = data.tokenLimit;
-	document.getElementById("limiter-tokenCount").innerHTML = Number(data.tokenCount).toFixed(2);
+	document.getElementById("limiter-flagged").innerHTML = (data.flagged ? "Yes" : "No");
+	document.getElementById("limiter-tokenSpend").innerHTML = data.tokens.spend;
+	document.getElementById("limiter-tokenLimit").innerHTML = data.tokens.limit;
+	document.getElementById("limiter-tokenCount").innerHTML = Number(data.tokens.count).toFixed(2);
 }
 
 function makeEntryRow(text, hits) {

@@ -30,7 +30,7 @@
 		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,48}$"
 	},
 	"description": {
-		"en": "A medium densisty alphanumeric barcode with a larger character set when compared to CODE39."
+		"en": "A medium densisty alphanumeric barcode with a larger character set when compared to CODE39. Supports most of the ASCII character set including non-printing control characters."
 	},
 	"wiki": {
 		"en": "https://en.wikipedia.org/wiki/Code_128"
@@ -44,7 +44,7 @@
 			"max": 300,
 			"step": 10,
 			"description": {
-				"en" : "The pixel density of the resultimg image."
+				"en": "The pixel density of the resultimg image."
 			}
 		},
 		"module": {

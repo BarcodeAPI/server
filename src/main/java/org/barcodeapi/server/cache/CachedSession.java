@@ -107,11 +107,12 @@ public class CachedSession extends CachedObject {
 
 		return (new JSONObject()//
 				.put("key", getKey())//
-				.put("created", getTimeCreated())//
-				.put("expires", getTimeExpires())//
-				.put("last", getTimeLastTouched())//
-				.put("count", getAccessCount())//
 				.put("addresses", addresses)//
+				.put("time", new JSONObject() //
+						.put("created", getTimeCreated())//
+						.put("expires", getTimeExpires())//
+						.put("last", getTimeLastTouched()))//
+				.put("count", getAccessCount())//
 				.put("requests", requests));
 	}
 }

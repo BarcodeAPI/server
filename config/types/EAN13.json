@@ -13,8 +13,8 @@
 	"threads": 2,
 	"priority": 85,
 	"cost": {
-		"base": 0.675,
-		"char": 0.025,
+		"base": 1.000,
+		"char": 0.000,
 		"mult": 1.250
 	},
 	"checkdigit": 13,

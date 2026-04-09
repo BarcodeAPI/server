@@ -14,9 +14,9 @@
 	"threads": 2,
 	"priority": 95,
 	"cost": {
-		"base": 0.700,
-		"char": 0.025,
-		"mult": 1.150
+		"base": 1.000,
+		"char": 0.000,
+		"mult": 1.250
 	},
 	"checkdigit": 12,
 	"nonprinting": false,

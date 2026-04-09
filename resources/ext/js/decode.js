@@ -103,15 +103,19 @@ function submitForDecode(e) {
 		body: formData,
 	}).then(response => {
 
-		if (!response.ok) {
-			throw new Error(`Error: ${response.statusText}`);
-		}
 		return response.json();
 	}).then(data => {
 
-		console.log("Decoded data:", data);
+		console.log("Decode response: ", data);
+
+		if (data.code == 200) {
+			alert("Data: " + data.text);
+		} else {
+			alert("Not decoded: " + data.message);
+		}
 	}).catch(error => {
 
+		alert("Error: " + error);
 		console.error("Error during file upload:", error);
 	});
 
