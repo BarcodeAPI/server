@@ -19,6 +19,7 @@ public class CachedBarcode extends CachedObject {
 	private final byte[] data;
 
 	private final String strRaw;
+	private final String strData;
 	private final String strNice;
 	private final String strEncoded;
 
@@ -34,8 +35,10 @@ public class CachedBarcode extends CachedObject {
 		this.data = data;
 
 		this.strRaw = raw;
-		this.strNice = CodeUtils.stripIllegal(raw);
-		this.strEncoded = CodeUtils.encodeURL(raw);
+		int optPos = raw.indexOf("?");
+		this.strData = ((optPos == -1) ? strRaw : raw.substring(0, optPos));
+		this.strNice = CodeUtils.stripIllegal(strData);
+		this.strEncoded = CodeUtils.encodeURL(strData);
 	}
 
 	/**

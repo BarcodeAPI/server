@@ -158,7 +158,7 @@ public class CodeUtils {
 	public static String stripIllegal(String data) {
 		LibMetrics.hitMethodRunCounter();
 
-		return data.replaceAll("[!@#$%^&*\\(\\)\\[\\]\\{\\};:\\',\\<\\>\\\"]", "");
+		return data.replaceAll("[!@#$%^&*\\(\\)=\\[\\]\\{\\};:\\',\\<\\>\\\"\\?]", "");
 	}
 
 	/**
