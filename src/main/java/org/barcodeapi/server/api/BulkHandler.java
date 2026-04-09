@@ -1,12 +1,15 @@
 package org.barcodeapi.server.api;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -27,6 +30,7 @@ import org.json.JSONObject;
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 
 /**
@@ -35,6 +39,10 @@ import com.opencsv.exceptions.CsvValidationException;
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
  */
 public class BulkHandler extends RestHandler {
+
+	// Upload size in bytes
+	private static final int UPLOAD_BYTES_MIN = 8;
+	private static final int UPLOAD_BYTES_MAX = (512 * 1024);
 
 	private final File uploadDir;
 
@@ -53,64 +61,200 @@ public class BulkHandler extends RestHandler {
 		this.uploadDir.mkdirs();
 	}
 
+	private String[][] readInput(InputStream stream) {
+		LibMetrics.hitMethodRunCounter();
+
+		// Create CSV Reader from the input stream
+		List<String[]> records = new ArrayList<>();
+		try (CSVReader csvReader = new CSVReader(new InputStreamReader(stream))) {
+			String[] record;
+
+			// Loop each entry in the CSV
+			while ((record = csvReader.readNext()) != null) {
+
+				records.add(record);
+			}
+
+			// Return the records as an array
+			return records.toArray(//
+					new String[records.size()][]);
+		} catch (IOException e) {
+
+			// Log failure in input stream
+			LibLog._log("Failed to read CSV data.", e);
+			return null;
+
+		} catch (CsvValidationException e) {
+
+			// Log failure in CSV validation
+			LibLog._log("Failed to validate CSV format.", e);
+			return null;
+		}
+	};
+
+	private boolean writeFile(String uid, String[][] entries) {
+		LibMetrics.hitMethodRunCounter();
+
+		File outputFile = new File(uploadDir, uid + ".csv");
+
+		try (CSVWriter csvWriter = //
+				new CSVWriter(//
+						new FileWriter(outputFile, true), //
+						CSVWriter.DEFAULT_SEPARATOR, //
+						CSVWriter.DEFAULT_QUOTE_CHARACTER, //
+						CSVWriter.DEFAULT_ESCAPE_CHARACTER, //
+						CSVWriter.DEFAULT_LINE_END)) {
+
+			for (String[] entry : entries) {
+				csvWriter.writeNext(entry, false);
+			}
+			return true;
+
+		} catch (IOException e) {
+			LibLog._log("Failed to write file to disk.", e);
+			return false;
+		}
+	}
+
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws ServletException, IOException {
 
+		// Assign the request an ID
+		String uid = UUID.randomUUID().toString();
+
+		double batchCost = 0;
+
 		try {
+
+			// Check for image
+			if (!c.hasBody() || //
+					c.getBodySize() < UPLOAD_BYTES_MIN || //
+					c.getBodySize() > UPLOAD_BYTES_MAX) {
+
+				// Send error to client
+				throw new GenerationException(ExceptionType.INVALID, //
+						new IllegalArgumentException("Body outside accepted size."));
+			}
 
 			// Get the uploaded file
 			Part part = c.getRequest().getPart("csvFile");
 
-			// Parse the CSV for barcode request objects
-			List<BarcodeRequest> requests = parseRequests(part.getInputStream());
+			// Read the CSV file from user stream
+			String[][] entries = readInput(part.getInputStream());
 
-			if (requests == null) {
+			// Write the file to disk
+			writeFile(uid, entries);
+
+			// Check entries loaded
+			if (entries == null) {
 
 				// Log and return the processing failure
-				LibLog._log("Failed to generate bulk barcodes.");
 				throw new GenerationException(ExceptionType.INVALID, //
-						new IllegalArgumentException("Invalid CSV format."));
+						new Throwable("Bulk upload file not in CSV format."));
 			}
 
 			// Determine max batch size for user
 			Subscriber sub = c.getSubscriber();
 			int maxBatch = (sub != null) ? sub.getMaxBatch() : 250;
 
-			// Check if larger then allowed
-			if (requests.size() > maxBatch) {
+			// Build debug status message
+			StringBuilder statusMessage = new StringBuilder("BarcodeAPI.org Bulk Generator Log\n");
+			statusMessage.append(String.format(" Request Size: %d / %d\n", entries.length, maxBatch));
 
-				// Return invalid request to user
-				throw new GenerationException(ExceptionType.INVALID, //
-						new Throwable("Request is larger then max batch size."));
+			// Open a new ZIP file output stream
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ZipOutputStream zipArchive = new ZipOutputStream(baos);
+
+			CachedBarcode barcode;
+			int entriesComplete = 0;
+
+			// Loop each of the requests
+			int numEntries = (maxBatch > entries.length) ? entries.length : maxBatch;
+			for (int index = 0; index < numEntries; index++) {
+				String[] entry = entries[index];
+
+				// Log the barcode data line
+				statusMessage.append(String.format(//
+						"\nProcessing entry: %d\n", (index + 1)));
+
+				try {
+
+					// Parse request from CSV entry
+					BarcodeRequest request = BarcodeRequest.fromCSV(entry);
+
+					// Log the data, type, and cost
+					statusMessage.append(String.format(//
+							" Data: %s\n Type: %s\n Cost: %.2f\n", //
+							request.getData(), request.getType().getName(), request.getCost()));
+
+					// Spend the tokens for the barcode
+					if (!c.getLimiter().spendTokens(request.getCost())) {
+						statusMessage.append("\nClient is out of tokens!");
+						break;
+					}
+					batchCost += request.getCost();
+
+					// Generate the requested barcode
+					statusMessage.append(" Generating...\n");
+					barcode = BarcodeGenerator.requestBarcode(request);
+				} catch (GenerationException e) {
+
+					// Log failure generating barcode
+					LibLog._clogF("E6009", entry[0], e.getCause().getMessage());
+					statusMessage.append(String.format(" Failed: %s\n", e.getCause().getMessage()));
+					continue;
+				}
+
+				try {
+
+					// Add barcode entry to ZIP archive
+					statusMessage.append(" Adding file to archive...\n");
+					zipArchive.putNextEntry(new ZipEntry(barcode.getBarcodeStringNice() + ".png"));
+					zipArchive.write(barcode.getBarcodeData(), 0, barcode.getBarcodeDataSize());
+					zipArchive.closeEntry();
+					statusMessage.append(" Done.\n");
+					entriesComplete++;
+
+				} catch (Exception | Error e) {
+
+					// Log failure adding to archive
+					LibLog._log("Failed adding barcode to ZIP archive!", e);
+					statusMessage.append(String.format(" Failed: %s\n", e.getMessage()));
+				}
 			}
 
-			// Determine token cost
-			int tokenCount = 0;
-			for (BarcodeRequest request : requests) {
-				tokenCount += request.getCost();
-			}
+			// Log the bulk process
+			long processTime = (System.currentTimeMillis() - c.getTimestamp());
+			LibLog._clogF("I0602", entries.length, processTime, batchCost);
 
-			// Discount for running as a batch
-			int batchCost = ((tokenCount * 75) / 100);
+			// Add final status messages
+			statusMessage.append("\n\nBulk processing complete.\n");
+			statusMessage.append(String.format(" Count: %d / %d\n", entriesComplete, numEntries));
+			statusMessage.append(String.format(" Cost:  %.2f tokens\n", batchCost));
+			statusMessage.append(String.format(" Time:  %dms\n", processTime));
+			statusMessage.append(String.format("\nTokens Remaining: %.2f\n", c.getLimiter().getTokenCount()));
+			statusMessage.append(String.format("\nRequest: %s\n", uid));
 
-			// Try to spend the tokens
-			if (!c.getLimiter().spendTokens(batchCost)) {
+			// Add debug messages to ZIP file
+			byte[] debugBytes = statusMessage.toString().getBytes();
+			zipArchive.putNextEntry(new ZipEntry("_debug.txt"));
+			zipArchive.write(debugBytes, 0, debugBytes.length);
 
-				// Return rate limited barcode to user
-				throw new GenerationException(ExceptionType.LIMITED, //
-						new Throwable("Client is rate limited, try again later."));
-			}
-
-			// Response headers for file download
-			r.setContentType("application/zip");
-			r.setHeader("Content-Disposition", "filename=barcodes.zip");
+			// Close the ZIP file
+			zipArchive.close();
+			baos.flush();
 
 			// Advise current token spend and count
 			r.setHeader("X-RateLimit-Cost", Double.toString(batchCost));
 			r.setHeader("X-RateLimit-Tokens", c.getLimiter().getTokenCountStr());
 
-			// Pass request list and output stream to bulk helper
-			getZippedBarcodes(requests, r.getOutputStream());
+			// Response headers for file download
+			r.setContentType("application/zip");
+			r.setHeader("Content-Disposition", "filename=barcodes.zip");
+
+			OutputStream out = r.getOutputStream();
+			out.write(baos.toByteArray());
+			out.flush();
 
 		} catch (GenerationException e) {
 
@@ -119,108 +263,30 @@ public class BulkHandler extends RestHandler {
 
 			// Print error to client
 			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			r.setHeader("X-Error-Message", e.getCause().getMessage());
 			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject() //
 					.put("code", 400)//
-					.put("message", "failed to process bulk request")//
-					.put("error", e.getMessage())//
+					.put("request", uid)//
+					.put("message", "Failed to process bulk request.")//
+					.put("error", e.getCause().getMessage())//
 			).toString());
 		} catch (Exception | Error e) {
 
+			// Log the failure
+			LibLog._logF("Unknown error: %s", e.getMessage());
+
 			// Print unknown failure to client
 			r.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			r.setHeader("X-Error-Message", e.getMessage());
 			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject() //
 					.put("code", 500)//
-					.put("message", "unknown error")//
+					.put("request", uid)//
+					.put("message", "Unknown error.")//
 					.put("error", e.getMessage())//
 			).toString());
 		}
 	}
 
-	private List<BarcodeRequest> parseRequests(InputStream in) {
-		LibMetrics.hitMethodRunCounter();
-
-		// Create CSV Reader from the input stream
-		List<BarcodeRequest> requests = new ArrayList<>();
-		try (CSVReader csvReader = new CSVReader(new InputStreamReader(in))) {
-
-			String[] csvRecord;
-
-			// Loop each entry in the CSV
-			while ((csvRecord = csvReader.readNext()) != null) {
-				try {
-
-					requests.add(BarcodeRequest.fromCSV(csvRecord));
-
-				} catch (GenerationException e) {
-
-					LibLog._log("Failed to create barcode request.", e);
-				}
-			}
-
-			return requests;
-		} catch (IOException e) {
-
-			// Log failure in input stream
-			LibLog._log("Failed to load CSV.", e);
-			return null;
-
-		} catch (CsvValidationException e) {
-
-			// Log failure in CSV validation
-			LibLog._log("Failed to validate CSV.", e);
-			return null;
-		}
-	}
-
-	public static void getZippedBarcodes(List<BarcodeRequest> requests, OutputStream out) {
-		LibMetrics.hitMethodRunCounter();
-
-		// Open a new ZIP file output stream
-		try (ZipOutputStream zipArchive = new ZipOutputStream(out)) {
-
-			// Loop each of the requests
-			for (BarcodeRequest request : requests) {
-
-				// Generate the barcode
-				CachedBarcode barcode;
-
-				try {
-
-					// Generate the requested barcode
-					barcode = BarcodeGenerator.requestBarcode(request);
-				} catch (GenerationException e) {
-
-					// Log failure generating barcode
-					LibLog._log("Failed to generate barcode.", e);
-					continue;
-				}
-
-				try {
-
-					// Add barcode entry to ZIP archive
-					zipArchive.putNextEntry(new ZipEntry(barcode.getBarcodeStringNice() + ".png"));
-					zipArchive.write(barcode.getBarcodeData(), 0, barcode.getBarcodeDataSize());
-					zipArchive.closeEntry();
-
-				} catch (Exception | Error e) {
-
-					// Log failure adding to archive
-					LibLog._log("Failed adding barcode to ZIP archive.", e);
-				}
-			}
-
-			// Close the ZIP file
-			zipArchive.close();
-
-			// Close the stream
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-
-			// Log general failure with ZIP archive
-			LibLog._log("Failed creating ZIP archive.");
-		}
-	}
 }
