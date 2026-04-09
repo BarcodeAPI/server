@@ -344,7 +344,8 @@ with open('test.png', 'wb') as out_file:
 			<div class="col-sm-8 col-xs-12">
 				<h2><a href="#bulk">&sect;4</a>&nbsp;Bulk Barcode Generation</h2>
 				<p class="start-xs">
-					&nbsp;&nbsp;Some users need to generate a lot of barcodes; for this we provide two different tools.
+					&nbsp;&nbsp;Some users need to generate a lot of barcodes; and for this we provide two different
+					tools for the job!
 				</p>
 			</div>
 
@@ -355,9 +356,12 @@ with open('test.png', 'wb') as out_file:
 			<div class="col-sm-6 col-xs-12">
 				<h3>Bulk Generator</h3>
 				<p class="start-xs">
-					&nbsp;&nbsp;Users wishing to generate a large number of barcodes may wish to use the Bulk Barcode
-					generator. This utility will allow the upload of a CSV containing the barcode requests, and will
-					return a ZIP file containing each of the barcodes.
+					&nbsp;&nbsp;This utility will allow users to upload a simple CSV file containing a list of barcode
+					requests. The server will render the images in bulk and return a single ZIP file of all barcode
+					images.
+				</p>
+				<p class="start-xs">
+					Each ZIP archive will additionally contain a text file called _debug.txt which will help
 				</p>
 				<p>
 					Visit <a href="/bulk.html" class="text-link anim icon-chevron">Bulk Generator</a>
@@ -367,9 +371,9 @@ with open('test.png', 'wb') as out_file:
 			<div class="col-sm-6 col-xs-12">
 				<h3>Multis Utility</h3>
 				<p class="start-xs">
-					&nbsp;&nbsp;Some users may wish to generate a large number of barcodes with one request - a basic
-					JavaScript utility is provided at /multi.html which will generate as many images as requested then
-					prepare the file to be printed.
+					&nbsp;&nbsp;This utility will allow users to generate a large number of barcodes on a single page.
+					Simply paste your text list and see all the barcodes! Optionally print them too! Click the share
+					button to get a simple link you can bookmark or share with a colleague.
 				</p>
 				<p>
 					Visit <a href="/multi.html" class="text-link anim icon-chevron">Multi Generator</a>
@@ -436,7 +440,8 @@ X-RateLimit-Cost: 2
 X-RateLimit-Tokens: 2032.40
 					</pre>
 					<p class="start-xs">
-						Should a client become rate limited, requests will result in a 429. Users must wait until new
+						&nbsp;&nbsp;Should a client become rate limited, requests to the server will result in a 429
+						error code indicating their rate limit is enforced. The caller must wait until new
 						tokens are generated before additional requests will be served.
 					</p>
 					<pre class="example-code">
@@ -467,6 +472,19 @@ Location: https://barcodeapi.org/api/auto/abc123
 				<div>
 					<h3>Generation Errors</h3>
 					<p class="start-xs">
+						&nbsp;&nbsp;Each type of barcode generation failure will result in a unique HTTP status code.
+					</p>
+					<pre class="example-code">
+200	OKAY		Barcode generated sucessfully.
+400	EMPTY		The request was empty.
+400	INVALID		Invalid data for selected code type.
+403	BLACKLIST	The request was rejected.
+409	CHECKSUM	Expected checksum: #
+429	LIMITED		Client is rate limited, try again later.
+500	FAILED		Failed to render barcode.
+503	BUSY		Server is busy, please try again.
+					</pre>
+					<p class="start-xs">
 						&nbsp;&nbsp;In the event of a render error, an additional header [<span
 							class="text-link">X-Error-Message</span>] will be available containing details about the
 						exception.
@@ -477,18 +495,6 @@ $ curl --head https://barcodeapi.org/api/8/00000009
 HTTP/1.1 409 Conflict
 ...
 X-Error-Message: Expected checksum: 0
-					</pre>
-					<p class="start-xs">
-						Each type of application failure will result in a unique error code.
-					</p>
-					<pre class="example-code">
-400	EMPTY		The request was empty.
-400	INVALID		Invalid data for selected code type.
-403	BLACKLIST	The request was rejected.
-409	CHECKSUM	Expected checksum: #
-429	LIMITED		Client is rate limited, try again later.
-500	FAILED		Failed to render barcode.
-503	BUSY		Server is busy, please try again.
 					</pre>
 				</div>
 			</div>
@@ -529,8 +535,8 @@ X-Error-Message: Expected checksum: 0
 					<b>IP-Based Rate Limiting</b>
 					<p class="start-xs">
 						&nbsp;&nbsp;Rate limits are enforced based on the IP address of the client making the request.
-						If you plan to generate a large number of barcodes from a central server or location, you will
-						need an API key to manage your rate limits effectively.
+						Multiple IPs may be assigned to the same rate limiter for users with more then one public facing
+						IP address.
 					</p>
 				</div>
 			</div>
@@ -539,9 +545,8 @@ X-Error-Message: Expected checksum: 0
 				<div class="pad-top-16 pad-bottom-16">
 					<b>API Keys</b>
 					<p class="start-xs">
-						&nbsp;&nbsp;This key should be included in your requests when numerous IP addresses will be
-						making requests
-						to the API.
+						&nbsp;&nbsp;If your application runs in an environment where the public IP address of the caller
+						changes often, your API key should be included in each request.
 					</p>
 				</div>
 				<div class="pad-top-16">
@@ -553,10 +558,12 @@ X-Error-Message: Expected checksum: 0
 Authorization: Token=xxxxxxxxxxxx
 					</pre>
 					</p>
+				</div>
+				<div class="pad-top-16">
+					<b>Embedded Barcodes</b>
 					<p class="start-xs">
-						<b>Note</b>: When embedding barcodes in an application accessed by end users, do not include the
-						API key in client-side requests. Rate limits will be managed at the IP level instead, so no API
-						key is needed for each user.
+						&nbsp;&nbsp;When embedding barcodes in an application accessed by end users, rate limits are
+						tracked by the HTTP Referer value.
 					</p>
 				</div>
 			</div>

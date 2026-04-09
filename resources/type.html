@@ -39,58 +39,94 @@
 		</div>
 
 		<div class="row middle-xs middle-xs">
-			<div class="col-xs-3">
+			<div class="col-xs-3 start-xs">
 				<a class="text-link" onclick="history.back()">
-					<span>&lt; Back</span>
+					<span>&nbsp;Back&nbsp;</span>
 				</a>
-				&nbsp;-&nbsp;
-				<a class="text-link" href="/types.html">
-					<span>All Types</span>
-				</a>
+			</div>
+			<div class="col-xs-2 center-xs">
+			</div>
+			<div class="col-xs-2 center-xs">
+				<a class="text-link icon-chevron anim" href="/types.html">All Types&nbsp;</a>
+			</div>
+			<div class="col-xs-2 center-xs">
+				<a class="text-link icon-chevron anim" href="/api.html">User Manual&nbsp;</a>
+			</div>
+			<div class="col-xs-3 end-xs">
+				<a class="text-link icon-chevron anim" href="/types.html">Generate Now &nbsp;</a>
 			</div>
 		</div>
 
 		<div id="barcode-types">
 			<div id="barcode-template" class="row start-xs middle-xs barcode-template">
-				<div class="col-xs-9 barcode-type-info">
+				<div class="col-xs-12 barcode-type-info">
 					<span class="type-name type-title">-</span>
 					<hr />
-					<br />
-					Cost
-					<br />
-					Basic: <span class="type-cost-basic">-</span>
-					<br />
-					Custom: <span class="type-cost-custom">-</span>
-					<br />
-					<br />
-					Target:&nbsp;<span class="type-target">-</span>
-					<br />
-					<br />
-					Format:&nbsp;<span class="type-format">-</span>
-					<br />
-					<br />
-					Decode Supported:&nbsp;<span class="type-decode">-</span>
-					<br />
-					Checksums Enforced:&nbsp;<span class="type-checksum">-</span>
-					<br />
-					Non-Printing Characters:&nbsp;<span class="type-nonprinting">-</span>&nbsp;<a
-						href="nonprinting.html" class="text-link">?</a>
-					<br />
-					<br />
-					<pre class="type-description">-</pre>
-					<br />
-					<br />
-					Read more on <a class="type-wiki" target="_blank">Wikipedia</a>.
-					<br />
-					<br />
-					Parameters
-					<br />
-					<div class="type-options">-</div>
-					<br />
-					<div class="type-options-string">-</div>
-					<br />
 				</div>
-				<div class="col-xs-3 barcode-type-example">
+				<div class="row col-xs-12">
+					<div class="row col-sm-9 col-xs-12">
+						<div class="col-xs-12">
+							<br />
+							&nbsp;&nbsp;<span class="type-description">-</span>
+							<br />
+							<br />
+						</div>
+						<div class="col-sm-6 col-xs-12">
+							<h3>Cost</h3>
+							Base: <span class="type-cost-base">-</span>
+							<br />
+							Per Char: <span class="type-cost-char">-</span>
+							<br />
+							Complex Multiplier: <span class="type-cost-mult">-</span>
+							<br />
+							<br />
+							More information about our <a href="/limits.html" class="text-link anim icon-chevron">rate
+								limits</a>
+						</div>
+						<div class="col-sm-6 col-xs-12">
+							<h3>Properties</h3>
+							Decode Supported:&nbsp;<span class="type-decode">-</span>&nbsp;<a href="decode.html"
+								class="text-link">?</a>
+							<br />
+							Checksums Enforced:&nbsp;<span class="type-checksum">-</span>
+							<br />
+							Non-Printing Characters:&nbsp;<span class="type-nonprinting">-</span>&nbsp;<a
+								href="nonprinting.html" class="text-link">?</a>
+							<br />
+							<br />
+						</div>
+						<div class="col-xs-12">
+							<h3>Barcode Configuration</h3>
+							Targets:&nbsp;<span class="type-target">-</span>
+							<br />
+							Format
+							<br />
+							&nbsp;<span class="type-format">-</span>
+							<br />
+							<br />
+							<table class="type-options">
+								<tr>
+									<th>Name</th>
+									<th>Parameter</th>
+									<th>Type</th>
+									<th>Default</th>
+									<th>Values</th>
+								</tr>
+							</table>
+							<br />
+							Call as:
+							<br />
+							<div class="type-options-string">-</div>
+							<br />
+							<br />
+							Read more about <span class="type-wiki-name"></span> barcodes on <a
+								class="type-wiki-link text-link anim icon-chevron" target="_blank">Wikipedia</a>
+							<br />
+						</div>
+					</div>
+					<div class="col-sm-3 col-xs-12 middle-xs barcode-type-example">
+						<br />
+					</div>
 				</div>
 			</div>
 		</div>

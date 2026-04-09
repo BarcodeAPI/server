@@ -48,13 +48,12 @@ function addType(type) {
 	var info = document.getElementById("barcode-template").cloneNode(true);
 	info.setAttribute("id", "barcode-type-" + target);
 
-	var link = ("/api/" + target + "/" + type.example[0]);
+	var link = ("/api/" + target + "/" + type.examples[0]);
 	info.querySelector(".type-example").src = link;
 
 	info.querySelector(".type-name").innerHTML = type.display;
 	info.querySelector(".type-target").innerHTML = ('/' + target + '/');
-	info.querySelector(".type-cost-basic").innerHTML = type.costBasic;
-	info.querySelector(".type-cost-custom").innerHTML = type.costCustom;
+	info.querySelector(".type-cost-base").innerHTML = type.cost.base;
 
 	var homeLink = ("index.html#" + target);
 	info.querySelector(".type-gen").href = homeLink;
