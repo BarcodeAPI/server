@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -56,30 +57,50 @@ public class AprilTagGenerator extends CodeGenerator {
 		tagFamilies.put("tagStandard52h13", new TagStandard52h13());
 	}
 
+	private TagFamily getFamily(int id) {
+
+		for (Map.Entry<String, TagFamily> entry : tagFamilies.entrySet()) {
+			if (entry.getValue().getCodes().length > id) {
+				return entry.getValue();
+			}
+		}
+
+		return null;
+	}
+
 	@Override
 	public byte[] onRender(BarcodeRequest request) throws WriterException, IOException, GenerationException {
 
+		int id;
+		TagFamily family;
+
+		// Split the request on family and data
 		String[] parts = request.getData().split(":");
 
-		String family = parts[0];
-		int id = Integer.parseInt(parts[1]);
+		if (parts.length == 1) {
+			id = Integer.parseInt(parts[0]);
+			family = getFamily(id);
+		} else {
+			family = tagFamilies.get(parts[0]);
+			id = Integer.parseInt(parts[1]);
+		}
+
+		if (family == null) {
+			throw new GenerationException(ExceptionType.INVALID, //
+					new Throwable("Unsupported tag type."));
+		}
 
 		JSONObject options = request.getOptions();
 
 		HashMap<String, Object> defaults = //
 				request.getType().getDefaults();
 
-		TagFamily tagFamily = tagFamilies.get(family);
-
-		if (tagFamily == null) {
-			throw new GenerationException(ExceptionType.INVALID, //
-					new Throwable("Unsupported tag type."));
-		}
-
 		int scale = options.optInt("scale", //
 				(Integer) defaults.getOrDefault("scale", 8));
 
-		BufferedImage img = tagFamily.getLayout().renderToImage(tagFamily.getCodes()[id], scale);
+		// Render the image
+		BufferedImage img = family.getLayout()//
+				.renderToImage(family.getCodes()[id], scale);
 
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();

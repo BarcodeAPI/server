@@ -14,7 +14,7 @@ public class TestEan8 extends ServerTestBase {
 		apiGet("8", "");
 
 		Assert.assertEquals("Response Code", //
-				HttpStatus.BAD_REQUEST_400, getResponseCode());
+				HttpStatus.NOT_ACCEPTABLE_406, getResponseCode());
 	}
 
 	@Test

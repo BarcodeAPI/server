@@ -14,7 +14,7 @@ public class TestUPCA extends ServerTestBase {
 		apiGet("a", "");
 
 		Assert.assertEquals("Response Code", //
-				HttpStatus.BAD_REQUEST_400, getResponseCode());
+				HttpStatus.NOT_ACCEPTABLE_406, getResponseCode());
 	}
 
 	@Test
