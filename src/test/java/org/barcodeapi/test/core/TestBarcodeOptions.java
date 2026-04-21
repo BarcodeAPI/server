@@ -59,7 +59,7 @@ public class TestBarcodeOptions extends ServerTestBase {
 	@Test
 	public void testBarcodeOptions_MissingOption() {
 
-		apiGet("128/RD309874", "dpi=100&&size=20");
+		apiGet("128", "RD309874", "dpi=100&&size=20");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -77,7 +77,7 @@ public class TestBarcodeOptions extends ServerTestBase {
 	@Test
 	public void testBarcodeOptions_DoubleOption() {
 
-		apiGet("128/RD309874", "dpi=100&dpi=120");
+		apiGet("128", "RD309874", "dpi=100&dpi=120");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());

@@ -27,12 +27,33 @@ public class LimiterListHandler extends RestHandler {
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
+		String filter = c.getRequest().getParameter("filter");
+		boolean filtered = (filter != null);
+		boolean filterReputation = (filtered && filter.equals("abusers"));
+		boolean filterTokenLimit = (filtered && filter.equals("limited"));
+
 		// List limiters
 		JSONObject byKey = new JSONObject();
 		ObjectCache keyCache = ObjectCache.getCache(ObjectCache.CACHE_LIMITERS);
 		for (Map.Entry<String, CachedObject> entry : keyCache.raw().entrySet()) {
 			CachedLimiter limiter = (CachedLimiter) entry.getValue();
-			byKey.put(limiter.getCaller(), limiter.getTokenCount());
+
+			// Add all to map if no filters applied
+			if (!filtered) {
+				byKey.put(limiter.getCaller(), limiter.getTokens().getTotalSpend());
+				continue;
+			}
+
+			// Conditionally filter based on low reputation status
+			if (filterReputation && limiter.getReputation().isAbuser()) {
+				byKey.put(limiter.getCaller(), limiter.getReputation().value());
+				continue;
+			}
+
+			// Conditionally filter based on low tokens count
+			if (filterTokenLimit && limiter.getTokens().isLowBalance()) {
+				byKey.put(limiter.getCaller(), limiter.getTokens().getCount());
+			}
 		}
 
 		// Print response to client

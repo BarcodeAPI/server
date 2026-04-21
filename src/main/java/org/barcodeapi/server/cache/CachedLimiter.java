@@ -1,44 +1,32 @@
 package org.barcodeapi.server.cache;
 
+import org.barcodeapi.server.core.Reputation;
+import org.barcodeapi.server.core.Tokens;
 import org.json.JSONObject;
 
 /**
  * CachedLimiter.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class CachedLimiter extends CachedObject {
 
 	private static final long serialVersionUID = 20241222L;
 
-	private static final double _DAY = (24 * 60 * 60 * 1000);
-
-	private final boolean enforce;
-
 	private final String caller;
 
-	private double tokenSpend;
+	private final Reputation reputation;
 
-	private double tokenCount;
-
-	private final long tokenLimit;
-
-	private long timeMinted;
-
-	private final double tokensPerMilli;
+	private final Tokens tokens;
 
 	public CachedLimiter(boolean enforce, String caller, long requests) {
 		super("limiter");
 
-		this.enforce = enforce;
 		this.caller = caller;
 
-		this.tokenSpend = 0;
-		this.tokenCount = requests;
-		this.tokenLimit = requests;
+		this.reputation = new Reputation();
 
-		this.timeMinted = System.currentTimeMillis();
-		this.tokensPerMilli = (requests > 0) ? ((double) requests / _DAY) : 0;
+		this.tokens = new Tokens(enforce, requests);
 	}
 
 	/**
@@ -49,7 +37,8 @@ public class CachedLimiter extends CachedObject {
 
 	@Override
 	public boolean isShortLived() {
-		return (tokenCount == tokenLimit);
+		return (!reputation.isAbuser() && //
+				(tokens.getCount() == tokens.getLimit()));
 	}
 
 	/**
@@ -62,151 +51,38 @@ public class CachedLimiter extends CachedObject {
 	}
 
 	/**
-	 * Returns the limit of the limiter.
+	 * Returns the Reputation object.
 	 * 
-	 * @return rate limit
+	 * @return the reputation object
 	 */
-	public long getTokenLimit() {
-		return tokenLimit;
+	public Reputation getReputation() {
+		return reputation;
 	}
 
 	/**
-	 * Returns true if the limiter should be enforced.
+	 * Returns the Tokens controller object.
 	 * 
-	 * @return limiter enforced
+	 * @return the tokens controller object
 	 */
-	public final boolean isEnforced() {
-		return enforce;
+	public Tokens getTokens() {
+		return tokens;
 	}
 
 	/**
-	 * Mints new tokens for the limiter.
+	 * Called to handle a user request.
 	 * 
-	 * Minted count is based on the limiter's request limit and the time since the
-	 * previous minting.
+	 * Spends tokens and handles reputation.
 	 * 
-	 * @return number of tokens minter
+	 * @param valid request was valid
+	 * @param cost  cost of the request
 	 */
-	public double mintTokens() {
+	public boolean userRequest(boolean valid, double cost) {
 
-		// Skip if already at limit, or unlimited
-		if ((tokenCount == tokenLimit) || (tokenCount == -1)) {
-			return 0;
-		}
+		// Update user reputation
+		reputation.update(valid);
 
-		synchronized (this) {
-			long timeNow = System.currentTimeMillis();
-			double oldCount = tokenCount;
-
-			double minted = (timeNow - timeMinted) * tokensPerMilli;
-
-			// new count, capped at limit
-			double newCount = Math.min(tokenLimit, (oldCount + minted));
-
-			// update limiter
-			tokenCount = newCount;
-			timeMinted = timeNow;
-
-			// return number of tokens added
-			return (newCount - oldCount);
-		}
-	}
-
-	/**
-	 * Returns the time at which tokens were last minted.
-	 * 
-	 * @return time tokens last minted
-	 */
-	public long getTimeLastMinted() {
-		return timeMinted;
-	}
-
-	/**
-	 * Returns the current number of tokens the caller has.
-	 * 
-	 * @return number of tokens the caller has
-	 */
-	public double getTokenCount() {
-		return tokenCount;
-	}
-
-	/**
-	 * Returns the current number of tokens the caller has.
-	 * 
-	 * @return number of tokens the caller has
-	 */
-	public String getTokenCountStr() {
-		return String.format("%.2f", tokenCount);
-	}
-
-	/**
-	 * Returns true if limiter is unlimited.
-	 * 
-	 * @return true if limiter is unlimited
-	 */
-	public boolean isUnlimited() {
-		return (tokenCount == -1);
-	}
-
-	/**
-	 * Returns the number of tokens spent.
-	 * 
-	 * @return number of tokens spent
-	 */
-	public double getTokenSpend() {
-		return tokenSpend;
-	}
-
-	/**
-	 * Returns true if the token balance allows the cost spend.
-	 * 
-	 * @param cost the cost of the request
-	 * @return true if balance allows spend
-	 */
-	public boolean allowSpend(double cost) {
-
-		// Allow if balance exceeds cost, unlimited, or not enforced
-		return ((tokenCount > cost) || isUnlimited() || !isEnforced());
-	}
-
-	/**
-	 * Spend a number of tokens.
-	 * 
-	 * @param cost number of tokens to spend
-	 * @return token spend successful
-	 */
-	public boolean spendTokens(double cost) {
-
-		// Fail if spending negative
-		if (cost < 0) {
-			throw new IllegalArgumentException(//
-					"Token cost cannot be negative.");
-		}
-
-		synchronized (this) {
-
-			// Unlimited token balance
-			if (tokenCount == -1) {
-				tokenSpend += cost;
-				return true;
-			}
-
-			// Limiter has tokens, spend them
-			if (tokenCount >= cost) {
-				tokenSpend += cost;
-				tokenCount -= cost;
-				return true;
-			}
-
-			// Limiter out of tokens, not enforced
-			if (!isEnforced()) {
-				tokenSpend += cost;
-				return true;
-			}
-
-			// Rate limit reached
-			return false;
-		}
+		// Spend rate limit tokens
+		return tokens.spend(cost);
 	}
 
 	/**
@@ -218,13 +94,16 @@ public class CachedLimiter extends CachedObject {
 
 		return (new JSONObject()//
 				.put("caller", getCaller())//
-				.put("created", getTimeCreated())//
-				.put("expires", getTimeExpires())//
-				.put("last", getTimeLastTouched())//
-				.put("enforce", isEnforced())//
-				.put("tokenLimit", getTokenLimit())//
-				.put("tokenCount", getTokenCount())//
-				.put("tokenSpend", getTokenSpend()));
+				.put("reputation", reputation.value())//
+				.put("time", new JSONObject() //
+						.put("created", getTimeCreated())//
+						.put("expires", getTimeExpires())//
+						.put("last", getTimeLastTouched()))//
+				.put("tokens", new JSONObject()//
+						.put("enforce", tokens.isEnforced())//
+						.put("limit", tokens.getLimit())//
+						.put("count", tokens.getCountStr())//
+						.put("spend", tokens.getTotalSpend())//
+						.put("minted", tokens.getTimeLastMinted())));
 	}
-
 }

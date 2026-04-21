@@ -15,7 +15,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_AprilTag() {
 		
-		apiGet("april/tag36h10:0");
+		apiGet("april", "tag36h10:0");
 		
 		Assert.assertEquals("Response Code",  //
 				HttpStatus.OK_200, getResponseCode());
@@ -30,7 +30,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_Aztec() {
 
-		apiGet("aztec/test");
+		apiGet("aztec", "test");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -45,7 +45,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_Codabar() {
 
-		apiGet("codabar/000000");
+		apiGet("codabar", "000000");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -60,7 +60,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_UPC_E() {
 
-		apiGet("e/00000000");
+		apiGet("e", "00000000");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -75,7 +75,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_UPC_A() {
 
-		apiGet("a/000000000000");
+		apiGet("a", "000000000000");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -90,7 +90,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_Ean8() {
 
-		apiGet("8/99999995");
+		apiGet("8", "99999995");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -105,7 +105,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_Ean13() {
 
-		apiGet("13/0000000000000");
+		apiGet("13", "0000000000000");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -120,7 +120,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_Code39() {
 
-		apiGet("39/TEST");
+		apiGet("39", "TEST");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -135,7 +135,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_Code128() {
 
-		apiGet("128/test");
+		apiGet("128", "test");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -150,7 +150,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_QRCode() {
 
-		apiGet("qr/test");
+		apiGet("qr", "test");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -165,7 +165,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_DataMatrix() {
 
-		apiGet("dm/test");
+		apiGet("dm", "test");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -180,7 +180,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_ITF14() {
 
-		apiGet("14/00000000000000");
+		apiGet("14", "00000000000000");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -195,7 +195,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_PDF417() {
 
-		apiGet("417/test");
+		apiGet("417", "test");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -210,7 +210,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_RoyalMail() {
 
-		apiGet("royal/11212345612345678");
+		apiGet("royal", "11212345612345678");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -225,7 +225,7 @@ public class TestManualType extends ServerTestBase {
 	@Test
 	public void testManualType_USPSMail() {
 
-		apiGet("usps/0123456709498765432101234567891");
+		apiGet("usps", "0123456709498765432101234567891");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());

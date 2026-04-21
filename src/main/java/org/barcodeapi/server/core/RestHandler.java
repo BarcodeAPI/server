@@ -115,10 +115,11 @@ public abstract class RestHandler extends AbstractHandler {
 		// Set as handled by us
 		baseRequest.setHandled(true);
 
-		// Log the request
+		// Log the request (replace line endings)
+		String targetLog = target.replaceAll("\n", "---");
 		LibLog.clogF("request", //
 				((ctx.getProxy() == null) ? "I4001" : "I4002"), //
-				_NAME, target, ctx.getSource(), ctx.getIP(), ctx.getProxy());
+				_NAME, targetLog, ctx.getSource(), ctx.getIP(), ctx.getProxy());
 
 		// Setup default response headers
 		response.setStatus(HttpServletResponse.SC_OK);
@@ -137,9 +138,14 @@ public abstract class RestHandler extends AbstractHandler {
 		// Authenticate the user if required
 		if (apiAuthRequired && (ctx.getAdmin() == null)) {
 
-			// Send user unauthorized with login realm
+			// Hit login fail counters
 			getStats().hitCounter("request", "authfail");
 			getStats().hitCounter("request", "target", _NAME, "authfail");
+
+			// Update bad reputation for failed login
+			ctx.getLimiter().getReputation().update(false);
+
+			// Send user unauthorized with login realm
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setHeader("WWW-Authenticate", "Basic realm=BarcodeAPI.org Admin API");
 			return;
@@ -152,9 +158,8 @@ public abstract class RestHandler extends AbstractHandler {
 				(ctx.getOrigin() != null) ? ctx.getOrigin() : "*");
 
 		// Send token count to user
-		ctx.getLimiter().touch();
 		response.setHeader("X-RateLimit-Tokens", //
-				String.format("%.2f", ctx.getLimiter().getTokenCount()));
+				String.format("%.2f", ctx.getLimiter().getTokens().getCount()));
 		response.setHeader("X-RateLimit-Caller", ctx.getLimiter().getCaller());
 
 		// Request complete if only options

@@ -21,6 +21,8 @@ public class GenerationException extends Exception {
 
 		BLACKLIST(403, "/128/$$@BLACKLIST$$@"),
 
+		ABUSE(403, "/128/$$@ABUSE$$@"),
+
 		CHECKSUM(409, "/128/$$@CHECKSUM$$@"),
 
 		LIMITED(429, "/128/$$@RATE$$@$$@LIMIT$$@"),

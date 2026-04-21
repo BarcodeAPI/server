@@ -181,6 +181,9 @@ public class RequestContext {
 		this.subscriber = user;
 		this.limiter = LimiterCache.getLimiter(user, ip);
 
+		// Touch the limiter
+		this.limiter.touch();
+
 		// Lookup or create new user session context
 		CachedSession userSession = SessionHelper.getSession(request);
 		this.session = (userSession != null) ? userSession : //

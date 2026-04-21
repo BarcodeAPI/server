@@ -188,7 +188,7 @@ public class BulkHandler extends RestHandler {
 							request.getData(), request.getType().getName(), request.getCost()));
 
 					// Spend the tokens for the barcode
-					if (!c.getLimiter().spendTokens(request.getCost())) {
+					if (!c.getLimiter().userRequest(true, request.getCost())) {
 						statusMessage.append("\nClient is out of tokens!");
 						break;
 					}
@@ -232,7 +232,7 @@ public class BulkHandler extends RestHandler {
 			statusMessage.append(String.format(" Count: %d / %d\n", entriesComplete, numEntries));
 			statusMessage.append(String.format(" Cost:  %.2f tokens\n", batchCost));
 			statusMessage.append(String.format(" Time:  %dms\n", processTime));
-			statusMessage.append(String.format("\nTokens Remaining: %.2f\n", c.getLimiter().getTokenCount()));
+			statusMessage.append(String.format("\nTokens Remaining: %.2f\n", c.getLimiter().getTokens().getCount()));
 			statusMessage.append(String.format("\nRequest: %s\n", uid));
 
 			// Add debug messages to ZIP file
@@ -246,7 +246,7 @@ public class BulkHandler extends RestHandler {
 
 			// Advise current token spend and count
 			r.setHeader("X-RateLimit-Cost", Double.toString(batchCost));
-			r.setHeader("X-RateLimit-Tokens", c.getLimiter().getTokenCountStr());
+			r.setHeader("X-RateLimit-Tokens", c.getLimiter().getTokens().getCountStr());
 
 			// Response headers for file download
 			r.setContentType("application/zip");

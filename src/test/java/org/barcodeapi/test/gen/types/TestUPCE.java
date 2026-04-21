@@ -9,9 +9,18 @@ import org.junit.Test;
 public class TestUPCE extends ServerTestBase {
 
 	@Test
+	public void testUPCE_Empty() {
+
+		apiGet("e", "");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.BAD_REQUEST_400, getResponseCode());
+	}
+
+	@Test
 	public void testUPCE_8Nums() {
 
-		apiGet("e/01234565");
+		apiGet("e", "01234565");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -26,7 +35,7 @@ public class TestUPCE extends ServerTestBase {
 	@Test
 	public void testUPCE_7Nums() {
 
-		apiGet("e/0123456");
+		apiGet("e", "0123456");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -42,7 +51,7 @@ public class TestUPCE extends ServerTestBase {
 	@Test
 	public void testUPCE_8NumsInvalidChecksum() throws Exception {
 
-		apiGet("e/01234567");
+		apiGet("e", "01234567");
 
 		Assert.assertEquals("Response Code", //
 				ExceptionType.CHECKSUM.getStatusCode(), getResponseCode());
@@ -54,7 +63,7 @@ public class TestUPCE extends ServerTestBase {
 	@Test
 	public void testUPCE_TooShort() throws Exception {
 
-		apiGet("e/012345");
+		apiGet("e", "012345");
 
 		Assert.assertEquals("Response Code", //
 				ExceptionType.INVALID.getStatusCode(), getResponseCode());
@@ -66,7 +75,7 @@ public class TestUPCE extends ServerTestBase {
 	@Test
 	public void testUPCE_TooLong() throws Exception {
 
-		apiGet("e/012345678");
+		apiGet("e", "012345678");
 
 		Assert.assertEquals("Response Code", //
 				ExceptionType.INVALID.getStatusCode(), getResponseCode());
@@ -78,7 +87,7 @@ public class TestUPCE extends ServerTestBase {
 	@Test
 	public void testUPCE_WithLetters() throws Exception {
 
-		apiGet("e/ABCDEFGH");
+		apiGet("e", "ABCDEFGH");
 
 		Assert.assertEquals("Response Code", //
 				ExceptionType.INVALID.getStatusCode(), getResponseCode());
@@ -90,7 +99,7 @@ public class TestUPCE extends ServerTestBase {
 	@Test
 	public void testUPCE_WithSymbols() throws Exception {
 
-		apiGet("e/!@");
+		apiGet("e", "!@");
 
 		Assert.assertEquals("Response Code", //
 				ExceptionType.INVALID.getStatusCode(), getResponseCode());
@@ -102,7 +111,7 @@ public class TestUPCE extends ServerTestBase {
 	@Test
 	public void testUPCE_WithUnicode() throws Exception {
 
-		apiGet("e/Ω");
+		apiGet("e", "Ω");
 
 		Assert.assertEquals("Response Code", //
 				ExceptionType.INVALID.getStatusCode(), getResponseCode());

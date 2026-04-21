@@ -15,7 +15,7 @@ public class TestMiscCustomer extends ServerTestBase {
 	@Test
 	public void testMiscCustomer_CustomEAN13() {
 
-		apiGet("ean13/8859178779797", "width=2&height=20&format=png");
+		apiGet("ean13", "8859178779797", "width=2&height=20&format=png");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -33,7 +33,7 @@ public class TestMiscCustomer extends ServerTestBase {
 	@Test
 	public void testMiscCustomer_CustomCode128() {
 
-		apiGet("128/RD309874", "dpi=100&rotation=0&color=%23000000");
+		apiGet("128", "RD309874", "dpi=100&rotation=0&color=%23000000");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());

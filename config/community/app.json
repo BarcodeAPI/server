@@ -44,6 +44,11 @@
 			"interval": 3600
 		},
 		{
+			"name": "Reputation Decay",
+			"impl": ".ReputationDecayTask",
+			"interval": 300
+		},
+		{
 			"name": "Limiter Minting",
 			"impl": ".LimiterMintingTask",
 			"interval": 600
@@ -76,5 +81,15 @@
 	"client": {
 		"cacheStatic": 1440,
 		"cacheBarcode": 1440
+	},
+	"reputation": {
+		"initial": 2.5,
+		"abuse_level": -2.5,
+		"cap_okay": 10,
+		"cap_spam": -25,
+		"req_okay": 0.025,
+		"req_spam": -0.085,
+		"decay_okay": -0.0000075,
+		"decay_spam":  0.0000005
 	}
 }

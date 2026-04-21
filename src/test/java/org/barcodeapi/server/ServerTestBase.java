@@ -63,7 +63,7 @@ public abstract class ServerTestBase {
 	public void setupHeaders() {
 
 		urlHeaders = new HashMap<>();
-		
+
 		// Preconditions, set request header
 		setHeader("Accept", "*/*");
 	}
@@ -87,12 +87,22 @@ public abstract class ServerTestBase {
 	}
 
 	protected void apiGet(String path) {
-		apiGet(path, null);
+		apiGet(null, path, null);
 	}
 
-	protected void apiGet(String path, String args) {
+	protected void apiGet(String type, String data) {
+		apiGet(type, data, null);
+	}
 
-		String request = "/api/" + encode(path);
+	protected void apiGet(String type, String data, String args) {
+
+		String request = null;
+		if (type != null) {
+			request = "/api/" + type + "/" + encode(data);
+		} else {
+			request = "/api/" + encode(data);
+		}
+
 		if (args != null) {
 			request += ('?' + args);
 		}

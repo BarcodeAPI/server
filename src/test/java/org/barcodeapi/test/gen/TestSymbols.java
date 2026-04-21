@@ -29,9 +29,9 @@ public class TestSymbols extends ServerTestBase {
 	}
 
 	@Test
-	public void testSymbols_TestQuestion() {
+	public void testSymbols_TestArgs() {
 
-		apiGet("test?123");
+		apiGet("128", "test?123");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -39,6 +39,23 @@ public class TestSymbols extends ServerTestBase {
 		Assert.assertEquals("Code Type", //
 				"Code128", getHeader("X-Barcode-Type"));
 
+		// Arg's not passed back
+		Assert.assertEquals("Code Data", //
+				encode("test?123"), getHeader("X-Barcode-Content"));
+	}
+
+	@Test
+	public void testSymbols_TestQuestion() {
+
+		apiGet("128", "test?123");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"Code128", getHeader("X-Barcode-Type"));
+
+		// Arg's not passed back
 		Assert.assertEquals("Code Data", //
 				encode("test?123"), getHeader("X-Barcode-Content"));
 	}

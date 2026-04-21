@@ -45,7 +45,7 @@ public class TestURLs extends ServerTestBase {
 	@Test
 	public void testURL_TestBarcodeOptions() {
 
-		apiGet("https://barcodeapi.org/", "size=20");
+		apiGet(null, "https://barcodeapi.org/", "size=20");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -60,7 +60,7 @@ public class TestURLs extends ServerTestBase {
 	@Test
 	public void testURL_TestURLOptions() {
 
-		apiGet("https://barcodeapi.org/", "product=123");
+		apiGet(null, "https://barcodeapi.org/", "product=123");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -75,7 +75,7 @@ public class TestURLs extends ServerTestBase {
 	@Test
 	public void testURL_TestURLEncoded() {
 
-		apiGet("https://barcodeapi.org/?product=123");
+		apiGet(null, "https://barcodeapi.org/?product=123", null);
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());

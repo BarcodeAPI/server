@@ -38,33 +38,47 @@ public class TestLimiterHandler extends ServerTestBase {
 			Assert.assertEquals("Caller", //
 					"AppTest", parsed.getString("caller"));
 
+			// Reputations is set and not 0
+			Assert.assertTrue("Reputation", //
+					parsed.getDouble("reputation") != 0);
+
+			// Get time object
+			JSONObject time = parsed.getJSONObject("time");
+
 			// Creation time of limiter
 			Assert.assertTrue("Created", //
-					parsed.getLong("created") <= System.currentTimeMillis());
+					time.getLong("created") <= System.currentTimeMillis());
 
 			// Expiration time of limiter
 			Assert.assertTrue("Expiration time", //
-					parsed.getLong("expires") > System.currentTimeMillis());
+					time.getLong("expires") > System.currentTimeMillis());
 
 			// Last touched time
 			Assert.assertTrue("Last Touched", //
-					parsed.getLong("last") <= System.currentTimeMillis());
+					time.getLong("last") <= System.currentTimeMillis());
+
+			// Get tokens object
+			JSONObject tokens = parsed.getJSONObject("tokens");
 
 			// Limiter enforcement
 			Assert.assertTrue("Limiter Enforcement", //
-					parsed.getBoolean("enforce") == true);
+					tokens.getBoolean("enforce") == true);
 
 			// Token limit is set
 			Assert.assertTrue("Token Limit", //
-					parsed.getDouble("tokenLimit") == 1000);
+					tokens.getDouble("limit") == 1000);
 
 			// Token count is set
 			Assert.assertTrue("Token Count", //
-					parsed.getDouble("tokenCount") >= 100);
+					tokens.getDouble("count") >= 100);
 
 			// Token spend is set
 			Assert.assertTrue("Token Spend", //
-					parsed.getDouble("tokenSpend") >= 0);
+					tokens.getDouble("spend") >= 0);
+
+			// Token last mint time is set
+			Assert.assertTrue("Last Mint Time", //
+					tokens.getLong("minted") >= 0);
 
 		} catch (IOException e) {
 			Assert.fail(e.getMessage());

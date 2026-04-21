@@ -64,7 +64,11 @@ public class StaticHandler extends RestHandler {
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws Exception {
 
-		// Do Nothing.
+		// Not much needed here.
 		// This class overrides the lower level (handle) method to serve static files.
+
+		// Good user reputation for session reuse on static
+		boolean goodUser = (!c.getSession().isShortLived());
+		c.getLimiter().getReputation().update(goodUser);
 	}
 }

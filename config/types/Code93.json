@@ -11,7 +11,7 @@
 	],
 	"generator": ".Code93Generator",
 	"threads": 2,
-	"priority": 90,
+	"priority": 20,
 	"cost": {
 		"base": 0.800,
 		"char": 0.040,

@@ -38,7 +38,7 @@ public class CachedBarcode extends CachedObject {
 		int optPos = raw.indexOf("?");
 		this.strData = ((optPos == -1) ? strRaw : raw.substring(0, optPos));
 		this.strNice = CodeUtils.stripIllegal(strData);
-		this.strEncoded = CodeUtils.encodeURL(strData);
+		this.strEncoded = CodeUtils.encodeURL(strRaw);
 	}
 
 	/**
