@@ -476,10 +476,11 @@ Location: https://barcodeapi.org/api/auto/abc123
 					</p>
 					<pre class="example-code">
 200	OKAY		Barcode generated sucessfully.
-400	EMPTY		The request was empty.
 400	INVALID		Invalid data for selected code type.
-403	BLACKLIST	The request was rejected.
+403	ABUSE		The IP is blocked for abuse.
+406	EMPTY		The request was empty.
 409	CHECKSUM	Expected checksum: #
+412	BLACKLIST	The request was rejected.
 429	LIMITED		Client is rate limited, try again later.
 500	FAILED		Failed to render barcode.
 503	BUSY		Server is busy, please try again.

@@ -20,7 +20,7 @@ function init() {
 
 			// Update user token count
 			document.getElementById("token_count").innerHTML = //
-				((data.tokens.count == -1) ? "Unlimited" : data.tokens.count.toFixed(2));
+				((data.tokens.count == -1) ? "Unlimited" : Number(data.tokens.count).toFixed(2));
 
 			// Update user token limit
 			document.getElementById("token_limit").innerHTML = //
