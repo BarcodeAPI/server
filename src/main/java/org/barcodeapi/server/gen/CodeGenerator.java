@@ -6,7 +6,7 @@ import org.barcodeapi.server.core.GenerationException;
 /**
  * CodeGenerator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public abstract class CodeGenerator {
 

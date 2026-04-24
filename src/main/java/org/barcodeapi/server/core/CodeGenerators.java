@@ -1,8 +1,5 @@
 package org.barcodeapi.server.core;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.barcodeapi.core.Config;
@@ -20,7 +17,7 @@ import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
  * Initializes all supported CodeTypes from configuration and provides access to
  * their associated generation object pools.
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class CodeGenerators {
 

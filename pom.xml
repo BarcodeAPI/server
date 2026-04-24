@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
-			<version>9.4.57.v20241219</version>
+			<version>9.4.58.v20250814</version>
 		</dependency>
 
 		<dependency>
@@ -66,32 +66,26 @@
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
-			<version>3.5.3</version>
+			<version>3.5.4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>javase</artifactId>
-			<version>3.5.3</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.mclarkdev.tools</groupId>
-			<artifactId>libapriltag</artifactId>
-			<version>1.5.0</version>
+			<version>3.5.4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20240303</version>
+			<version>20251224</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>5.11.1</version>
+			<version>5.12.0</version>
 		</dependency>
 
 		<dependency>
@@ -103,38 +97,44 @@
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
+			<artifactId>libapriltag</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>libargs</artifactId>
-			<version>1.5.1</version>
+			<version>1.7.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>libmetrics</artifactId>
-			<version>1.5.1</version>
+			<version>1.7.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>liblog</artifactId>
-			<version>1.6.7</version>
+			<version>1.7.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>libloggelf</artifactId>
-			<version>1.6.5</version>
+			<version>1.7.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>libextras</artifactId>
-			<version>1.5.2</version>
+			<version>1.7.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.mclarkdev.tools</groupId>
 			<artifactId>libobjectpooler</artifactId>
-			<version>1.5.4</version>
+			<version>1.7.0</version>
 		</dependency>
 	</dependencies>
 </project>

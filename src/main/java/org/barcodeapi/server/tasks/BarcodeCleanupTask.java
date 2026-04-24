@@ -12,7 +12,7 @@ import com.mclarkdev.tools.liblog.LibLog;
  * A background task which periodically removes stale barcodes from the cache.
  * Additionally saves a cache snapshot to disk, to be used on server restart.
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class BarcodeCleanupTask extends BackgroundTask {
 

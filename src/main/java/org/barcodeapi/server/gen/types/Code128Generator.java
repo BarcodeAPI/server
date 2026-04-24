@@ -7,7 +7,7 @@ import org.krysalis.barcode4j.impl.code128.Code128Bean;
 /**
  * Code128Generator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class Code128Generator extends DefaultBarcode4JProvider {
 

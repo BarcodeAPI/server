@@ -21,7 +21,7 @@ import com.mclarkdev.tools.liblog.LibLog;
 /**
  * BarcodeAPIHandler.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class BarcodeAPIHandler extends RestHandler {
 
@@ -154,7 +154,7 @@ public class BarcodeAPIHandler extends RestHandler {
 		}
 
 		// Advise current token spend and count
-		limiter.userRequest(tokenSpendValid, tokenSpendCount);
+		limiter.allowRequest(tokenSpendValid, tokenSpendCount);
 		r.setHeader("X-RateLimit-Cost", Double.toString(tokenSpendCount));
 		r.setHeader("X-RateLimit-Tokens", limiter.getTokens().getCountStr());
 		r.setHeader("X-SpamDetect", Double.toString(limiter.getReputation().value()));

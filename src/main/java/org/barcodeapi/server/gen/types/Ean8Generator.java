@@ -7,7 +7,7 @@ import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
 /**
  * Ean8Generator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class Ean8Generator extends DefaultBarcode4JProvider {
 

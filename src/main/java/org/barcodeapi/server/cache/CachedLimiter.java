@@ -76,7 +76,7 @@ public class CachedLimiter extends CachedObject {
 	 * @param valid request was valid
 	 * @param cost  cost of the request
 	 */
-	public boolean userRequest(boolean valid, double cost) {
+	public boolean allowRequest(boolean valid, double cost) {
 
 		// Update user reputation
 		reputation.update(valid);

@@ -10,6 +10,11 @@ import org.json.JSONObject;
 
 import com.mclarkdev.tools.liblog.LibLog;
 
+/**
+ * SubscriberCache.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ */
 public class SubscriberCache {
 
 	private static final Map<String, Subscriber> subscribersByName;

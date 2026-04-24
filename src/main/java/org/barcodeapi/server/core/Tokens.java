@@ -1,5 +1,10 @@
 package org.barcodeapi.server.core;
 
+/**
+ * Tokens.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ */
 public class Tokens {
 
 	private static final double _DAY = (24 * 60 * 60 * 1000);

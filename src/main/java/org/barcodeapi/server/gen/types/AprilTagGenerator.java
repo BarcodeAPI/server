@@ -29,9 +29,9 @@ import com.mclarkdev.tools.libapriltag.families.TagStandard41h12;
 import com.mclarkdev.tools.libapriltag.families.TagStandard52h13;
 
 /**
- * AztecGenerator.java
+ * AprilTagGenerator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class AprilTagGenerator extends CodeGenerator {
 

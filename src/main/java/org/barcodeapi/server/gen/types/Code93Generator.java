@@ -7,7 +7,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.oned.Code93Writer;
 
 /**
- * QRCodeGenerator.java
+ * Code93Generator.java
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */

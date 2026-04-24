@@ -50,7 +50,7 @@ import com.mclarkdev.tools.libloggelf.lib.LibLogGELFLogWriter;
  * on startup in addition to the setup of the main Jetty API server and it's
  * associated handlers.
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class ServerLauncher {
 

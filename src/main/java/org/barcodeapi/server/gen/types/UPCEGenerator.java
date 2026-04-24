@@ -7,7 +7,7 @@ import org.krysalis.barcode4j.impl.upcean.UPCEBean;
 /**
  * UPCEGenerator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class UPCEGenerator extends DefaultBarcode4JProvider {
 

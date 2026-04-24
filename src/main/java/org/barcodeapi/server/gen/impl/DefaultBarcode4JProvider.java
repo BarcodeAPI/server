@@ -3,7 +3,6 @@ package org.barcodeapi.server.gen.impl;
 import java.util.HashMap;
 
 import org.barcodeapi.server.core.CodeType;
-import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.gen.BarcodeCanvasProvider;
 import org.barcodeapi.server.gen.BarcodeRequest;
 import org.barcodeapi.server.gen.CodeGenerator;
@@ -11,6 +10,11 @@ import org.json.JSONObject;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.AbstractBarcodeBean;
 
+/**
+ * DefaultBarcode4JProvider.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ */
 public abstract class DefaultBarcode4JProvider extends CodeGenerator {
 
 	private final AbstractBarcodeBean generator;

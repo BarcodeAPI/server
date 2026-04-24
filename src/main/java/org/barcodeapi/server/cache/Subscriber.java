@@ -4,12 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * CachedSession.java
+ * Subscriber.java
  * 
- * A user session object allowing for the detailed tracking of individual user
- * usage activities across all handlers.
- * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class Subscriber {
 

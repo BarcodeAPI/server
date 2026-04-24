@@ -3,7 +3,6 @@ package org.barcodeapi.server.api;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -33,7 +32,7 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
 /**
  * DecodeHandler.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class DecodeHandler extends RestHandler {
 

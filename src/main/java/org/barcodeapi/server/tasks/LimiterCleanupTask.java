@@ -10,7 +10,7 @@ import com.mclarkdev.tools.liblog.LibLog;
  * 
  * A background task which periodically removes stale limiters from the cache.
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class LimiterCleanupTask extends BackgroundTask {
 

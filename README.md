@@ -11,3 +11,4 @@ The WebUI is also designed to be responsive, allowing users to generate barcodes
 Comprehensive documentation regarding server capabilities is built directly into the server, ensuring users have access to all necessary information for efficient usage.
 
 For detailed instructions and examples, check out our new [User Manual](https://barcodeapi.org/api.html).
+

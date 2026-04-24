@@ -15,6 +15,11 @@ import com.google.zxing.Writer;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
+/**
+ * DefaultZXingProvider.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ */
 public abstract class DefaultZXingProvider extends CodeGenerator {
 
 	private final Writer generator;

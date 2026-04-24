@@ -9,6 +9,13 @@ import org.json.JSONObject;
 import com.mclarkdev.tools.libargs.LibArgs;
 import com.mclarkdev.tools.libextras.LibExtrasStreams;
 
+/**
+ * Config.java
+ * 
+ * Handles loading application configuration files.
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ */
 public class Config {
 
 	public enum Cfg {

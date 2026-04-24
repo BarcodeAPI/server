@@ -17,7 +17,7 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
 /**
  * RestHandler.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public abstract class RestHandler extends AbstractHandler {
 

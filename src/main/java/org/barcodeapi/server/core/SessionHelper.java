@@ -13,11 +13,12 @@ import org.eclipse.jetty.server.Request;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.libextras.LibExtrasHashes;
+import com.mclarkdev.tools.libextras.LibExtrasHashes.HashType;
 
 /**
  * SessionHelper.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class SessionHelper {
 
@@ -139,7 +140,8 @@ public class SessionHelper {
 		}
 
 		// Determine actual and expected password hashes
-		String passHashActual = LibExtrasHashes.sumSHA256(pWord.getBytes());
+		String passHashActual = LibExtrasHashes//
+				.checksum(HashType.SHA256, pWord.getBytes());
 		String passHashExpected = _admins.getString(uName).toUpperCase();
 
 		// Check if actual pass hash matches expected pass hash

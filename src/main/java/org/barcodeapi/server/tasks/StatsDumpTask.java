@@ -1,6 +1,7 @@
 package org.barcodeapi.server.tasks;
 
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -14,7 +15,7 @@ import com.mclarkdev.tools.liblog.LibLog;
  * 
  * A background task which periodically logs the server stats.
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class StatsDumpTask extends BackgroundTask {
 
@@ -50,7 +51,7 @@ public class StatsDumpTask extends BackgroundTask {
 		try {
 
 			// Create HTTP client
-			URL url = new URL(_TELEM_TARGET);
+			URL url = new URI(_TELEM_TARGET).toURL();
 			URLConnection con = url.openConnection();
 			HttpURLConnection http = (HttpURLConnection) con;
 

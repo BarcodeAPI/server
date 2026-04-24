@@ -7,7 +7,7 @@ import org.krysalis.barcode4j.impl.int2of5.ITF14Bean;
 /**
  * ITF14Generator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class ITF14Generator extends DefaultBarcode4JProvider {
 

@@ -9,7 +9,7 @@ import com.google.zxing.aztec.AztecWriter;
 /**
  * AztecGenerator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class AztecGenerator extends DefaultZXingProvider {
 

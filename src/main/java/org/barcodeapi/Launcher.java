@@ -8,7 +8,7 @@ import org.barcodeapi.core.ServerLauncher;
  * This class should handle the master life-cycle of the BarcodeAPI.org
  * application, web server, and sub components there-in.
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class Launcher {
 

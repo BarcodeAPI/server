@@ -36,7 +36,7 @@ import com.opencsv.exceptions.CsvValidationException;
 /**
  * BulkHandler.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class BulkHandler extends RestHandler {
 
@@ -188,7 +188,7 @@ public class BulkHandler extends RestHandler {
 							request.getData(), request.getType().getName(), request.getCost()));
 
 					// Spend the tokens for the barcode
-					if (!c.getLimiter().userRequest(true, request.getCost())) {
+					if (!c.getLimiter().allowRequest(true, request.getCost())) {
 						statusMessage.append("\nClient is out of tokens!");
 						break;
 					}

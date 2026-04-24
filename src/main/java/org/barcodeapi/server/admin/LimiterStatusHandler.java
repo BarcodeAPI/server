@@ -6,12 +6,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
-import org.json.JSONObject;
 
 /**
- * SessionDetailsHandler.java
+ * LimiterStatusHandler.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class LimiterStatusHandler extends RestHandler {
 

@@ -7,7 +7,7 @@ import org.krysalis.barcode4j.impl.fourstate.RoyalMailCBCBean;
 /**
  * RoyalMailGenerator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class RoyalMailGenerator extends DefaultBarcode4JProvider {
 

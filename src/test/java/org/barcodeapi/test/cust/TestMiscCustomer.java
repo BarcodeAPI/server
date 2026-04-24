@@ -49,8 +49,38 @@ public class TestMiscCustomer extends ServerTestBase {
 	}
 	
 	@Test
-	public void testMiscCustomer_MACAddress() {
+	public void testMiscCustomer_MACAddress_UpperCase() {
+		
+		apiGet("AA:11:BB:22:CC:33");
+		
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"QRCode", getHeader("X-Barcode-Type"));
+
+		Assert.assertEquals("Code Data", //
+				encode("AA:11:BB:22:CC:33"), getHeader("X-Barcode-Content"));
+
+		Assert.assertEquals("Code Format", //
+				"image/png;charset=utf-8", getHeader("Content-Type"));
+	}
+	
+	@Test
+	public void testMiscCustomer_MACAddress_LowerCase() {
 		
 		apiGet("aa:11:bb:22:cc:33");
+		
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"QRCode", getHeader("X-Barcode-Type"));
+
+		Assert.assertEquals("Code Data", //
+				encode("aa:11:bb:22:cc:33"), getHeader("X-Barcode-Content"));
+
+		Assert.assertEquals("Code Format", //
+				"image/png;charset=utf-8", getHeader("Content-Type"));
 	}
 }

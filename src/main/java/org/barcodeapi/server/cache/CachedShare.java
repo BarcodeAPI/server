@@ -7,11 +7,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.libextras.LibExtrasHashes;
+import com.mclarkdev.tools.libextras.LibExtrasHashes.HashType;
 
 /**
  * CachedShare.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class CachedShare extends CachedObject {
 
@@ -40,7 +41,8 @@ public class CachedShare extends CachedObject {
 		// Hash the data and save for later
 		this.data = reqs.toString();
 		this.entries = reqs.length();
-		this.hash = LibExtrasHashes.sumMD5(data);
+		this.hash = LibExtrasHashes//
+				.checksum(HashType.MD5, data);
 	}
 
 	/**

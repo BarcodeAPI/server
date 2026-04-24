@@ -20,7 +20,7 @@ public class TestLimiterHandler extends ServerTestBase {
 	@Test
 	public void testServer_TestLimiterEndpoint() {
 
-		setHeader("Authorization", "Token=appTest");
+		setHeader("Authorization", "Token=APPTEST");
 		serverGet("/limiter/");
 
 		Assert.assertEquals("Response Code", //
@@ -66,11 +66,11 @@ public class TestLimiterHandler extends ServerTestBase {
 
 			// Token limit is set
 			Assert.assertTrue("Token Limit", //
-					tokens.getDouble("limit") == 1000);
+					tokens.getDouble("limit") == -1);
 
 			// Token count is set
 			Assert.assertTrue("Token Count", //
-					tokens.getDouble("count") >= 100);
+					tokens.getDouble("count") == -1);
 
 			// Token spend is set
 			Assert.assertTrue("Token Spend", //

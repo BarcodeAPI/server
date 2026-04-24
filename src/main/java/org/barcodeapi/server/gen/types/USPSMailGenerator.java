@@ -7,7 +7,7 @@ import org.krysalis.barcode4j.impl.fourstate.USPSIntelligentMailBean;
 /**
  * USPSMailGenerator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2024)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class USPSMailGenerator extends DefaultBarcode4JProvider {
 
