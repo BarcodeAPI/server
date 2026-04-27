@@ -64,6 +64,19 @@
 				"NOENFORCE"
 			],
 			"apps": []
+		},
+		{
+			"customer": "AppTest (Disabled)",
+			"subscribed": 1735693200000,
+			"active": false,
+			"enforce": true,
+			"limit": 25,
+			"batch": 100,
+			"ips": [],
+			"keys": [
+				"DISABLED"
+			],
+			"apps": []
 		}
 	]
 }

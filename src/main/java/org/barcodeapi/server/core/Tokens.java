@@ -151,7 +151,7 @@ public class Tokens {
 	public boolean allowSpend(double cost) {
 
 		// Allow if balance exceeds cost or unlimited
-		return ((tokenCount > cost) || isUnlimited());
+		return ((tokenCount > cost) || isUnlimited() || !isEnforced());
 	}
 
 	/**
