@@ -1,6 +1,6 @@
 package org.barcodeapi.test.gen;
 
-import org.barcodeapi.server.ServerTestBase;
+import org.barcodeapi.test.ServerTestBase;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;

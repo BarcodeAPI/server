@@ -2,7 +2,7 @@ package org.barcodeapi.test.api;
 
 import java.io.IOException;
 
-import org.barcodeapi.server.ServerTestBase;
+import org.barcodeapi.test.ServerTestBase;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -11,9 +11,9 @@ import org.junit.Test;
 import com.mclarkdev.tools.libextras.LibExtrasStreams;
 
 /**
- * TestServerTypesHandler.java
+ * TestInfoHandler.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class TestInfoHandler extends ServerTestBase {
 

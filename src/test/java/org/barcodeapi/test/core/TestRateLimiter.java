@@ -1,8 +1,8 @@
-package org.barcodeapi.test.limits;
+package org.barcodeapi.test.core;
 
-import org.barcodeapi.server.ServerTestBase;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.gen.BarcodeRequest;
+import org.barcodeapi.test.ServerTestBase;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,13 +28,14 @@ public class TestRateLimiter extends ServerTestBase {
 		// Give the server our API key
 		setHeader("Authorization", ("Token=" + APIKEY));
 
+		// Make the request
 		serverGet(getURI(9999));
 
 		// Verify correct user account
 		Assert.assertEquals("RateLimit Caller", //
 				"AppTest (Unlimited)", getHeader("X-RateLimit-Caller"));
 
-		// Request result is okay
+		// We got an okay response code
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
 
@@ -81,17 +82,17 @@ public class TestRateLimiter extends ServerTestBase {
 			}
 		}
 
-		// Verify correct user account
-		Assert.assertEquals("RateLimit Caller", //
-				"AppTest (1000)", getHeader("X-RateLimit-Caller"));
-
 		// We got a rate limited response code
 		Assert.assertEquals("Response Code", //
 				HttpStatus.TOO_MANY_REQUESTS_429, getResponseCode());
 
+		// Verify correct user account
+		Assert.assertEquals("RateLimit Caller", //
+				"AppTest (1000)", getHeader("X-RateLimit-Caller"));
+
 		// We got a rate limited response message
 		Assert.assertEquals("Error Message", //
-				"Client is rate limited, try again later.", getHeader("X-Error-Message"));
+				"Client is rate limited, try again later. (u:AppTest (1000))", getHeader("X-Error-Message"));
 
 		// We got the proper number of barcodes before hitting the limit
 		Assert.assertEquals("Request Count", expectedCount, requestCount);
@@ -132,13 +133,13 @@ public class TestRateLimiter extends ServerTestBase {
 			}
 		}
 
+		// We got an okay response code
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
 		// Verify correct user account
 		Assert.assertEquals("RateLimit Caller", //
 				"AppTest (NoEnforce)", getHeader("X-RateLimit-Caller"));
-
-		// We got a rate limited response code
-		Assert.assertEquals("Response Code", //
-				HttpStatus.OK_200, getResponseCode());
 
 		// We got the proper number of barcodes before hitting the limit
 		Assert.assertEquals("Request Count", expectedCount, requestCount);
@@ -155,6 +156,7 @@ public class TestRateLimiter extends ServerTestBase {
 		final String APIKEY = "DISABLED";
 		setHeader("Authorization", ("Token=" + APIKEY));
 
+		// Make the request
 		serverGet(getURI(0));
 
 		// We got a rate limited response code

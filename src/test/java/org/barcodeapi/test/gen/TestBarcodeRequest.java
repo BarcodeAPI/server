@@ -1,15 +1,15 @@
-package org.barcodeapi.test.core;
+package org.barcodeapi.test.gen;
 
-import org.barcodeapi.server.ServerTestBase;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.gen.BarcodeRequest;
+import org.barcodeapi.test.ServerTestBase;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * TestBarcodeRequest.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class TestBarcodeRequest extends ServerTestBase {
 
@@ -66,7 +66,6 @@ public class TestBarcodeRequest extends ServerTestBase {
 					GenerationException.ExceptionType.INVALID, e.getExceptionType());
 		}
 	}
-	
 
 	@Test
 	public void testBarcodeRequest_TestBlacklistRequest() {

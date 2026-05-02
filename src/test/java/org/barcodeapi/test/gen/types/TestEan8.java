@@ -1,11 +1,16 @@
 package org.barcodeapi.test.gen.types;
 
-import org.barcodeapi.server.ServerTestBase;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
+import org.barcodeapi.test.ServerTestBase;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * TestEan8.java
+ * 
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ */
 public class TestEan8 extends ServerTestBase {
 
 	@Test

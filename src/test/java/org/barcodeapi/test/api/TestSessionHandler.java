@@ -1,6 +1,6 @@
 package org.barcodeapi.test.api;
 
-import org.barcodeapi.server.ServerTestBase;
+import org.barcodeapi.test.ServerTestBase;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -8,9 +8,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * TestServerTypesHandler.java
+ * TestSessionHandler.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class TestSessionHandler extends ServerTestBase {
 

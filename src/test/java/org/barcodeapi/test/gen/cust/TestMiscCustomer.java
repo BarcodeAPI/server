@@ -1,6 +1,6 @@
-package org.barcodeapi.test.cust;
+package org.barcodeapi.test.gen.cust;
 
-import org.barcodeapi.server.ServerTestBase;
+import org.barcodeapi.test.ServerTestBase;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
@@ -8,7 +8,7 @@ import org.junit.Test;
 /**
  * TestMiscCustomer.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2025)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class TestMiscCustomer extends ServerTestBase {
 	

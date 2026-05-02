@@ -78,7 +78,8 @@ public class BarcodeAPIHandler extends RestHandler {
 
 				// Return rate limited barcode to user
 				throw new GenerationException(ExceptionType.LIMITED, //
-						new Throwable("Client is rate limited, try again later."));
+						new Throwable(String.format(//
+								"Client is rate limited, try again later. (u:%s)", limiter.getCaller())));
 			}
 
 			// Generate user requested barcode
@@ -161,8 +162,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		// Add content headers type and length
 		r.setContentType(format.getMime());
-		r.setHeader("Content-Length", //
-				Long.toString(bytes.length));
+		r.setHeader("Content-Length", Long.toString(bytes.length));
 
 		// Add the barcode type and detail headers
 		r.setHeader("X-Barcode-Type", barcode.getBarcodeType().getName());
