@@ -1,5 +1,7 @@
 package org.barcodeapi.server.core;
 
+import java.io.Serializable;
+
 import org.barcodeapi.core.Config;
 import org.barcodeapi.core.Config.Cfg;
 import org.json.JSONObject;
@@ -9,7 +11,9 @@ import org.json.JSONObject;
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
-public class Reputation {
+public class Reputation implements Serializable {
+
+	private static final long serialVersionUID = 20260503L;
 
 	private static final double REP_INITIAL;
 
@@ -25,7 +29,7 @@ public class Reputation {
 	private static final double REP_DECAY_SPAM;
 
 	static {
-		
+
 		JSONObject cfg = Config.get(Cfg.App)//
 				.getJSONObject("reputation");
 
@@ -42,13 +46,20 @@ public class Reputation {
 		REP_DECAY_SPAM = cfg.getDouble("decay_spam");
 	}
 
+	private final boolean enforce;
+
 	private double reputation;
 
 	private long updated;
 
-	public Reputation() {
+	public Reputation(boolean enforce) {
+		this.enforce = enforce;
 		this.reputation = REP_INITIAL;
 		this.updated = System.currentTimeMillis();
+	}
+
+	public boolean enforced() {
+		return enforce;
 	}
 
 	public double value() {
@@ -56,7 +67,7 @@ public class Reputation {
 	}
 
 	public boolean isAbuser() {
-		return (REP_ABUSE_LEVEL >= reputation);
+		return ((REP_ABUSE_LEVEL >= reputation) && enforce);
 	}
 
 	public void update(boolean valid) {

@@ -11,7 +11,7 @@ import org.json.JSONObject;
  */
 public class CachedLimiter extends CachedObject {
 
-	private static final long serialVersionUID = 20241222L;
+	private static final long serialVersionUID = 20260503L;
 
 	private final String caller;
 
@@ -24,7 +24,7 @@ public class CachedLimiter extends CachedObject {
 
 		this.caller = caller;
 
-		this.reputation = new Reputation();
+		this.reputation = new Reputation(enforce);
 
 		this.tokens = new Tokens(enforce, requests);
 	}

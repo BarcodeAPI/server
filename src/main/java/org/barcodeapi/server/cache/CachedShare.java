@@ -16,7 +16,7 @@ import com.mclarkdev.tools.libextras.LibExtrasHashes.HashType;
  */
 public class CachedShare extends CachedObject {
 
-	private static final long serialVersionUID = 20241222L;
+	private static final long serialVersionUID = 20260503L;
 
 	private final String data;
 

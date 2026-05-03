@@ -13,7 +13,7 @@ import org.json.JSONObject;
  */
 public class CachedBarcode extends CachedObject {
 
-	private static final long serialVersionUID = 20241222L;
+	private static final long serialVersionUID = 20260503L;
 
 	private final CodeType type;
 	private final byte[] data;

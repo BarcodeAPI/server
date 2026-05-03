@@ -19,7 +19,7 @@ import org.json.JSONObject;
  */
 public class CachedSession extends CachedObject {
 
-	private static final long serialVersionUID = 20241222L;
+	private static final long serialVersionUID = 20260503L;
 
 	private final String key;
 

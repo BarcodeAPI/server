@@ -96,3 +96,25 @@ function sessionDelete() {
 		window.location.reload();
 	});
 }
+
+function limiterReset() {
+	if (!confirm("Request limiter balance to be reset?")) {
+		return;
+	}
+
+	console.log("Requesting limiter balance to be reset.");
+	fetch('/limiter/', {
+		method: 'DELETE'
+	}).then(response => {
+
+		return response.ok;
+	}).then(okay => {
+		if (!okay) {
+			alert("Could not reset limiter balance!");
+			return;
+		}
+
+		alert("Limiter balancer reset.");
+		window.location.reload();
+	});
+}

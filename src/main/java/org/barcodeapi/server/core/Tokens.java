@@ -1,11 +1,15 @@
 package org.barcodeapi.server.core;
 
+import java.io.Serializable;
+
 /**
  * Tokens.java
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
-public class Tokens {
+public class Tokens implements Serializable {
+
+	private static final long serialVersionUID = 20260503L;
 
 	private static final double _DAY = (24 * 60 * 60 * 1000);
 
@@ -140,6 +144,20 @@ public class Tokens {
 	public boolean isLowBalance() {
 
 		return (!isUnlimited() && ((0.05 * tokenLimit) > tokenCount));
+	}
+
+	/**
+	 * Refund the given number of tokens to the balance.
+	 * 
+	 * @param count number of tokens to refund
+	 */
+	public void refund(double count) {
+
+		synchronized (this) {
+
+			// Return new balance, capped at limit
+			tokenCount = Math.min(tokenLimit, (tokenCount + count));
+		}
 	}
 
 	/**
