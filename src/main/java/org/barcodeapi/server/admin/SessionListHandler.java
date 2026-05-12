@@ -19,7 +19,13 @@ import org.json.JSONObject;
 public class SessionListHandler extends RestHandler {
 
 	public SessionListHandler() {
-		super(true, false, false);
+		super(
+				// Authentication required
+				true,
+				// Do not use client rate limit
+				false,
+				// Do not create new session
+				false);
 	}
 
 	@Override

@@ -19,7 +19,13 @@ import org.json.JSONObject;
 public class InfoHandler extends RestHandler {
 
 	public InfoHandler() {
-		super();
+		super(
+				// Authentication not required
+				false,
+				// Do not use client rate limit
+				false,
+				// Do not create new session
+				false);
 	}
 
 	@Override
@@ -27,7 +33,7 @@ public class InfoHandler extends RestHandler {
 
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
-		r.setContentType("application/json");	
+		r.setContentType("application/json");
 		r.getOutputStream().println((new JSONObject()//
 				.put("uptime", ServerRuntime.getTimeRunning())//
 				.put("hostname", ServerRuntime.getHostname())//

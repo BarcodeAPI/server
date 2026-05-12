@@ -27,7 +27,7 @@
 	],
 	"pattern": {
 		"auto": "^[ !#$()*.\\/0-9=?A-Za-z~]{1,12}$",
-		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,48}$"
+		"extended": "^[ !\\\"#$%&\\'()*+,\\-.\\/0-9:;<=>?@A-Z\\[\\]^_`a-z{|}~]{1,56}$"
 	},
 	"description": {
 		"en": "A medium densisty alphanumeric barcode with a larger character set when compared to CODE39. Supports most of the ASCII character set including non-printing control characters."

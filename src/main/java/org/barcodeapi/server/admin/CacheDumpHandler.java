@@ -22,7 +22,13 @@ import org.json.JSONObject;
 public class CacheDumpHandler extends RestHandler {
 
 	public CacheDumpHandler() {
-		super(true, false, false);
+		super(
+				// Authentication required
+				true,
+				// Do not use client rate limit
+				false,
+				// Do not create new session
+				false);
 	}
 
 	@Override

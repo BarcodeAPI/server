@@ -21,7 +21,13 @@ public class PlansHandler extends RestHandler {
 	private static final JSONObject plansInfo = Config.get(Cfg.Plans);
 
 	public PlansHandler() {
-		super();
+		super(
+				// Authentication not required
+				false,
+				// Do not use client rate limit
+				false,
+				// Do not create new session
+				false);
 	}
 
 	@Override

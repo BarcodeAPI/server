@@ -4,20 +4,21 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.server.cache.CachedLimiter;
-import org.barcodeapi.server.cache.LimiterCache;
+import org.barcodeapi.server.cache.CachedSession;
+import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * LimiterStatusHandler.java
+ * SessionStatusHandler.java
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
-public class LimiterStatusHandler extends RestHandler {
+public class SessionStatusHandler extends RestHandler {
 
-	public LimiterStatusHandler() {
+	public SessionStatusHandler() {
 		super(
 				// Authentication required
 				true,
@@ -28,31 +29,30 @@ public class LimiterStatusHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext c, HttpServletResponse r) throws IOException {
+	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
-		String caller = c.getRequest().getParameter("caller");
+		String key = c.getRequest().getParameter("key");
 
-		// Check the requested caller exists
-		if (!LimiterCache.hasCaller(caller)) {
+		// Check the requested session exists
+		if (!ObjectCache.getCache(ObjectCache.CACHE_SESSIONS).has(key)) {
 
 			// Print failure to client
 			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			r.setContentType("application/json");
 			r.getOutputStream().println((new JSONObject()//
 					.put("code", 400)//
-					.put("message", "limiter not found")//
+					.put("message", "session not found")//
 			).toString());
 			return;
 		}
 
-		// Lookup the caller info
-		CachedLimiter limiter = //
-				LimiterCache.getLimiter(null, caller);
+		CachedSession session = //
+				(CachedSession) ObjectCache//
+						.getCache(ObjectCache.CACHE_SESSIONS).get(key);
 
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setContentType("application/json");
-		r.getOutputStream().println(//
-				limiter.asJSON().toString(4));
+		r.getOutputStream().println(session.asJSON().toString(4));
 	}
 }

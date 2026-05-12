@@ -10,9 +10,11 @@ import org.barcodeapi.server.admin.CacheDumpHandler;
 import org.barcodeapi.server.admin.CacheFlushHandler;
 import org.barcodeapi.server.admin.LimiterFlushHandler;
 import org.barcodeapi.server.admin.LimiterListHandler;
+import org.barcodeapi.server.admin.LimiterStatusHandler;
 import org.barcodeapi.server.admin.ServerStatsHandler;
 import org.barcodeapi.server.admin.SessionFlushHandler;
 import org.barcodeapi.server.admin.SessionListHandler;
+import org.barcodeapi.server.admin.SessionStatusHandler;
 import org.barcodeapi.server.admin.ShareListHandler;
 import org.barcodeapi.server.admin.SubscriberReloadHandler;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
@@ -147,14 +149,16 @@ public class ServerLauncher {
 		initHandler("/plans", PlansHandler.class);
 
 		// Setup admin handlers
-		initHandler("/admin/share/list", ShareListHandler.class);
 		initHandler("/admin/cache/dump", CacheDumpHandler.class);
 		initHandler("/admin/cache/flush", CacheFlushHandler.class);
-		initHandler("/admin/user/reload", SubscriberReloadHandler.class);
-		initHandler("/admin/limiter/list", LimiterListHandler.class);
 		initHandler("/admin/limiter/flush", LimiterFlushHandler.class);
-		initHandler("/admin/session/list", SessionListHandler.class);
+		initHandler("/admin/limiter/list", LimiterListHandler.class);
+		initHandler("/admin/limiter/status", LimiterStatusHandler.class);
 		initHandler("/admin/session/flush", SessionFlushHandler.class);
+		initHandler("/admin/session/list", SessionListHandler.class);
+		initHandler("/admin/session/status", SessionStatusHandler.class);
+		initHandler("/admin/share/list", ShareListHandler.class);
+		initHandler("/admin/subscriber/reload", SubscriberReloadHandler.class);
 
 		// Server Stats
 		initHandler("/server/stats", ServerStatsHandler.class);

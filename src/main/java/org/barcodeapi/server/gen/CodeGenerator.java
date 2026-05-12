@@ -1,7 +1,6 @@
 package org.barcodeapi.server.gen;
 
 import org.barcodeapi.server.core.CodeType;
-import org.barcodeapi.server.core.GenerationException;
 
 /**
  * CodeGenerator.java
@@ -23,16 +22,6 @@ public abstract class CodeGenerator {
 	 */
 	public CodeType getType() {
 		return codeType;
-	}
-
-	/**
-	 * Default validation does not modifications.
-	 * 
-	 * @param data
-	 * @return
-	 * @throws GenerationException
-	 */
-	public void onValidateRequest(BarcodeRequest data) throws GenerationException {
 	}
 
 	/**

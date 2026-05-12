@@ -1,0 +1,62 @@
+{
+	"name": "QR DotCode",
+	"display": "QR DotCode",
+	"show": false,
+	"decode": true,
+	"cache": true,
+	"target": [
+		"dot",
+		"qrdot",
+		"qrdotcode"
+	],
+	"generator": ".QRDotCodeGenerator",
+	"threads": 2,
+	"priority": 30,
+	"cost": {
+		"base": 2.000,
+		"char": 0.025,
+		"mult": 1.350
+	},
+	"checkdigit": 0,
+	"nonprinting": true,
+	"example": [
+		"QR Barcode"
+	],
+	"pattern": {
+		"auto": "^.{1,64}$",
+		"extended": "^.{1,65535}$"
+	},
+	"description": {
+		"en": "A 2D data barcode whose timing markers are aligned at the corners."
+	},
+	"wiki": {
+		"en": "https://en.wikipedia.org/wiki/QR_code"
+	},
+	"options": {
+		"size": {
+			"name": "Size",
+			"type": "number",
+			"default": 275,
+			"min": 50,
+			"max": 500
+		},
+		"qz": {
+			"name": "Quiet Zone",
+			"type": "number",
+			"default": 2,
+			"min": 0,
+			"max": 8
+		},
+		"correction": {
+			"name": "Error Correction",
+			"type": "option",
+			"default": "M",
+			"options": [
+				"M",
+				"L",
+				"H",
+				"Q"
+			]
+		}
+	}
+}

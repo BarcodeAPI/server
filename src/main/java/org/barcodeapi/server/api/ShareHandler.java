@@ -30,7 +30,13 @@ public class ShareHandler extends RestHandler {
 			ObjectCache.getCache(ObjectCache.CACHE_SHARE);
 
 	public ShareHandler() {
-		super();
+		super(
+				// Authentication not required
+				false,
+				// Do not use client rate limit
+				false,
+				// Do not create new session
+				false);
 	}
 
 	@Override

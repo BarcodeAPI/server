@@ -208,6 +208,15 @@ function loadSelectedType() {
 	// Show non-printing keyboard for supported formats
 	uiShowHide("action-keyboard", (codeType) ? codeType.nonprinting : false);
 
+	// Update learn more link
+	uiShowHide("link-more", (codeType) ? true : false);
+	if (codeType) {
+		var link = document.getElementsByClassName("link-more")[0];
+		link.innerHTML = "Learn more about " + codeType.display + " barcodes!";
+		link.href = "/type.html#" + codeType.targets[0];
+	}
+
+
 	// Render options menu
 	renderOptions(codeType);
 
@@ -385,16 +394,6 @@ function updateBarcodeImage(url) {
 			var tokens = response.headers.get('x-ratelimit-tokens');
 			tokens = (tokens == -1) ? "Unlimited" : tokens;
 			document.getElementById("barcode_tokens").innerHTML = tokens;
-
-			// Update learn more link
-			var codeType = response.headers.get('x-barcode-type');
-			var displayType = codeType.replace("_", " ");
-			var linkType = codeType.replace("_", "");
-
-			// Update learn more link
-			var link = document.getElementsByClassName("link-more")[0];
-			link.innerHTML = "Learn more about " + displayType + " barcodes!";
-			link.href = "/type.html#" + linkType;
 
 			// Update the image blob
 			response.blob().then(blob => {

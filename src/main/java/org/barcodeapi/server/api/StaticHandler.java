@@ -31,7 +31,13 @@ public class StaticHandler extends RestHandler {
 	private ResourceHandler resources = new ResourceHandler();
 
 	public StaticHandler(Server server) throws Exception {
-		super();
+		super(
+				// Authentication not required
+				false,
+				// Do not use client rate limit
+				false,
+				// Create new session
+				true);
 
 		// Load the Jetty resource handler
 		resources = new ResourceHandler();

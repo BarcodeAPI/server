@@ -11,6 +11,7 @@
 		"Code128",
 		"Aztec",
 		"QRCode",
+		"QRDotCode",
 		"DataMatrix",
 		"PDF417",
 		"USPSMail",

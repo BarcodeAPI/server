@@ -14,7 +14,7 @@ function init() {
 
 	// Redirect if not set
 	if (!target) {
-		window.location = "/types.html";
+		window.location = "types.html";
 		return;
 	}
 
@@ -29,9 +29,12 @@ function loadType(type) {
 
 	// Redirect if not loaded
 	if (!type) {
-		window.location = "/types.html";
+		window.location = "types.html";
 		return;
 	}
+
+	// Determine language	
+	var language = appConfig.userLanguage;
 
 	// Set the page title
 	document.title = //
@@ -40,8 +43,9 @@ function loadType(type) {
 	// Determine default target
 	var target = type.targets[0];
 
-	// Determine language	
-	var language = appConfig.userLanguage;
+	// Update generate now link
+	var linkGen = document.getElementById("link-gen");
+	linkGen.href = "index.html#" + target;
 
 	// Get the DOM template object
 	var info = document.getElementById("barcode-template");
@@ -50,7 +54,7 @@ function loadType(type) {
 	// Render each of the examples
 	for (var x in type.examples) {
 
-		var apiURL = ("/api/" + target + "/" + type.examples[x]);
+		var apiURL = ("api/" + target + "/" + type.examples[x]);
 
 		var table = document.createElement("table");
 
@@ -109,7 +113,7 @@ function loadType(type) {
 function buildOptions(type) {
 
 	// Build the exmaple URL root
-	var exampleURL = "/api/" + type.targets[0] + "/" + type.examples[0] + "?";
+	var exampleURL = "api/" + type.targets[0] + "/" + type.examples[0] + "?";
 
 	// Loop each of the parameters
 	for (var x in type.options) {

@@ -21,7 +21,13 @@ import org.json.JSONObject;
 public class LimiterListHandler extends RestHandler {
 
 	public LimiterListHandler() {
-		super(true, false, false);
+		super(
+				// Authentication required
+				true,
+				// Do not use client rate limit
+				false,
+				// Do not create new session
+				false);
 	}
 
 	@Override

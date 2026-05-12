@@ -34,6 +34,12 @@ public class LimiterCache {
 		_LIMITERS = ObjectCache.getCache(ObjectCache.CACHE_LIMITERS);
 	}
 
+	public static boolean hasCaller(String caller) {
+		LibMetrics.hitMethodRunCounter();
+
+		return _LIMITERS.has(caller);
+	}
+
 	public static CachedLimiter getLimiter(Subscriber sub, String address) {
 		LibMetrics.hitMethodRunCounter();
 
@@ -61,14 +67,14 @@ public class LimiterCache {
 		return limiter;
 	}
 
-	public static boolean flushLimiter(String limiter) {
+	public static boolean flushLimiter(String caller) {
 		LibMetrics.hitMethodRunCounter();
 
-		if (!_LIMITERS.has(limiter)) {
+		if (!_LIMITERS.has(caller)) {
 			return false;
 		}
 
-		_LIMITERS.remove(limiter);
+		_LIMITERS.remove(caller);
 		return true;
 	}
 }

@@ -18,15 +18,21 @@ import org.json.JSONObject;
 public class LimiterFlushHandler extends RestHandler {
 
 	public LimiterFlushHandler() {
-		super(true, false, false);
+		super(
+				// Authentication required
+				true,
+				// Do not use client rate limit
+				false,
+				// Do not create new session
+				false);
 	}
 
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
 		// Check & flush caches
-		String id = c.getRequest().getParameter("id");
-		boolean flushed = LimiterCache.flushLimiter(id);
+		String caller = c.getRequest().getParameter("caller");
+		boolean flushed = LimiterCache.flushLimiter(caller);
 
 		if (!flushed) {
 

@@ -45,7 +45,13 @@ public class TypeHandler extends RestHandler {
 	}
 
 	public TypeHandler() {
-		super();
+		super(
+				// Authentication not required
+				false,
+				// Do not use client rate limit
+				false,
+				// Do not create new session
+				false);
 	}
 
 	@Override

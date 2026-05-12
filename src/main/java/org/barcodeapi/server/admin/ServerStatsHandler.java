@@ -19,7 +19,13 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
 public class ServerStatsHandler extends RestHandler {
 
 	public ServerStatsHandler() {
-		super(true, false, false);
+		super(
+				// Authentication required
+				true,
+				// Do not use client rate limit
+				false,
+				// Do not create new session
+				false);
 	}
 
 	@Override

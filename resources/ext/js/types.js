@@ -48,7 +48,7 @@ function addType(type) {
 	var info = document.getElementById("barcode-template").cloneNode(true);
 	info.setAttribute("id", "barcode-type-" + target);
 
-	var link = ("/api/" + target + "/" + type.examples[0]);
+	var link = ("api/" + target + "/" + type.examples[0]);
 	info.querySelector(".type-example").src = link;
 
 	info.querySelector(".type-name").innerHTML = type.display;

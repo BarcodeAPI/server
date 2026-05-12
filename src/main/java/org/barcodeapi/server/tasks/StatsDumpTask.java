@@ -20,7 +20,7 @@ import com.mclarkdev.tools.liblog.LibLog;
 public class StatsDumpTask extends BackgroundTask {
 
 	private static final String _TELEM_TARGET = "https://barcodeapi.org/stats/upload";
-	private static final boolean _TELEM_ENABLED = (!LibArgs.instance().getBoolean("no-telemetry"));
+	private static final boolean _TELEM_ENABLED = (!LibArgs.instance().isSet("no-telemetry"));
 
 	public StatsDumpTask() {
 		super();
