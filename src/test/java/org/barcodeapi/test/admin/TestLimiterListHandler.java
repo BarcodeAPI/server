@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * TestCacheDumpHandler.java
+ * TestLimiterListHandler.java
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */

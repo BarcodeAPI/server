@@ -44,20 +44,22 @@
 				<br />
 				<b>Limiters</b>
 				<br />
+				<a href="/admin/limiter/list/">All</a>&nbsp;
+				<a href="/admin/limiter/list/?filter=limited">Limited</a>&nbsp;
+				<a href="/admin/limiter/list/?filter=abusers">Abusers</a>&nbsp;
+				<br />
 				<a href="/limiter/">Current Limiter</a>
 				<br />
-				<a href="/admin/limiter/list/">List Limiters</a>
+				<a onclick="adminAction(this, 'caller');" href="/admin/limiter/flush/">Flush Limiter</a>
 				<br />
-				<a href="/admin/limiter/flush/?caller=">Flush Limiter</a>
-				<br />
-				<a href="/admin/limiter/status/?caller=">Limiter Status</a>
+				<a onclick="adminAction(this, 'caller');" href="/admin/limiter/status/">Limiter Status</a>
 				<br />
 				<br />
 				<b>Subscribers</b>
 				<br />
 				<a href="/admin/subscriber/reload/">Reload Subscribers</a>
 				<br />
-				<a href="/admin/subscriber/status/?key=">Subscriber Status</a>
+				<a onclick="adminAction(this, 'key');" href="/admin/subscriber/status/">Subscriber Status</a>
 				<br />
 				<br />
 				<b>Sessions</b>
@@ -68,12 +70,12 @@
 				<br />
 				<a href="/admin/session/flush/">Flush Sessions</a>
 				<br />
-				<a href="/admin/session/status/?key=">Session Status</a>
+				<a onclick="adminAction(this, 'key');" href="/admin/session/status/">Session Status</a>
 				<br />
 				<br />
 				<b>Shares</b>
 				<br />
-				<a href="/share/?key=">Share Info</a>
+				<a onclick="adminAction(this, 'key');" href="/share/?key=">Share Info</a>
 				<br />
 				<a href="/admin/share/list/">List Shares</a>
 				<br />

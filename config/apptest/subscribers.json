@@ -1,6 +1,19 @@
 {
 	"subscribers": [
 		{
+			"customer": "BarcodeAPI.org",
+			"subscribed": 1735693200000,
+			"active": false,
+			"enforce": true,
+			"limit": -1,
+			"batch": 500,
+			"ips": [
+				"10.3.132.100"
+			],
+			"keys": [],
+			"apps": []
+		},
+		{
 			"customer": "DevTest",
 			"subscribed": 1735693200000,
 			"active": true,

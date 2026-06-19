@@ -13,18 +13,18 @@ function init() {
 			return response.json();
 		})
 		.then(data => {
-			if (!data.enforce) {
+			if (!data.tokens.enforce) {
 				document.getElementsByClassName("notice-enforced")[0].style.display = 'block';
 				document.getElementsByClassName("notice-abusers")[0].style.display = 'none';
 			}
 
 			// Update user token count
 			document.getElementById("token_count").innerHTML = //
-				((data.tokens.count == -1) ? "Unlimited" : Number(data.tokens.count).toFixed(2));
+				((data.tokens.count == -1) ? "&infin;" : Number(data.tokens.count).toFixed(2));
 
 			// Update user token limit
 			document.getElementById("token_limit").innerHTML = //
-				((data.tokens.limit == -1) ? "Unlimited" : data.tokens.limit);
+				((data.tokens.limit == -1) ? "&infin;" : data.tokens.limit);
 
 			// Log app load tracking event
 			var setupMillis = ((new Date()) - timeStart);

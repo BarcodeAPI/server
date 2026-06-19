@@ -26,6 +26,7 @@ import org.barcodeapi.server.api.PlansHandler;
 import org.barcodeapi.server.api.SessionHandler;
 import org.barcodeapi.server.api.ShareHandler;
 import org.barcodeapi.server.api.StaticHandler;
+import org.barcodeapi.server.api.SubscriberHandler;
 import org.barcodeapi.server.api.TypeHandler;
 import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
@@ -145,6 +146,7 @@ public class ServerLauncher {
 		initHandler("/share", ShareHandler.class);
 		initHandler("/limiter", LimiterHandler.class);
 		initHandler("/session", SessionHandler.class);
+		initHandler("/subscriber", SubscriberHandler.class);
 		initHandler("/info", InfoHandler.class);
 		initHandler("/plans", PlansHandler.class);
 

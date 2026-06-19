@@ -29,6 +29,14 @@ public class CachedLimiter extends CachedObject {
 		this.tokens = new Tokens(enforce, requests);
 	}
 
+	public void touch(CachedSession session) {
+		super.touch();
+
+		if (session != null) {
+
+		}
+	}
+
 	/**
 	 * Short lived and can be cleaned if token balance is full.
 	 * 
@@ -76,7 +84,7 @@ public class CachedLimiter extends CachedObject {
 	 * @param valid request was valid
 	 * @param cost  cost of the request
 	 */
-	public boolean allowRequest(boolean valid, double cost) {
+	public boolean onRequest(boolean valid, double cost) {
 
 		// Update user reputation
 		reputation.update(valid);
@@ -94,6 +102,7 @@ public class CachedLimiter extends CachedObject {
 
 		return (new JSONObject()//
 				.put("caller", getCaller())//
+				.put("requests", getAccessCount())//
 				.put("reputation", reputation.value())//
 				.put("time", new JSONObject() //
 						.put("created", getTimeCreated())//

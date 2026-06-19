@@ -188,7 +188,7 @@ public class BulkHandler extends RestHandler {
 							request.getData(), request.getType().getName(), request.getCost()));
 
 					// Spend the tokens for the barcode
-					if (!c.getLimiter().allowRequest(true, request.getCost())) {
+					if (!c.getLimiter().onRequest(true, request.getCost())) {
 						statusMessage.append("\nClient is out of tokens!");
 						break;
 					}

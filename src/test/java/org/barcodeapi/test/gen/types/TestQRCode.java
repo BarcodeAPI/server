@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * TestAprilTag.java
+ * TestQRCode.java
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
@@ -15,9 +15,8 @@ public class TestQRCode extends ServerTestBase {
 	@Test
 	public void testQRCode_CorrectionL() {
 
-		apiGet("qr", "test", "correction=L");
+		apiGet("qr", "test", "correction=l");
 
-		// We got a rate limited response code
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
 	}
@@ -25,9 +24,8 @@ public class TestQRCode extends ServerTestBase {
 	@Test
 	public void testQRCode_CorrectionM() {
 
-		apiGet("qr", "test", "correction=M");
+		apiGet("qr", "test", "correction=m");
 
-		// We got a rate limited response code
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
 	}
@@ -35,9 +33,8 @@ public class TestQRCode extends ServerTestBase {
 	@Test
 	public void testQRCode_CorrectionQ() {
 
-		apiGet("qr", "test", "correction=Q");
+		apiGet("qr", "test", "correction=q");
 
-		// We got a rate limited response code
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
 	}
@@ -45,9 +42,8 @@ public class TestQRCode extends ServerTestBase {
 	@Test
 	public void testQRCode_CorrectionH() {
 
-		apiGet("qr", "test", "correction=H");
+		apiGet("qr", "test", "correction=h");
 
-		// We got a rate limited response code
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
 	}

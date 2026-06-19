@@ -60,8 +60,8 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			// Check for abuse
 			if (limiter.getReputation().isAbuser()) {
-				throw new GenerationException(ExceptionType.ABUSE, //
-						new Throwable("Bad reputation for IP. Try again later."));
+				throw new GenerationException(ExceptionType.ABUSE, new Throwable(String.format(//
+						"Bad reputation for IP, try again later. (u:%s)", limiter.getCaller())));
 			}
 
 			// Parse the request
@@ -77,9 +77,8 @@ public class BarcodeAPIHandler extends RestHandler {
 			if (!limiter.getTokens().allowSpend(tokenSpendCount)) {
 
 				// Return rate limited barcode to user
-				throw new GenerationException(ExceptionType.LIMITED, //
-						new Throwable(String.format(//
-								"Client is rate limited, try again later. (u:%s)", limiter.getCaller())));
+				throw new GenerationException(ExceptionType.LIMITED, new Throwable(String.format(//
+						"Client is rate limited, try again later. (u:%s)", limiter.getCaller())));
 			}
 
 			// Generate user requested barcode
@@ -154,8 +153,10 @@ public class BarcodeAPIHandler extends RestHandler {
 			LibLog._log("Unhandled exception!", e);
 		}
 
+		// Spend the tokens, track total spend count
+		limiter.onRequest(tokenSpendValid, tokenSpendCount);
+
 		// Advise current token spend and count
-		limiter.allowRequest(tokenSpendValid, tokenSpendCount);
 		r.setHeader("X-RateLimit-Cost", Double.toString(tokenSpendCount));
 		r.setHeader("X-RateLimit-Tokens", limiter.getTokens().getCountStr());
 		r.setHeader("X-SpamDetect", Double.toString(limiter.getReputation().value()));

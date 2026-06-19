@@ -112,55 +112,66 @@ public class RequestContext {
 		this.fwd = (fwd == null) ? null : ip;
 		this.ip = ip = (fwd == null) ? ip : fwd;
 
-		// Update scheme if via proxy
-		HttpURI uri = request.getMetaData().getURI();
+		// Update scheme if via proxy, determine if secure
+		HttpURI rawUri = request.getMetaData().getURI();
 		String proto = request.getHeader("X-Forwarded-Proto");
-		uri.setScheme(proto != null ? proto : "http");
+		rawUri.setScheme(proto != null ? proto : "http");
+		this.secure = rawUri.getScheme().equals("https");
 
-		// The request is secure to the client
-		this.secure = uri.getScheme().equals("https");
-
-		// The requested method
+		// Request method and origin
 		this.method = request.getMethod();
+		this.origin = request.getHeader("Origin");
 
-		// The requested URI
-		this.uri = request.getOriginalURI();
+		// Determine the source of the request
+		String ref = request.getHeader("Referer");
+		this.source = (ref != null) ? ref : "API";
 
 		// Determine output format and encoding
 		this.formats = Format.parse(//
 				request.getHeader("Accept"));
 
+		// Check for request token
+		String authStr = request.getHeader("Authorization");
+		String reqUri = request.getOriginalURI().toString();
+		int tokenAt = reqUri.indexOf("token=");
+		if (tokenAt > 0) {
+
+			// Extract the token from the URI
+			int tokenEnd = reqUri.indexOf('&', tokenAt);
+			tokenEnd = (tokenEnd > 0) ? tokenEnd : reqUri.length();
+			authStr = reqUri.substring(tokenAt, tokenEnd);
+
+			// Rebuild the URI with the token extracted
+			reqUri = (reqUri.substring(0, tokenAt)) + //
+					((tokenEnd == reqUri.length()) ? "" : //
+							(reqUri.substring(tokenEnd, (reqUri.length() - 1))));
+		}
+
+		// The requested method and URI
+		this.uri = reqUri;
+
 		// Size of the request body
 		this.body = request.getContentLength();
 
-		// Get the origin
-		this.origin = request.getHeader("Origin");
-
-		// Determine the associated subscriber by IP
-		Subscriber user = null;
-
-		// Check if authenticating with login or API key
+		// Lookup API key
 		String admin = null;
-		String authStr = request.getHeader("Authorization");
-
+		Subscriber user = null;
 		if (authStr != null) {
 
-			// Lookup user by admin login
-			if (authStr.startsWith("Basic")) {
-				authStr = authStr.substring(6);
-				admin = SessionHelper.validateUser(authStr);
-			} else //
+			String authType = authStr.substring(0, 5);
+			String authData = authStr.substring(6);
 
-			// Lookup user by API key
-			if (authStr.startsWith("Token")) {
-				authStr = authStr.substring(6);
-				user = SubscriberCache.getByKey(authStr);
+			switch (authType) {
+			case "Basic":
+				admin = SessionHelper.validateUser(authData);
+				break;
+
+			case "Token":
+			case "token":
+				user = SubscriberCache.getByKey(authData);
+				break;
 			}
 		}
-
-		// Determine the source of the request
-		String ref = request.getHeader("Referer");
-		this.source = (ref != null) ? ref : "API";
 
 		// Lookup user based on application
 		if (user == null && ref != null) {
@@ -179,10 +190,6 @@ public class RequestContext {
 		// Assign resolved user info to the context
 		this.admin = admin;
 		this.subscriber = user;
-		this.limiter = LimiterCache.getLimiter(user, ip);
-
-		// Touch the limiter
-		this.limiter.touch();
 
 		// Lookup or create new user session context
 		CachedSession userSession = SessionHelper.getSession(request);
@@ -191,8 +198,12 @@ public class RequestContext {
 
 		// Hit the session if it exists
 		if (this.session != null) {
-			session.hit(ip, request.getOriginalURI().toString());
+			session.hit(ip, this.uri);
 		}
+
+		// Get and touch the limiter
+		this.limiter = LimiterCache.getLimiter(user, ip);
+		this.limiter.touch(this.session);
 	}
 
 	/**

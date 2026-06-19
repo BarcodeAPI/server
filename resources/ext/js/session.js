@@ -53,7 +53,7 @@ function onLoadLimiter(data) {
 	document.getElementById("limiter-caller").innerHTML = data.caller;
 	document.getElementById("limiter-created").innerHTML = (new Date(data.time.created)).toJSON();
 	document.getElementById("limiter-expires").innerHTML = (new Date(data.time.expires)).toJSON();
-	document.getElementById("limiter-enforce").innerHTML = (data.enforce ? "Yes" : "No");
+	document.getElementById("limiter-enforce").innerHTML = (data.tokens.enforce ? "Yes" : "No");
 	document.getElementById("limiter-reputation").innerHTML = Number(data.reputation).toFixed(2);
 	document.getElementById("limiter-tokenSpend").innerHTML = data.tokens.spend;
 	document.getElementById("limiter-tokenLimit").innerHTML = data.tokens.limit;

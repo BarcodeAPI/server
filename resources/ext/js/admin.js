@@ -32,3 +32,7 @@ function onLoadInfo(info) {
 	var setupMillis = ((new Date()) - timeStart);
 	trackingEvent("AppEvents", "AppLoad", "Admin", setupMillis);
 }
+
+function adminAction(src, field) {
+	src.href += ('?' + field + '=' + prompt(field + "=?"));
+}
