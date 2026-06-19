@@ -6,10 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
-import org.barcodeapi.server.core.Tokens;
 import org.json.JSONObject;
-
-import com.mclarkdev.tools.liblog.LibLog;
 
 /**
  * SubscriberHandler.java

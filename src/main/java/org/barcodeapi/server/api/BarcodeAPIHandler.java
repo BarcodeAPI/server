@@ -49,7 +49,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 		BarcodeRequest request = null;
 		CachedBarcode barcode = null;
-		Format format = null;
+		Format format = Format.PNG;
 		byte[] bytes = null;
 
 		double tokenSpendCount = 0;
