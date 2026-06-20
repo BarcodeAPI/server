@@ -1,9 +1,5 @@
 package org.barcodeapi.server.cache;
 
-import org.barcodeapi.core.Config;
-import org.barcodeapi.core.Config.Cfg;
-import org.json.JSONObject;
-
 import com.mclarkdev.tools.libmetrics.LibMetrics;
 
 /**
@@ -13,22 +9,10 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
  */
 public class LimiterCache {
 
-	// Default values for new limiters
-	private static final int DEFLIMIT_RATE;
-	private static final boolean DEFLIMIT_ENFORCE;
-
 	// Local instance of the limiters cache
 	private static final ObjectCache _LIMITERS;
 
 	static {
-
-		// Load plan from configuration
-		JSONObject freePlan = Config//
-				.get(Cfg.Plans).getJSONObject("free");
-
-		// Free plan defaults
-		DEFLIMIT_RATE = freePlan.getInt("limit");
-		DEFLIMIT_ENFORCE = freePlan.getBoolean("enforce");
 
 		// Get the limiter cache
 		_LIMITERS = ObjectCache.getCache(ObjectCache.CACHE_LIMITERS);
@@ -44,23 +28,19 @@ public class LimiterCache {
 		LibMetrics.hitMethodRunCounter();
 
 		// User ID is customer or address
-		String userID = (sub != null) ? sub.getCustomer() : address;
+		String caller = (sub != null) ? sub.getCustomer() : address;
 
 		// Determine if limiter exists
 		CachedLimiter limiter;
-		if (_LIMITERS.has(userID)) {
+		if (_LIMITERS.has(caller)) {
 
 			// Get the existing limiter from the cache
-			limiter = (CachedLimiter) _LIMITERS.get(userID);
+			limiter = (CachedLimiter) _LIMITERS.get(caller);
 		} else {
 
-			// Determine enforce / limits for the new limiter
-			int limit = (sub != null) ? sub.getLimit() : DEFLIMIT_RATE;
-			boolean enforce = (sub != null) ? sub.isEnforced() : DEFLIMIT_ENFORCE;
-
 			// Create a new limiter and add it to the cache
-			limiter = new CachedLimiter(enforce, userID, limit);
-			_LIMITERS.put(userID, limiter);
+			limiter = new CachedLimiter(sub, address);
+			_LIMITERS.put(caller, limiter);
 		}
 
 		// Return the limiter

@@ -160,7 +160,7 @@ public abstract class RestHandler extends AbstractHandler {
 		// Send token count to user
 		response.setHeader("X-RateLimit-Tokens", //
 				String.format("%.2f", ctx.getLimiter().getTokens().getCount()));
-		response.setHeader("X-RateLimit-Caller", ctx.getLimiter().getCaller());
+		response.setHeader("X-RateLimit-Caller", ctx.getLimiter().getCallerID());
 
 		// Request complete if only options
 		if (ctx.getMethod().equals("OPTIONS")) {

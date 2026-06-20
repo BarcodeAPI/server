@@ -61,7 +61,7 @@ public class BarcodeAPIHandler extends RestHandler {
 			// Check for abuse
 			if (limiter.getReputation().isAbuser()) {
 				throw new GenerationException(ExceptionType.ABUSE, new Throwable(String.format(//
-						"Bad reputation for IP, try again later. (u:%s)", limiter.getCaller())));
+						"Bad reputation for IP, try again later. (u:%s)", limiter.getCallerID())));
 			}
 
 			// Parse the request
@@ -78,7 +78,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 				// Return rate limited barcode to user
 				throw new GenerationException(ExceptionType.LIMITED, new Throwable(String.format(//
-						"Client is rate limited, try again later. (u:%s)", limiter.getCaller())));
+						"Client is rate limited, try again later. (u:%s)", limiter.getCallerID())));
 			}
 
 			// Generate user requested barcode

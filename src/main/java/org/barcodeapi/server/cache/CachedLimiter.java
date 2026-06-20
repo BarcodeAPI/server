@@ -1,5 +1,7 @@
 package org.barcodeapi.server.cache;
 
+import org.barcodeapi.core.Config;
+import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.core.Reputation;
 import org.barcodeapi.server.core.Tokens;
 import org.json.JSONObject;
@@ -11,22 +13,43 @@ import org.json.JSONObject;
  */
 public class CachedLimiter extends CachedObject {
 
+	// Default values for new limiters
+	private static final int DEFLIMIT_RATE;
+	private static final boolean DEFLIMIT_ENFORCE;
+
+	static {
+
+		// Load plan from configuration
+		JSONObject freePlan = Config//
+				.get(Cfg.Plans).getJSONObject("free");
+
+		// Free plan defaults
+		DEFLIMIT_RATE = freePlan.getInt("limit");
+		DEFLIMIT_ENFORCE = freePlan.getBoolean("enforce");
+	}
+
 	private static final long serialVersionUID = 20260503L;
 
-	private final String caller;
+	private final String callerID;
 
 	private final Reputation reputation;
 
 	private final Tokens tokens;
 
-	public CachedLimiter(boolean enforce, String caller, long requests) {
+	public CachedLimiter(Subscriber sub, String address) {
 		super("limiter");
 
-		this.caller = caller;
+		// Assign the userID
+		this.callerID = (sub != null) ? sub.getCustomer() : address;
 
-		this.reputation = new Reputation(enforce);
+		// Determine token limits for the limiter
+		int limit = (sub != null) ? sub.getLimit() : DEFLIMIT_RATE;
+		boolean enforce = (sub != null) ? sub.isEnforced() : DEFLIMIT_ENFORCE;
+		this.tokens = new Tokens(enforce, limit);
 
-		this.tokens = new Tokens(enforce, requests);
+		// Setup user reputation tracker
+		boolean repBlock = (sub != null) ? false : enforce;
+		this.reputation = new Reputation(repBlock);
 	}
 
 	public void touch(CachedSession session) {
@@ -54,8 +77,8 @@ public class CachedLimiter extends CachedObject {
 	 * 
 	 * @return caller
 	 */
-	public String getCaller() {
-		return caller;
+	public String getCallerID() {
+		return callerID;
 	}
 
 	/**
@@ -101,7 +124,7 @@ public class CachedLimiter extends CachedObject {
 	public JSONObject asJSON() {
 
 		return (new JSONObject()//
-				.put("caller", getCaller())//
+				.put("caller", getCallerID())//
 				.put("requests", getAccessCount())//
 				.put("reputation", reputation.value())//
 				.put("time", new JSONObject() //

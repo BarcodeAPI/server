@@ -45,7 +45,7 @@ public class ReputationDecayTask extends BackgroundTask {
 			if (rep.isAbuser()) {
 				LibLog.logF("reputation", //
 						"Reputation decay: %s has %.4f (+%.4f)", //
-						limiter.getCaller(), rep.value(), diff);
+						limiter.getCallerID(), rep.value(), diff);
 			}
 		}
 

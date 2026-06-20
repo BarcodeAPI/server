@@ -46,19 +46,19 @@ public class LimiterListHandler extends RestHandler {
 
 			// Add all to map if no filters applied
 			if (!filtered) {
-				byKey.put(limiter.getCaller(), limiter.getTokens().getTotalSpend());
+				byKey.put(limiter.getCallerID(), limiter.getTokens().getTotalSpend());
 				continue;
 			}
 
 			// Conditionally filter based on low reputation status
 			if (filterReputation && limiter.getReputation().isAbuser()) {
-				byKey.put(limiter.getCaller(), limiter.getReputation().value());
+				byKey.put(limiter.getCallerID(), limiter.getReputation().value());
 				continue;
 			}
 
 			// Conditionally filter based on low tokens count
 			if (filterTokenLimit && limiter.getTokens().isLowBalance()) {
-				byKey.put(limiter.getCaller(), limiter.getTokens().getCount());
+				byKey.put(limiter.getCallerID(), limiter.getTokens().getCount());
 			}
 		}
 

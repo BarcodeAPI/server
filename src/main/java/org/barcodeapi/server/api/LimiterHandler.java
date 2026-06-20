@@ -65,7 +65,7 @@ public class LimiterHandler extends RestHandler {
 		}
 
 		// Log the reset request
-		LibLog._logF("Limiter reset request: %s", c.getLimiter().getCaller());
+		LibLog._logF("Limiter reset request: %s", c.getLimiter().getCallerID());
 
 		// Reset the limiter balance to full
 		Tokens userTokens = c.getLimiter().getTokens();
