@@ -6,14 +6,10 @@
 function init() {
 
 	// Load the type details
-	fetch("/session/")
+	fetch("/session/?history=true")
 		.then(response => {
 			return (response.status == 200) ? response.json() : false;
 		}).then(onLoadSession);
-	fetch("/limiter/")
-		.then(response => {
-			return (response.status == 200) ? response.json() : false;
-		}).then(onLoadLimiter);
 
 	// Log tracking event
 	var setupMillis = ((new Date()) - timeStart);
@@ -22,22 +18,26 @@ function init() {
 
 function onLoadSession(data) {
 
-	document.getElementById("session-key").innerHTML = data.key;
-	document.getElementById("session-created").innerHTML = (new Date(data.time.created)).toJSON();
-	document.getElementById("session-expires").innerHTML = (new Date(data.time.expires)).toJSON();
-	document.getElementById("session-count").innerHTML = data.count;
+	// Load session data
+	var _session = data.session;
+	document.getElementById("session-key").innerHTML = _session.key;
+	document.getElementById("session-created").innerHTML = (new Date(_session.time.created)).toJSON();
+	document.getElementById("session-expires").innerHTML = (new Date(_session.time.expires)).toJSON();
+	document.getElementById("session-count").innerHTML = _session.count;
 
+	// Display history addresses
 	var addresses = "";
-	for (var a in data.addresses) {
-		var d = data.addresses[a];
+	for (var a in _session.history.addresses) {
+		var d = _session.history.addresses[a];
 
 		addresses += //
 			"<tr><td>" + d.ip + "</td><td>" + d.hits + "</td></tr>";
 	}
 	document.getElementById("session-addresses").innerHTML = addresses;
 
-	for (var r in data.requests) {
-		var d = data.requests[r];
+	// Display history requests
+	for (var r in _session.history.requests) {
+		var d = _session.history.requests[r];
 
 		if (d.text.match(/^\/api\/.*/)) {
 			addEntryAPI(d.text.substr(4), d.hits);
@@ -47,17 +47,18 @@ function onLoadSession(data) {
 		addEntryOther(d.text, d.hits);
 		continue;
 	}
-}
 
-function onLoadLimiter(data) {
-	document.getElementById("limiter-caller").innerHTML = data.caller;
-	document.getElementById("limiter-created").innerHTML = (new Date(data.time.created)).toJSON();
-	document.getElementById("limiter-expires").innerHTML = (new Date(data.time.expires)).toJSON();
-	document.getElementById("limiter-enforce").innerHTML = (data.tokens.enforce ? "Yes" : "No");
-	document.getElementById("limiter-reputation").innerHTML = Number(data.reputation).toFixed(2);
-	document.getElementById("limiter-tokenSpend").innerHTML = data.tokens.spend;
-	document.getElementById("limiter-tokenLimit").innerHTML = data.tokens.limit;
-	document.getElementById("limiter-tokenCount").innerHTML = Number(data.tokens.count).toFixed(2);
+	// Load limiter data
+	var _limiter = data.limiter;
+	document.getElementById("limiter-caller").innerHTML = _limiter.caller;
+	document.getElementById("limiter-created").innerHTML = (new Date(_limiter.time.created)).toJSON();
+	document.getElementById("limiter-expires").innerHTML = (new Date(_limiter.time.expires)).toJSON();
+	document.getElementById("limiter-count").innerHTML = _limiter.requests;
+	document.getElementById("limiter-enforce").innerHTML = (_limiter.tokens.enforce ? "Yes" : "No");
+	document.getElementById("limiter-reputation").innerHTML = Number(_limiter.reputation).toFixed(2);
+	document.getElementById("limiter-tokenSpend").innerHTML = _limiter.tokens.spend;
+	document.getElementById("limiter-tokenLimit").innerHTML = _limiter.tokens.limit;
+	document.getElementById("limiter-tokenCount").innerHTML = Number(_limiter.tokens.count).toFixed(2);
 }
 
 function makeEntryRow(text, hits) {

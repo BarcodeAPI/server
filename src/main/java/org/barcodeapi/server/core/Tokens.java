@@ -9,7 +9,8 @@ import java.io.Serializable;
  */
 public class Tokens implements Serializable {
 
-	private static final long serialVersionUID = 20260503L;
+	// Serialization ID for caching
+	private static final long serialVersionUID = 20260712L;
 
 	private static final double _DAY = (24 * 60 * 60 * 1000);
 

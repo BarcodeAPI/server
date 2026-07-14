@@ -34,5 +34,25 @@ function onLoadInfo(info) {
 }
 
 function adminAction(src, field) {
-	src.href += ('?' + field + '=' + prompt(field + "=?"));
+
+	var addr = src.href;
+
+	if (field) {
+		var value = encodeURI(prompt(field + "=?"));
+		addr += ('?' + field + '=' + value);
+	}
+
+	fetch(addr).then(response => {
+		return response.json();
+	}).then(onLoadAction);
+
+	return false;
+}
+
+function onLoadAction(obj) {
+
+	var appConsole = document.getElementById("appConsole");
+	appConsole.innerHTML = //
+		(JSON.stringify(obj, null, 4) + //
+			("\n") + appConsole.innerHTML);
 }

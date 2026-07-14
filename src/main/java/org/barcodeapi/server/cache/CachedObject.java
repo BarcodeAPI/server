@@ -14,7 +14,8 @@ import org.json.JSONObject;
  */
 public abstract class CachedObject implements Serializable {
 
-	private static final long serialVersionUID = 20260503L;
+	// Serialization ID for caching
+	private static final long serialVersionUID = 20260712L;
 
 	private static final JSONObject cachesConfig = //
 			Config.get(Cfg.App).getJSONObject("cache");

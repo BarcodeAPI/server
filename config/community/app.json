@@ -57,6 +57,11 @@
 			"name": "Share Cleanup",
 			"impl": ".ShareCleanupTask",
 			"interval": 3600
+		},
+		{
+			"name": "Reporting",
+			"impl": ".ReportingTask",
+			"interval": 3600
 		}
 	],
 	"cache": {
@@ -90,6 +95,6 @@
 		"req_okay": 0.025,
 		"req_spam": -0.085,
 		"decay_okay": -0.0000075,
-		"decay_spam":  0.0000005
+		"decay_spam": 0.0000005
 	}
 }

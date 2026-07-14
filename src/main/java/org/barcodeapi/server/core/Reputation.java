@@ -13,7 +13,8 @@ import org.json.JSONObject;
  */
 public class Reputation implements Serializable {
 
-	private static final long serialVersionUID = 20260503L;
+	// Serialization ID for caching
+	private static final long serialVersionUID = 20260712L;
 
 	private static final double REP_INITIAL;
 

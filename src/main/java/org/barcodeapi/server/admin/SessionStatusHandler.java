@@ -50,9 +50,12 @@ public class SessionStatusHandler extends RestHandler {
 				(CachedSession) ObjectCache//
 						.getCache(ObjectCache.CACHE_SESSIONS).get(key);
 
+		JSONObject sessionInfo = session.asJSON();
+		sessionInfo.put("history", session.getHistory());
+
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setContentType("application/json");
-		r.getOutputStream().println(session.asJSON().toString(4));
+		r.getOutputStream().println(sessionInfo.toString(4));
 	}
 }

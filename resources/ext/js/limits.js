@@ -8,23 +8,25 @@ window.addEventListener("load", init);
 function init() {
 
 	// Load limiter info
-	fetch('/limiter/')
+	fetch('/session/')
 		.then(response => {
 			return response.json();
 		})
 		.then(data => {
-			if (!data.tokens.enforce) {
+
+			// Display notice if limits enforced
+			if (!data.limiter.tokens.enforce) {
 				document.getElementsByClassName("notice-enforced")[0].style.display = 'block';
 				document.getElementsByClassName("notice-abusers")[0].style.display = 'none';
 			}
 
 			// Update user token count
 			document.getElementById("token_count").innerHTML = //
-				((data.tokens.count == -1) ? "&infin;" : Number(data.tokens.count).toFixed(2));
+				((data.limiter.tokens.count == -1) ? "&infin;" : Number(data.limiter.tokens.count).toFixed(2));
 
 			// Update user token limit
 			document.getElementById("token_limit").innerHTML = //
-				((data.tokens.limit == -1) ? "&infin;" : data.tokens.limit);
+				((data.limiter.tokens.limit == -1) ? "&infin;" : data.limiter.tokens.limit);
 
 			// Log app load tracking event
 			var setupMillis = ((new Date()) - timeStart);

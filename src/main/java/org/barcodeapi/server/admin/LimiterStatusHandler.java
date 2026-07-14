@@ -49,10 +49,14 @@ public class LimiterStatusHandler extends RestHandler {
 		CachedLimiter limiter = //
 				LimiterCache.getLimiter(null, caller);
 
+		// Fetch limiter details and history
+		JSONObject limiterInfo = limiter.asJSON();
+		limiterInfo.put("history", limiter.getHistroy());
+
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setContentType("application/json");
 		r.getOutputStream().println(//
-				limiter.asJSON().toString(4));
+				limiterInfo.toString(4));
 	}
 }

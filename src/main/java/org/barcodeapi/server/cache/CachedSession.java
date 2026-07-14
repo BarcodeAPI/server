@@ -19,7 +19,8 @@ import org.json.JSONObject;
  */
 public class CachedSession extends CachedObject {
 
-	private static final long serialVersionUID = 20260503L;
+	// Serialization ID for caching
+	private static final long serialVersionUID = 20260712L;
 
 	private final String key;
 
@@ -40,8 +41,8 @@ public class CachedSession extends CachedObject {
 		this.cookie.setPath("/");
 
 		// Memory map for ip and request history
-		this.sessionIPs = new ConcurrentHashMap<String, Integer>();
-		this.sessionRequests = new ConcurrentHashMap<String, Integer>();
+		this.sessionIPs = new ConcurrentHashMap<>();
+		this.sessionRequests = new ConcurrentHashMap<>();
 	}
 
 	/**
@@ -83,12 +84,13 @@ public class CachedSession extends CachedObject {
 	}
 
 	/**
-	 * Returns the user session as a JSON object.
+	 * Returns the user session history as a JSON object.
 	 * 
 	 * @return the user session in JSON format
 	 */
-	public JSONObject asJSON() {
+	public JSONObject getHistory() {
 
+		// Show IP counts
 		JSONArray addresses = new JSONArray();
 		for (Map.Entry<String, Integer> entry : sessionIPs.entrySet()) {
 
@@ -97,6 +99,7 @@ public class CachedSession extends CachedObject {
 					.put("hits", entry.getValue()));
 		}
 
+		// Show all user requests
 		JSONArray requests = new JSONArray();
 		for (Map.Entry<String, Integer> entry : sessionRequests.entrySet()) {
 
@@ -105,14 +108,25 @@ public class CachedSession extends CachedObject {
 					.put("hits", entry.getValue()));
 		}
 
+		// Return formatted object back to user
+		return (new JSONObject()//
+				.put("addresses", addresses)//
+				.put("requests", requests));
+	}
+
+	/**
+	 * Returns the user session as a JSON object.
+	 * 
+	 * @return the user session in JSON format
+	 */
+	public JSONObject asJSON() {
+
 		return (new JSONObject()//
 				.put("key", getKey())//
-				.put("addresses", addresses)//
 				.put("time", new JSONObject() //
 						.put("created", getTimeCreated())//
 						.put("expires", getTimeExpires())//
 						.put("last", getTimeLastTouched()))//
-				.put("count", getAccessCount())//
-				.put("requests", requests));
+				.put("count", getAccessCount()));
 	}
 }

@@ -30,65 +30,54 @@
 			<div class="col-xs-8">
 				<b>Server</b>
 				<br />
-				<a href="/info/">Server Information</a>
+				<a onclick="return adminAction(this);" href="/info/">Server Information</a>
 				<br />
-				<a href="/server/stats/">Server Statistics</a>
+				<a onclick="return adminAction(this);" href="/server/stats/">Server Statistics</a>
+				<br />
+				<a onclick="return adminAction(this);" href="/type/">Supported Formats</a>
 				<br />
 				<br />
 				<b>Barcodes</b>
 				<br />
 				<a href="/admin/cache/dump/">Download Cache</a>
 				<br />
-				<a href="/admin/cache/flush/">Flush Barcode Caches</a>
+				<a onclick="return adminAction(this);" href="/admin/cache/flush/">Flush Barcode Caches</a>
 				<br />
 				<br />
 				<b>Limiters</b>
 				<br />
-				<a href="/admin/limiter/list/">All</a>&nbsp;
-				<a href="/admin/limiter/list/?filter=limited">Limited</a>&nbsp;
-				<a href="/admin/limiter/list/?filter=abusers">Abusers</a>&nbsp;
+				<a onclick="return adminAction(this);" href="/admin/limiter/list/">All</a>&nbsp;
+				<a onclick="return adminAction(this);" href="/admin/limiter/list/?filter=limited">Limited</a>&nbsp;
+				<a onclick="return adminAction(this);" href="/admin/limiter/list/?filter=abusers">Abusers</a>&nbsp;
 				<br />
-				<a href="/limiter/">Current Limiter</a>
+				<a onclick="return adminAction(this);" href="/limiter/">Current Limiter</a>
 				<br />
-				<a onclick="adminAction(this, 'caller');" href="/admin/limiter/flush/">Flush Limiter</a>
+				<a onclick="return adminAction(this, 'caller');" href="/admin/limiter/flush/">Flush Limiter</a>
 				<br />
-				<a onclick="adminAction(this, 'caller');" href="/admin/limiter/status/">Limiter Status</a>
+				<a onclick="return adminAction(this, 'caller');" href="/admin/limiter/status/">Limiter Status</a>
 				<br />
 				<br />
 				<b>Subscribers</b>
 				<br />
-				<a href="/admin/subscriber/reload/">Reload Subscribers</a>
+				<a onclick="return adminAction(this);" href="/admin/subscriber/reload/">Reload Subscribers</a>
 				<br />
-				<a onclick="adminAction(this, 'key');" href="/admin/subscriber/status/">Subscriber Status</a>
+				<a onclick="return adminAction(this, 'key');" href="/admin/subscriber/status/">Subscriber Status</a>
 				<br />
 				<br />
 				<b>Sessions</b>
 				<br />
-				<a href="/session/">Current Session</a>
+				<a onclick="return adminAction(this);" href="/session/">Current Session</a>
 				<br />
-				<a href="/admin/session/list/">List Sessions</a>
+				<a onclick="return adminAction(this);" href="/admin/session/list/">List Sessions</a>
 				<br />
-				<a href="/admin/session/flush/">Flush Sessions</a>
-				<br />
-				<a onclick="adminAction(this, 'key');" href="/admin/session/status/">Session Status</a>
+				<a onclick="return adminAction(this, 'key');" href="/admin/session/status/">Session Status</a>
 				<br />
 				<br />
 				<b>Shares</b>
 				<br />
-				<a onclick="adminAction(this, 'key');" href="/share/?key=">Share Info</a>
+				<a onclick="return adminAction(this, 'key');" href="/share/?key=">Share Info</a>
 				<br />
-				<a href="/admin/share/list/">List Shares</a>
-				<br />
-				<br />
-				<b>Generation API</b>
-				<br />
-				<a href="/api/">Barcode Generator</a>
-				<br />
-				<a href="/bulk/">Bulk Generator</a>
-				<br />
-				<a href="/decode/">Barcode Decoder</a>
-				<br />
-				<a href="/type/">Barcode Types</a>
+				<a onclick="return adminAction(this);" href="/admin/share/list/">List Shares</a>
 				<br />
 				<br />
 			</div>
@@ -114,6 +103,21 @@
 				<span id="appDist">_unknown_</span>
 				<br />
 			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<b>Console</b>
+			</div>
+
+			<pre id="appConsole" style="
+        margin:0;
+        height:380px;
+        overflow-y:auto;
+        color:#111;
+        border:0;
+        font-size:12px;
+        padding:10px;
+    "></pre>
 		</div>
 	</div>
 </body>

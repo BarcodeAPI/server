@@ -29,16 +29,6 @@ public class SessionHandler extends RestHandler {
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws IOException {
 
-		if (!c.hasSession()) {
-			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			r.setContentType("application/json");
-			r.getOutputStream().println((new JSONObject() //
-					.put("code", 400)//
-					.put("message", "no session in request")//
-			).toString());
-			return;
-		}
-
 		switch (c.getMethod()) {
 		case "GET":
 			doGET(c, r);
@@ -55,15 +45,44 @@ public class SessionHandler extends RestHandler {
 	}
 
 	protected void doGET(RequestContext c, HttpServletResponse r) throws IOException {
+		JSONObject userInfo = new JSONObject();
+
+		// Check the session exists
+		if (c.hasSession()) {
+
+			// Get the user session info
+			JSONObject sessionInfo = c.getSession().asJSON();
+
+			// Show session request history
+			String history = c.getRequest().getParameter("history");
+			if (history != null && history.trim().equals("true")) {
+				sessionInfo.put("history", c.getSession().getHistory());
+			}
+
+			userInfo.put("session", sessionInfo);
+		}
+
+		// Add session limiter info
+		userInfo.put("limiter", c.getLimiter().asJSON());
 
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setContentType("application/json");
-		r.getOutputStream().println(//
-				c.getSession().asJSON().toString(4));
+		r.getOutputStream().println(userInfo.toString());
 	}
 
 	protected void doDELETE(RequestContext c, HttpServletResponse r) throws IOException {
+
+		// Check the session exists
+		if (!c.hasSession()) {
+			r.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			r.setContentType("application/json");
+			r.getOutputStream().println((new JSONObject() //
+					.put("code", 400)//
+					.put("message", "no session in request")//
+			).toString());
+			return;
+		}
 
 		// Attempt session deletion
 		boolean deleted = SessionHelper.deleteSession(c.getSession().getKey());

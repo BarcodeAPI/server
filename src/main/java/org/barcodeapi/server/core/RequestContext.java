@@ -196,14 +196,16 @@ public class RequestContext {
 		this.session = (userSession != null) ? userSession : //
 				((createSession) ? SessionHelper.createSession() : null);
 
-		// Hit the session if it exists
+		// Check that a session exists
 		if (this.session != null) {
-			session.hit(ip, this.uri);
+
+			// Update counters for the session
+			session.hit(this.ip, this.uri);
 		}
 
 		// Get and touch the limiter
 		this.limiter = LimiterCache.getLimiter(user, ip);
-		this.limiter.touch(this.session);
+		this.limiter.touch(ip, this.session);
 	}
 
 	/**

@@ -12,7 +12,6 @@ import org.barcodeapi.server.admin.LimiterFlushHandler;
 import org.barcodeapi.server.admin.LimiterListHandler;
 import org.barcodeapi.server.admin.LimiterStatusHandler;
 import org.barcodeapi.server.admin.ServerStatsHandler;
-import org.barcodeapi.server.admin.SessionFlushHandler;
 import org.barcodeapi.server.admin.SessionListHandler;
 import org.barcodeapi.server.admin.SessionStatusHandler;
 import org.barcodeapi.server.admin.ShareListHandler;
@@ -156,7 +155,6 @@ public class ServerLauncher {
 		initHandler("/admin/limiter/flush", LimiterFlushHandler.class);
 		initHandler("/admin/limiter/list", LimiterListHandler.class);
 		initHandler("/admin/limiter/status", LimiterStatusHandler.class);
-		initHandler("/admin/session/flush", SessionFlushHandler.class);
 		initHandler("/admin/session/list", SessionListHandler.class);
 		initHandler("/admin/session/status", SessionStatusHandler.class);
 		initHandler("/admin/share/list", ShareListHandler.class);

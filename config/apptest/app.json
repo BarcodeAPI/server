@@ -33,6 +33,11 @@
 			"name": "Reputation Decay",
 			"impl": ".ReputationDecayTask",
 			"interval": 20
+		},
+		{
+			"name": "Reporting",
+			"impl": ".ReportingTask",
+			"interval": 60
 		}
 	],
 	"cache": {
