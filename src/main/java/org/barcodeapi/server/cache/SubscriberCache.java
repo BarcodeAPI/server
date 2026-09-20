@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.barcodeapi.core.Config;
 import org.barcodeapi.core.Config.Cfg;
+import org.barcodeapi.server.core.CidrTree;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,16 +18,15 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class SubscriberCache {
 
-	private static final Map<String, Subscriber> subscribersByName;
-	private static final Map<String, Subscriber> subscribersByIP;
 	private static final Map<String, Subscriber> subscribersByKey;
 	private static final Map<String, Subscriber> subscribersByApp;
+	private static final CidrTree<Subscriber> subscribersByIP;
 
 	static {
-		subscribersByName = new ConcurrentHashMap<>();
-		subscribersByIP = new ConcurrentHashMap<>();
-		subscribersByKey = new ConcurrentHashMap<>();
+
+		subscribersByIP = new CidrTree<>();
 		subscribersByApp = new ConcurrentHashMap<>();
+		subscribersByKey = new ConcurrentHashMap<>();
 
 		reload();
 	}
@@ -35,12 +35,12 @@ public class SubscriberCache {
 	 * Reload subscriber info from configuration on disk.
 	 */
 	public static void reload() {
+		long timeStart = System.currentTimeMillis();
 
 		// Flush existing subscribers
-		subscribersByName.clear();
 		subscribersByIP.clear();
-		subscribersByKey.clear();
 		subscribersByApp.clear();
+		subscribersByKey.clear();
 
 		// Load subscribers, force reload
 		JSONArray users = Config//
@@ -71,22 +71,11 @@ public class SubscriberCache {
 				continue;
 			}
 
-			// Map of Customer Names
-			subscribersByName.put(//
-					subscriber.getCustomer(), subscriber);
-
 			// Map Customer IPs
 			JSONArray subIps = subscriber.getIPs();
 			for (int y = 0; y < subIps.length(); y++) {
 				subscribersByIP.put(//
 						subIps.getString(y), subscriber);
-			}
-
-			// Map Customer Keys
-			JSONArray subKeys = subscriber.getKeys();
-			for (int y = 0; y < subKeys.length(); y++) {
-				subscribersByKey.put(//
-						subKeys.getString(y), subscriber);
 			}
 
 			// Map Customer Applications
@@ -95,17 +84,17 @@ public class SubscriberCache {
 				subscribersByApp.put(//
 						subApps.getString(y), subscriber);
 			}
-		}
-	}
 
-	/**
-	 * Lookup a subscriber by customer name.
-	 * 
-	 * @param name name of the customer
-	 * @return the subscriber info or null
-	 */
-	public static Subscriber getByName(String name) {
-		return subscribersByName.get(name);
+			// Map Customer Keys
+			JSONArray subKeys = subscriber.getKeys();
+			for (int y = 0; y < subKeys.length(); y++) {
+				subscribersByKey.put(//
+						subKeys.getString(y), subscriber);
+			}
+		}
+		
+		long timeDiff = (System.currentTimeMillis() - timeStart);
+		LibLog._logF("Subscribers reloaded in %dms", timeDiff);
 	}
 
 	/**

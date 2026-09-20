@@ -20,13 +20,18 @@ public class BarcodeRequest {
 	private final CodeType type;
 
 	private final String data;
+	private final JSONObject options;
+
+	private final double cost;
+
 	private final boolean complex;
 	private final boolean cached;
 	private final boolean download;
-	private final JSONObject options;
-	private final double cost;
+	private final boolean example;
+	private final boolean url;
 
-	private BarcodeRequest(CodeType type, String data, JSONObject options) {
+	private BarcodeRequest(//
+			CodeType type, String data, JSONObject options) {
 		LibMetrics.hitMethodRunCounter();
 
 		this.type = type;
@@ -40,6 +45,8 @@ public class BarcodeRequest {
 		// User requested download
 		this.download = options.optBoolean("download", false);
 
+		double tokens = 0;
+
 		// Determine if request is a free example
 		boolean isExample = false;
 		for (String example : type.getExamples()) {
@@ -49,7 +56,6 @@ public class BarcodeRequest {
 			}
 		}
 
-		double tokens = 0;
 		if (!isExample) {
 
 			// Determine the cost of the request
@@ -61,6 +67,17 @@ public class BarcodeRequest {
 				tokens *= type.getCostMultiplier();
 			}
 		}
+
+		// Determine if request is a URL
+		boolean isUrl = false;
+		if (data.regionMatches(true, 0, "https://", 0, 8) || //
+				data.regionMatches(true, 0, "http://", 0, 7)) {
+			isUrl = true;
+		}
+
+		// Request properties
+		this.example = isExample;
+		this.url = isUrl;
 
 		// Assign the request cost
 		this.cost = tokens;
@@ -121,6 +138,24 @@ public class BarcodeRequest {
 	}
 
 	/**
+	 * Returns true if the request is an example.
+	 * 
+	 * @return true if request is an example
+	 */
+	public boolean isExample() {
+		return example;
+	}
+
+	/**
+	 * Returns true if the request is a URL.
+	 * 
+	 * @return true if request is a URL
+	 */
+	public boolean isURL() {
+		return url;
+	}
+
+	/**
 	 * Returns a map of options used to generate the barcode.
 	 * 
 	 * @return a map of request options
@@ -135,6 +170,7 @@ public class BarcodeRequest {
 	 * @return the request as a URI
 	 */
 	public String encodeURI() {
+		LibMetrics.hitMethodRunCounter();
 
 		String opts = "";
 		for (String key : getOptions().keySet()) {
@@ -153,6 +189,7 @@ public class BarcodeRequest {
 	 * @throws GenerationException processing failure
 	 */
 	public static BarcodeRequest fromCSV(String[] record) throws GenerationException {
+		LibMetrics.hitMethodRunCounter();
 
 		if (record == null || record.length == 0) {
 			throw new GenerationException(ExceptionType.EMPTY, //
@@ -240,7 +277,7 @@ public class BarcodeRequest {
 		}
 
 		// Check for valid render type and data
-		if (type == null || target == null || target.equals("")) {
+		if (type == null || target == null || target.isEmpty()) {
 
 			// Fail on empty requests
 			throw new GenerationException(ExceptionType.EMPTY, //
@@ -255,11 +292,22 @@ public class BarcodeRequest {
 					new Throwable("Invalid data for selected code type."));
 		}
 
-		// Check for broken URL schemas
-		if (target.matches("^(https?):/[^/].*")) {
+		// Check if the request is a URL
+		if (target.regionMatches(true, 0, "http", 0, 4)) {
 
-			// Fix the missing double slash
-			target = target.replaceFirst(":/", "://");
+			// Check position where the second '/' should be
+			int slashPos = target.regionMatches(//
+					true, 4, "s:/", 0, 3) ? 7 : 6;
+
+			// Check for broken URLs
+			if ((target.length() > slashPos) && //
+					(target.charAt(slashPos - 1) == '/') && //
+					(target.charAt(slashPos) != '/')) {
+
+				// Fix the broken URL
+				target = target.substring(0, slashPos) + //
+						'/' + target.substring(slashPos);
+			}
 		}
 
 		// Match against blacklist entries
@@ -270,8 +318,10 @@ public class BarcodeRequest {
 					new Throwable("The request was rejected. Contact support."));
 		}
 
-		// Parse control characters
-		if (type.getAllowNonprinting()) {
+		// Check barcode type supports and contains control chars
+		if (type.getAllowNonprinting() && target.contains("$$")) {
+
+			// Parse control characters
 			target = CodeUtils.parseControlChars(target);
 		}
 

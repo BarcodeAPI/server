@@ -54,7 +54,7 @@ function loadType(type) {
 	// Render each of the examples
 	for (var x in type.examples) {
 
-		var apiURL = ("api/" + target + "/" + type.examples[x]);
+		var apiURL = ("/api/" + target + "/" + type.examples[x]);
 
 		var table = document.createElement("table");
 
@@ -113,7 +113,7 @@ function loadType(type) {
 function buildOptions(type) {
 
 	// Build the exmaple URL root
-	var exampleURL = "api/" + type.targets[0] + "/" + type.examples[0] + "?";
+	var exampleURL = "/api/" + type.targets[0] + "/" + type.examples[0] + "?";
 
 	// Loop each of the parameters
 	for (var x in type.options) {

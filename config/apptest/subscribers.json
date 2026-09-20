@@ -3,7 +3,7 @@
 		{
 			"customer": "BarcodeAPI.org",
 			"subscribed": 1735693200000,
-			"active": false,
+			"active": true,
 			"enforce": true,
 			"limit": -1,
 			"batch": 500,

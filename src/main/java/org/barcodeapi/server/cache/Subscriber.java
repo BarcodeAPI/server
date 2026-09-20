@@ -77,6 +77,14 @@ public class Subscriber {
 		return this.apps;
 	}
 
+	public JSONObject getAssociations() {
+
+		return new JSONObject()//
+				.put("ips", getIPs())//
+				.put("keys", getKeys())//
+				.put("apps", getApps());
+	}
+
 	/**
 	 * Returns the subscriber info as a JSON object.
 	 * 
@@ -90,9 +98,6 @@ public class Subscriber {
 				.put("active", isActive())//
 				.put("enforce", isEnforced())//
 				.put("limit", getLimit())//
-				.put("batch", getMaxBatch())//
-				.put("ips", getIPs())//
-				.put("keys", getKeys())//
-				.put("apps", getApps());
+				.put("batch", getMaxBatch());
 	}
 }

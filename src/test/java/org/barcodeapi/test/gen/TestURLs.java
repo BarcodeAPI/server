@@ -26,11 +26,41 @@ public class TestURLs extends ServerTestBase {
 		Assert.assertEquals("Code Data", //
 				encode("http://barcodeapi.org/"), getHeader("X-Barcode-Content"));
 	}
+	
+	@Test
+	public void testURL_TestHTTP_BrokenFix() {
+
+		apiGet("http:/barcodeapi.org/");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"QRCode", getHeader("X-Barcode-Type"));
+
+		Assert.assertEquals("Code Data", //
+				encode("http://barcodeapi.org/"), getHeader("X-Barcode-Content"));
+	}
 
 	@Test
 	public void testURL_TestHTTPS() {
 
 		apiGet("https://barcodeapi.org/");
+
+		Assert.assertEquals("Response Code", //
+				HttpStatus.OK_200, getResponseCode());
+
+		Assert.assertEquals("Code Type", //
+				"QRCode", getHeader("X-Barcode-Type"));
+
+		Assert.assertEquals("Code Data", //
+				encode("https://barcodeapi.org/"), getHeader("X-Barcode-Content"));
+	}
+	
+	@Test
+	public void testURL_TestHTTPS_BrokenFix() {
+
+		apiGet("https:/barcodeapi.org/");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
