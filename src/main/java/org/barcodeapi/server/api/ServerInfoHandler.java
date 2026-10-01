@@ -1,49 +1,38 @@
-package org.barcodeapi.server.admin;
+package org.barcodeapi.server.api;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.server.cache.ObjectCache;
+import org.barcodeapi.core.Config;
+import org.barcodeapi.core.ServerRuntime;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * ShareListHandler.java
+ * InfoHandler.java
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
-public class ShareListHandler extends RestHandler {
+public class ServerInfoHandler extends RestHandler {
 
-	public ShareListHandler() {
-		super(
-				// Authentication required
-				true,
-				// Do not use client rate limit
-				false,
-				// Do not create new session
-				false);
+	public ServerInfoHandler() {
+		super();
 	}
 
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
-		// Loop all sessions
-		JSONArray shares = new JSONArray();
-		for (String key : ObjectCache.getCache(//
-				ObjectCache.CACHE_SHARE).raw().keySet()) {
-			shares.put(key);
-		}
-
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setContentType("application/json");
 		r.getOutputStream().println((new JSONObject()//
-				.put("shares", shares)//
-				.put("count", shares.length())//
+				.put("uptime", ServerRuntime.getTimeRunning())//
+				.put("hostname", ServerRuntime.getHostname())//
+				.put("version", ServerRuntime.getVersion())//
+				.put("dist", Config.dist())//
 		).toString());
 	}
 }

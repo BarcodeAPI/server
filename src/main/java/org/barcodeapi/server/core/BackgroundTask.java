@@ -11,6 +11,8 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public abstract class BackgroundTask extends TimerTask {
+	
+	public static final String TASKROOT = "org.barcodeapi.server.tasks";
 
 	private final LibMetrics stats = LibMetrics.instance();
 

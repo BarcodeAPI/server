@@ -18,6 +18,6 @@ public class TestServerStatsHandler extends ServerTestBase {
 		serverGet("/server/stats/");
 
 		Assert.assertEquals("Response Code", //
-				HttpStatus.UNAUTHORIZED_401, getResponseCode());
+				HttpStatus.OK_200, getResponseCode());
 	}
 }

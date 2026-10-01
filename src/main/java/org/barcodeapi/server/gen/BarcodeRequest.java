@@ -22,15 +22,12 @@ public class BarcodeRequest {
 	private final String data;
 	private final JSONObject options;
 
-	private final double cost;
-
 	private final boolean complex;
 	private final boolean cached;
 	private final boolean download;
-	private final boolean example;
 	private final boolean url;
 
-	private BarcodeRequest(//
+	protected BarcodeRequest(//
 			CodeType type, String data, JSONObject options) {
 		LibMetrics.hitMethodRunCounter();
 
@@ -45,29 +42,6 @@ public class BarcodeRequest {
 		// User requested download
 		this.download = options.optBoolean("download", false);
 
-		double tokens = 0;
-
-		// Determine if request is a free example
-		boolean isExample = false;
-		for (String example : type.getExamples()) {
-			if (example.equals(data)) {
-				isExample = true;
-				break;
-			}
-		}
-
-		if (!isExample) {
-
-			// Determine the cost of the request
-			tokens = type.getCostBase() + //
-					(data.length() * type.getCostPerChar());
-
-			// Multiplier for custom requests
-			if (options.length() > 0) {
-				tokens *= type.getCostMultiplier();
-			}
-		}
-
 		// Determine if request is a URL
 		boolean isUrl = false;
 		if (data.regionMatches(true, 0, "https://", 0, 8) || //
@@ -76,11 +50,7 @@ public class BarcodeRequest {
 		}
 
 		// Request properties
-		this.example = isExample;
 		this.url = isUrl;
-
-		// Assign the request cost
-		this.cost = tokens;
 	}
 
 	/**
@@ -111,15 +81,6 @@ public class BarcodeRequest {
 	}
 
 	/**
-	 * Returns the token cost for the request.
-	 * 
-	 * @return the barcode token cost
-	 */
-	public double getCost() {
-		return cost;
-	}
-
-	/**
 	 * Returns true if the request should use the cache.
 	 * 
 	 * @return true if use cache
@@ -135,15 +96,6 @@ public class BarcodeRequest {
 	 */
 	public boolean forceDownload() {
 		return download;
-	}
-
-	/**
-	 * Returns true if the request is an example.
-	 * 
-	 * @return true if request is an example
-	 */
-	public boolean isExample() {
-		return example;
 	}
 
 	/**
@@ -308,14 +260,6 @@ public class BarcodeRequest {
 				target = target.substring(0, slashPos) + //
 						'/' + target.substring(slashPos);
 			}
-		}
-
-		// Match against blacklist entries
-		if (CodeUtils.isBlacklisted(target)) {
-
-			// Fail if request is blacklisted
-			throw new GenerationException(ExceptionType.BLACKLIST, //
-					new Throwable("The request was rejected. Contact support."));
 		}
 
 		// Check barcode type supports and contains control chars

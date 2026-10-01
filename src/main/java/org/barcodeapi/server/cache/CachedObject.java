@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 import org.barcodeapi.core.Config;
-import org.barcodeapi.core.Config.Cfg;
 import org.json.JSONObject;
 
 /**
@@ -17,13 +16,12 @@ public abstract class CachedObject implements Serializable {
 	// Serialization ID for caching
 	private static final long serialVersionUID = 20260712L;
 
-	private static final JSONObject cachesConfig = //
-			Config.get(Cfg.App).getJSONObject("cache");
+	private static final JSONObject cachesConfig = Config.get().getJSONObject("cache");
 
 	private final long timeCreated;
 	private long timeTouched, accessCount = 0;
 
-	private long timeTimeout, timeShortLived;
+	private long timeTimeout, timeShortLived, timeLongLived;
 
 	protected CachedObject(String type) {
 
@@ -34,6 +32,7 @@ public abstract class CachedObject implements Serializable {
 		JSONObject cacheConfig = cachesConfig.getJSONObject(type);
 		this.setStandardTimeout(cacheConfig.getInt("life"), TimeUnit.MINUTES);
 		this.setShortLivedTimeout(cacheConfig.getInt("shortLife"), TimeUnit.MINUTES);
+		this.setLongLivedTimeout(cacheConfig.getInt("longLife"), TimeUnit.MINUTES);
 	}
 
 	/**
@@ -69,8 +68,24 @@ public abstract class CachedObject implements Serializable {
 	 * @return time object will expire
 	 */
 	public long getTimeExpires() {
-		return (timeTouched + //
-				(isShortLived() ? timeShortLived : timeTimeout));
+
+		// Long lived
+		if (isLongLived()) {
+			return (getTimeLastTouched()//
+					+ getLongLivedTimeout());
+		} else
+
+		// Short lived
+		if (isShortLived()) {
+			return (getTimeLastTouched() //
+					+ getShortLivedTimeout());
+		}
+
+		// Default
+		else {
+			return (getTimeLastTouched()//
+					+ getStandardTimeout());
+		}
 	}
 
 	/**
@@ -113,6 +128,25 @@ public abstract class CachedObject implements Serializable {
 	}
 
 	/**
+	 * Returns the time the object will stay cached if determined to be long lived.
+	 * 
+	 * @return object long lived timeout
+	 */
+	public long getLongLivedTimeout() {
+		return this.timeLongLived;
+	}
+
+	/**
+	 * Update the long lived timeout of the object.
+	 * 
+	 * @param timeoutTime
+	 * @param timeoutUnit
+	 */
+	public void setLongLivedTimeout(long timeoutTime, TimeUnit timeoutUnit) {
+		this.timeLongLived = TimeUnit.MILLISECONDS.convert(timeoutTime, timeoutUnit);
+	}
+
+	/**
 	 * Touch the object.
 	 * 
 	 * Updates the access count and time.
@@ -138,5 +172,14 @@ public abstract class CachedObject implements Serializable {
 	 */
 	public boolean isShortLived() {
 		return (accessCount < 3);
+	}
+
+	/**
+	 * Returns true if the cache object is long lived.
+	 * 
+	 * @return object is long lived
+	 */
+	public boolean isLongLived() {
+		return (accessCount > 50);
 	}
 }

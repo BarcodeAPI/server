@@ -19,7 +19,7 @@ import org.json.JSONObject;
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
-public class TypeHandler extends RestHandler {
+public class BarcodeTypeHandler extends RestHandler {
 
 	// Static map of JSON responses
 	private static final HashMap<CodeType, String> typesConfig;
@@ -34,7 +34,7 @@ public class TypeHandler extends RestHandler {
 		JSONArray complete = new JSONArray();
 		for (String type : types.getTypes()) {
 			CodeType t = types.getType(type);
-			JSONObject details = CodeType.toJSON(t);
+			JSONObject details = t.toJSON();
 
 			complete.put(details);
 
@@ -44,14 +44,8 @@ public class TypeHandler extends RestHandler {
 		typesComplete = complete.toString();
 	}
 
-	public TypeHandler() {
-		super(
-				// Authentication not required
-				false,
-				// Do not use client rate limit
-				false,
-				// Do not create new session
-				false);
+	public BarcodeTypeHandler() {
+		super();
 	}
 
 	@Override

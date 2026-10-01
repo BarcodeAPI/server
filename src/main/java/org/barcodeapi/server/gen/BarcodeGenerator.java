@@ -45,7 +45,6 @@ public class BarcodeGenerator {
 		String typeName = type.getName();
 		String data = request.getData();
 		boolean cplx = request.isComplex();
-		double cost = request.getCost();
 
 		// The barcode image object
 		CachedBarcode barcode = null;
@@ -84,7 +83,7 @@ public class BarcodeGenerator {
 
 			// Calculate run time and log generation
 			int time = (int) (System.currentTimeMillis() - start);
-			LibLog.clogF("barcode", "I0601", typeName, data, png.length, time, cost);
+			LibLog.clogF("barcode", "I0601", typeName, data, png.length, time);
 
 			// Create the object to be cached
 			barcode = new CachedBarcode(type, data, png);

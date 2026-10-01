@@ -2,9 +2,12 @@ package org.barcodeapi.server.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.barcodeapi.core.Config;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +21,8 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class CodeTypes {
 
+	private static final String DEFAULT_RENDERER = "org.barcodeapi.server.core.CodeType";
+
 	private static final CodeTypes typeCache = new CodeTypes();
 
 	public static CodeTypes inst() {
@@ -28,8 +33,15 @@ public class CodeTypes {
 
 	private final HashMap<String, CodeType> codeTypes;
 
+	private final String typeLoader;
+
 	private CodeTypes() {
+
 		codeTypes = new HashMap<>();
+
+		// Determine the type loader to use
+		typeLoader = Config.get()//
+				.optString("typeLoader", DEFAULT_RENDERER);
 	}
 
 	/**
@@ -38,6 +50,7 @@ public class CodeTypes {
 	 * @param name the name of the config file
 	 * @return the loaded CodeType
 	 */
+	@SuppressWarnings("unchecked")
 	public CodeType loadType(String name) {
 
 		// Setup and log config file name
@@ -46,17 +59,29 @@ public class CodeTypes {
 
 		try {
 
-			// Read config file, parse as JSON
+			// Read type config file, parse as JSON
 			JSONObject typeConfig = new JSONObject(//
 					LibExtrasStreams.readFile(typeFile));
 
+			// Load the type class using the type loader
+			Class<? extends CodeType> typeClass = //
+					(Class<? extends CodeType>) Class.forName(typeLoader);
+			Constructor<? extends CodeType> typeConstructor = //
+					typeClass.getDeclaredConstructor(JSONObject.class);
+
 			// Initialize and log the CodeType
-			CodeType codeType = CodeType.fromJSON(typeConfig);
+			CodeType codeType = typeConstructor.newInstance(new Object[] { typeConfig });
 			LibLog._clogF("I0062", codeType.getName(), codeType.getNumThreads());
 
 			// Add to map and return the type
 			codeTypes.put(name, codeType);
 			return codeType;
+
+		} catch (ClassNotFoundException | NoSuchMethodException //
+				| InvocationTargetException | IllegalAccessException | InstantiationException e) {
+
+			// Print and throw failure loading type
+			throw LibLog._clog("E0069", e).asException();
 
 		} catch (JSONException | IOException e) {
 

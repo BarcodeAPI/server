@@ -4,10 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-import org.barcodeapi.core.Config;
-import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.core.CodeType;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mclarkdev.tools.libmetrics.LibMetrics;
@@ -18,30 +15,6 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
 public class CodeUtils {
-
-	private static final String[] blacklist;
-
-	static {
-		JSONArray asJSON = Config.get(Cfg.Blacklist).getJSONArray("blacklist");
-		blacklist = new String[asJSON.length()];
-		for (int x = 0; x < asJSON.length(); x++) {
-			blacklist[x] = asJSON.getString(x);
-		}
-	}
-
-	public static boolean isBlacklisted(String data) {
-
-		// Loop each blacklist item
-		for (String entry : blacklist) {
-
-			// Check if string is blacklisted
-			if (data.matches(entry)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
 
 	/**
 	 * Converts a data string into a string containing control characters; Any

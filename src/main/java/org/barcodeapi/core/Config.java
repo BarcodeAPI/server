@@ -18,13 +18,11 @@ import com.mclarkdev.tools.libextras.LibExtrasStreams;
  */
 public class Config {
 
-	public enum Cfg {
-		App, Blacklist, Admins, Plans, Subscribers;
-	}
+	public static final String CFG_APP = "App";
 
 	private static final String dist = LibArgs.instance().getString("config", "community");
 
-	private static final Map<Cfg, JSONObject> configs = new ConcurrentHashMap<Cfg, JSONObject>();
+	private static final Map<String, JSONObject> configs = new ConcurrentHashMap<String, JSONObject>();
 
 	/**
 	 * Retrieves the name of the configuration distribution currently in use.
@@ -35,14 +33,8 @@ public class Config {
 		return dist;
 	}
 
-	/**
-	 * Retrieve application configuration.
-	 * 
-	 * @param cfg configuration type
-	 * @return the cached configuration object
-	 */
-	public static JSONObject get(Cfg cfg) {
-		return get(cfg, false);
+	public static JSONObject get() {
+		return get(CFG_APP, false);
 	}
 
 	/**
@@ -52,7 +44,7 @@ public class Config {
 	 * @param forceReload force reload from disk
 	 * @return the cached configuration object
 	 */
-	public static JSONObject get(Cfg cfg, boolean forceReload) {
+	public static JSONObject get(String cfg, boolean forceReload) {
 
 		// Check if already loaded or forcing a reload
 		if ((!configs.containsKey(cfg)) || forceReload) {
@@ -71,7 +63,7 @@ public class Config {
 	 * @param cfg configuration type
 	 * @return the loaded configuration object
 	 */
-	private static final JSONObject loadConfig(Cfg cfg) {
+	private static final JSONObject loadConfig(String cfg) {
 
 		try {
 

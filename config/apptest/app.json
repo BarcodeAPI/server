@@ -23,21 +23,6 @@
 			"name": "Watchdog",
 			"impl": ".WatchdogTask",
 			"interval": 10
-		},
-		{
-			"name": "Limiter Minting",
-			"impl": ".LimiterMintingTask",
-			"interval": 15
-		},
-		{
-			"name": "Reputation Decay",
-			"impl": ".ReputationDecayTask",
-			"interval": 20
-		},
-		{
-			"name": "Reporting",
-			"impl": ".ReportingTask",
-			"interval": 60
 		}
 	],
 	"cache": {
@@ -45,14 +30,6 @@
 		"barcode": {
 			"life": 10080,
 			"shortLife": 240
-		},
-		"session": {
-			"life": 20160,
-			"shortLife": 60
-		},
-		"limiter": {
-			"life": 4320,
-			"shortLife": 360
 		},
 		"share": {
 			"life": 129600,
@@ -62,15 +39,5 @@
 	"client": {
 		"cacheStatic": 1440,
 		"cacheBarcode": 1440
-	},
-	"reputation": {
-		"initial": 2.5,
-		"abuse_level": -2.5,
-		"cap_okay": 10,
-		"cap_spam": -25,
-		"req_okay": 0.025,
-		"req_spam": -0.085,
-		"decay_okay": -0.00001,
-		"decay_spam": 0.0000025
 	}
 }

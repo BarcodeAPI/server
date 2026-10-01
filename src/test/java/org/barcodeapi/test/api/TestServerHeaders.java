@@ -52,15 +52,4 @@ public class TestServerHeaders extends ServerTestBase {
 		Assert.assertEquals("Access Control Origin Header", //
 				"*", getHeader("Access-Control-Allow-Origin"));
 	}
-
-	@Test
-	public void testServerHeaders_testServerTokens() {
-
-		apiGet("test-headers");
-
-		Assert.assertEquals("Response Code", //
-				HttpStatus.OK_200, getResponseCode());
-
-		Assert.assertNotNull("RateLimit Token Header", getHeader("X-RateLimit-Tokens"));
-	}
 }

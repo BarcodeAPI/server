@@ -37,10 +37,6 @@ public class CodeType {
 
 	private final String[] targets;
 
-	private final double costBase;
-	private final double costChar;
-	private final double costMult;
-
 	private final String[] examples;
 	private final JSONObject description;
 	private final JSONObject wiki;
@@ -49,7 +45,7 @@ public class CodeType {
 
 	private final HashMap<String, Object> defaults;
 
-	private CodeType(JSONObject config) {
+	public CodeType(JSONObject config) {
 		this.config = config;
 
 		// generator name
@@ -95,12 +91,6 @@ public class CodeType {
 		for (int x = 0; x < example.length(); x++) {
 			this.examples[x] = example.getString(x);
 		}
-
-		// get barcode costs
-		JSONObject costs = config.getJSONObject("cost");
-		this.costBase = costs.getDouble("base");
-		this.costChar = costs.getDouble("char");
-		this.costMult = costs.getDouble("mult");
 
 		// get description and wiki link
 		this.description = config.getJSONObject("description");
@@ -177,18 +167,6 @@ public class CodeType {
 		return targets;
 	}
 
-	public double getCostBase() {
-		return costBase;
-	}
-
-	public double getCostPerChar() {
-		return costChar;
-	}
-
-	public double getCostMultiplier() {
-		return costMult;
-	}
-
 	public String[] getExamples() {
 		return examples;
 	}
@@ -209,28 +187,19 @@ public class CodeType {
 		return defaults;
 	}
 
-	public static CodeType fromJSON(JSONObject conf) {
-
-		return new CodeType(conf);
-	}
-
-	public static final JSONObject toJSON(CodeType type) {
+	public JSONObject toJSON() {
 		return new JSONObject()//
-				.put("name", type.getName())//
-				.put("display", type.getDisplayName())//
-				.put("show", type.getShowType())//
-				.put("decode", type.getDecodeSupported())//
-				.put("pattern", type.getPatternExtended())//
-				.put("examples", type.getExamples())//
-				.put("checksum", type.enforceChecksum())//
-				.put("nonprinting", type.getAllowNonprinting())//
-				.put("targets", new JSONArray(type.getTargets()))//
-				.put("description", type.getDescription())//
-				.put("wiki", type.getWiki())//
-				.put("options", type.getOptions())//
-				.put("cost", new JSONObject() //
-						.put("base", type.getCostBase())//
-						.put("char", type.getCostPerChar())//
-						.put("mult", type.getCostMultiplier()));
+				.put("name", getName())//
+				.put("display", getDisplayName())//
+				.put("show", getShowType())//
+				.put("decode", getDecodeSupported())//
+				.put("pattern", getPatternExtended())//
+				.put("examples", getExamples())//
+				.put("checksum", enforceChecksum())//
+				.put("nonprinting", getAllowNonprinting())//
+				.put("targets", new JSONArray(getTargets()))//
+				.put("description", getDescription())//
+				.put("wiki", getWiki())//
+				.put("options", getOptions());
 	}
 }

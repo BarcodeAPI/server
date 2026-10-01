@@ -4,38 +4,37 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.barcodeapi.core.Config;
-import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.mclarkdev.tools.libmetrics.LibMetrics;
+
 /**
- * PlansHandler.java
+ * ServerStatsHandler.java
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
-public class PlansHandler extends RestHandler {
+public class ServerStatsHandler extends RestHandler {
 
-	private static final JSONObject plansInfo = Config.get(Cfg.Plans);
-
-	public PlansHandler() {
-		super(
-				// Authentication not required
-				false,
-				// Do not use client rate limit
-				false,
-				// Do not create new session
-				false);
+	public ServerStatsHandler() {
+		super();
 	}
 
 	@Override
 	protected void onRequest(RequestContext c, HttpServletResponse r) throws JSONException, IOException {
 
+		// Determine which stats cache to use
+		String cache = c.getRequest().getParameter("cache");
+		cache = (cache != null) ? cache : "default";
+
+		// Get the details from the requested instance
+		JSONObject stats = LibMetrics.instance(cache).getDetails();
+
 		// Print response to client
 		r.setStatus(HttpServletResponse.SC_OK);
 		r.setContentType("application/json");
-		r.getOutputStream().println(plansInfo.toString());
+		r.getOutputStream().println(stats.toString());
 	}
 }

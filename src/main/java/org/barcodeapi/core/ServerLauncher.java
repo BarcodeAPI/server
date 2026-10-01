@@ -3,31 +3,15 @@ package org.barcodeapi.core;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
-import org.barcodeapi.core.Config.Cfg;
-import org.barcodeapi.server.admin.CacheDumpHandler;
-import org.barcodeapi.server.admin.CacheFlushHandler;
-import org.barcodeapi.server.admin.LimiterFlushHandler;
-import org.barcodeapi.server.admin.LimiterListHandler;
-import org.barcodeapi.server.admin.LimiterStatusHandler;
-import org.barcodeapi.server.admin.ServerStatsHandler;
-import org.barcodeapi.server.admin.SessionListHandler;
-import org.barcodeapi.server.admin.SessionStatusHandler;
-import org.barcodeapi.server.admin.ShareListHandler;
-import org.barcodeapi.server.admin.SubscriberReloadHandler;
 import org.barcodeapi.server.api.BarcodeAPIHandler;
-import org.barcodeapi.server.api.BulkHandler;
-import org.barcodeapi.server.api.DecodeHandler;
-import org.barcodeapi.server.api.InfoHandler;
-import org.barcodeapi.server.api.LimiterHandler;
-import org.barcodeapi.server.api.PlansHandler;
-import org.barcodeapi.server.api.SessionHandler;
-import org.barcodeapi.server.api.ShareHandler;
+import org.barcodeapi.server.api.BarcodeTypeHandler;
+import org.barcodeapi.server.api.ServerInfoHandler;
+import org.barcodeapi.server.api.ServerStatsHandler;
 import org.barcodeapi.server.api.StaticHandler;
-import org.barcodeapi.server.api.SubscriberHandler;
-import org.barcodeapi.server.api.TypeHandler;
-import org.barcodeapi.server.cache.ObjectCache;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.RestHandler;
@@ -63,8 +47,8 @@ public class ServerLauncher {
 
 	// The Jetty server and it's handlers
 	private Server server;
-	private HandlerCollection handlers;
-	private ArrayList<BackgroundTask> tasks;
+	private HashMap<String, RestHandler> handlers = new HashMap<>();
+	private ArrayList<BackgroundTask> tasks = new ArrayList<>();
 
 	/**
 	 * Initialize the server loader by processing the command line arguments
@@ -116,75 +100,28 @@ public class ServerLauncher {
 	/**
 	 * Initialize the API REST server.
 	 */
-	private void initApiServer() throws Exception {
+	protected void initApiServer() throws Exception {
 		CodeGenerators.getInstance();
 
-		// Initialize API server
-		LibLog._clog("I0011");
-		server = new Server();
-		handlers = new HandlerCollection();
-		server.setHandler(handlers);
-
-		// Set max request size
-		HttpConfiguration httpConfig = new HttpConfiguration();
-		httpConfig.setRequestHeaderSize(16 * 1024);
-		server.setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", -1);
-
-		// Bind server port
-		int portAPI = LibArgs.instance().getInteger("port", 8080);
-		ServerConnector serverConnector = new ServerConnector(//
-				server, new HttpConnectionFactory(httpConfig));
-		serverConnector.setPort(portAPI);
-		server.setConnectors(new Connector[] { serverConnector });
-
 		// Setup rest handlers
-		initHandler("/api", BarcodeAPIHandler.class);
-		initHandler("/bulk", BulkHandler.class);
-		initHandler("/decode", DecodeHandler.class);
-		initHandler("/type", TypeHandler.class);
-		initHandler("/share", ShareHandler.class);
-		initHandler("/limiter", LimiterHandler.class);
-		initHandler("/session", SessionHandler.class);
-		initHandler("/subscriber", SubscriberHandler.class);
-		initHandler("/info", InfoHandler.class);
-		initHandler("/plans", PlansHandler.class);
-
-		// Setup admin handlers
-		initHandler("/admin/cache/dump", CacheDumpHandler.class);
-		initHandler("/admin/cache/flush", CacheFlushHandler.class);
-		initHandler("/admin/limiter/flush", LimiterFlushHandler.class);
-		initHandler("/admin/limiter/list", LimiterListHandler.class);
-		initHandler("/admin/limiter/status", LimiterStatusHandler.class);
-		initHandler("/admin/session/list", SessionListHandler.class);
-		initHandler("/admin/session/status", SessionStatusHandler.class);
-		initHandler("/admin/share/list", ShareListHandler.class);
-		initHandler("/admin/subscriber/reload", SubscriberReloadHandler.class);
+		registerEndpoint("/api", BarcodeAPIHandler.class);
+		registerEndpoint("/type", BarcodeTypeHandler.class);
 
 		// Server Stats
-		initHandler("/server/stats", ServerStatsHandler.class);
-
-		// Instantiate the static resource handler and add it to the collection
-		LibLog._clog("I0012");
-		ContextHandler resourceHandler = new ContextHandler();
-		resourceHandler.setHandler(new StaticHandler(server));
-		resourceHandler.setContextPath("/");
-		handlers.addHandler(resourceHandler);
+		registerEndpoint("/server/info", ServerInfoHandler.class);
+		registerEndpoint("/server/stats", ServerStatsHandler.class);
 	}
 
 	/**
 	 * Initialize a new handler to be served by Jetty
 	 */
-	private void initHandler(String path, Class<? extends RestHandler> clazz) throws Exception {
+	protected void registerEndpoint(String path, //
+			Class<? extends RestHandler> clazz) throws Exception {
 
 		// Instantiate the handler
 		LibLog._clogF("I0021", path);
-		RestHandler handler = clazz.getConstructor().newInstance();
-
-		// Add it to the handler collection
-		ContextHandler statsHandler = new ContextHandler();
-		statsHandler.setHandler(handler);
-		statsHandler.setContextPath(path);
-		handlers.addHandler(statsHandler);
+		handlers.put(path, //
+				clazz.getConstructor().newInstance());
 	}
 
 	/**
@@ -192,10 +129,9 @@ public class ServerLauncher {
 	 */
 	private void initSystemTasks() {
 
-		final String TASK_ROOT = "org.barcodeapi.server.tasks";
-		JSONArray taskList = Config.get(Cfg.App).getJSONArray("tasks");
+		JSONArray taskList = Config.get().getJSONArray("tasks");
 
-		tasks = new ArrayList<>();
+		// Loop each of the registered tasks
 		for (int x = 0; x < taskList.length(); x++) {
 			JSONObject taskDef = taskList.getJSONObject(x);
 
@@ -203,7 +139,8 @@ public class ServerLauncher {
 
 				// Get task details
 				String taskName = taskDef.getString("name");
-				String taskClass = (TASK_ROOT + taskDef.getString("impl"));
+				String taskImpl = taskDef.getString("impl");
+				String taskClass = (((taskImpl.charAt(0) == '.') ? BackgroundTask.TASKROOT : "") + taskImpl);
 				long taskTime = taskDef.getInt("interval");
 
 				// Get task constructor
@@ -221,29 +158,7 @@ public class ServerLauncher {
 				LibLog._clog("E0039", e);
 			}
 		}
-
-		// Register shutdown hook
-		LibLog._clog("I0031");
-		Runtime.getRuntime().addShutdownHook(shutdownRunner);
 	}
-
-	/**
-	 * Hook called as the JVM is shutting down.
-	 */
-	private Thread shutdownRunner = new Thread() {
-
-		public void run() {
-
-			// Save snapshot of shares cache
-			ObjectCache.getCache(ObjectCache.CACHE_SHARE).saveSnapshot();
-
-			// Save snapshot of limiters cache
-			ObjectCache.getCache(ObjectCache.CACHE_LIMITERS).saveSnapshot();
-
-			// Save snapshot of sessions cache
-			ObjectCache.getCache(ObjectCache.CACHE_SESSIONS).saveSnapshot();
-		}
-	};
 
 	/**
 	 * Start the Jetty server.
@@ -254,10 +169,47 @@ public class ServerLauncher {
 
 		try {
 
+			HandlerCollection collection = new HandlerCollection();
+
+			// Loop all registered handlers
+			for (Map.Entry<String, RestHandler> entry : handlers.entrySet()) {
+
+				// Add it to the handler collection
+				ContextHandler contextHandler = new ContextHandler();
+				contextHandler.setHandler(entry.getValue());
+				contextHandler.setContextPath(entry.getKey());
+				collection.addHandler(contextHandler);
+			}
+
+			// Instantiate the static resource handler and add it to the collection
+			LibLog._clog("I0012");
+			ContextHandler resourceHandler = new ContextHandler();
+			resourceHandler.setHandler(new StaticHandler(server));
+			resourceHandler.setContextPath("/");
+			collection.addHandler(resourceHandler);
+
+			// Initialize API server
+			LibLog._clog("I0011");
+			server = new Server();
+			server.setHandler(collection);
+
+			// Set max request size
+			HttpConfiguration httpConfig = new HttpConfiguration();
+			httpConfig.setRequestHeaderSize(16 * 1024);
+			server.setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", -1);
+
+			// Bind server port
+			int portAPI = LibArgs.instance().getInteger("port", 8080);
+			ServerConnector serverConnector = new ServerConnector(//
+					server, new HttpConnectionFactory(httpConfig));
+			serverConnector.setPort(portAPI);
+			server.setConnectors(new Connector[] { serverConnector });
+
 			// Start server
 			server.start();
 		} catch (Exception e) {
 
+			// Log the startup error
 			LibLog._clog("E0008", e);
 			throw e;
 		}

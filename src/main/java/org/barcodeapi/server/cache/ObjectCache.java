@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.barcodeapi.core.Config;
-import org.barcodeapi.core.Config.Cfg;
 
 import com.mclarkdev.tools.liblog.LibLog;
 import com.mclarkdev.tools.libmetrics.LibMetrics;
@@ -22,11 +21,7 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
  */
 public class ObjectCache {
 
-	public static final String CACHE_SHARE = "_shares";
-	public static final String CACHE_SESSIONS = "_sessions";
-	public static final String CACHE_LIMITERS = "_limiters";
-
-	private static final String SNAPSHOT_DIR = Config.get(Cfg.App)//
+	private static final String SNAPSHOT_DIR = Config.get()//
 			.getJSONObject("cache").getString("_snapshots");
 
 	private static final LibMetrics stats = LibMetrics.instance();

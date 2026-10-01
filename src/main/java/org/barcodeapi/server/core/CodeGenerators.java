@@ -3,7 +3,6 @@ package org.barcodeapi.server.core;
 import java.util.HashMap;
 
 import org.barcodeapi.core.Config;
-import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.gen.CodeGenerator;
 import org.json.JSONArray;
 
@@ -43,7 +42,7 @@ public class CodeGenerators {
 	private CodeGenerators() {
 
 		// Load all enabled code types
-		JSONArray enabled = Config.get(Cfg.App).getJSONArray("types");
+		JSONArray enabled = Config.get().getJSONArray("types");
 
 		// Loop all enabled types
 		for (int x = 0; x < enabled.length(); x++) {

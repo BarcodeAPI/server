@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.core.Config;
-import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.core.RequestContext;
 import org.barcodeapi.server.core.RestHandler;
 import org.eclipse.jetty.server.Request;
@@ -21,7 +20,7 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
  */
 public class StaticHandler extends RestHandler {
 
-	private static final int CACHED_LIFE_MIN = Config.get(Cfg.App)//
+	private static final int CACHED_LIFE_MIN = Config.get()//
 			.getJSONObject("client").getInt("cacheStatic");
 
 	private static final int CACHED_LIFE_SEC = (CACHED_LIFE_MIN * 60);
@@ -31,13 +30,7 @@ public class StaticHandler extends RestHandler {
 	private ResourceHandler resources = new ResourceHandler();
 
 	public StaticHandler(Server server) throws Exception {
-		super(
-				// Authentication not required
-				false,
-				// Do not use client rate limit
-				false,
-				// Create new session
-				true);
+		super();
 
 		// Load the Jetty resource handler
 		resources = new ResourceHandler();
@@ -68,13 +61,9 @@ public class StaticHandler extends RestHandler {
 	}
 
 	@Override
-	protected void onRequest(RequestContext c, HttpServletResponse r) throws Exception {
+	protected void onRequest(RequestContext ctx, HttpServletResponse response) throws Exception {
 
-		// Not much needed here.
+		// Not much needed hered
 		// This class overrides the lower level (handle) method to serve static files.
-
-		// Good user reputation for session reuse on static
-		boolean goodUser = (!c.getSession().isShortLived());
-		c.getLimiter().getReputation().update(goodUser);
 	}
 }

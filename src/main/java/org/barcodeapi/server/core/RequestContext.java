@@ -1,15 +1,8 @@
 package org.barcodeapi.server.core;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.barcodeapi.server.cache.CachedLimiter;
-import org.barcodeapi.server.cache.CachedSession;
-import org.barcodeapi.server.cache.LimiterCache;
-import org.barcodeapi.server.cache.Subscriber;
-import org.barcodeapi.server.cache.SubscriberCache;
 import org.eclipse.jetty.http.HttpURI;
 import org.eclipse.jetty.server.Request;
 
@@ -91,14 +84,7 @@ public class RequestContext {
 
 	private final String source;
 
-	private final String admin;
-
-	private final Subscriber subscriber;
-
-	private final CachedLimiter limiter;
-	private final CachedSession session;
-
-	public RequestContext(Request request, boolean createSession) {
+	public RequestContext(Request request) {
 		this.request = request;
 
 		// Request time
@@ -130,82 +116,11 @@ public class RequestContext {
 		this.formats = Format.parse(//
 				request.getHeader("Accept"));
 
-		// Check for request token
-		String authStr = request.getHeader("Authorization");
-		String reqUri = request.getOriginalURI().toString();
-		int tokenAt = reqUri.indexOf("token=");
-		if (tokenAt > 0) {
-
-			// Extract the token from the URI
-			int tokenEnd = reqUri.indexOf('&', tokenAt);
-			tokenEnd = (tokenEnd > 0) ? tokenEnd : reqUri.length();
-			authStr = reqUri.substring(tokenAt, tokenEnd);
-
-			// Rebuild the URI with the token extracted
-			reqUri = (reqUri.substring(0, tokenAt)) + //
-					((tokenEnd == reqUri.length()) ? "" : //
-							(reqUri.substring(tokenEnd, (reqUri.length() - 1))));
-		}
-
-		// The requested method and URI
-		this.uri = reqUri;
+		// The original URI
+		this.uri = request.getOriginalURI().toString();
 
 		// Size of the request body
 		this.body = request.getContentLength();
-
-		// Lookup API key
-		String admin = null;
-		Subscriber user = null;
-		if (authStr != null) {
-
-			String authType = authStr.substring(0, 5);
-			String authData = authStr.substring(6);
-
-			switch (authType) {
-			case "Basic":
-				admin = SessionHelper.validateUser(authData);
-				break;
-
-			case "Token":
-			case "token":
-				user = SubscriberCache.getByKey(authData);
-				break;
-			}
-		}
-
-		// Lookup user based on application
-		if (user == null && ref != null) {
-			try {
-				user = SubscriberCache.getByApp(//
-						(new URI(ref)).getHost());
-			} catch (URISyntaxException ignored) {
-			}
-		}
-
-		// Lookup user based on IP
-		if (user == null) {
-			user = SubscriberCache.getByIP(ip);
-		}
-
-		// Assign resolved user info to the context
-		this.admin = admin;
-		this.subscriber = user;
-
-		// Lookup or create new user session context
-		CachedSession userSession = SessionHelper.getSession(request);
-		this.session = (userSession != null) ? userSession : //
-				((createSession) ? SessionHelper.createSession() : null);
-
-		// Check that a session exists
-		if (this.session != null) {
-
-			// Update counters for the session
-			session.hit(this.ip, this.uri);
-		}
-
-		// Get and touch the limiter
-		this.limiter = LimiterCache.getLimiter(user, ip);
-		this.limiter.touch(ip, this.session);
 	}
 
 	/**
@@ -286,7 +201,6 @@ public class RequestContext {
 	 * @return if the request has additional content
 	 */
 	public boolean hasBody() {
-
 		return (this.body > 0);
 	}
 
@@ -296,7 +210,6 @@ public class RequestContext {
 	 * @return the length of the additional content
 	 */
 	public int getBodySize() {
-
 		return this.body;
 	}
 
@@ -319,57 +232,20 @@ public class RequestContext {
 	}
 
 	/**
-	 * Returns the user currently logged in.
+	 * Returns true if is an API request with no referer.
 	 * 
-	 * @return the user currently logged in
+	 * @return true if is an API request
 	 */
-	public String getAdmin() {
-		return this.admin;
+	public boolean isAPIRequest() {
+		return getSource().equals("API");
 	}
 
 	/**
-	 * Returns the limiter for the request.
+	 * Returns true if is an App based request
 	 * 
-	 * @return the limiter for the request
+	 * @return true if is an App based request
 	 */
-	public CachedLimiter getLimiter() {
-		return this.limiter;
-	}
-
-	/**
-	 * Returns true if the request has a session.
-	 * 
-	 * @return if the request has a session
-	 */
-	public boolean hasSession() {
-		return (this.session != null);
-	}
-
-	/**
-	 * Returns the subscriber of the request.
-	 * 
-	 * @return the subscriber of the request
-	 */
-	public Subscriber getSubscriber() {
-		return this.subscriber;
-	}
-
-	/**
-	 * Returns the session for the request.
-	 * 
-	 * @return the session for the request
-	 */
-	public CachedSession getSession() {
-		return this.session;
-	}
-
-	/**
-	 * Returns true if the session was newly created.
-	 * 
-	 * @return if the session was newly created
-	 */
-	public boolean hasNewSession() {
-		return (this.session != null) && //
-				(this.session.getAccessCount() == 1);
+	public boolean isAppRequest() {
+		return !isAPIRequest();
 	}
 }

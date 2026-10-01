@@ -27,27 +27,9 @@ public abstract class RestHandler extends AbstractHandler {
 
 	private final LibMetrics stats;
 
-	private final boolean apiAuthRequired;
-
-	private final boolean apiRateLimited;
-
-	private final boolean createSessions;
-
 	private boolean enableMultipart = false;
 
 	public RestHandler() {
-		this(false, false, true);
-	}
-
-	public RestHandler(boolean authRequired) {
-		this(authRequired, false, true);
-	}
-
-	public RestHandler(boolean authRequired, boolean rateLimited) {
-		this(authRequired, rateLimited, true);
-	}
-
-	public RestHandler(boolean authRequired, boolean rateLimited, boolean createSessions) {
 		LibMetrics.hitMethodRunCounter();
 
 		// extract class name
@@ -61,25 +43,18 @@ public abstract class RestHandler extends AbstractHandler {
 		}
 
 		this.stats = LibMetrics.instance();
-		this.apiAuthRequired = authRequired;
-		this.apiRateLimited = rateLimited;
-		this.createSessions = createSessions;
+	}
+
+	public String name() {
+		return _NAME;
+	}
+
+	public String server() {
+		return serverName;
 	}
 
 	public LibMetrics getStats() {
 		return stats;
-	}
-
-	public boolean apiAuthRequired() {
-		return apiAuthRequired;
-	}
-
-	public boolean apiRateLimited() {
-		return apiRateLimited;
-	}
-
-	public boolean createSessions() {
-		return createSessions;
 	}
 
 	public void enableMultipart(boolean enable) {
@@ -98,7 +73,7 @@ public abstract class RestHandler extends AbstractHandler {
 			HttpServletResponse response) throws IOException, ServletException {
 
 		// Build the request context
-		RequestContext ctx = new RequestContext(baseRequest, createSessions);
+		RequestContext ctx = new RequestContext(baseRequest);
 
 		// Hit the counters
 		getStats().hitCounter("request", "count");
@@ -128,39 +103,11 @@ public abstract class RestHandler extends AbstractHandler {
 		response.setHeader("Server-Node", serverName);
 		response.setHeader("Accept-Charset", "utf-8");
 
-		// Check if newly created session
-		if (ctx.hasNewSession()) {
-
-			// Add session token to response header
-			response.addCookie(ctx.getSession().getCookie());
-		}
-
-		// Authenticate the user if required
-		if (apiAuthRequired && (ctx.getAdmin() == null)) {
-
-			// Hit login fail counters
-			getStats().hitCounter("request", "authfail");
-			getStats().hitCounter("request", "target", _NAME, "authfail");
-
-			// Update bad reputation for failed login
-			ctx.getLimiter().getReputation().update(false);
-
-			// Send user unauthorized with login realm
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.setHeader("WWW-Authenticate", "Basic realm=BarcodeAPI.org Admin API");
-			return;
-		}
-
 		// Add open CORS headers
 		response.setHeader("Access-Control-Max-Age", "86400");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Origin", //
 				(ctx.getOrigin() != null) ? ctx.getOrigin() : "*");
-
-		// Send token count to user
-		response.setHeader("X-RateLimit-Tokens", //
-				String.format("%.2f", ctx.getLimiter().getTokens().getCount()));
-		response.setHeader("X-RateLimit-Caller", ctx.getLimiter().getCallerID());
 
 		// Request complete if only options
 		if (ctx.getMethod().equals("OPTIONS")) {

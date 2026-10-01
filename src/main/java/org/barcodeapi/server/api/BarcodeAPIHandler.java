@@ -5,9 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.barcodeapi.core.Config;
-import org.barcodeapi.core.Config.Cfg;
 import org.barcodeapi.server.cache.CachedBarcode;
-import org.barcodeapi.server.cache.CachedLimiter;
 import org.barcodeapi.server.core.GenerationException;
 import org.barcodeapi.server.core.GenerationException.ExceptionType;
 import org.barcodeapi.server.core.RequestContext;
@@ -25,7 +23,7 @@ import com.mclarkdev.tools.liblog.LibLog;
  */
 public class BarcodeAPIHandler extends RestHandler {
 
-	private static final int CACHED_LIFE_MIN = Config.get(Cfg.App)//
+	private static final int CACHED_LIFE_MIN = Config.get()//
 			.getJSONObject("client").getInt("cacheBarcode");
 
 	private static final int CACHED_LIFE_SEC = (CACHED_LIFE_MIN * 60);
@@ -35,13 +33,7 @@ public class BarcodeAPIHandler extends RestHandler {
 	private final String cacheControl = String.format("max-age=%d, public", CACHED_LIFE_SEC);
 
 	public BarcodeAPIHandler() {
-		super(
-				// Authentication not required
-				false,
-				// Use client rate limit
-				true,
-				// Do not create new sessions
-				false);
+		super();
 	}
 
 	@Override
@@ -52,34 +44,10 @@ public class BarcodeAPIHandler extends RestHandler {
 		Format format = Format.PNG;
 		byte[] bytes = null;
 
-		double tokenSpendCount = 0;
-		boolean tokenSpendValid = false;
-		CachedLimiter limiter = c.getLimiter();
-
 		try {
-
-			// Check for abuse
-			if (limiter.getReputation().isAbuser()) {
-				throw new GenerationException(ExceptionType.ABUSE, new Throwable(String.format(//
-						"Bad reputation for IP, try again later. (u:%s)", limiter.getCallerID())));
-			}
 
 			// Parse the request
 			request = BarcodeRequest.fromURI(c.getUri());
-
-			// Send token cost to user
-			r.setHeader("X-RateLimit-Cost", //
-					Double.toString(request.getCost()));
-
-			// Try to spend the tokens
-			tokenSpendValid = true;
-			tokenSpendCount = request.getCost();
-			if (!limiter.getTokens().allowSpend(tokenSpendCount)) {
-
-				// Return rate limited barcode to user
-				throw new GenerationException(ExceptionType.LIMITED, new Throwable(String.format(//
-						"Client is rate limited, try again later. (u:%s)", limiter.getCallerID())));
-			}
 
 			// Generate user requested barcode
 			barcode = BarcodeGenerator.requestBarcode(request);
@@ -138,10 +106,6 @@ public class BarcodeAPIHandler extends RestHandler {
 			r.setStatus(e.getExceptionType().getStatusCode());
 			r.setHeader("X-Error-Message", e.getCause().getMessage());
 
-			// Spend tokens to discourage abuse
-			tokenSpendValid = false;
-			tokenSpendCount = 0.5;
-
 			// Replace barcode with failure barcode
 			barcode = e.getExceptionType().getBarcodeImage();
 
@@ -152,14 +116,6 @@ public class BarcodeAPIHandler extends RestHandler {
 
 			LibLog._log("Unhandled exception!", e);
 		}
-
-		// Spend the tokens, track total spend count
-		limiter.onRequest(tokenSpendValid, tokenSpendCount);
-
-		// Advise current token spend and count
-		r.setHeader("X-RateLimit-Cost", Double.toString(tokenSpendCount));
-		r.setHeader("X-RateLimit-Tokens", limiter.getTokens().getCountStr());
-		r.setHeader("X-SpamDetect", Double.toString(limiter.getReputation().value()));
 
 		// Add content headers type and length
 		r.setContentType(format.getMime());

@@ -68,19 +68,6 @@ public class TestBarcodeRequest extends ServerTestBase {
 	}
 
 	@Test
-	public void testBarcodeRequest_TestBlacklistRequest() {
-
-		try {
-			BarcodeRequest.fromURI("/api/auto/_tstblk_");
-
-		} catch (GenerationException e) {
-
-			Assert.assertEquals("Failure Reason", //
-					GenerationException.ExceptionType.BLACKLIST, e.getExceptionType());
-		}
-	}
-
-	@Test
 	public void testBarcodeRequest_TestCodeType_Auto() {
 
 		try {
