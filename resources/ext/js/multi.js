@@ -17,10 +17,6 @@ function init() {
 	var share = window.location.hash.substring(1);
 	((share) ? loadShare(share) : loadArgs());
 	document.getElementById("input").focus();
-
-	// Log tracking event
-	var setupMillis = ((new Date()) - timeStart);
-	trackingEvent("AppEvents", "AppLoad", "Multi", setupMillis);
 }
 
 /**
@@ -36,9 +32,6 @@ function loadShare(share) {
 
 			// Parse and render the response list
 			renderRequests(JSON.parse(data.data));
-
-			// Log tracking event
-			trackingEvent("Multi", "Load", "Share", share);
 		});
 }
 
@@ -85,9 +78,6 @@ function addFromInput() {
 	for (var x in inStr) {
 		addFromText(inStr[x]);
 	}
-
-	// Log tracking event
-	trackingEvent("Multi", "Add");
 
 	// Clear and focus input
 	input.value = "";
@@ -212,9 +202,6 @@ function multiShare() {
 		window.location = //
 			(window.location.pathname + '#' + shareCode);
 	});
-
-	// Log tracking event
-	trackingEvent("Multi", "Share");
 }
 
 /**
@@ -222,7 +209,4 @@ function multiShare() {
  */
 function printPage() {
 	window.print();
-
-	// Log tracking event
-	trackingEvent("Multi", "Print");
 }

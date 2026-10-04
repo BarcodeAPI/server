@@ -10,11 +10,7 @@ const timeStart = new Date();
  * App Display Options
  */
 const appConfig = {
-	'showLinkBulk': true,
 	'showLinkMulti': true,
-	'showLinkDecode': false,
-	'showTokenCount': false,
-	'showLimitsNotice': false,
 	'showRenderOptions': true,
 	'showHiddenTypes': false,
 	'userLanguage': 'en'
@@ -44,19 +40,9 @@ const appFeatures = {
  */
 window.addEventListener("load", function() {
 
-	// Check and load analytics
-	if (appFeatures.matomoTracking.enabled) {
-		initAnalytics();
-	}
-
 	// Check and load header
 	if (document.getElementsByClassName("header")[0]) {
 		initHeader();
-	}
-
-	// Check and load notice
-	if (document.getElementsByClassName("notice")[0]) {
-		initNotice();
 	}
 
 	// Check and load footer
@@ -66,48 +52,19 @@ window.addEventListener("load", function() {
 });
 
 /**
- * Initialize analytics tracking.
- */
-function initAnalytics() {
-
-	var u = appFeatures.matomoTracking.server;
-
-	var _paq = window._paq = window._paq || [];
-	_paq.push(['trackPageView']);
-	_paq.push(['enableLinkTracking']);
-	_paq.push(['setTrackerUrl', u + 'matomo.php']);
-	_paq.push(['setSiteId', appFeatures.matomoTracking.appID]);
-
-	var js = document.createElement("script");
-	js.src = u + 'matomo.js';
-	js.async = true;
-	document.head.appendChild(js);
-}
-
-/**
  * Initialize page header.
  */
 function initHeader() {
 
 	uiAddListener("header-logo", actionHome);
 	uiAddListener("action-email", actionContact);
-	uiAddListener("header-support", actionSupport)
-}
-
-/**
- * Initialize page notice.
- */
-function initNotice() {
-
-	uiShowHide("notice-limits", appConfig.showLimitsNotice);
+	uiAddListener("header-support", actionContact)
 }
 
 /**
  * Initialize page footer.
  */
 function initFooter() {
-
-	uiShowHide("footer-tokens", appConfig.showTokenCount);
 
 	uiAddListener("footer-docs-link", actionShowDocs);
 }
@@ -123,13 +80,6 @@ function actionHome() {
  * Called when a user clicks contact via email.
  */
 function actionContact() {
-	window.location.href = "mailto:support@barcodeapi.org";
-}
-
-/**
- * Called when a user should be sent to the support page.
- */
-function actionSupport() {
 	window.location.href = "mailto:support@barcodeapi.org";
 }
 
@@ -159,16 +109,5 @@ function uiAddListener(elem, handler, event) {
 	if (obj) {
 		event = (event) ? event : "click";
 		obj.addEventListener(event, handler);
-	}
-}
-
-/**
- * Tracking event handler
- */
-function trackingEvent(category, action, event, value) {
-
-	// Check if enabled and push to matomo
-	if (appFeatures.matomoTracking.enabled) {
-		window._paq.push(['trackEvent', category, action, event, value]);
 	}
 }

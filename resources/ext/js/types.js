@@ -35,10 +35,6 @@ function loadTypes(data) {
 	}
 
 	delTemplate();
-
-	// Log tracking event
-	var setupMillis = ((new Date()) - timeStart);
-	trackingEvent("AppEvents", "AppLoad", "Types", setupMillis);
 }
 
 function addType(type) {

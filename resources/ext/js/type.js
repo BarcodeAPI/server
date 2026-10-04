@@ -99,10 +99,6 @@ function loadType(type) {
 
 	// Render the parameters
 	buildOptions(type);
-
-	// Log tracking event
-	var setupMillis = ((new Date()) - timeStart);
-	trackingEvent("AppEvents", "AppLoad", "Type", setupMillis);
 }
 
 function buildOptions(type) {

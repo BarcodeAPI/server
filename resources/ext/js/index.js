@@ -90,10 +90,6 @@ async function init() {
 
 	// Close the keyboard when navigating away
 	window.onbeforeunload = actionCloseKeyboard;
-
-	// Log tracking event
-	var setupMillis = ((new Date()) - timeStart);
-	trackingEvent("AppEvents", "AppLoad", "Main", setupMillis);
 }
 
 /**
@@ -400,9 +396,6 @@ function updateBarcodeImage(url) {
 				document.getElementById('barcode_output').src = URL.createObjectURL(blob);
 			});
 		});
-
-	// Log tracking event
-	trackingEvent("AppMain", "Generate");
 }
 
 /**
@@ -536,12 +529,6 @@ function toggleShowRenderOptions() {
 
 	// Set new state
 	showRenderMenu(stateNew);
-
-	if (stateNew) {
-
-		// Log tracking event
-		trackingEvent("AppMain", "Options");
-	}
 }
 
 /**
@@ -566,9 +553,6 @@ function actionShowKeyboard() {
 	} else {
 		kbd.focus();
 	}
-
-	// Log tracking event
-	trackingEvent("AppMain", "Keyboard");
 }
 
 /**
@@ -591,9 +575,6 @@ function actionPrintImage() {
 	w.document.write(content);
 	w.print();
 	w.close();
-
-	// Log tracking event
-	trackingEvent("AppMain", "Print");
 }
 
 /**
@@ -640,9 +621,6 @@ async function actionCopyImage() {
 		console.log("Failed to copy image.");
 		console.log(e);
 	}
-
-	// Log tracking event
-	trackingEvent("AppMain", "Copy");
 }
 
 /**
@@ -651,9 +629,6 @@ async function actionCopyImage() {
 function actionDownloadImage() {
 
 	window.open(appState.current, '_blank');
-
-	// Log tracking event
-	trackingEvent("AppMain", "Download");
 }
 
 /**
@@ -695,11 +670,6 @@ function setType(type) {
 
 	location.replace('#' + type);
 	showTypesMenu(false);
-
-	// Log tracking event
-	var codeType = getType(type);
-	trackingEvent("AppMain", "TypeChange", //
-		(codeType) ? codeType.name : "Auto");
 }
 
 /**
