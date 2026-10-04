@@ -28,8 +28,9 @@
 	"cache": {
 		"_snapshots": "./cache/",
 		"barcode": {
-			"life": 10080,
-			"shortLife": 240
+			"timeLivedDefault": 10080,
+			"timeLivedShort": 240,
+			"timeLivedLong": 50400
 		},
 		"share": {
 			"life": 129600,

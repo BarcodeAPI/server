@@ -88,11 +88,6 @@ function loadType(type) {
 	info.querySelector(".type-name").innerHTML = type.display;
 	info.querySelector(".type-target").innerHTML = ('/' + target + '/');
 
-	// Update barcode costs
-	info.querySelector(".type-cost-base").innerHTML = type.cost.base;
-	info.querySelector(".type-cost-char").innerHTML = type.cost.char;
-	info.querySelector(".type-cost-mult").innerHTML = type.cost.mult;
-
 	// Update type extended details
 	info.querySelector(".type-format").innerHTML = type.pattern;
 	info.querySelector(".type-description").innerHTML = type.description[language].replaceAll("\n", "<br/>");

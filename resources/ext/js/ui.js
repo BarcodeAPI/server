@@ -130,7 +130,7 @@ function actionContact() {
  * Called when a user should be sent to the support page.
  */
 function actionSupport() {
-	window.location.href = "/support.html";
+	window.location.href = "mailto:support@barcodeapi.org";
 }
 
 /**

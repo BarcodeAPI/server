@@ -30,9 +30,9 @@ public abstract class CachedObject implements Serializable {
 
 		// Setup timeouts
 		JSONObject cacheConfig = cachesConfig.getJSONObject(type);
-		this.setStandardTimeout(cacheConfig.getInt("life"), TimeUnit.MINUTES);
-		this.setShortLivedTimeout(cacheConfig.getInt("shortLife"), TimeUnit.MINUTES);
-		this.setLongLivedTimeout(cacheConfig.getInt("longLife"), TimeUnit.MINUTES);
+		this.setStandardTimeout(cacheConfig.getInt("timeLivedDefault"), TimeUnit.MINUTES);
+		this.setShortLivedTimeout(cacheConfig.getInt("timeLivedShort"), TimeUnit.MINUTES);
+		this.setLongLivedTimeout(cacheConfig.getInt("timeLivedLong"), TimeUnit.MINUTES);
 	}
 
 	/**

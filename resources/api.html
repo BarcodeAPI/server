@@ -31,7 +31,7 @@
 			<div class="header-logo start-sm center-xs col-xs-12 col-sm-5"></div>
 			<div class="header-contact col-sm-5 middle-xs end-xs">
 				<h4 class="header-support">
-					<div>FEEDBACK &amp; SUPPORT</div>
+					<div>Community Edition</div>
 					<div class="header-email">support@barcodeapi.org</div>
 				</h4>
 				<div class="action-icon action-email icon-email"></div>
@@ -99,24 +99,6 @@
 					<div class="col-xs-12 start-xs">
 						<a class="toc-link" href="#headers">
 							&sect;5 - Barcode Response Headers
-						</a>
-					</div>
-
-					<div class="col-xs-12 start-xs">
-						<a class="toc-link" href="#limits">
-							&sect;6 - Tokens and Rate Limits
-						</a>
-					</div>
-
-					<div class="col-xs-12 start-xs">
-						<a class="toc-link" href="#session">
-							&sect;7 - User Session Info
-						</a>
-					</div>
-
-					<div class="col-xs-12 start-xs">
-						<a class="toc-link" href="#support">
-							&sect;8 - Technical Support
 						</a>
 					</div>
 				</div>
@@ -278,11 +260,11 @@ with open('test.png', 'wb') as out_file:
 					&nbsp;&nbsp;If you know exactly which barcode format you need, you can specify it directly in the
 					URL. This gives you full control over the barcode type, ensuring that you get the format that best
 					fits your requirements.
-					<br />
-					<a href="/api/128/abc123">/api/128/abc123</a>
-					<br />
-					<a href="/api/qr/abc123">/api/qr/abc123</a>
 				</p>
+				<pre class="example-code">
+Example
+/api/128/abc123
+/api/qr/abc123</pre>
 			</div>
 
 			<div class="col-sm-6 col-xs-12">
@@ -291,9 +273,10 @@ with open('test.png', 'wb') as out_file:
 					&nbsp;&nbsp;If you don’t want to specify a barcode format, you can let the API automatically
 					determine the best format based on the data you provide. The API will analyze the content and choose
 					the most suitable format.
-					<br />
-					<a href="/api/auto/abc123">/api/auto/abc123</a>
 				</p>
+				<pre class="example-code">
+Example
+/api/auto/abc123</pre>
 			</div>
 		</div>
 
@@ -317,12 +300,10 @@ with open('test.png', 'wb') as out_file:
 					parameters to your request URL, you can modify the appearance and behavior of the generated barcode.
 					These options can include things like barcode foreground color, background color, height, width, and
 					more.
-					<br />
-					Example
 				</p>
 				<pre class="example-code">
-/api/128/RED?fg=ff0000&bg=ffffff&height=12
-				</pre>
+Example
+/api/128/RED?fg=ff0000&bg=ffffff&height=12</pre>
 			</div>
 
 			<div class="col-sm-6 col-xs-12">
@@ -342,34 +323,8 @@ with open('test.png', 'wb') as out_file:
 		<a name="bulk"></a>
 		<div class="row middle-sm center-xs top-xs help-entry pad-top-24">
 			<div class="col-sm-8 col-xs-12">
-				<h2><a href="#bulk">&sect;4</a>&nbsp;Bulk Barcode Generation</h2>
-				<p class="start-xs">
-					&nbsp;&nbsp;Some users need to generate a lot of barcodes; and for this we provide two different
-					tools for the job!
-				</p>
-			</div>
-
-			<div class="col-sm-4 col-help-image">
-				<img class="help-image" src="/api/dm/Data%20Matrix%20Barcode" />
-			</div>
-
-			<div class="col-sm-6 col-xs-12">
-				<h3>Bulk Generator</h3>
-				<p class="start-xs">
-					&nbsp;&nbsp;This utility will allow users to upload a simple CSV file containing a list of barcode
-					requests. The server will render the images in bulk and return a single ZIP file of all barcode
-					images.
-				</p>
-				<p class="start-xs">
-					Each ZIP archive will additionally contain a text file called _debug.txt which will help
-				</p>
-				<p>
-					Visit <a href="/bulk.html" class="text-link anim icon-chevron">Bulk Generator</a>
-				</p>
-			</div>
-
-			<div class="col-sm-6 col-xs-12">
-				<h3>Multis Utility</h3>
+				<h2><a href="#bulk">&sect;4</a>&nbsp;Bulk Barcode
+					Generation</h2>
 				<p class="start-xs">
 					&nbsp;&nbsp;This utility will allow users to generate a large number of barcodes on a single page.
 					Simply paste your text list and see all the barcodes! Optionally print them too! Click the share
@@ -379,28 +334,27 @@ with open('test.png', 'wb') as out_file:
 					Visit <a href="/multi.html" class="text-link anim icon-chevron">Multi Generator</a>
 				</p>
 			</div>
+			<div class="col-sm-4 col-help-image">
+				<img class="help-image" src="/api/dm/Data%20Matrix%20Barcode" />
+			</div>
 		</div>
 
 		<!-- S5 - Barcode Response Headers -->
 		<a name="headers"></a>
 		<div class="row middle-sm center-xs top-xs help-entry pad-top-24">
-			<div class="col-sm-8 col-xs-12">
+			<div class="col-xs-12">
 				<h2><a href="#headers">&sect;5</a>&nbsp;Barcode Response Headers</h2>
 				<p class="start-xs">
 					&nbsp;&nbsp;The server makes a number of headers available which describe the result of the request.
 				</p>
 			</div>
 
-			<div class="col-sm-4 col-help-image">
-				<img class="help-image" src="/api/april/tag36h11:0" />
-			</div>
-
-			<div class="col-sm-6 col-xs-12">
+			<div class="col-xs-8">
 				<div>
 					<h3>Barcode Information</h3>
 					<p class="start-xs">
-						&nbsp;&nbsp;The server will add several headers related to the barcode including the type and
-						encoded contents.
+						&nbsp;&nbsp;The server will add several headers related to the barcode including the format,
+						type, and encoded contents.
 					</p>
 					<pre class="example-code">
 $ curl --head https://barcodeapi.org/api/auto/abc123
@@ -411,6 +365,14 @@ X-Barcode-Content: abc123
 Content-Disposition: filename=abc123.png
 					</pre>
 				</div>
+
+			</div>
+
+			<div class="col-sm-4 col-help-image">
+				<img class="help-image" src="/api/april/tag36h11:0" />
+			</div>
+
+			<div class="col-sm-6 col-xs-12">
 
 				<div>
 					<h3>Cache Control</h3>
@@ -426,40 +388,12 @@ Cache-Control: max-age=86400, public
 Expires: Sat, 04 Jan 2025 06:57:14 GMT
 					</pre>
 				</div>
-
-				<div>
-					<h3>Rate Limits</h3>
-					<p class="start-xs">
-						&nbsp;&nbsp;The server will add several headers related to the rate limiter applied to the
-						client.
-					</p>
-					<pre class="example-code">
-$ curl --head https://barcodeapi.org/api/auto/abc123
-...
-X-RateLimit-Cost: 2
-X-RateLimit-Tokens: 2032.40
-					</pre>
-					<p class="start-xs">
-						&nbsp;&nbsp;Should a client become rate limited, requests to the server will result in a 429
-						error code indicating their rate limit is enforced. The caller must wait until new
-						tokens are generated before additional requests will be served.
-					</p>
-					<pre class="example-code">
-$ curl --head https://barcodeapi.org/api/auto/abc123
-HTTP/1.1 429 Too Many Requests
-...
-X-Error-Message: Client is rate limited, try again later.
-					</pre>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-xs-12">
 				<div>
 					<h3>API Redirect</h3>
 					<p class="start-xs">
 						&nbsp;&nbsp;The server provides a set of static resources served from the root url of the
 						server, in the event a request is made which is not targeted directly at the API nor references
-						a known resources, a 403 redirect will be provided to send the send request to the API handler.
+						a known resources, a 302 redirect will be provided to send the request to the API handler.
 					</p>
 					<pre class="example-code">
 $ curl --head https://barcodeapi.org/abc123
@@ -468,7 +402,9 @@ HTTP/1.1 302 Found
 Location: https://barcodeapi.org/api/auto/abc123
 					</pre>
 				</div>
+			</div>
 
+			<div class="col-sm-6 col-xs-12">
 				<div>
 					<h3>Generation Errors</h3>
 					<p class="start-xs">
@@ -477,11 +413,8 @@ Location: https://barcodeapi.org/api/auto/abc123
 					<pre class="example-code">
 200	OKAY		Barcode generated sucessfully.
 400	INVALID		Invalid data for selected code type.
-403	ABUSE		The IP is blocked for abuse.
 406	EMPTY		The request was empty.
 409	CHECKSUM	Expected checksum: #
-412	BLACKLIST	The request was rejected.
-429	LIMITED		Client is rate limited, try again later.
 500	FAILED		Failed to render barcode.
 503	BUSY		Server is busy, please try again.
 					</pre>
@@ -498,111 +431,6 @@ HTTP/1.1 409 Conflict
 X-Error-Message: Expected checksum: 0
 					</pre>
 				</div>
-			</div>
-		</div>
-
-		<!-- S6 - Tokens and Rate Limits -->
-		<a name="limits"></a>
-		<div class="row middle-sm center-xs top-xs help-entry pad-top-24">
-			<div class="col-sm-8 col-xs-12">
-				<h2><a href="#limits">&sect;6</a>&nbsp;Tokens and Rate Limits</h2>
-				<p class="start-xs">
-					&nbsp;&nbsp;To ensure optimal service for all users, we implement <b>rate limiting</b> and offer
-					tiered <b>pricing plans</b> for high-volume users. While the FREE tier should meet basic usage
-					needs, some users may require higher limits for larger volumes of barcode requests.
-				</p>
-			</div>
-
-			<div class="col-sm-4 col-help-image">
-				<img class="help-image" src="/api/417/PDF%20-%20417" />
-			</div>
-
-			<div class="col-sm-6 col-xs-12">
-				<div class="pad-top-16 pad-bottom-16">
-					<b>Pricing Plans</b>
-					<p class="start-xs">
-						&nbsp;&nbsp;If you need higher rate limits, you can upgrade to one of our paid plans. Each plan
-						is flexible and can accommodate varying token usage levels to suit your needs.
-					</p>
-					<p class="start-xs">
-						Don't worry, none of the barcodes we show you in the docs count against your rate limit!
-					</p>
-					<p>
-						For additional details, visit <a href="/limits.html" class="text-link anim icon-chevron">Rate
-							Limits</a>
-					</p>
-				</div>
-				<div class="pad-top-16">
-					<b>IP-Based Rate Limiting</b>
-					<p class="start-xs">
-						&nbsp;&nbsp;Rate limits are enforced based on the IP address of the client making the request.
-						Multiple IPs may be assigned to the same rate limiter for users with more then one public facing
-						IP address.
-					</p>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-xs-12">
-				<div class="pad-top-16 pad-bottom-16">
-					<b>API Keys</b>
-					<p class="start-xs">
-						&nbsp;&nbsp;If your application runs in an environment where the public IP address of the caller
-						changes often, your API key should be included in each request.
-					</p>
-				</div>
-				<div class="pad-top-16">
-					<b>Using An API Key</b>
-					<p class="start-xs">
-						&nbsp;&nbsp;If you have an API key, include it in the Authorization header with each request.
-						The token should be passed as follows:
-					<pre class="example-code">
-Authorization: Token=xxxxxxxxxxxx
-					</pre>
-					</p>
-				</div>
-				<div class="pad-top-16">
-					<b>Embedded Barcodes</b>
-					<p class="start-xs">
-						&nbsp;&nbsp;When embedding barcodes in an application accessed by end users, rate limits are
-						tracked by the HTTP Referer value.
-					</p>
-				</div>
-			</div>
-		</div>
-
-		<!-- S7 - User Session Info -->
-		<a name="session"></a>
-		<div class="row middle-sm center-xs middle-xs help-entry pad-top-24">
-			<div class="col-xs-12">
-				<h2><a href="#session">&sect;7</a>&nbsp;User Session Info</h2>
-				<p class="start-xs">
-					&nbsp;&nbsp;Users of the web interface are assigned a session token for basic history tracking. By
-					default, your browser will pass this token along with each request. Sessions will generally expire
-					several days after last use, but may also be deleted from the server cache on request.
-					<br />
-					<br />
-					To view the details of your current session, visit <a href="/session.html"
-						class="text-link anim icon-chevron">Session Info</a>
-				</p>
-			</div>
-		</div>
-
-		<!-- S8 - Support -->
-		<a name="support"></a>
-		<div class="row middle-sm center-xs middle-xs help-entry pad-top-24">
-			<div class="col-xs-12">
-				<h2><a href="#support">&sect;8</a>&nbsp;Technical Support</h2>
-				<p class="center-xs">
-					Still looking for additional information or support?
-					<br />
-					Send us an email! Our team will respond as soon as possible.
-					<br />
-					<br />
-					Please refer to <a class="text-link anim icon-chevron" href="/support.html">Contact & Support</a>
-					<br />
-					<br />
-					<a href="mailto:support@barcodeapi.org" class="text-link">support@barcodeapi.org</a>
-				</p>
 			</div>
 		</div>
 	</div>

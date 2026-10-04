@@ -53,7 +53,6 @@ function addType(type) {
 
 	info.querySelector(".type-name").innerHTML = type.display;
 	info.querySelector(".type-target").innerHTML = ('/' + target + '/');
-	info.querySelector(".type-cost-base").innerHTML = type.cost.base;
 
 	var homeLink = ("index.html#" + target);
 	info.querySelector(".type-gen").href = homeLink;
