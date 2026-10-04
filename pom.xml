@@ -78,8 +78,7 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20251224</version>
-			<scope>compile</scope>
+			<version>20260814</version>
 		</dependency>
 
 		<dependency>
