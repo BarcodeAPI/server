@@ -136,16 +136,12 @@
 					<p class="start-xs">
 						<span class="example-code-title">JavaScript</span>
 						<br />
-						&nbsp;Use <b>fetch</b> to request a barcode and display it on the current page, while printing
-						the remaining token count to the console:
+						&nbsp;Use <b>fetch</b> to request a barcode and display it on the current page.
 					</p>
 					<pre class="example-code">
 let url = 'https://barcodeapi.org/api/auto/Try%20Me'
 fetch(url, { cache: "no-store" })
   .then(response => {
-
-    var tokens = response.headers.get('X-RateLimit-Tokens');
-    console.log("Tokens remaining: " + tokens);
 
     response.blob().then(blob => {
       var img = document.createElement("img");

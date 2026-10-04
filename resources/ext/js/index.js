@@ -16,7 +16,6 @@ const appState = {
 
 const appOptions = {
 	'language': 'en',
-	'apiKey': false,
 	'genDelay': 500,
 	'default': {
 		'colorFG': "000000",
@@ -46,9 +45,6 @@ async function init() {
 	// Call our method when the URL hash changes.
 	window.onhashchange = loadSelectedType;
 
-	// Load previously configured API key
-	appOptions.apiKey = window.localStorage.getItem("apiKey");
-
 	// Load trim options if previously set
 	appOptions.trim.before = (window.localStorage.getItem("trimBefore") != "false");
 	appOptions.trim.after = (window.localStorage.getItem("trimAfter") != "false");
@@ -59,17 +55,13 @@ async function init() {
 	// Hide UI elements based on config
 	uiShowHide("app-setup-more", //
 		(appConfig.showLinkMulti || appConfig.showLinkBulk || appConfig.showLinkDecode));
-
 	uiShowHide("app-link-multi", appConfig.showLinkMulti);
-	uiShowHide("app-link-bulk", appConfig.showLinkBulk);
-	uiShowHide("app-link-decode", appConfig.showLinkDecode);
 
 	// Hide UI elements based on browser support
 	uiShowHide("action-copy", appFeatures.copyImage);
 	uiShowHide("action-url", appFeatures.copyURL);
 
 	// Update states from appOptions
-	document.getElementById("option-api-key").value = appOptions.apiKey;
 	document.getElementById("option-trim-before").checked = appOptions.trim.before;
 	document.getElementById("option-trim-after").checked = appOptions.trim.after;
 
@@ -245,10 +237,6 @@ function renderOptions(type) {
  */
 function optionsChange() {
 
-	// Update user api key
-	appOptions.apiKey = document.getElementById("option-api-key").value;
-	window.localStorage.setItem("apiKey", appOptions.apiKey);
-
 	// Parse text trimming options
 	appOptions.trim.before = document.getElementById("option-trim-before").checked;
 	window.localStorage.setItem("trimBefore", (appOptions.trim.before) ? "true" : false);
@@ -375,21 +363,9 @@ function updateBarcodeImage(url) {
 		}
 	};
 
-	// If user has API key
-	if (appOptions.apiKey) {
-
-		// Use API key in Authorization header
-		options.headers.Authorization = ("Token=" + appOptions.apiKey);
-	}
-
 	// Request the image
 	fetch(url, options)
 		.then(response => {
-
-			// Upate token count if not cached
-			var tokens = response.headers.get('x-ratelimit-tokens');
-			tokens = (tokens == -1) ? "Unlimited" : tokens;
-			document.getElementById("barcode_tokens").innerHTML = tokens;
 
 			// Update the image blob
 			response.blob().then(blob => {
