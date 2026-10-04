@@ -13,7 +13,7 @@ import org.krysalis.barcode4j.impl.AbstractBarcodeBean;
 /**
  * DefaultBarcode4JProvider.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public abstract class DefaultBarcode4JProvider extends CodeGenerator {
 

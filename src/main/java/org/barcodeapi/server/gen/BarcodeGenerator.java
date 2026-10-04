@@ -16,7 +16,7 @@ import com.mclarkdev.tools.libobjectpooler.LibObjectPoolerException;
 /**
  * BarcodeGenerator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class BarcodeGenerator {
 

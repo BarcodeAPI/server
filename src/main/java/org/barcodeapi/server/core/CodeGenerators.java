@@ -16,7 +16,7 @@ import com.mclarkdev.tools.libobjectpooler.LibObjectPooler;
  * Initializes all supported CodeTypes from configuration and provides access to
  * their associated generation object pools.
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class CodeGenerators {
 

@@ -19,7 +19,7 @@ import com.mclarkdev.tools.liblog.LibLog;
 /**
  * BarcodeAPIHandler.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class BarcodeAPIHandler extends RestHandler {
 

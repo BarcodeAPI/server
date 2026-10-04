@@ -15,7 +15,7 @@ import com.mclarkdev.tools.liblog.LibLog;
  * 
  * A background task which periodically logs the server stats.
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class StatsDumpTask extends BackgroundTask {
 

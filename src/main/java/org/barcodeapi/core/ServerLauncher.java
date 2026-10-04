@@ -36,7 +36,7 @@ import com.mclarkdev.tools.libloggelf.lib.LibLogGELFLogWriter;
  * on startup in addition to the setup of the main Jetty API server and it's
  * associated handlers.
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class ServerLauncher {
 
@@ -140,7 +140,9 @@ public class ServerLauncher {
 				// Get task details
 				String taskName = taskDef.getString("name");
 				String taskImpl = taskDef.getString("impl");
-				String taskClass = (((taskImpl.charAt(0) == '.') ? BackgroundTask.TASKROOT : "") + taskImpl);
+				String taskRoot = ((taskImpl.charAt(0) == '.') ? BackgroundTask.TASKROOT : "");
+
+				String taskClass = (taskRoot + taskImpl);
 				long taskTime = taskDef.getInt("interval");
 
 				// Get task constructor

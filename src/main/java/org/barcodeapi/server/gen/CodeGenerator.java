@@ -5,7 +5,7 @@ import org.barcodeapi.server.core.CodeType;
 /**
  * CodeGenerator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public abstract class CodeGenerator {
 

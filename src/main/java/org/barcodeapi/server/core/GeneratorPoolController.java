@@ -13,7 +13,7 @@ import com.mclarkdev.tools.libobjectpooler.LibObjectPoolerController;
  * 
  * Manages the creation and destruction of pooled code generators.
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class GeneratorPoolController implements LibObjectPoolerController<CodeGenerator> {
 

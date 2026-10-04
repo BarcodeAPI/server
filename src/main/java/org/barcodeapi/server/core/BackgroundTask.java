@@ -8,7 +8,7 @@ import com.mclarkdev.tools.libmetrics.LibMetrics;
 /**
  * BackgroundTask.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public abstract class BackgroundTask extends TimerTask {
 	

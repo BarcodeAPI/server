@@ -12,9 +12,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * InfoHandler.java
+ * ServerInfoHandler.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class ServerInfoHandler extends RestHandler {
 

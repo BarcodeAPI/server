@@ -7,7 +7,7 @@ import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 /**
  * Ean13Generator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class Ean13Generator extends DefaultBarcode4JProvider {
 

@@ -18,7 +18,7 @@ import org.krysalis.barcode4j.output.java2d.Java2DCanvasProvider;
 /**
  * BarcodeCanvasProvider.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class BarcodeCanvasProvider extends AbstractCanvasProvider {
 

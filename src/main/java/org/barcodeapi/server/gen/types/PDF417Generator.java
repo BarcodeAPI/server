@@ -7,7 +7,7 @@ import org.krysalis.barcode4j.impl.pdf417.PDF417Bean;
 /**
  * PDF417Generator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class PDF417Generator extends DefaultBarcode4JProvider {
 

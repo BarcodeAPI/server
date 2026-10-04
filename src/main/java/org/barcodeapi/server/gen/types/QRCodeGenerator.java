@@ -17,7 +17,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 /**
  * QRCodeGenerator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class QRCodeGenerator extends DefaultZXingProvider {
 

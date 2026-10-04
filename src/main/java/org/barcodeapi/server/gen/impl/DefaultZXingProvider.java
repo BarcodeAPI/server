@@ -17,7 +17,7 @@ import com.google.zxing.common.BitMatrix;
 /**
  * DefaultZXingProvider.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public abstract class DefaultZXingProvider extends CodeGenerator {
 

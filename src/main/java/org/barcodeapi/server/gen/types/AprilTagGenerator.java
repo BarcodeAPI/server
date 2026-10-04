@@ -31,7 +31,7 @@ import com.mclarkdev.tools.libapriltag.families.TagStandard52h13;
 /**
  * AprilTagGenerator.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class AprilTagGenerator extends CodeGenerator {
 

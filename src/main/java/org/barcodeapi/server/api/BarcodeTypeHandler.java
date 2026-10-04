@@ -15,9 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * TypeHandler.java
+ * BarcodeTypeHandler.java
  * 
- * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
+ * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026, Community Edition)
  */
 public class BarcodeTypeHandler extends RestHandler {
 
