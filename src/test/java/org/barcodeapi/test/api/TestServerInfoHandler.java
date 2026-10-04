@@ -15,12 +15,12 @@ import com.mclarkdev.tools.libextras.LibExtrasStreams;
  * 
  * @author Matthew R. Clark (BarcodeAPI.org, 2017-2026)
  */
-public class TestInfoHandler extends ServerTestBase {
+public class TestServerInfoHandler extends ServerTestBase {
 
 	@Test
-	public void testServer_TestInfoEndpoint() {
+	public void testServer_TestServerInfoEndpoint() {
 
-		serverGet("/info/");
+		serverGet("/server/info/");
 
 		Assert.assertEquals("Response Code", //
 				HttpStatus.OK_200, getResponseCode());
@@ -29,7 +29,7 @@ public class TestInfoHandler extends ServerTestBase {
 				"application/json;charset=utf-8", getHeader("Content-Type"));
 
 		try {
-			
+
 			String response = LibExtrasStreams.readStream(getResponse());
 			JSONObject parsed = new JSONObject(response);
 
