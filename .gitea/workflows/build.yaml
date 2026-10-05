@@ -23,13 +23,14 @@ jobs:
       run: mvn clean install
     - name: Package the server
       run: |
-        mkdir server/
-        cp -rv config server/
-        cp -rv resources server/
-        cp target/server.jar server/                     
+        mkdir BarcodeAPI-Community
+        cp -rv config BarcodeAPI-Community
+        cp -rv resources BarcodeAPI-Community
+        cp target/server.jar BarcodeAPI-Community                     
     - name: Archive job artifact
       uses: actions/upload-artifact@v3
       with:
-        name: server-${{ github.run_id }}
+        name: BarcodeAPI-Community-${{ github.run_id }}
         path: |
-          server/
+          BarcodeAPI-Community/
+
