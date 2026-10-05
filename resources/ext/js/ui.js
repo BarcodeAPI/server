@@ -1,6 +1,6 @@
 //
-// BarcodeAPI.org, 2017-2025
-// ui.js (Community)
+// BarcodeAPI.org, 2017-2026 (Community Edition)
+// ui.js
 //
 
 // Time page load began

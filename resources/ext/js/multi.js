@@ -1,5 +1,5 @@
 //
-// BarcodeAPI.org, 2017-2025
+// BarcodeAPI.org, 2017-2026 (Community Edition)
 // multi.js // multi.html
 //
 
@@ -14,26 +14,8 @@ window.onhashchange = init;
 function init() {
 
 	multiClear();
-	var share = window.location.hash.substring(1);
-	((share) ? loadShare(share) : loadArgs());
-	document.getElementById("input").focus();
 }
 
-/**
- * Load share hash from server.
- */
-function loadShare(share) {
-
-	fetch("/share/?key=" + share)
-		.then(response => {
-			return response.json();
-		})
-		.then(function(data) {
-
-			// Parse and render the response list
-			renderRequests(JSON.parse(data.data));
-		});
-}
 
 /**
  * Load page arguments as request string.
@@ -177,31 +159,6 @@ function multiClear() {
 	document.getElementById("barcodes").innerHTML = "";
 	document.getElementById("input").value = "";
 	document.getElementById("input").focus();
-}
-
-/**
- * Get request code for requests.
- */
-function multiShare() {
-
-	fetch('/share/', {
-		method: "post",
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(barcodes)
-	}).then(response => {
-
-		// Get the body of the response
-		return response.text();
-
-	}).then(function(shareCode) {
-
-		// Update URL hash to share code
-		window.location = //
-			(window.location.pathname + '#' + shareCode);
-	});
 }
 
 /**

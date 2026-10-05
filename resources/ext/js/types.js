@@ -1,5 +1,5 @@
 //
-// BarcodeAPI.org, 2017-2025
+// BarcodeAPI.org, 2017-2026 (Community Edition)
 // types.js // types.html
 //
 
