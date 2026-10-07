@@ -24,7 +24,9 @@ jobs:
     - name: Package the server
       run: |
         mkdir BarcodeAPI-Community
-        cp -rv config BarcodeAPI-Community
+        mkdir BarcodeAPI-Community/config
+        cp -rv config/types BarcodeAPI-Community/config
+        cp -rv config/community BarcodeAPI-Community/config
         cp -rv resources BarcodeAPI-Community
         cp target/server.jar BarcodeAPI-Community                     
     - name: Archive job artifact
