@@ -144,7 +144,8 @@ public class BarcodeRequest {
 		LibMetrics.hitMethodRunCounter();
 
 		if (record == null || record.length == 0) {
-			throw new GenerationException(ExceptionType.EMPTY, //
+			throw new GenerationException(//
+					ExceptionType.EMPTY, //
 					new Throwable(LibLog.c("E0501")));
 		}
 
@@ -236,7 +237,8 @@ public class BarcodeRequest {
 		if (type == null || target == null || target.isEmpty()) {
 
 			// Fail on empty requests
-			throw new GenerationException(ExceptionType.EMPTY, //
+			throw new GenerationException(//
+					ExceptionType.EMPTY, //
 					new Throwable(LibLog.c("E0501")));
 		}
 
@@ -244,7 +246,8 @@ public class BarcodeRequest {
 		if (!target.matches(type.getPatternExtended())) {
 
 			// Fail if request does not match pattern
-			throw new GenerationException(ExceptionType.INVALID, //
+			throw new GenerationException(//
+					ExceptionType.INVALID, //
 					new Throwable(LibLog.c("E0502")));
 		}
 
@@ -291,7 +294,8 @@ public class BarcodeRequest {
 				if ((target.charAt(type.getCheckDigit() - 1) - '0') != expected) {
 
 					// Fail if actual check digit is different then expected
-					throw new GenerationException(ExceptionType.CHECKSUM, //
+					throw new GenerationException(//
+							ExceptionType.CHECKSUM, //
 							new Throwable(String.format(LibLog.c("E0503"), expected)));
 				}
 			}
