@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import com.mclarkdev.tools.libargs.LibArgs;
 import com.mclarkdev.tools.libextras.LibExtrasStreams;
+import com.mclarkdev.tools.liblog.LibLog;
 
 /**
  * Config.java
@@ -84,7 +85,7 @@ public class Config {
 		} catch (Error | Exception e) {
 
 			// Log general exception
-			throw new Error("Failed loading app config.", e);
+			throw LibLog._clog("E0099", e).asException();
 		}
 	}
 }

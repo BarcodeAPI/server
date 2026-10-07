@@ -33,7 +33,7 @@ public class GeneratorPoolController implements LibObjectPoolerController<CodeGe
 		} catch (Exception e) {
 
 			// Log the initialization failure
-			throw LibLog._clog("E0059", e).asException();
+			throw LibLog._clog("E0183", e).asException();
 		}
 	}
 
@@ -52,7 +52,7 @@ public class GeneratorPoolController implements LibObjectPoolerController<CodeGe
 		} catch (Exception | Error e) {
 
 			// Log the failure
-			LibLog._clog("E0059", e);
+			LibLog._clog("E0183", e);
 			return null;
 		}
 	}

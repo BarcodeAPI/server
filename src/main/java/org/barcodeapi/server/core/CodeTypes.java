@@ -1,9 +1,7 @@
 package org.barcodeapi.server.core;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -77,13 +75,12 @@ public class CodeTypes {
 			codeTypes.put(name, codeType);
 			return codeType;
 
-		} catch (ClassNotFoundException | NoSuchMethodException //
-				| InvocationTargetException | IllegalAccessException | InstantiationException e) {
+		} catch (JSONException e) {
 
 			// Print and throw failure loading type
-			throw LibLog._clog("E0069", e).asException();
+			throw LibLog._clog("E0068", e).asException();
 
-		} catch (JSONException | IOException e) {
+		} catch (Exception | Error e) {
 
 			// Print and throw failure loading type
 			throw LibLog._clog("E0069", e).asException();

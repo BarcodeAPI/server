@@ -145,7 +145,7 @@ public class BarcodeRequest {
 
 		if (record == null || record.length == 0) {
 			throw new GenerationException(ExceptionType.EMPTY, //
-					new Throwable("The request was empty."));
+					new Throwable(LibLog.c("E0501")));
 		}
 
 		String data = record[0];
@@ -189,8 +189,12 @@ public class BarcodeRequest {
 			target = CodeUtils.decodeURL(target);
 		} catch (IllegalArgumentException e) {
 
+			// Extract the first 24 characters of the request to be logged
+			int charCount = ((target.length() > 24) ? 24 : target.length());
+			String first24 = target.substring(0, charCount);
+
 			// Log and throw the decoding failure
-			throw LibLog._clog("E0608").asException();
+			throw LibLog._clogF("E0608", first24).asException();
 		}
 
 		// Extract code type and data string
@@ -233,7 +237,7 @@ public class BarcodeRequest {
 
 			// Fail on empty requests
 			throw new GenerationException(ExceptionType.EMPTY, //
-					new Throwable("The request was empty."));
+					new Throwable(LibLog.c("E0501")));
 		}
 
 		// Validate barcode pattern
@@ -241,7 +245,7 @@ public class BarcodeRequest {
 
 			// Fail if request does not match pattern
 			throw new GenerationException(ExceptionType.INVALID, //
-					new Throwable("Invalid data for selected code type."));
+					new Throwable(LibLog.c("E0502")));
 		}
 
 		// Check if the request is a URL
@@ -278,7 +282,7 @@ public class BarcodeRequest {
 			// Check if digit needs to be added
 			if (target.length() < type.getCheckDigit()) {
 
-				LibLog._logF("Request is missing check digit, adding %d", expected);
+				LibLog._clogF("I0502", expected);
 				target = (target + expected);
 
 			} else if (target.length() >= type.getCheckDigit()) {
@@ -288,7 +292,7 @@ public class BarcodeRequest {
 
 					// Fail if actual check digit is different then expected
 					throw new GenerationException(ExceptionType.CHECKSUM, //
-							new Throwable(String.format("Invalid checksum: expected %d", expected)));
+							new Throwable(String.format(LibLog.c("E0503"), expected)));
 				}
 			}
 		}

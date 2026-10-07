@@ -72,7 +72,7 @@ public class ServerLauncher {
 				String.format("/strings/codes.%s.properties", lang)));
 
 		// Log config distribution being used
-		LibLog._logF("Config Dist: " + Config.dist());
+		LibLog._clogF("I0000", Config.dist());
 	}
 
 	/**
@@ -183,17 +183,17 @@ public class ServerLauncher {
 				collection.addHandler(contextHandler);
 			}
 
+			// Initialize API server
+			LibLog._clog("I0011");
+			server = new Server();
+			server.setHandler(collection);
+
 			// Instantiate the static resource handler and add it to the collection
 			LibLog._clog("I0012");
 			ContextHandler resourceHandler = new ContextHandler();
 			resourceHandler.setHandler(new StaticHandler(server));
 			resourceHandler.setContextPath("/");
 			collection.addHandler(resourceHandler);
-
-			// Initialize API server
-			LibLog._clog("I0011");
-			server = new Server();
-			server.setHandler(collection);
 
 			// Set max request size
 			HttpConfiguration httpConfig = new HttpConfiguration();

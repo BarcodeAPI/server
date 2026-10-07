@@ -72,7 +72,7 @@ public class BarcodeAPIHandler extends RestHandler {
 
 				case ANY:
 				case PNG:
-				default:
+				default: 
 					// Output as PNG image
 					format = Format.PNG;
 					bytes = barcode.getBarcodeData();
@@ -114,7 +114,7 @@ public class BarcodeAPIHandler extends RestHandler {
 			bytes = barcode.getBarcodeData();
 		} catch (Exception | Error e) {
 
-			LibLog._log("Unhandled exception!", e);
+			LibLog._clog("E0609", e);
 		}
 
 		// Add content headers type and length
