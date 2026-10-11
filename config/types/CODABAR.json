@@ -18,11 +18,11 @@
 	"checkdigit": 0,
 	"nonprinting": false,
 	"example": [
-		"1234567890"
+		"a1234567890b"
 	],
 	"pattern": {
-		"auto": "^[0-9:$]{4,12}$",
-		"extended": "^[0-9\\-:$\\/.+]{1,22}$"
+		"auto": "^[abcd0-9:$]{4,12}$",
+		"extended": "^[abcd0-9\\-:$\\/.+]{1,22}$"
 	},
 	"description": {
 		"en": "An early barcode design, initially used with dot-matrix printers."
