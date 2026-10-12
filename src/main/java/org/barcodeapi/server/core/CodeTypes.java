@@ -39,6 +39,7 @@ public class CodeTypes {
 
 		// Determine the type loader to use
 		typeLoader = Config.get()//
+				.optJSONObject("overrides", (new JSONObject()))//
 				.optString("typeLoader", DEFAULT_RENDERER);
 	}
 

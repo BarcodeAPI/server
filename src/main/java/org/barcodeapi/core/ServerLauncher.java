@@ -11,7 +11,6 @@ import org.barcodeapi.server.api.BarcodeAPIHandler;
 import org.barcodeapi.server.api.BarcodeTypeHandler;
 import org.barcodeapi.server.api.ServerInfoHandler;
 import org.barcodeapi.server.api.ServerStatsHandler;
-import org.barcodeapi.server.api.StaticHandler;
 import org.barcodeapi.server.core.BackgroundTask;
 import org.barcodeapi.server.core.CodeGenerators;
 import org.barcodeapi.server.core.RestHandler;
@@ -162,6 +161,37 @@ public class ServerLauncher {
 		}
 	}
 
+	protected ContextHandler initStaticHandler() throws Exception {
+
+		String DEFAULT_HANDLER = //
+				"org.barcodeapi.server.api.StaticHandler";
+
+		// Instantiate the static resource handler and add it to the collection
+		LibLog._clog("I0012");
+
+		String className = Config.get()//
+				.optJSONObject("overrides", (new JSONObject()))//
+				.optString("staticHandler", DEFAULT_HANDLER);
+
+		@SuppressWarnings("unchecked")
+		Class<? extends RestHandler> handlerClass = //
+				(Class<? extends RestHandler>) Class.forName(className);
+
+		// Get the constructor for the handler
+		Constructor<? extends RestHandler> handlerConstructor = //
+				handlerClass.getDeclaredConstructor(Server.class);
+
+		// Create the static handler class
+		RestHandler codeType = handlerConstructor//
+				.newInstance(new Object[] { server });
+
+		// Initialize the static resource context handler
+		ContextHandler resourceHandler = new ContextHandler();
+		resourceHandler.setHandler(codeType);
+		resourceHandler.setContextPath("/");
+		return resourceHandler;
+	}
+
 	/**
 	 * Start the Jetty server.
 	 * 
@@ -188,12 +218,9 @@ public class ServerLauncher {
 			server = new Server();
 			server.setHandler(collection);
 
-			// Instantiate the static resource handler and add it to the collection
-			LibLog._clog("I0012");
-			ContextHandler resourceHandler = new ContextHandler();
-			resourceHandler.setHandler(new StaticHandler(server));
-			resourceHandler.setContextPath("/");
-			collection.addHandler(resourceHandler);
+			// Setup static handler
+			collection.addHandler(//
+					initStaticHandler());
 
 			// Set max request size
 			HttpConfiguration httpConfig = new HttpConfiguration();
