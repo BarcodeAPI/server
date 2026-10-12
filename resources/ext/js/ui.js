@@ -24,9 +24,6 @@ const appFeatures = {
 	// Firefox unsupported
 	'copyImage': false,
 
-	// Must be secure context
-	'copyURL': window.isSecureContext,
-
 	// Analytics event tracking
 	'matomoTracking': {
 		'enabled': false,

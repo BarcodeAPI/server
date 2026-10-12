@@ -59,7 +59,7 @@ async function init() {
 
 	// Hide UI elements based on browser support
 	uiShowHide("action-copy", appFeatures.copyImage);
-	uiShowHide("action-url", appFeatures.copyURL);
+	uiShowHide("action-url", window.isSecureContext);
 
 	// Update states from appOptions
 	document.getElementById("option-trim-before").checked = appOptions.trim.before;
@@ -559,7 +559,7 @@ function actionPrintImage() {
 function actionCopyURL() {
 
 	// Fail if unsupported
-	if (!appFeatures.copyURL) {
+	if (!window.isSecureContext) {
 		console.log("Browser unsupported.");
 		return false;
 	}
