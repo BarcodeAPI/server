@@ -21,8 +21,8 @@
 		"a1234567890b"
 	],
 	"pattern": {
-		"auto": "^[abcd0-9:$]{4,12}$",
-		"extended": "^[abcd0-9\\-:$\\/.+]{1,22}$"
+		"auto": "^[abcd]{0,1}[0-9:$]{4,12}[abcd]{0,1}$",
+		"extended": "^[abcd]{0,1}[0-9\\-:$\\/.+]{1,22}[abcd]{0,1}$"
 	},
 	"description": {
 		"en": "An early barcode design, initially used with dot-matrix printers."
