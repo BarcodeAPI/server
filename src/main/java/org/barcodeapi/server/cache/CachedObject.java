@@ -63,6 +63,15 @@ public abstract class CachedObject implements Serializable {
 	}
 
 	/**
+	 * Returns the time since the object was last touched.
+	 * 
+	 * @return time since last touched
+	 */
+	public long getTimeSinceLast() {
+		return (System.currentTimeMillis() - getTimeLastTouched());
+	}
+
+	/**
 	 * Return the time (in milliseconds) the object will expire.
 	 * 
 	 * @return time object will expire
